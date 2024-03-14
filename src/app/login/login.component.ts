@@ -28,7 +28,8 @@ import { MdDialog, MdDialogRef } from '@angular/material';
 
 import { DataSyncLoginComponent } from '../app-modules/data-sync/data-sync-login/data-sync-login.component';
 import { MasterDownloadComponent } from '../app-modules/data-sync/master-download/master-download.component';
-import * as CryptoJS from 'crypto-js';
+import * as bcrypt from 'bcrypt';
+
 @Component({
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
@@ -97,42 +98,19 @@ export class LoginComponent implements OnInit {
   set iterationCount(value) {
     this._iterationCount = value;
   }
-
-
-
-  generateKey(salt, passPhrase) {
-    return CryptoJS.PBKDF2(passPhrase, CryptoJS.enc.Hex.parse(salt), {
-     
-      hasher: CryptoJS.algo.SHA512,
-      keySize: this.keySize / 32,
-      iterations: this._iterationCount
-    })
-  }
-
-
-
-  encryptWithIvSalt(salt, iv, passPhrase, plainText) {
-    let key = this.generateKey(salt, passPhrase);
-    let encrypted = CryptoJS.AES.encrypt(plainText, key, {
-      iv: CryptoJS.enc.Hex.parse(iv)
-    });
-    return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
-  }
-
-  encrypt(passPhrase, plainText) {
-    let iv = CryptoJS.lib.WordArray.random(this._ivSize / 8).toString(CryptoJS.enc.Hex);
-    let salt = CryptoJS.lib.WordArray.random(this.keySize / 8).toString(CryptoJS.enc.Hex);
-    let ciphertext = this.encryptWithIvSalt(salt, iv, passPhrase, plainText);
-    return salt + iv + ciphertext;
-  }
-
-
-
+  
   login() {
+    let plainPassword = this.password;
+    const saltRounds = 12; 
 
-let encriptPassword = this.encrypt(this.Key_IV, this.password)
-    
-   this.authService.login(this.userName, encriptPassword, false)
+    bcrypt.hash(plainPassword, saltRounds, (err, hash) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+ 
+      
+   this.authService.login(this.userName, hash, false)
       .subscribe(res => {
         if (res.statusCode === 200) {
           if (res.data.previlegeObj && res.data.previlegeObj[0]) {
@@ -156,7 +134,7 @@ let encriptPassword = this.encrypt(this.Key_IV, this.password)
             if (confirmResponse){
               this.authService.userLogoutPreviousSession(this.userName).subscribe((logOutFromPreviousSession) => {
                 if (logOutFromPreviousSession.statusCode === 200){
-              this.authService.login(this.userName, encriptPassword, true).subscribe((userLoggedIn) => {
+              this.authService.login(this.userName, hash, true).subscribe((userLoggedIn) => {
                 if (userLoggedIn.statusCode === 200) {
                 if (userLoggedIn.data.previlegeObj && userLoggedIn.data.previlegeObj[0] && userLoggedIn.data.previlegeObj != null && userLoggedIn.data.previlegeObj != undefined) {
                   localStorage.setItem('loginDataResponse', JSON.stringify(userLoggedIn.data));
@@ -168,28 +146,25 @@ let encriptPassword = this.encrypt(this.Key_IV, this.password)
               else {
                 this.confirmationService.alert(userLoggedIn.errorMessage, 'error');
               }  
-              })
+              });
             }
               else {
                 this.confirmationService.alert(logOutFromPreviousSession.errorMessage, 'error');
               }
-            })
+            });
             }
           });
-        }
+        }}
         else {
           sessionStorage.clear();
           this.router.navigate(["/login"]);
           this.confirmationService.alert(res.errorMessage, 'error');
-          }
-        }
-        else {
-          this.confirmationService.alert(res.errorMessage, 'error');
+          
         }
       }
       , err => {
         this.confirmationService.alert(err, 'error');
-      });
+      });});
   }
 
   getServicesAuthdetails(loginDataResponse) {
@@ -263,5 +238,5 @@ let encriptPassword = this.encrypt(this.Key_IV, this.password)
         }
       })
   }
-
+  
 }
