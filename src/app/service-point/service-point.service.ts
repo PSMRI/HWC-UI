@@ -44,8 +44,9 @@ export class ServicePointService {
   getMMUDemographics() {
     const vanID = JSON.parse(localStorage.getItem('serviceLineDetails')).vanID;
     const spPSMID = localStorage.getItem('providerServiceID');
+    let userID = localStorage.getItem('userID');
 
-    return this.http.post(environment.demographicsCurrentMasterUrl, { vanID: vanID, spPSMID: spPSMID })
+    return this.http.post(environment.demographicsCurrentMasterUrl, { vanID: vanID, spPSMID: spPSMID , userID: userID})
       .map(res => res.json())
       .catch(err => {
         return Observable.throw(err);

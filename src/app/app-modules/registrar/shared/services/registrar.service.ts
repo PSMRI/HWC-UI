@@ -104,7 +104,9 @@ export class RegistrarService {
     this.isMarriageStatus.next(maritalStatus);
 
   }
-
+  clearMaritalDetails() {
+    this.isMarriageStatus.next(null);
+  }
   
   // GenerateOTPEnable: any;
   // GenerateOTP = new BehaviorSubject(this.GenerateOTPEnable);

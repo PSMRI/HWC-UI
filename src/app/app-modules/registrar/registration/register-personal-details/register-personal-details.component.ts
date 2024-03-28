@@ -160,9 +160,7 @@ export class RegisterPersonalDetailsComponent implements OnInit {
     if (this.personalDataOnHealthIDSubscription) {
       this.personalDataOnHealthIDSubscription.unsubscribe();
     }
-    if (this.maritalSubscription){
-    this.maritalSubscription.unsubscribe();
-    }
+    this.registrarService.clearMaritalDetails();
   }
 
   setPhoneSelectionEnabledByDefault() {
@@ -720,8 +718,10 @@ export class RegisterPersonalDetailsComponent implements OnInit {
       this.personalDetailsForm.value.ageUnit == "Years"
     ) {
       this.enableMaritalStatus = true;
+      this.MaritalStatus = true;
     } else {
       this.enableMaritalStatus = false;
+      this.MaritalStatus = false;
       this.clearMaritalStatus();
     }
   }
