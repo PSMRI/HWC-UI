@@ -82,7 +82,7 @@ import { RegistrarModule } from './app-modules/registrar/registrar.module';
     DataSYNCModule,
     CoreModule.forRoot(),
     SharedModule,
-    RegistrarModule,
+    RegistrationModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
