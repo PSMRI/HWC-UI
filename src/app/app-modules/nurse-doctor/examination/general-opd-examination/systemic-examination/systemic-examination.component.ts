@@ -23,7 +23,7 @@ import { Component, OnInit, Input, OnChanges, DoCheck } from '@angular/core';
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 
 @Component({
   selector: 'app-nurse-systemic-examination',

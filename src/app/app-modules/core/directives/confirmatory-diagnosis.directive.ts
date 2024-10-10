@@ -34,11 +34,11 @@ import {
   FormGroup,
   AbstractControl,
 } from '@angular/forms';
-import { SetLanguageComponent } from '../component/set-language.component';
+import { SetLanguageComponent } from '../components/set-language.component';
 import { HttpServiceService } from '../services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralUtils } from '../../nurse-doctor/shared/utility';
-import { DiagnosisSearchComponent } from '../component/diagnosis-search/diagnosis-search.component';
+import { DiagnosisSearchComponent } from '../components/diagnosis-search/diagnosis-search.component';
 @Directive({
   selector: '[appConfirmatoryDiagnosis]',
 })

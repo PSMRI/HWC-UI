@@ -34,7 +34,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { DoctorService } from 'src/app/app-modules/nurse-doctor/shared/services/doctor.service';

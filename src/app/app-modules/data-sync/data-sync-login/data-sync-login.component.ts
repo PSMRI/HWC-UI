@@ -26,7 +26,7 @@ import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { DataSyncService } from '../shared/service/data-sync.service';

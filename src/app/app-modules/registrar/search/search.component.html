@@ -143,301 +143,478 @@
         </mat-form-field>
       </div>
       <div class="clearfix"></div>
-      <section class="table-responsive">
+      <section class="table-responsive table-striped">
         <table
           *ngIf="externalBeneficiaryList?.length === 0"
-          class="table table-striped"
-          aria-describedby="editBeneficiaryTbl"
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 responsiveTable"
+          aria-describedby="searchBenResults"
         >
-          <thead>
-            <tr>
-              <th id="edit">{{ currentLanguageSet?.bendetails?.edit }}</th>
-              <th id="beneficiaryID">
-                {{ currentLanguageSet?.bendetails?.beneficiaryID }}
-              </th>
-              <th id="beneficiaryName">
-                {{ currentLanguageSet?.bendetails?.beneficiaryName }}
-              </th>
-              <th id="gender">{{ currentLanguageSet?.bendetails?.gender }}</th>
-              <th id="age">{{ currentLanguageSet?.bendetails?.age }}</th>
-              <th id="fatherName">
-                {{ currentLanguageSet?.bendetails?.fatherName }}
-              </th>
-              <th id="district">
-                {{ currentLanguageSet?.bendetails?.district }}
-              </th>
-              <th id="phoneNo">
-                {{ currentLanguageSet?.bendetails?.phoneNo }}
-              </th>
-              <th id="registrationDate">
-                {{ currentLanguageSet?.bendetails?.registrationDate }}
-              </th>
-              <th id="abhaAddress">{{ currentLanguageSet?.abhaDetails }}</th>
-              <th id="image">{{ currentLanguageSet?.bendetails?.image }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-template [ngIf]="filteredBeneficiaryList.length === 0">
-              <tr *ngFor="let row of blankTable">
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-              </tr>
-            </ng-template>
-            <tr *ngFor="let beneficiary of pagedList" class="table-hover">
-              <td>
-                <button
-                  matTooltip="{{ currentLanguageSet?.editBeneficiary }}"
-                  type="button"
-                  class="btn text-center"
-                  (click)="editPatientInfo(beneficiary)"
-                >
-                  <span class="fa fa-pencil cursorPointer fa-lg"> </span>
-                </button>
-              </td>
-              <td (click)="patientRevisited(beneficiary.benObject)">
-                {{ beneficiary?.beneficiaryID }}
-              </td>
-              <td
-                (click)="patientRevisited(beneficiary.benObject)"
-                style="max-width: 200px; word-break: break-word"
+          <ng-container matColumnDef="edit">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.edit }}
+            </th>
+            <td mat-cell *matCellDef="let beneficiary">
+              <button
+                matTooltip="{{ currentLanguageSet?.editBeneficiary }}"
+                type="button"
+                class="btn text-center"
+                (click)="editPatientInfo(beneficiary)"
               >
-                {{ beneficiary?.benName | titlecase }}
-              </td>
-              <td (click)="patientRevisited(beneficiary.benObject)">
-                {{ beneficiary.genderName | titlecase }}
-              </td>
-              <td (click)="patientRevisited(beneficiary.benObject)">
-                {{ beneficiary.age === "a year" ? "1 year" : beneficiary.age }}
-              </td>
-              <td (click)="patientRevisited(beneficiary.benObject)">
-                {{ beneficiary.fatherName | titlecase }}
-              </td>
-              <td (click)="patientRevisited(beneficiary.benObject)">
-                {{ beneficiary.districtName | titlecase }} /
-                {{ beneficiary.villageName | titlecase }}
-              </td>
-              <td (click)="patientRevisited(beneficiary.benObject)">
-                {{ beneficiary.phoneNo }}
-              </td>
-              <td (click)="patientRevisited(beneficiary.benObject)">
-                {{ beneficiary.registeredOn }}
-              </td>
-              <td>
-                <button
-                  mat-raised-button
-                  type="button"
-                  color="primary"
-                  class="btn text-center"
-                  (click)="getHealthIDDetails(beneficiary)"
-                >
-                  <span>View</span>
-                </button>
-              </td>
-              <td
-                (click)="patientImageView(beneficiary.beneficiaryRegID)"
-                matTooltip="{{ currentLanguageSet?.tc?.image }}"
+                <span class="fa fa-pencil cursorPointer fa-lg"></span>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="beneficiaryID">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.beneficiaryID }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary.benObject)"
+            >
+              {{ beneficiary?.beneficiaryID }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="benName">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.beneficiaryName }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="patientRevisited(beneficiary.benObject)"
+              style="max-width: 200px; word-break: break-word"
+            >
+              {{ beneficiary?.benName | titlecase }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="genderName">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.gender }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="patientRevisited(beneficiary.benObject)"
+            >
+              {{ beneficiary.genderName | titlecase }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="age">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.age }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="patientRevisited(beneficiary.benObject)"
+            >
+              {{ beneficiary.age === "a year" ? "1 year" : beneficiary.age }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fatherName">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.fatherName }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="patientRevisited(beneficiary.benObject)"
+            >
+              {{ beneficiary.fatherName | titlecase }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="districtVillage">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.district }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="patientRevisited(beneficiary.benObject)"
+            >
+              {{ beneficiary.districtName | titlecase }} /
+              {{ beneficiary.villageName | titlecase }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="phoneNo">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.phoneNo }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="patientRevisited(beneficiary.benObject)"
+            >
+              {{ beneficiary.phoneNo }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="registeredOn">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.registrationDate }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="patientRevisited(beneficiary.benObject)"
+            >
+              {{ beneficiary.registeredOn }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="abhaAddress">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.abhaDetails }}
+            </th>
+            <td mat-cell *matCellDef="let beneficiary">
+              <button
+                mat-raised-button
+                type="button"
+                color="primary"
+                class="btn text-center"
+                (click)="getHealthIDDetails(beneficiary)"
               >
-                <img alt="" src="assets/images/Avatar-Profile_30X30.png " />
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2">
-                <div
-                  *ngIf="filteredBeneficiaryList.length > 0"
-                  class="totalCount"
-                >
-                  {{ currentLanguageSet?.common?.totalCount }} :
-                  {{ filteredBeneficiaryList.length }}
-                </div>
-              </td>
-              <td colspan="8">
-                <mat-paginator
-                  *ngIf="filteredBeneficiaryList.length > 0"
-                  [pageSizeOptions]="[5, 10, 20]"
-                  [pageSize]="5"
-                  showFirstLastButtons
-                  aria-label="Select patient in search Worklist"
-                >
-                </mat-paginator>
-              </td>
-            </tr>
-          </tfoot>
+                <span>View</span>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="image">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              {{ currentLanguageSet?.bendetails?.image }}
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="patientImageView(beneficiary.beneficiaryRegID)"
+              matTooltip="{{ currentLanguageSet?.tc?.image }}"
+            >
+              <img src="assets/images/Avatar-Profile_30X30.png " alt="image" />
+            </td>
+          </ng-container>
+          <!-- Repeat ng-container for other columns -->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
+        <div
+          class="pull-center"
+          style="margin-top: 5px; text-align: center"
+          [hidden]="dataSource.data.length > 0"
+        >
+          <strong>{{ currentLanguageSet?.common?.noRecordsFound }}</strong>
+        </div>
+        <mat-paginator
+          *ngIf="dataSource.data.length > 0"
+          [pageSizeOptions]="[5, 10, 20]"
+          [length]="dataSource.data.length"
+          [pageSize]="5"
+          showFirstLastButtons
+          aria-label="Select patient in search Worklist"
+        >
+        </mat-paginator>
 
         <!-- Table For Displaying External Beneficiary data from Mongo-->
         <table
-          *ngIf="externalBeneficiaryList.length > 0"
-          class="table table-striped"
+          *ngIf="externalBeneficiaryList?.data?.length > 0"
+          mat-table
+          [dataSource]="dataSourceOne"
+          class="mat-elevation-z8 responsiveTable"
           aria-describedby="externalBeneficiaryTable"
         >
-          <thead>
-            <tr style="text-align: center">
-              <th id="sNo">{{ currentLanguageSet?.common?.sNo }}</th>
-              <th id="amritID">{{ currentLanguageSet?.amritID }}</th>
-              <th id="healthID">{{ currentLanguageSet?.abha }}</th>
-              <th id="healthIdNumber">{{ currentLanguageSet?.abhaNumber }}</th>
-              <th id="externalID">{{ currentLanguageSet?.externalID }}</th>
-              <th id="benName">{{ currentLanguageSet?.casesheet?.name }}</th>
-              <th id="gender">{{ currentLanguageSet?.bendetails?.gender }}</th>
-              <th id="dob">{{ currentLanguageSet?.dateOfBirth }}</th>
-              <th id="state">{{ currentLanguageSet?.travel?.state }}</th>
-              <th id="district">{{ currentLanguageSet?.travel?.district }}</th>
-              <th id="action">{{ currentLanguageSet?.bendetails?.action }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-template [ngIf]="filteredExternalBeneficiaryList.length === 0">
-              <tr *ngFor="let row of blankTable">
-                <td colspan="11" *ngIf="row === 3">
-                  <h4 class="norecord text-field-color">
-                    {{ currentLanguageSet?.common?.noRecordFound }}
-                  </h4>
-                </td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-              </tr>
-            </ng-template>
-            <tr
-              *ngFor="let beneficiary of externalPagedList"
-              class="table-hover"
+          <ng-container matColumnDef="sNo">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
             >
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{ filteredExternalBeneficiaryList.indexOf(beneficiary) + 1 }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{
-                  beneficiary?.amritID === null ? "NA" : beneficiary?.amritID
-                }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{
-                  beneficiary?.healthID === null ? "NA" : beneficiary?.healthID
-                }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{
-                  beneficiary?.healthIdNumber === null
-                    ? "NA"
-                    : beneficiary?.healthIdNumber
-                }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{
-                  beneficiary?.externalId === null
-                    ? "NA"
-                    : beneficiary?.externalId
-                }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{ beneficiary?.benName }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{ beneficiary.gender | titlecase }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{ beneficiary?.dob }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{ beneficiary.state | titlecase }}
-              </td>
-              <td (click)="sendRegisteredBeneficiaryToNurse(beneficiary)">
-                {{ beneficiary.district | titlecase }}
-              </td>
-              <td>
-                <button
-                  mat-raised-button
-                  class="button-overall-disabled"
-                  type="button"
-                  color="primary"
-                  [disabled]="
-                    beneficiary?.amritID !== '' &&
-                    beneficiary?.amritID !== null &&
-                    beneficiary?.amritID !== undefined &&
-                    beneficiary?.externalId !== null &&
-                    beneficiary?.externalId !== undefined &&
-                    beneficiary?.externalId !== ''
-                  "
-                  (click)="migrateBeneficiaryToAmrit(beneficiary.benObject)"
-                >
-                  {{ currentLanguageSet?.registertoAMRIT }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2">
-                <div
-                  *ngIf="filteredExternalBeneficiaryList.length > 0"
-                  class="totalCount"
-                >
-                  {{ currentLanguageSet?.common?.totalCount }} :
-                  {{ filteredExternalBeneficiaryList.length }}
-                </div>
-              </td>
-              <td colspan="9">
-                <ul class="pagination">
-                  <li
-                    [ngClass]="{
-                      disabled:
-                        pageNo === 0 ||
-                        pageNo === 1 ||
-                        externalBeneficiaryList === null ||
-                        externalBeneficiaryList === undefined ||
-                        externalBeneficiaryList.length === 0
-                    }"
-                  >
-                    <a
-                      tabindex="{0}"
-                      (click)="prevPage()"
-                      (keydown.enter)="prevPage()"
-                      (keyup.enter)="prevPage()"
-                    >
-                    </a>
-                  </li>
-                  <li>
-                    <a>{{ pageNo }}</a>
-                  </li>
-                  <li
-                    [ngClass]="{
-                      disabled:
-                        externalBeneficiaryList === null ||
-                        externalBeneficiaryList === undefined ||
-                        externalBeneficiaryList.length === 0
-                    }"
-                  >
-                    <a
-                      tabindex="{0}"
-                      (click)="nextPage()"
-                      (keydown.enter)="nextPage()"
-                      (keyup.enter)="nextPage()"
-                    >
-                    </a>
-                  </li>
-                </ul>
-              </td>
-            </tr>
-          </tfoot>
+              S.No
+            </th>
+            <td mat-cell *matCellDef="let beneficiary">
+              {{ beneficiary?.sNo }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="amritID">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              Amrit ID
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{ beneficiary?.amritID === null ? "NA" : beneficiary?.amritID }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="healthID">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              ABHA
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{
+                beneficiary?.healthID === null ? "NA" : beneficiary?.healthID
+              }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="healthIdNumber">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              ABHA Number
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{
+                beneficiary?.healthIdNumber === null
+                  ? "NA"
+                  : beneficiary?.healthIdNumber
+              }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="externalID">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              External ID
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{
+                beneficiary?.externalId === null
+                  ? "NA"
+                  : beneficiary?.externalId
+              }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="benName">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              Name
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{ beneficiary?.benName }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="gender">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              Gender
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{ beneficiary.gender | titlecase }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="dob">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              Date Of Birth
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{ beneficiary?.dob }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="state">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              State
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{ beneficiary.state | titlecase }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="district">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              District
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let beneficiary"
+              (click)="sendRegisteredBeneficiaryToNurse(beneficiary)"
+            >
+              {{ beneficiary.district | titlecase }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th
+              mat-header-cell
+              style="border-bottom: none"
+              *matHeaderCellDef
+              mat-sort-header
+            >
+              Action
+            </th>
+            <td mat-cell *matCellDef="let beneficiary">
+              <button
+                mat-raised-button
+                type="button"
+                color="primary"
+                [disabled]="
+                  beneficiary?.amritID !== '' &&
+                  beneficiary?.amritID !== null &&
+                  beneficiary?.amritID !== undefined &&
+                  beneficiary?.externalId !== null &&
+                  beneficiary?.externalId !== undefined &&
+                  beneficiary?.externalId !== ''
+                "
+                (click)="migrateBeneficiaryToAmrit(beneficiary.benObject)"
+              >
+                Register to AMRIT
+              </button>
+            </td>
+          </ng-container>
+          <!-- Repeat ng-container for other columns -->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1"></tr>
         </table>
+        <mat-paginator
+          *ngIf="dataSourceOne.data.length > 0"
+          [pageSizeOptions]="[5, 10, 20]"
+          [pageSize]="5"
+          showFirstLastButtons
+          aria-label="Select patient in search Worklist"
+        >
+        </mat-paginator>
       </section>
     </mat-card>
   </div>

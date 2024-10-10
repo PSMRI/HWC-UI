@@ -19,26 +19,53 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  Component,
-  OnInit,
-  Input,
-  DoCheck,
-  OnChanges,
-  OnDestroy,
-} from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { ConfirmationService } from '../../../core/services/confirmation.service';
 import { NurseService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import * as moment from 'moment';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-nurse-anc-details',
   templateUrl: './anc-details.component.html',
   styleUrls: ['./anc-details.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -93,14 +120,18 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
     const today = new Date();
     const checkdate = new Date();
 
-    checkdate.setMonth(today.getMonth() - 10);
+    checkdate.setMonth(today.getMonth() - 9);
 
-    if (lmpDate > checkdate && lmpDate < today) {
-      this.patientANCDetailsForm.patchValue({ duration: null });
-      this.calculateEDD(lmpDate);
-      this.calculateGestationalAge(lmpDate);
-      this.calculatePeriodOfPregnancy(lmpDate);
-      this.nurseService.setLMPForFetosenseTest(lmpDate);
+    const lmpDateJS = lmpDate.toDate();
+
+    if (lmpDateJS > checkdate && lmpDateJS < today) {
+      this.patientANCDetailsForm.patchValue({
+        lmpDate: lmpDateJS,
+        duration: null,
+      });
+      this.calculateEDD(lmpDateJS);
+      this.calculateGestationalAge(lmpDateJS);
+      this.calculatePeriodOfPregnancy(lmpDateJS);
     } else {
       lmpDate = null;
       this.patientANCDetailsForm.patchValue({ lmpDate: lmpDate });
@@ -110,7 +141,6 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
       this.calculateEDD(lmpDate);
       this.calculateGestationalAge(lmpDate);
       this.calculatePeriodOfPregnancy(lmpDate);
-      this.nurseService.clearLMPForFetosenseTest();
     }
   }
 
@@ -133,9 +163,9 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  calculateGestationalAge(lastMP: any) {
+  calculateGestationalAge(lastMP: Date) {
     let gestationalAge: any;
-    if (lastMP !== null) {
+    if (lastMP instanceof Date) {
       const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
       gestationalAge = Math.round(
         Math.abs(
@@ -157,8 +187,8 @@ export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  calculateEDD(lastMP: any) {
-    if (lastMP !== null) {
+  calculateEDD(lastMP: Date) {
+    if (lastMP instanceof Date) {
       const edd = new Date(lastMP);
       edd.setDate(lastMP.getDate() + 280);
       this.patientANCDetailsForm.patchValue({ expDelDt: edd });

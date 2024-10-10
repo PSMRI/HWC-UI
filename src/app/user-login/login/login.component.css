@@ -14,7 +14,7 @@
 
 .forgotPassword{
     float: right;
-    margin-right: 90px;
+    margin-right: 75px;
     margin-top: 20px;
 }
 
@@ -117,8 +117,8 @@ mat-card-title {
 }
 
 .full-width-login {
-    width: 75%;
-    margin-left: 50px;
+    width: 80%;
+    margin-left: 35px;
     margin-top: 10px;
     margin-bottom: 10px;
     font-size: 20px;
@@ -146,4 +146,17 @@ input:-webkit-autofill:active {
 input::-ms-reveal,
 input::-ms-clear {
     display: none;
+}
+
+
+
+
+/* @media screen  and (min-width:768px) and (max-width:1024px) {
+    
+} */
+@media screen  and (min-width:360px) and (max-width:430px) {
+    .screen_adjustment {
+        width: 100% !important;
+        margin-left: -50px !important;
+    } 
 }

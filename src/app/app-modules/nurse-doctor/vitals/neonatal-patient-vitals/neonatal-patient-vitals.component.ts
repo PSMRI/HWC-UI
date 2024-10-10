@@ -36,8 +36,9 @@ import {
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { IotcomponentComponent } from 'src/app/app-modules/core/component/iotcomponent/iotcomponent.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-nurse-neonatal-patient-vitals',
@@ -65,6 +66,7 @@ export class NeonatalPatientVitalsComponent
   startTempTest = environment.startTempurl;
   doctorScreen = false;
   benGenderType: any;
+  attendant: any;
 
   constructor(
     private dialog: MatDialog,
@@ -73,6 +75,7 @@ export class NeonatalPatientVitalsComponent
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private nurseService: NurseService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -104,6 +107,11 @@ export class NeonatalPatientVitalsComponent
       this.doctorScreen = true;
       this.updateGeneralVitals(this.neonatalVitalsForm);
     }
+
+    this.attendant = this.route.snapshot.params['attendant'];
+    if (this.attendant === 'nurse') {
+      this.getPreviousVisitAnthropometry();
+    }
   }
 
   ngOnDestroy() {
@@ -121,6 +129,29 @@ export class NeonatalPatientVitalsComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+
+  getPreviousVisitAnthropometry() {
+    this.generalVitalsDataSubscription = this.doctorService
+      .getPreviousVisitAnthropometry({
+        benRegID: localStorage.getItem('beneficiaryRegID'),
+      })
+      .subscribe((anthropometryData: any) => {
+        if (
+          anthropometryData &&
+          anthropometryData.data &&
+          anthropometryData.data.response &&
+          anthropometryData.data.response !== 'Visit code is not found' &&
+          anthropometryData.data.response !== 'No data found'
+        ) {
+          const heightStr = anthropometryData.data.response.toString();
+          this.neonatalVitalsForm.controls['height_cm'].patchValue(
+            heightStr.endsWith('.0')
+              ? Math.round(anthropometryData.data.response)
+              : anthropometryData.data.response,
+          );
+        }
+      });
   }
 
   benGenderAndAge: any;

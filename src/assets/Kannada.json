@@ -38,7 +38,7 @@
                 "fullName": "ಪೂರ್ಣ ಹೆಸರು",
                 "maritalStatus": "ವೈವಾಹಿಕ ಸ್ಥಿತಿ",
                 "contactNo": "ಸಂಪರ್ಕ ಸಂಖ್ಯೆ",
-                "alternateNumber":"ಪರ್ಯಾಯ ಸಂಪರ್ಕ ಸಂಖ್ಯೆ",
+                "alternateNumber":"ಪರ್ಯಾಯ ಸಂಖ್ಯೆ",
                 "gender": "ಲಿಂಗ",
                 "age": "ವಯಸ್ಸು",
                 "ageUnit": "ವಯಸ್ಸಿನ ಘಟಕ",
@@ -2071,7 +2071,7 @@
         "externalID": "ಬಾಹ್ಯ ಐಡಿ",
         "registertoAMRIT": "ಅಮೃತಗೆ ನೋಂದಾಯಿಸಿ",
         "pleaseEnterValidInput": "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇನ್‌ಪುಟ್ ಅನ್ನು ನಮೂದಿಸಿ",
-        "pleaseEnterValidInputFor": "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇನ್‌ಪುಟ್ ಅನ್ನು ನಮೂದಿಸಿ",
+        "pleaseEnterValidInputFor": "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇನ್‌ಪುಟ್ ಅನ್ನು ನಮೂದಿಸಿ ",
         "errorInfetchingStates": "ಸ್ಥಿತಿಗಳನ್ನು ಪಡೆಯುವಲ್ಲಿ ದೋಷ",
         "pleaseRegisterBeneficiaryInAMRIT": "ದಯವಿಟ್ಟು ಅಮೃತ ನಲ್ಲಿ ಫಲಾನುಭವಿಯನ್ನು ನೋಂದಾಯಿಸಿ",
         "noFurtherRecordsToShow": "ತೋರಿಸಲು ಹೆಚ್ಚಿನ ದಾಖಲೆಗಳಿಲ್ಲ",
@@ -2107,7 +2107,8 @@
         "riskFactors": "Risk Factors",
         "treatment": "Treatment",
         "selfcare": "Self-Care",
-        "investigations": "Investigations"
+        "investigations": "Investigations",
+        "noRecordsFound": "No Records Found"
     }  
 
     

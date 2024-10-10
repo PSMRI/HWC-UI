@@ -1,13 +1,12 @@
 <div class="title info">
   <h4>{{ currentLanguageSet?.generateABHA }}</h4>
-  <button
-    class="pull-right close-btn"
+  <mat-icon
+    class="md-24 pull-right close-btn"
     matDialogClose
     (click)="closeDialog()"
     mat-icon-button
+    >close</mat-icon
   >
-    <mat-icon class="md-24">close</mat-icon>
-  </button>
 </div>
 <br />
 
@@ -79,12 +78,16 @@
         />
       </mat-form-field>
     </div>
-    <div class="col-sm-12 step-btn m-b-20" style="text-align: right">
+    <div
+      class="col-sm-12 step-btn m-b-20"
+      style="text-align: right; margin-left: -15px"
+    >
       <button
         id="submitButton"
         mat-raised-button
         type="accent"
         color="accent"
+        class="mat_green"
         [disabled]="!generateMobileOTPForm.valid"
         (click)="onSubmitOfMobileNo(); verifyMobileOtp()"
       >

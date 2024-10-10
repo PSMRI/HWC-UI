@@ -34,7 +34,7 @@ import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ActivatedRoute } from '@angular/router';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
 
 @Component({

@@ -577,7 +577,7 @@ export class GeneralUtils {
       placeOfDelivery: null,
       otherPlaceOfDelivery: null,
       deliveryTypeID: null,
-      typeOfDelivery: null,
+      typeOfDelivery: { value: null, disabled: true },
       complicationAtBirthID: null,
       complicationAtBirth: null,
       otherComplicationAtBirth: null,

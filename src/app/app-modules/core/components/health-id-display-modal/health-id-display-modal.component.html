@@ -14,7 +14,7 @@
       {{ currentLanguageSet?.aBHACareContextMapping }}
     </h4>
     <button
-      class="pull-right close-btn"
+      class="pull-right close-btn mat_icon_white"
       matTooltip="{{ currentLanguageSet?.common?.close }}"
       matDialogClose
       (click)="closeDialog()"
@@ -39,12 +39,7 @@
         searchDetails.data.length > 0
       "
     >
-      <table
-        mat-table
-        class="table table-striped"
-        [dataSource]="searchDetails"
-        class="mat-elevation-z8"
-      >
+      <table mat-table class="table table-striped" [dataSource]="searchDetails">
         <!-- sno Column -->
         <ng-container matColumnDef="sno">
           <th mat-header-cell *matHeaderCellDef>
@@ -59,7 +54,7 @@
             {{ currentLanguageSet?.abhaNumber }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.healthIdNumber ? element?.healthIdNumber : "" }}
+            {{ element?.abha ? element?.abha : "" }}
           </td>
         </ng-container>
 
@@ -69,7 +64,7 @@
             {{ currentLanguageSet?.abha }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.HealthID ? element?.HealthID : "" }}
+            {{ element?.abha ? element?.abha : "" }}
           </td>
         </ng-container>
 
@@ -79,7 +74,7 @@
             {{ currentLanguageSet?.dateOfCreation }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.CreatedDate | date: "yyyy-MM-dd hh:mm:ss a" }}
+            {{ element?.createdDate | date: "yyyy-MM-dd hh:mm:ss a" }}
           </td>
         </ng-container>
 
@@ -108,12 +103,7 @@
       class="table-responsive vw100"
       *ngIf="!healthIDMapping && !enablehealthIdOTPForm && !searchPopup"
     >
-      <table
-        mat-table
-        class="table table-striped"
-        [dataSource]="healthIDArray"
-        class="mat-elevation-z8"
-      >
+      <table mat-table class="table table-striped" [dataSource]="healthIDArray">
         <!-- sno Column -->
         <ng-container matColumnDef="sno">
           <th mat-header-cell *matHeaderCellDef>
@@ -125,7 +115,7 @@
         <!-- abhaNumber Column -->
         <ng-container matColumnDef="abhaNumber">
           <th mat-header-cell *matHeaderCellDef>
-            {{ currentLanguageSet?.abhaNumber }}
+            {{ currentLanguageSet?.aBHANumber }}
           </th>
           <td mat-cell *matCellDef="let element">
             {{ element?.healthIdNumber ? element?.healthIdNumber : "" }}
@@ -135,10 +125,10 @@
         <!-- abha Column -->
         <ng-container matColumnDef="abha">
           <th mat-header-cell *matHeaderCellDef>
-            {{ currentLanguageSet?.abha }}
+            {{ currentLanguageSet?.aBHA }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.HealthID ? element?.HealthID : "" }}
+            {{ element?.healthId ? element?.healthId : "" }}
           </td>
         </ng-container>
 
@@ -148,17 +138,17 @@
             {{ currentLanguageSet?.dateOfCreation }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.CreatedDate | date: "yyyy-MM-dd hh:mm:ss a" }}
+            {{ element?.createdDate }}
           </td>
         </ng-container>
 
         <!-- abhaMode Column -->
         <ng-container matColumnDef="abhaMode">
           <th mat-header-cell *matHeaderCellDef>
-            {{ currentLanguageSet?.abhaMode }}
+            {{ currentLanguageSet?.aBHAMode }}
           </th>
           <td mat-cell *matCellDef="let element">
-            {{ element?.AuthenticationMode }}
+            {{ element?.authenticationMode }}
           </td>
         </ng-container>
 
@@ -199,25 +189,14 @@
       class="table-responsive vw100"
       *ngIf="healthIDMapping && !enablehealthIdOTPForm && !searchPopup"
     >
-      <table
-        mat-table
-        class="table table-striped"
-        [dataSource]="healthIDArray"
-        class="mat-elevation-z8"
-      >
+      <table mat-table class="table table-striped" [dataSource]="healthIDArray">
         <ng-container matColumnDef="sno">
-          <th
-            mat-header-cell
-            style="border-bottom: none"
-            *matHeaderCellDef
-            mat-sort-header
-          >
+          <th mat-header-cell *matHeaderCellDef>
             {{ currentLanguageSet?.coreComponents?.sno }}
           </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element?.sno }}
-          </td>
+          <td mat-cell *matCellDef="let element; let i = index">1</td>
         </ng-container>
+
         <ng-container matColumnDef="healthIDNo">
           <th
             mat-header-cell
@@ -278,16 +257,6 @@
             mat-sort-header
           ></th>
           <td mat-cell *matCellDef="let element">
-            <button
-              mat-icon-button
-              matTooltip="{{ currentLanguageSet?.printABHACard }}"
-              (click)="printHealthIDCard(element)"
-              class="pull-right width-20px"
-            >
-              <mat-icon>print</mat-icon>
-            </button>
-          </td>
-          <td mat-cell *matCellDef="let element">
             <mat-radio-group [(ngModel)]="chooseHealthID">
               <mat-radio-button
                 color="primary"
@@ -303,6 +272,19 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns2"></tr>
       </table>
+      <div *ngIf="healthIDArray?.data?.length !== 0">
+        <button
+          mat-raised-button
+          class="pull-right mat_blue button-overall-disabled background-overall"
+          color="primary"
+          (click)="generateOtpForMapping()"
+          [disabled]="
+            selectedHealthID === undefined || selectedHealthID === null
+          "
+        >
+          {{ currentLanguageSet?.generateOTP }}
+        </button>
+      </div>
 
       <div
         class="pull-center"
@@ -317,7 +299,7 @@
 <!-- Entering OTP for Health ID Generation-->
 <div
   *ngIf="enablehealthIdOTPForm && !searchPopup"
-  class="col-xs-12 col-sm-12"
+  class="col-xs-12 col-sm-12 container-fluid"
   [formGroup]="healthIdOTPForm"
 >
   <div class="row">
@@ -340,16 +322,6 @@
     </div>
     <div class="col-sm-12 step-btn m-b-20" style="text-align: right">
       <button
-        id="cancelButton"
-        mat-raised-button
-        type="button"
-        color="primary"
-        class="pull-right mat_blue"
-        (click)="resendOtp()"
-      >
-        {{ currentLanguageSet?.resendOTP }}
-      </button>
-      <button
         id="submitButton"
         mat-raised-button
         class="pull-right mat_blue"
@@ -359,6 +331,17 @@
         (click)="verifyOtp()"
       >
         {{ currentLanguageSet?.common?.submit }}
+      </button>
+      <button
+        id="cancelButton"
+        mat-raised-button
+        style="margin-right: 3px"
+        type="button"
+        color="primary"
+        class="pull-right mat_blue"
+        (click)="resendOtp()"
+      >
+        {{ currentLanguageSet?.resendOTP }}
       </button>
     </div>
   </div>

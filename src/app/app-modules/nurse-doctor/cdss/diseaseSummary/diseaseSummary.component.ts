@@ -7,7 +7,7 @@ import { DoctorService, MasterdataService } from '../../shared/services';
 import { ViewDiseaseSummaryDetailsComponent } from '../viewDiseaseSummaryDetails/viewDiseaseSummaryDet.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
@@ -55,17 +55,17 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
   ngOnInit() {
     this.getChiefComplaintSymptoms();
     this.getDiseaseNames();
+    this.filteredOptions = this.DiseaseSummaryForm.controls[
+      'diseaseSummary'
+    ].valueChanges.pipe(
+      startWith(''),
+      map((val: any) => this._filter(val || '')),
+    );
   }
 
-  inputFocused(trg: MatAutocompleteTrigger) {
-    setTimeout(() => {
-      trg.closePanel();
-    });
-  }
-
-  filter(val: string): string[] {
-    return this.chiefComplaints.filter(
-      (option: string) => option.toLowerCase().indexOf(val.toLowerCase()) === 0,
+  _filter(val: string): string[] {
+    return this.diseaseNames.filter((option: string) =>
+      option.toLowerCase().includes(val.toLowerCase()),
     );
   }
 
@@ -203,12 +203,6 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
         diseaseName.forEach((names: any) => {
           this.diseaseNames.push(names.diseaseName);
         });
-        this.filteredOptions = this.DiseaseSummaryForm.valueChanges.pipe(
-          startWith(null),
-          map((val: any) =>
-            val ? this.filterDiseaseNames(val) : this.diseaseNames.slice(),
-          ),
-        );
       } else {
         this.confirmationService.alert(res.errorMessage, 'error');
       }
@@ -217,12 +211,11 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
       this.confirmationService.alert(err, 'error');
     };
   }
-  filterDiseaseNames(val: string): string[] {
-    return this.diseaseNames.filter(
-      (option: string) => option.toLowerCase().indexOf(val.toLowerCase()) === 0,
-    );
-  }
-  showDiseaseSummary(diseaseData: string | null | undefined) {
+  showDiseaseSummary(
+    diseaseData: string | null | undefined,
+    autocompleteField: any,
+    elementInput: any,
+  ) {
     this.summaryObj = null;
     this.summaryDetails.forEach((filterDiseaseObj: any) => {
       if (filterDiseaseObj.diseaseName === diseaseData) {
@@ -236,6 +229,10 @@ export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
     ) {
       this.cdssService.getDiseaseData(this.summaryObj).subscribe((data) => {
         if (data) {
+          autocompleteField._elementRef.nativeElement.classList.remove(
+            'mat-focused',
+          );
+          elementInput.blur();
           const dialogRef = this.dialog.open(
             ViewDiseaseSummaryDetailsComponent,
             {

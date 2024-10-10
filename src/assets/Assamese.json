@@ -37,7 +37,7 @@
         "lastName": "উপাধী (চাৰন্যেম)",
         "maritalStatus": "বৈবাহিক স্থিতি",
         "contactNo": "যোগাযোগৰ নম্বৰ",
-        "alternateNumber":"Alternate Contact Number",
+        "alternateNumber":"Alternate Number",
         "gender": "লিঙ্গ",
         "age": "বয়স",
         "ageUnit": "বয়সৰ একক",
@@ -2054,7 +2054,7 @@
         "externalID": "External ID",
         "registertoAMRIT": "Register to AMRIT",
         "pleaseEnterValidInput": "Please enter a valid input",
-        "pleaseEnterValidInputFor": "Please enter a valid input for",
+        "pleaseEnterValidInputFor": "Please enter a valid input for ",
         "errorInfetchingStates": "Error in fetching states",
         "pleaseRegisterBeneficiaryInAMRIT": "Please register the beneficiary in AMRIT",
         "noFurtherRecordsToShow": "No further records to show",
@@ -2074,8 +2074,7 @@
         "riskFactors": "Risk Factors",
         "treatment": "Treatment",
         "selfcare": "Self-Care",
-        "investigations": "Investigations"
-
-      
+        "investigations": "Investigations",
+        "noRecordsFound": "No Records Found"
       }
 }

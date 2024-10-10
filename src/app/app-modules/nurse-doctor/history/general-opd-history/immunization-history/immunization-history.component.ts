@@ -24,7 +24,7 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../../shared/services';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 
 @Component({
   selector: 'app-general-immunization-history',
@@ -240,9 +240,12 @@ export class ImmunizationHistoryComponent
     }
   }
   addVaccine(i: any) {
+    let vaccineList: any = [];
     const immunizationList = <FormArray>(
       this.immunizationHistoryForm.controls['immunizationList']
     );
+    vaccineList = (<FormArray>immunizationList.controls[i]).get('vaccines');
+    vaccineList.push(this.initVaccineList());
   }
 
   addImmunization() {

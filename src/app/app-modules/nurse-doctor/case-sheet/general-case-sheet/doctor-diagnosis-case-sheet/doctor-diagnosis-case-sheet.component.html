@@ -442,14 +442,7 @@
   <!-- End of Current Vitals -->
 
   <!-- Covid Vaccination Details -->
-  <div
-    class="row m-t-10"
-    *ngIf="
-      visitCategory?.toLowerCase() !==
-        'neonatal and infant health care services' &&
-      printPagePreviewSelect?.caseSheetCovidVaccinationDetails
-    "
-  >
+  <div class="row m-t-10" *ngIf="isCovidVaccinationStatusVisible">
     <div class="col-xs-12">
       <fieldset>
         <legend>{{ current_language_set?.covidVaccinationStatus }}:</legend>
@@ -1716,8 +1709,52 @@
           <small>{{ counsellingProvidedDetails }}</small>
         </h4>
       </div>
+
+      <!-- Counselling Provided ends -->
+
+      <!-- Revisit & Refer for QC-->
+      <div class="row col-xs-12" *ngIf="visitCategory === 'General OPD (QC)'">
+        <h2 class="text-center">{{ current_language_set?.revisitRefer }}</h2>
+        <hr />
+        <div class="col-xs-12">
+          <table
+            class="table table-no-border casesheet-table"
+            aria-describedby="Revisit&Refertbl"
+          >
+            <tbody>
+              <tr>
+                <th id="referredToInstituteName">
+                  {{
+                    current_language_set?.Referdetails?.higherhealthcarecenter
+                  }}:
+                </th>
+                <td>{{ referDetails?.referredToInstituteName }}</td>
+              </tr>
+              <tr>
+                <th id="serviceList">
+                  {{ current_language_set?.Referdetails?.additionalservices }}:
+                </th>
+                <td>{{ serviceList }}</td>
+              </tr>
+              <tr>
+                <th id="referralReason">
+                  {{ current_language_set?.Referdetails?.referralReason }}:
+                </th>
+                <td>{{ referDetails?.referralReason }}</td>
+              </tr>
+              <tr>
+                <th id="revisitDate">
+                  {{ current_language_set?.Referdetails?.revisitDate }}:
+                </th>
+                <td>{{ referDetails?.revisitDate }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!--Revisit & Refer for QC ends-->
     </div>
-    <!-- Counselling Provided ends -->
 
     <!-- Doctor's Sign -->
     <div class="row m-t-50">

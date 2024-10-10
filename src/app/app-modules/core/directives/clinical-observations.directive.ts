@@ -28,7 +28,7 @@ import {
 } from '@angular/forms';
 import { GeneralUtils } from '../../nurse-doctor/shared/utility/general-utility';
 import { MatDialog } from '@angular/material/dialog';
-import { DiagnosisSearchComponent } from '../component/diagnosis-search/diagnosis-search.component';
+import { DiagnosisSearchComponent } from '../components/diagnosis-search/diagnosis-search.component';
 @Directive({
   selector: '[appClinicalObservations]',
 })

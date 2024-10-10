@@ -34,7 +34,7 @@ import { DataSyncUtils } from '../shared/utility/data-sync-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 
 @Component({
   selector: 'app-workarea',

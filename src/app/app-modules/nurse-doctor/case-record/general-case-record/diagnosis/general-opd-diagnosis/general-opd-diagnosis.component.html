@@ -32,71 +32,73 @@
           let isLast = last
         "
       >
-        <ng-container [formGroupName]="i">
-          <div class="col-xs-12 col-sm-9">
-            <mat-form-field class="input-full-width">
-              <input
-                matInput
-                allowText="inputFieldValidator"
-                appDiagnosisSearch
-                [diagnosisListForm]="diagnosis"
-                required
-                name="viewDiagnosisProvided"
-                formControlName="viewProvisionalDiagnosisProvided"
-                maxlength="100"
-                minlength="3"
-                [previousSelected]="
-                  generalDiagnosisForm.value.provisionalDiagnosisList
-                "
-                required
-              />
-              <mat-icon
-                class="search-btn cursorPointer"
+        <ng-container [formGroupName]="i" class="col-12">
+          <div class="row">
+            <div class="col-9">
+              <mat-form-field class="input-full-width">
+                <input
+                  matInput
+                  allowText="inputFieldValidator"
+                  appDiagnosisSearch
+                  [diagnosisListForm]="diagnosis"
+                  required
+                  name="viewDiagnosisProvided"
+                  formControlName="viewProvisionalDiagnosisProvided"
+                  maxlength="100"
+                  minlength="3"
+                  [previousSelected]="
+                    generalDiagnosisForm.value.provisionalDiagnosisList
+                  "
+                  required
+                />
+                <mat-icon
+                  class="search-btn cursorPointer"
+                  *ngIf="
+                    !diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled
+                  "
+                  matSuffix
+                  appDiagnosisSearch
+                  [diagnosisListForm]="diagnosis"
+                  [previousSelected]="
+                    generalDiagnosisForm.value.provisionalDiagnosisList
+                  "
+                  >search</mat-icon
+                >
+              </mat-form-field>
+            </div>
+            <div class="col-3 m-t-10" style="padding: 0px">
+              <button
+                mat-mini-fab
+                type="button"
+                class="mat_warn_circle"
+                style="margin-right: 5px"
+                color="warn"
                 *ngIf="
-                  !diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled
+                  diagnosis.get('provisionalDiagnosisList')?.disabled ||
+                  i !== 0 ||
+                  (i === 0 &&
+                    generalDiagnosisForm.get('provisionalDiagnosisList')?.value
+                      .viewProvisionalDiagnosisProvided !== null &&
+                    generalDiagnosisForm.get('provisionalDiagnosisList')?.value
+                      .viewProvisionalDiagnosisProvided !== '')
                 "
-                matSuffix
-                appDiagnosisSearch
-                [diagnosisListForm]="diagnosis"
-                [previousSelected]="
-                  generalDiagnosisForm.value.provisionalDiagnosisList
-                "
-                >search</mat-icon
+                (click)="removeDiagnosisFromList(i, diagnosis)"
               >
-            </mat-form-field>
-          </div>
-          <div class="col-xs-12 col-sm-3 m-t-10" style="padding: 0px">
-            <button
-              mat-mini-fab
-              type="button"
-              class="mat_warn_circle"
-              style="margin-right: 5px"
-              color="warn"
-              *ngIf="
-                diagnosis.get('provisionalDiagnosisList')?.disabled ||
-                i !== 0 ||
-                (i === 0 &&
-                  generalDiagnosisForm.get('provisionalDiagnosisList')?.value
-                    .viewProvisionalDiagnosisProvided !== null &&
-                  generalDiagnosisForm.get('provisionalDiagnosisList')?.value
-                    .viewProvisionalDiagnosisProvided !== '')
-              "
-              (click)="removeDiagnosisFromList(i, diagnosis)"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-            <button
-              mat-mini-fab
-              type="button"
-              style="margin-right: 3px"
-              color="primary"
-              class="mat_blue_circle"
-              *ngIf="isLast"
-              [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
-              (click)="addDiagnosis()"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
+                <mat-icon>close</mat-icon>
+              </button>
+              <button
+                mat-mini-fab
+                type="button"
+                style="margin-right: 3px"
+                color="primary"
+                class="mat_blue_circle"
+                *ngIf="isLast"
+                [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
+                (click)="addDiagnosis()"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
           </div>
         </ng-container>
       </div>

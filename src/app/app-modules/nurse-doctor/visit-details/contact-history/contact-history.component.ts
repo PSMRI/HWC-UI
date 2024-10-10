@@ -32,7 +32,7 @@ import {
 import { FormGroup } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 
 @Component({
   selector: 'app-contact-history',

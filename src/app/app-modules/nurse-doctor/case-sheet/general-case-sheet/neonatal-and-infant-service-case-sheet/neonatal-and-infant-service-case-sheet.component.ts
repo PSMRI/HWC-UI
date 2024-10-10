@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+// import { Component, DoCheck, Input, OnChanges, OnInit } from '@angular/core';
+// import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import {
   Component,
   DoCheck,
@@ -27,10 +29,9 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { Timestamp } from 'rxjs';
 
 @Component({
   selector: 'app-neonatal-and-infant-service-case-sheet',
@@ -69,10 +70,7 @@ export class NeonatalAndInfantServiceCaseSheetComponent
   visitCategory: any;
   birthTime!: Date;
 
-  constructor(
-    private httpServiceService: HttpServiceService,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
-  ) {}
+  constructor(private httpServiceService: HttpServiceService) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();

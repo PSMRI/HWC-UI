@@ -45,8 +45,8 @@ import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { HrpService } from '../../../shared/services/hrp.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 
 @Component({
   selector: 'app-general-past-history',

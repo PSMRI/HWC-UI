@@ -21,24 +21,62 @@
  */
 import { Component, DoCheck, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ConfirmationService } from '../../services/confirmation.service';
 import { DatePipe } from '@angular/common';
-import { SetLanguageComponent } from '../set-language.component';
-import { HealthIdValidateComponent } from 'src/app/app-modules/registrar/registration/register-other-details/register-other-details.component';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { HttpServiceService } from '../../services/http-service.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { ConfirmationService } from 'src/app/app-modules/core/services';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+// import { RegistrarService } from '../services/registrar.service';
+// import { HealthIdValidateComponent } from '../health-id-validatepopup/health-id-validatepopup.component';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
+import { HealthIdValidateComponent } from 'src/app/app-modules/registrar/registration/register-other-details/register-other-details.component';
 
 @Component({
   selector: 'app-health-id-display-modal',
   templateUrl: './health-id-display-modal.component.html',
   styleUrls: ['./health-id-display-modal.component.css'],
-  providers: [DatePipe],
+  providers: [
+    {
+      provide: DatePipe,
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
   chooseHealthID: any;
@@ -55,19 +93,19 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
 
   displayedColumns: any = [
     'sno',
-    'healthIDNo',
-    'healthID',
-    'createdDate',
-    'healthIDMode',
+    'abhaNumber',
+    'abha',
+    'dateOfCreation',
+    'abhaMode',
   ];
   searchDetails = new MatTableDataSource<any>();
 
   displayedColumns1: any = [
     'sno',
-    'healthIDNo',
-    'healthID',
-    'createdDate',
-    'healthIDMode',
+    'abhaNumber',
+    'abha',
+    'dateOfCreation',
+    'abhaMode',
     'action',
   ];
   displayedColumns2: any = [
@@ -94,7 +132,8 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
   }
 
   ngOnInit() {
-    console.log('datalist', this.input);
+    console.log('INSIDE HEALTH ID COMPONENT');
+    console.log('this.input', this.input);
     this.searchDetails.data = [];
     this.selectedHealthID = null;
     this.searchPopup = false;
@@ -102,18 +141,39 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
     this.searchPopup =
       this.input.search !== undefined ? this.input.search : false;
     this.healthIDMapping = this.input.healthIDMapping;
+    console.log('this.healthIDMapping', this.healthIDMapping);
+    if (this.input.dataList !== undefined && this.input.search === true) {
+      const tempVal: any = this.input.dataList.otherFields;
+      this.benDetails = this.input.dataList.otherFields;
+      const tempCreatDate: any = this.input.dataList.createdDate;
+      console.log('tempVal', tempVal);
+      let tempDataList: any;
+      if (typeof tempVal === 'string') {
+        tempDataList = JSON.parse(tempVal);
+        console.log('tempDataList', tempDataList);
+        // if (tempDataList) {
+        //   tempDataList.tempCreatDate = this.datePipe.transform(
+        //     tempDataList.tempCreatDate,
+        //     'yyyy-MM-dd hh:mm:ss a'
+        //   );
+        // }
+        this.searchDetails.data.push(tempDataList);
+        console.log('this.searchDetails.data%%', this.searchDetails.data);
+      }
+    }
+    // this.searchDetails = this.input.dataList;
+    // if (
+    //   this.input.dataList !== undefined &&
+    //   this.input.dataList.data !== undefined &&
+    //   this.input.dataList.data.BenHealthDetails !== undefined
+    // )
     if (
       this.input.dataList !== undefined &&
-      this.input.dataList.length > 0 &&
-      this.input.search === true
-    )
-      this.searchDetails = this.input.dataList;
-    if (
-      this.input.dataList !== undefined &&
-      this.input.dataList.data !== undefined &&
       this.input.dataList.data.BenHealthDetails !== undefined
-    )
+    ) {
       this.benDetails = this.input.dataList.data.BenHealthDetails;
+      console.log('this.benDetails1', this.benDetails);
+    }
     this.healthIdOTPForm = this.createOtpGenerationForm();
     this.createList();
   }
@@ -141,6 +201,7 @@ export class HealthIdDisplayModalComponent implements OnInit, DoCheck {
       });
     }
   }
+
   onRadioChange(data: any) {
     this.selectedHealthID = data;
   }

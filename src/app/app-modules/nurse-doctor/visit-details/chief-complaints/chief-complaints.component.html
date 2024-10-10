@@ -29,7 +29,6 @@
                 name="chiefComplaint"
                 formControlName="chiefComplaint"
                 #complaintType
-                [(ngModel)]="chiefComplaint"
                 (keyup)="suggestChiefComplaintList(complaint, i)"
                 (blur)="reEnterChiefComplaint(complaint)"
                 [matAutocomplete]="auto"
@@ -80,7 +79,6 @@
                 maxlength="2"
                 name="duration"
                 formControlName="duration"
-                [(ngModel)]="duration"
                 (input)="onInputDuration(complaint)"
                 (selectionChange)="validateDuration(complaint)"
               />

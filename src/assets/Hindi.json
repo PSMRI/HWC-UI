@@ -36,7 +36,7 @@
         "maritalStatus": "वैवाहिक स्थिति",
         "lastName": "उपनाम",
         "contactNo": "संपर्क नंबर",
-        "alternateNumber":"Alternate Contact Number",
+        "alternateNumber":"Alternate Number",
         "gender": "लिंग",
         "age": "आयु",
         "ageUnit": "उम्र यूनिट",
@@ -2066,7 +2066,7 @@
         "externalID": "External ID",
         "registertoAMRIT": "Register to AMRIT",
         "pleaseEnterValidInput": "Please enter a valid input",
-        "pleaseEnterValidInputFor": "Please enter a valid input for",
+        "pleaseEnterValidInputFor": "Please enter a valid input for ",
         "errorInfetchingStates": "Error in fetching states",
         "pleaseRegisterBeneficiaryInAMRIT": "Please register the beneficiary in AMRIT",
         "noFurtherRecordsToShow": "No further records to show",
@@ -2085,7 +2085,7 @@
         "riskFactors": "Risk Factors",
         "treatment": "Treatment",
         "selfcare": "Self-Care",
-        "investigations": "Investigations"
-
+        "investigations": "Investigations",
+        "noRecordsFound": "No Records Found"
       }
 }

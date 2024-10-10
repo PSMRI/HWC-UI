@@ -28,7 +28,7 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { FamilyTaggingService } from '../../shared/services/familytagging.service';
@@ -382,11 +382,11 @@ export class FamilyTaggingDetailsComponent
 
     this.registrarService.identityQuickSearch(benReqObj).subscribe(
       (beneficiaryDetails: any) => {
-        if (beneficiaryDetails && beneficiaryDetails.length === 1) {
+        if (beneficiaryDetails && beneficiaryDetails.data.length === 1) {
           this.benFamilyId =
-            beneficiaryDetails[0].familyId !== undefined &&
-            beneficiaryDetails[0].familyId !== null
-              ? beneficiaryDetails[0].familyId
+            beneficiaryDetails.data[0].familyId !== undefined &&
+            beneficiaryDetails.data[0].familyId !== null
+              ? beneficiaryDetails.data[0].familyId
               : null;
           this.registrarService.getBenFamilyDetails(this.benFamilyId);
         } else {

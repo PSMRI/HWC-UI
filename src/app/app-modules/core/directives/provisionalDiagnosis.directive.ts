@@ -27,7 +27,7 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { DiagnosisSearchComponent } from '../component/diagnosis-search/diagnosis-search.component';
+import { DiagnosisSearchComponent } from '../components/diagnosis-search/diagnosis-search.component';
 import { MatDialog } from '@angular/material/dialog';
 import { QuickConsultUtils } from '../../nurse-doctor/shared/utility';
 

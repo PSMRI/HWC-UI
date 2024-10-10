@@ -24,7 +24,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { ServicePointService } from './service-point.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 
 @Component({

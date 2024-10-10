@@ -3,10 +3,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.iemr.hwc-ui-next</groupId>
-	<artifactId>HWC-UI-NEXT</artifactId>
+	<groupId>com.iemr.hwc-ui</groupId>
+	<artifactId>HWC-UI</artifactId>
 	<version>1.0</version>
-	<name>HWC-UI-NEXT</name>
+	<name>HWC-UI</name>
 	<description>Piramal - HWC: Module ui</description>
 	<packaging>war</packaging>
 	<profiles>
@@ -75,7 +75,7 @@
 
 	<!-- install the necessary node_modules & compile in prod mode -->
 	<build>
-		<finalName>hwc-ui-next</finalName>
+		<finalName>hwc-ui</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>

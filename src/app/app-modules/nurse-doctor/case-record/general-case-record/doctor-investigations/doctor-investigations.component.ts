@@ -31,9 +31,9 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { environment } from 'src/environments/environment';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 
 @Component({
   selector: 'app-doctor-investigations',

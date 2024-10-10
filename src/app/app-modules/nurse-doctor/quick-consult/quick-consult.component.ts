@@ -50,28 +50,28 @@ import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { IotcomponentComponent } from '../../core/component/iotcomponent/iotcomponent.component';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
 
 interface prescribe {
-  id: string;
-  drugID: string;
-  drugName: string;
-  drugStrength: string;
-  drugUnit: string;
-  quantity: string;
-  formID: string;
-  qtyPrescribed: string;
-  route: string;
-  formName: string;
-  dose: string;
-  frequency: string;
-  duration: string;
-  unit: string;
-  instructions: string;
-  sctCode: string;
-  sctTerm: string;
+  id: any;
+  drugID: any;
+  drugName: any;
+  drugStrength: any;
+  drugUnit: any;
+  quantity: any;
+  formID: any;
+  qtyPrescribed: any;
+  route: any;
+  formName: any;
+  dose: any;
+  frequency: any;
+  duration: any;
+  unit: any;
+  instructions: any;
+  sctCode: any;
+  sctTerm: any;
   isEDL: any;
 }
 
@@ -103,24 +103,24 @@ export class QuickConsultComponent
   pageLimits: any = [];
   startRBSTest = environment.startRBSurl;
   currentPrescription: prescribe = {
-    id: '',
-    drugID: '',
-    drugName: '',
-    drugStrength: '',
-    drugUnit: '',
-    qtyPrescribed: '',
-    quantity: '',
-    route: '',
-    formID: '',
-    formName: '',
-    dose: '',
-    frequency: '',
-    duration: '',
-    unit: '',
-    instructions: '',
-    sctCode: '',
-    sctTerm: '',
-    isEDL: '',
+    id: null,
+    drugID: null,
+    drugName: null,
+    drugStrength: null,
+    drugUnit: null,
+    qtyPrescribed: null,
+    quantity: null,
+    route: null,
+    formID: null,
+    formName: null,
+    dose: null,
+    frequency: null,
+    duration: null,
+    unit: null,
+    instructions: null,
+    sctCode: null,
+    sctTerm: null,
+    isEDL: false,
   };
 
   tempDrugName: any;
@@ -446,24 +446,24 @@ export class QuickConsultComponent
 
   clearCurrentDetails() {
     this.currentPrescription = {
-      id: '',
-      drugID: '',
-      drugName: '',
-      drugStrength: '',
-      drugUnit: '',
-      quantity: '',
-      formID: '',
-      route: '',
-      qtyPrescribed: '',
-      formName: '',
-      dose: '',
-      frequency: '',
-      duration: '',
-      unit: '',
-      instructions: '',
-      sctCode: '',
-      sctTerm: '',
-      isEDL: '',
+      id: null,
+      drugID: null,
+      drugName: null,
+      drugStrength: null,
+      drugUnit: null,
+      quantity: null,
+      formID: null,
+      route: null,
+      qtyPrescribed: null,
+      formName: null,
+      dose: null,
+      frequency: null,
+      duration: null,
+      unit: null,
+      instructions: null,
+      sctCode: null,
+      sctTerm: null,
+      isEDL: false,
     };
     this.tempDrugName = null;
     this.prescriptionForm.form.markAsUntouched();

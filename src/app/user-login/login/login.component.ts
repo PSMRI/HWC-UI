@@ -270,6 +270,9 @@ export class LoginComponent implements OnInit {
           serviceID:
             item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
               .serviceID,
+          serviceProviderID:
+            item.roles[0].serviceRoleScreenMappings[0].providerServiceMapping
+              .serviceProviderID,
         };
         services.push(service);
       }

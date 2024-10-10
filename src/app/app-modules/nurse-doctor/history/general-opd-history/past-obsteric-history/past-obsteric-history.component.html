@@ -1,9 +1,9 @@
 <div class="col-12" style="text-align: end">
-  <p class="font-history-label m-t-10">
+  <span class="font-history-label m-t-10">
     {{
       currentLanguageSet?.historyData?.obstetrichistory?.previousObstetricHist
     }}
-  </p>
+  </span>
   <button
     type="button"
     mat-icon-button
@@ -104,7 +104,7 @@
                   class="select-full-width"
                   name="complicationDuringPregnancy"
                   formControlName="pregComplicationList"
-                  (change)="
+                  (selectionChange)="
                     resetOtherPregnancyComplication(
                       pastObstericHistory,
                       i,
@@ -171,7 +171,7 @@
                   class="select-full-width"
                   name="outcomeOfPregnancy"
                   formControlName="pregOutcome"
-                  (change)="checkPregnancyOutcome(pastObstericHistory)"
+                  (selectionChange)="checkPregnancyOutcome(pastObstericHistory)"
                 >
                   <mat-option
                     *ngFor="let outcome of masterData?.pregOutcomes"
@@ -281,7 +281,9 @@
                     class="select-full-width"
                     name="complicationPostAbortion"
                     formControlName="postAbortionComplication"
-                    (change)="resetPostComplicationType(pastObstericHistory, i)"
+                    (selectionChange)="
+                      resetPostComplicationType(pastObstericHistory, i)
+                    "
                     multiple
                     [required]="
                       pastObstericHistory.value.pregOutcome?.pregOutcome ===
@@ -327,7 +329,7 @@
                   class="select-full-width"
                   name="durationOfPregnancy"
                   formControlName="durationType"
-                  (change)="hrpPastObstetricDetails(true)"
+                  (selectionChange)="hrpPastObstetricDetails(true)"
                 >
                   <mat-option
                     *ngFor="let duration of masterData?.pregDuration"
@@ -355,7 +357,9 @@
                     class="select-full-width"
                     name="placeOfDelivery"
                     formControlName="deliveryPlace"
-                    (change)="resetOtherDeliveryPlace(pastObstericHistory)"
+                    (selectionChange)="
+                      resetOtherDeliveryPlace(pastObstericHistory)
+                    "
                   >
                     <mat-option
                       *ngFor="let place of masterData?.deliveryPlaces"
@@ -409,7 +413,7 @@
                   name="typeOfDelivery"
                   formControlName="deliveryType"
                   [disabled]="!pastObstericHistory.value.deliveryPlace"
-                  (change)="hrpPastObstetricDetails(true)"
+                  (selectionChange)="hrpPastObstetricDetails(true)"
                 >
                   <ng-container *ngFor="let type of selectDeliveryTypes">
                     <mat-option [value]="type">
@@ -436,7 +440,7 @@
                     class="select-full-width"
                     name="deliveryComplication"
                     formControlName="deliveryComplicationList"
-                    (change)="
+                    (selectionChange)="
                       resetOtherDeliveryComplication(
                         pastObstericHistory,
                         i,
@@ -507,7 +511,7 @@
                   class="select-full-width"
                   name="postpartumComplication"
                   formControlName="postpartumComplicationList"
-                  (change)="
+                  (selectionChange)="
                     resetOtherPostpartumComplicationType(pastObstericHistory, i)
                   "
                   multiple
@@ -579,7 +583,9 @@
                   class="select-full-width"
                   name="newBornComplications"
                   formControlName="newBornComplication"
-                  (change)="resetOtherNewBornComplications(pastObstericHistory)"
+                  (selectionChange)="
+                    resetOtherNewBornComplications(pastObstericHistory)
+                  "
                 >
                   <mat-option
                     *ngFor="

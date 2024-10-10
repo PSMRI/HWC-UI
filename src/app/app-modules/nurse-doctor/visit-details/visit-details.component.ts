@@ -34,7 +34,7 @@ import { DoctorService } from '../shared/services';
 import { NcdScreeningService } from '../shared/services/ncd-screening.service';
 import { Subscription } from 'rxjs';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 
 @Component({
   selector: 'app-visit-details',
@@ -71,6 +71,7 @@ export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   enablingCBACSectionSubscription!: Subscription;
   isCdssStatus = false;
   isCdss: any;
+  isCovidVaccinationStatusVisible = false;
 
   patientVisitDetailsForm!: FormGroup;
   covidVaccineStatusForm!: FormGroup;

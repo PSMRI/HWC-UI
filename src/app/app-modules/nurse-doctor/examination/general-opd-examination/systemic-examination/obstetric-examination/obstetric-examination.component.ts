@@ -22,7 +22,7 @@
 import { Component, OnInit, Input, DoCheck, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   BeneficiaryDetailsService,
   ConfirmationService,

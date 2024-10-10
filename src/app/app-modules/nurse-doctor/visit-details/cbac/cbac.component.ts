@@ -35,7 +35,7 @@ import {
   BeneficiaryDetailsService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 
 @Component({
   selector: 'app-cbac',

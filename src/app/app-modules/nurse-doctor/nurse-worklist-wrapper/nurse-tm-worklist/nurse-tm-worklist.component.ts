@@ -36,7 +36,7 @@ import { SchedulerComponent } from './../../scheduler/scheduler.component';
 import * as moment from 'moment';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -238,8 +238,14 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   filterBeneficiaryList(searchTerm: string) {
-    if (!searchTerm) this.filteredBeneficiaryList = this.beneficiaryList;
-    else {
+    if (!searchTerm) {
+      this.filteredBeneficiaryList = this.beneficiaryList;
+      this.dataSource.data = this.filteredBeneficiaryList;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.data.forEach((sectionCount: any, index: number) => {
+        sectionCount.sno = index + 1;
+      });
+    } else {
       this.filteredBeneficiaryList = [];
       this.dataSource.data = [];
       this.dataSource.paginator = this.paginator;
@@ -284,7 +290,7 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
                   break;
                 }
               } else {
-                const val = 'Revist';
+                const val = 'Revisit';
                 if (val.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
                   this.filteredBeneficiaryList.push(item);
                   this.dataSource.data.push(item);
@@ -302,12 +308,6 @@ export class NurseTmWorklistComponent implements OnInit, DoCheck, OnDestroy {
         }
       });
     }
-    this.activePage = 1;
-    this.pageChanged({
-      page: 1,
-      itemsPerPage: this.rowsPerPage,
-    });
-    this.currentPage = 1;
   }
 
   toggleArrivalStatus(evt: any, benFlowID: any) {

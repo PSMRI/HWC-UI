@@ -33,7 +33,7 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { BeneficiaryDetailsService } from '../../core/services';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 
 @Component({
   selector: 'app-nurse-anc',

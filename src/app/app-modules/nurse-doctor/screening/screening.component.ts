@@ -36,7 +36,7 @@ import { NcdScreeningService } from '../shared/services/ncd-screening.service';
 import { Subscription } from 'rxjs';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { environment } from 'src/environments/environment';
 
 @Component({

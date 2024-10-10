@@ -1,12 +1,12 @@
 <div class="row m-t-10" [formGroup]="familyHistoryForm">
   <div class="col-xs-12" formArrayName="familyDiseaseList">
     <div class="col-12" style="text-align: end">
-      <p class="font-history-label m-t-10">
+      <span class="font-history-label m-t-10">
         {{
           currentLanguageSet?.historyData?.ancHistory
             ?.familyHistoryDataANC_OPD_NCD_PNC?.previousFamilyHistory
         }}
-      </p>
+      </span>
       <button
         type="button"
         mat-icon-button
@@ -91,15 +91,7 @@
           </mat-form-field>
         </div>
 
-        <div
-          class="col-xs-12 col-sm-6 col-md-3 box"
-          *ngIf="
-            (familyDisease?.value?.diseaseType !== null &&
-              familyDisease?.value?.diseaseType !== '') ||
-            familyDisease?.value?.diseaseType?.diseaseType === 'None' ||
-            familyDisease?.value?.diseaseType?.diseaseType === 'Nil'
-          "
-        >
+        <div class="col-xs-12 col-sm-6 col-md-3 box">
           <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.historyData?.ancHistory
@@ -128,7 +120,10 @@
             id="removeFamilyDisease"
             class="mat_warn_circle"
             style="margin-right: 5px"
-            *ngIf="i !== 0 || (i === 0 && familyDisease.touched)"
+            *ngIf="
+              i !== 0 ||
+              (i === 0 && (familyDisease.touched || familyDisease.dirty))
+            "
             (click)="removeFamilyDisease(i, familyDisease)"
           >
             <mat-icon class="md-18">close</mat-icon>

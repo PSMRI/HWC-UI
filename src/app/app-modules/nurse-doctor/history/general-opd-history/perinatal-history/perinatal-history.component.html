@@ -1,11 +1,11 @@
 <div class="row m-t-10" [formGroup]="perinatalHistoryForm">
   <div class="col-12" style="text-align: end">
-    <p class="font-history-label m-t-10">
+    <span class="font-history-label m-t-10">
       {{
         currentLanguageSet?.historyData?.Perinatalhistorydetails
           ?.previousperinatalhistory
       }}
-    </p>
+    </span>
     <button
       type="button"
       mat-icon-button
@@ -18,7 +18,7 @@
       <mat-icon class="md-18">history</mat-icon>
     </button>
   </div>
-  <div>
+  <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
       <mat-form-field [style.width]="'100%'">
         <mat-label class="mat-label-text">{{
@@ -28,7 +28,7 @@
           class="select-full-width"
           name="placeOfDelivery"
           formControlName="placeOfDelivery"
-          (change)="resetOtherPlaceOfDelivery()"
+          (selectionChange)="resetOtherPlaceOfDelivery()"
         >
           <mat-option
             *ngFor="let place of masterData?.deliveryPlaces"
@@ -59,13 +59,7 @@
       </mat-form-field>
     </div>
 
-    <div
-      class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
-      *ngIf="
-        perinatalHistoryForm?.value?.placeOfDelivery !== null &&
-        perinatalHistoryForm?.value?.placeOfDelivery !== ''
-      "
-    >
+    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
       <mat-form-field [style.width]="'100%'">
         <mat-label class="mat-label-text">{{
           currentLanguageSet?.pncData?.typeofDelivery
@@ -94,7 +88,7 @@
           class="select-full-width"
           name="complicationAtBirth"
           formControlName="complicationAtBirth"
-          (change)="resetOtherComplicationAtBirth()"
+          (selectionChange)="resetOtherComplicationAtBirth()"
         >
           <mat-option
             *ngFor="let birthComplication of masterData?.birthComplications"

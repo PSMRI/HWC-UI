@@ -4,7 +4,7 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { TelemedicineService } from 'src/app/app-modules/core/services/telemedicine.service';
 import { ServicePointService } from './../service-point/service-point.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -22,6 +22,7 @@ export class ServiceComponent implements OnInit, DoCheck {
   vansList = [];
   vanID!: string;
   serviceDetails: any;
+  stateName: any;
 
   constructor(
     private router: Router,
@@ -257,6 +258,7 @@ export class ServiceComponent implements OnInit, DoCheck {
 
     console.log('statesList', this.statesList);
     this.stateID = data.stateMaster.stateID;
+    this.saveLocationDataToStorage();
   }
 
   locationGathetingIssues() {
@@ -327,5 +329,29 @@ export class ServiceComponent implements OnInit, DoCheck {
           localStorage.setItem('isCdss', res.data.isCdss);
         }
       });
+  }
+
+  saveLocationDataToStorage() {
+    const location: any = localStorage.getItem('location');
+    const data = JSON.parse(location);
+    this.stateName = data.stateMaster.find((item: any) => {
+      if (item.stateID === data.otherLoc.stateID) return item.stateName;
+    });
+    const locationData = {
+      stateID: data.otherLoc.stateID,
+      stateName: this.stateName.stateName,
+      districtID: data.otherLoc.districtList[0].districtID,
+      districtName: data.otherLoc.districtList[0].districtName,
+      blockName: data.otherLoc.districtList[0].blockName,
+      blockID: data.otherLoc.districtList[0].blockId,
+      subDistrictID: data.otherLoc.districtList[0].districtBranchID,
+      villageName: data.otherLoc.districtList[0].villageName,
+    };
+
+    // Convert the object into a JSON string
+    const locationDataJSON = JSON.stringify(locationData);
+
+    // Store the JSON string in localStorage
+    localStorage.setItem('locationData', locationDataJSON);
   }
 }

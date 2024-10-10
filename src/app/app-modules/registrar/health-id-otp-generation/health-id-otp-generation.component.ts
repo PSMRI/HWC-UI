@@ -26,7 +26,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { GenerateMobileOtpGenerationComponent } from '../generate-mobile-otp-generation/generate-mobile-otp-generation.component';
@@ -77,6 +77,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
     if (this.healthIdMode === 'AADHAR') {
       this.enablehealthIdOTPForm = true;
       this.getHealthIdOtpForInitial();
+      this.loadMasterDataObservable();
     }
   }
   ngDoCheck() {
@@ -235,9 +236,21 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
       },
     );
   }
+
+  masterDataSubscription: any;
+  loadMasterDataObservable() {
+    this.masterDataSubscription =
+      this.registrarService.registrationMasterDetails$.subscribe((res: any) => {
+        console.log('Registrar master data', res);
+        if (res !== null) {
+          this.registrarMasterData = Object.assign({}, res);
+          console.log('master data', this.registrarMasterData);
+        }
+      });
+  }
   posthealthIDButtonCall() {
     const dialogRefPass = this.dialog.open(SetPasswordForAbhaComponent, {
-      height: '400px',
+      height: '350px',
       width: '520px',
       disableClose: true,
     });
@@ -259,13 +272,13 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
         (res: any) => {
           if (res.statusCode === 200 && res.data) {
             this.registrarService.abhaGenerateData = res.data;
-            this.registrarService.aadharNumberNew = this.aadharNum;
             this.registrarService.getabhaDetail(true);
+
             const dialogRefSuccess = this.dialog.open(
               HealthIdOtpSuccessComponent,
               {
-                height: '400px',
-                width: '520px',
+                height: '380px',
+                width: '480px',
                 disableClose: true,
                 data: res,
               },
@@ -287,8 +300,8 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
                   (g: any) => g.genderName === gender,
                 );
 
-              let genderID: any = null;
-              let genderName: any = null;
+              let genderID: any;
+              let genderName: any;
               if (filteredGender.length > 0) {
                 genderID = filteredGender[0].genderID;
                 genderName = filteredGender[0].genderName;
@@ -299,8 +312,9 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
               let matchedDistrict;
               let districtID: any;
               let districtName: any;
-              const locationData: any = localStorage.getItem('location');
-              const location = JSON.parse(locationData);
+              const location = JSON.parse(
+                localStorage.getItem('location') as any,
+              );
               location.stateMaster.forEach((item: any) => {
                 if (item.govtLGDStateID === res.data.stateCode) {
                   matchedState = item;
@@ -359,7 +373,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
             this.confirmationService.alert(res.errorMessage, 'error');
           }
         },
-        (err: any) => {
+        (err) => {
           this.showProgressBar = false;
           this.confirmationService.alert(
             this.currentLanguageSet.issueInGettingBeneficiaryABHADetails,
@@ -540,7 +554,7 @@ export class HealthIdOtpSuccessComponent implements OnInit, DoCheck {
 
   openDialogForprintHealthIDCard(data: any, txnId: any) {
     const dialogRefValue = this.dialog.open(HealthIdValidateComponent, {
-      height: '300px',
+      height: '240px',
       width: '500px',
       disableClose: true,
       data: {

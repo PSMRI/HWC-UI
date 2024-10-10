@@ -1,0 +1,3 @@
+<jboss-web>
+  <context-root>/hwc</context-root>
+</jboss-web>

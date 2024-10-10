@@ -39,9 +39,8 @@ import { CdssFormResultPopupComponent } from '../cdss-form-result-popup/cdss-for
 import { DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { VisitDetailUtils } from '../../shared/utility';
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-cdss-form',
@@ -49,8 +48,6 @@ import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
   styleUrls: ['./cdss-form.component.css'],
 })
 export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
-  @ViewChild(MatAutocompleteTrigger)
-  autocompleteTrigger!: MatAutocompleteTrigger;
   currentLanguageSet: any;
   chiefComplaints: any = [];
   filteredOptions!: Observable<string[]>;
@@ -95,11 +92,17 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
   ngOnInit() {
     this.showingCdssForm();
     this.getChiefComplaintSymptoms();
+    this.filteredOptions = this.cdssForm.controls[
+      'presentChiefComplaint'
+    ].valueChanges.pipe(
+      startWith(''),
+      map((val: any) => this._filter(val || '')),
+    );
   }
 
-  filter(val: string): string[] {
-    return this.chiefComplaints.filter(
-      (option: any) => option.toLowerCase().indexOf(val.toLowerCase()) === 0,
+  _filter(val: string): string[] {
+    return this.chiefComplaints.filter((option: any) =>
+      option.toLowerCase().includes(val.toLowerCase()),
     );
   }
 
@@ -185,14 +188,6 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           );
         });
     }
-    this.filteredOptions = this.cdssForm.controls[
-      'presentChiefComplaint'
-    ].valueChanges.pipe(
-      startWith(null),
-      map((val: any) =>
-        val ? this.filter(val) : this.chiefComplaints.slice(),
-      ),
-    );
   }
 
   assignSelectedLanguage() {
@@ -223,7 +218,7 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
     return complaint && complaint.chiefComplaint;
   }
 
-  getQuestions(searchSymptom: any) {
+  getQuestions(searchSymptom: any, autocompleteField: any, elementInput: any) {
     if (
       searchSymptom !== null &&
       searchSymptom !== undefined &&
@@ -242,6 +237,11 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
           res.data !== null &&
           res.data?.Questions.length
         ) {
+          this.cdssForm.controls['presentChiefComplaint'].markAsUntouched();
+          autocompleteField._elementRef.nativeElement.classList.remove(
+            'mat-focused',
+          );
+          elementInput.blur();
           this.openDialog(searchSymptom);
         } else {
           this.confirmationService.alert(
@@ -259,11 +259,6 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
     }
   }
 
-  inputFocused(trg: MatAutocompleteTrigger) {
-    setTimeout(() => {
-      trg.closePanel();
-    });
-  }
   resetForm() {
     this.cdssForm.reset();
   }
@@ -271,6 +266,7 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
   openDialog(searchSymptom: any) {
     const dialogRef = this.dialog.open(CdssFormResultPopupComponent, {
       width: 0.8 * window.innerWidth + 'px',
+      height: '500px',
       panelClass: 'dialog-width',
       disableClose: true,
       data: {

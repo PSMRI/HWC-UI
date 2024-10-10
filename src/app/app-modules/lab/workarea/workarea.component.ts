@@ -38,8 +38,8 @@ import { ViewFileComponent } from './../view-file/view-file.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { IotcomponentComponent } from '../../core/component/iotcomponent/iotcomponent.component';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 
 @Component({

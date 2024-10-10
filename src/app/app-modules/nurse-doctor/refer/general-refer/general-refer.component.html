@@ -62,8 +62,8 @@
         }}{{ showMsg > 0 && instituteFlag === true ? "*" : "" }}
       </div>
 
-      <div class="col-sm-6 col-md-3 box">
-        <mat-form-field [style.width]="'100%'">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 box">
+        <mat-form-field [style.width]="'53%'">
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.Referdetails?.referredtoinstitute
           }}</mat-label>
@@ -117,12 +117,11 @@
         {{ currentLanguageSet?.Referdetails?.additionalservices }}
       </div>
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-form-field [style.width]="'100%'">
+        <mat-form-field [style.width]="'50%'">
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.Referdetails?.additionalservices
           }}</mat-label>
           <mat-select
-            class="inputFieldWidth"
             (ngModelChange)="additionalservices($event)"
             multiple="true"
             name="refrredToAdditionalServiceList"
@@ -306,9 +305,8 @@
             [matDatepicker]="picker"
             formControlName="revisitDate"
             [min]="tomorrow"
-            (change)="checkdate(revisitDate)"
+            (dateChange)="checkdate($event.value)"
           />
-          <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"

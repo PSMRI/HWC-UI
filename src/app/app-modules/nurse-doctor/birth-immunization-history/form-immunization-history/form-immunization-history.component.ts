@@ -31,8 +31,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { PreviousImmunizationServiceDetailsComponent } from 'src/app/app-modules/core/component/previous-immunization-service-details/previous-immunization-service-details.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousImmunizationServiceDetailsComponent } from 'src/app/app-modules/core/components/previous-immunization-service-details/previous-immunization-service-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import {
   BeneficiaryDetailsService,
   ConfirmationService,

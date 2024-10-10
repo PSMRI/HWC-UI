@@ -251,70 +251,73 @@
           let isLast = last
         "
       >
-        <ng-container [formGroupName]="i">
-          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                current_language_set?.casesheet?.clinicalObs
-              }}</mat-label>
-              <input
-                matInput
-                allowText="inputFieldValidator"
-                appClinicalObservations
-                [observationsList]="observations"
-                name="viewObservationsProvided"
-                formControlName="clinicalObservationsProvided"
-                maxlength="100"
-                minlength="3"
-                [previousSelected]="
-                  generalFindingsForm.value.clinicalObservationsList
-                "
-              />
-              <mat-icon
-                class="search-btn cursorPointer"
-                matSuffix
-                appClinicalObservations
-                [observationsList]="observations"
-                [previousSelected]="
-                  generalFindingsForm.value.clinicalObservationsList
-                "
-                >search</mat-icon
-              >
-            </mat-form-field>
-          </div>
+        <ng-container [formGroupName]="i" class="col-12">
+          <div class="row">
+            <div class="col-8">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  current_language_set?.casesheet?.clinicalObs
+                }}</mat-label>
+                <input
+                  matInput
+                  allowText="inputFieldValidator"
+                  appClinicalObservations
+                  [observationsList]="observations"
+                  name="viewObservationsProvided"
+                  formControlName="clinicalObservationsProvided"
+                  maxlength="100"
+                  minlength="3"
+                  [previousSelected]="
+                    generalFindingsForm.value.clinicalObservationsList
+                  "
+                />
+                <mat-icon
+                  class="search-btn cursorPointer"
+                  matSuffix
+                  appClinicalObservations
+                  [observationsList]="observations"
+                  [previousSelected]="
+                    generalFindingsForm.value.clinicalObservationsList
+                  "
+                  >search</mat-icon
+                >
+              </mat-form-field>
+            </div>
 
-          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-            <button
-              mat-mini-fab
-              type="button"
-              style="margin-right: 3px"
-              class="mat_warn_circle"
-              color="warn"
-              *ngIf="
-                i !== 0 ||
-                (i === 0 &&
-                  generalFindingsForm.get('clinicalObservationsList')?.value
-                    .clinicalObservationsProvided !== null &&
-                  generalFindingsForm.get('clinicalObservationsList')?.value
-                    .clinicalObservationsProvided !== '')
-              "
-              (click)="removeObservationsFromList(i, observations)"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
-          <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            <button
-              mat-mini-fab
-              type="button"
-              color="primary"
-              *ngIf="isLast"
-              [disabled]="validateAddedObservations(observations)"
-              (click)="addObservations()"
-              class="mat_blue_circle"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
+            <div class="col-2" style="margin-top: 10px">
+              <button
+                mat-mini-fab
+                type="button"
+                style="float: inline-end"
+                class="mat_warn_circle"
+                color="warn"
+                *ngIf="
+                  i !== 0 ||
+                  (i === 0 &&
+                    generalFindingsForm.get('clinicalObservationsList')?.value
+                      .clinicalObservationsProvided !== null &&
+                    generalFindingsForm.get('clinicalObservationsList')?.value
+                      .clinicalObservationsProvided !== '')
+                "
+                (click)="removeObservationsFromList(i, observations)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <div class="col-2" style="margin-top: 10px">
+              <button
+                mat-mini-fab
+                type="button"
+                color="primary"
+                style="margin-left: -15px"
+                *ngIf="isLast"
+                [disabled]="validateAddedObservations(observations)"
+                (click)="addObservations()"
+                class="mat_blue_circle"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
           </div>
         </ng-container>
       </div>
@@ -330,76 +333,79 @@
         "
       >
         <ng-container [formGroupName]="i">
-          <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <mat-form-field class="input-full-width">
-              <mat-label>{{
-                current_language_set?.casesheet?.significantFind
-              }}</mat-label>
-              <input
-                matInput
-                allowText="inputFieldValidator"
-                appSignificantFindings
-                [findingsList]="findings"
-                name="viewFindingsProvided"
-                formControlName="significantFindingsProvided"
-                maxlength="100"
-                minlength="3"
-                [previousSelected]="
-                  generalFindingsForm.value.significantFindingsList
-                "
-                (keyup)="
-                  resetFindingsCheckbox(
+          <div class="col-12 row">
+            <div class="col-8">
+              <mat-form-field class="input-full-width">
+                <mat-label>{{
+                  current_language_set?.casesheet?.significantFind
+                }}</mat-label>
+                <input
+                  matInput
+                  allowText="inputFieldValidator"
+                  appSignificantFindings
+                  [findingsList]="findings"
+                  name="viewFindingsProvided"
+                  formControlName="significantFindingsProvided"
+                  maxlength="100"
+                  minlength="3"
+                  [previousSelected]="
+                    generalFindingsForm.value.significantFindingsList
+                  "
+                  (keyup)="
+                    resetFindingsCheckbox(
+                      generalFindingsForm.get('significantFindingsList')?.value
+                        .significantFindingsProvided
+                    )
+                  "
+                />
+
+                <mat-icon
+                  class="search-btn cursorPointer"
+                  matSuffix
+                  appSignificantFindings
+                  [findingsList]="findings"
+                  [previousSelected]="
+                    generalFindingsForm.value.significantFindingsList
+                  "
+                  >search</mat-icon
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="col-2" style="margin-top: 10px">
+              <button
+                mat-mini-fab
+                type="button"
+                color="warn"
+                style="float: inline-end"
+                class="mat_warn_circle"
+                *ngIf="
+                  i !== 0 ||
+                  (i === 0 &&
                     generalFindingsForm.get('significantFindingsList')?.value
-                      .significantFindingsProvided
-                  )
+                      .significantFindingsProvided !== null &&
+                    generalFindingsForm.get('significantFindingsList')?.value
+                      .significantFindingsProvided !== '')
                 "
-              />
-
-              <mat-icon
-                class="search-btn cursorPointer"
-                matSuffix
-                appSignificantFindings
-                [findingsList]="findings"
-                [previousSelected]="
-                  generalFindingsForm.value.significantFindingsList
-                "
-                >search</mat-icon
+                (click)="removeFindingsFromList(i, findings)"
               >
-            </mat-form-field>
-          </div>
-
-          <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-            <button
-              mat-mini-fab
-              type="button"
-              color="warn"
-              style="margin-right: 3px"
-              class="mat_warn_circle"
-              *ngIf="
-                i !== 0 ||
-                (i === 0 &&
-                  generalFindingsForm.get('significantFindingsList')?.value
-                    .significantFindingsProvided !== null &&
-                  generalFindingsForm.get('significantFindingsList')?.value
-                    .significantFindingsProvided !== '')
-              "
-              (click)="removeFindingsFromList(i, findings)"
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
-          <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            <button
-              mat-mini-fab
-              type="button"
-              color="primary"
-              *ngIf="isLast"
-              [disabled]="validateAddedFindings(findings)"
-              (click)="addFindings()"
-              class="mat_blue_circle"
-            >
-              <mat-icon>add</mat-icon>
-            </button>
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <div class="col-2" style="margin-top: 10px">
+              <button
+                mat-mini-fab
+                type="button"
+                color="primary"
+                *ngIf="isLast"
+                style="margin-left: -15px"
+                [disabled]="validateAddedFindings(findings)"
+                (click)="addFindings()"
+                class="mat_blue_circle"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
           </div>
         </ng-container>
       </div>

@@ -30,7 +30,7 @@ import { MasterdataService } from '../../shared/services/masterdata.service';
 import { CdssFormResultPopupComponent } from '../cdss-form-result-popup/cdss-form-result-popup.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 
 @Component({
   selector: 'app-cdss-104-form',

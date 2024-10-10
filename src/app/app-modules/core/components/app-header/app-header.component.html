@@ -1,31 +1,31 @@
-<nav class="navbar navbar-iemr">
+<nav class="navbar navbar-expand-lg navbar-iemr">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <button
-        type="button"
-        class="navbar-toggle collapse"
-        data-toggle="collapse"
-        data-target="#top-navbar, #main-navbar"
-        aria-expanded="false"
-      >
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
       <a class="navbar-brand">
         <img src="assets/images/logo.png" alt="Logo" />
       </a>
     </div>
 
+    <button
+      class="navbar-toggler ms-auto"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#top-navbar,#main-navbar"
+    >
+      <mat-icon class="white-icon">menu</mat-icon>
+    </button>
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="navbar-collapse menu-font" id="top-navbar">
-      <ul class="nav navbar-nav navbar-right ms-auto flex-row">
+    <div class="collapse navbar-collapse menu-font" id="top-navbar">
+      <ul class="navbar-nav ms-auto flex-row">
         <li *ngIf="status" class="nav-item alignWord menu-font">
           <span>{{ currentLanguageSet?.common?.SelectLanguage }}: </span>
         </li>
-        <li *ngIf="status" class="nav-item alignDropDown">
+        <li
+          *ngIf="status"
+          class="nav-item alignDropDown"
+          style="margin-right: 8px"
+        >
           <select
             style="font-size: 13px"
             class="menu-font drop-arrow border-radius-20 height-30 width120px pull-right"
@@ -41,8 +41,10 @@
             </option>
           </select>
         </li>
+
         <li
           *ngIf="isAuthenticated"
+          style="margin-right: 8px"
           class="nav-item cursorPointer"
           matTooltip="{{ currentLanguageSet?.common?.connectBluetooth }}"
           [ngClass]="{ connected: isConnected }"
@@ -52,59 +54,7 @@
             bluetooth_searching
           </span>
         </li>
-        <li
-          class="nav-item"
-          style="margin-top: 6px"
-          *ngIf="userName"
-          matTooltip="{{ currentLanguageSet?.coreComponents?.user }}"
-        >
-          <a>
-            <img src="assets/images/user1.png" alt="user" />
-            <span style="color: #d9d9d9">
-              {{ currentLanguageSet?.coreComponents?.user }}
-              <span style="color: #d9d9d9">:</span>
-              <span style="color: #ffffff">{{ userName | titlecase }}</span>
-            </span>
-          </a>
-        </li>
-
-        <li
-          class="nav-item cursorPointer"
-          *ngIf="isAuthenticated"
-          style="margin-top: 6px"
-        >
-          <mat-icon
-            alt="Help"
-            [matMenuTriggerFor]="knowAboutUs"
-            matTooltip="{{ currentLanguageSet?.coreComponents?.help }}"
-            >help_outline</mat-icon
-          >
-        </li>
-
-        <li
-          *ngIf="isAuthenticated"
-          class="nav-item logout cursorPointer"
-          matTooltip="{{ currentLanguageSet?.coreComponents?.logout }}"
-        >
-          <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
-          <a
-            tabindex="{0}"
-            (click)="getSwymedLogout()"
-            class="d-flex align-items-center"
-          >
-            <mat-icon color="warn">power_settings_new</mat-icon>
-            <span style="color: #ffffff" class="hidden-sm hidden-md hidden-lg"
-              >Logout</span
-            >
-          </a>
-        </li>
-
-        <mat-menu
-          #menu="matMenu"
-          #knowAboutUs
-          x-position="before"
-          class="m-t-40"
-        >
+        <mat-menu #menu="matMenu" x-position="before" class="m-t-40">
           <button mat-menu-item (click)="showVersionAndCommitDetails()">
             {{ currentLanguageSet?.version }} : {{ versionUI }}
           </button>
@@ -114,19 +64,77 @@
             }}</a>
           </button>
         </mat-menu>
+
+        <li
+          class="nav-item"
+          style="margin-top: 6px; margin-right: 8px"
+          *ngIf="userName"
+          matTooltip="{{ currentLanguageSet?.user }}"
+        >
+          <a>
+            <img src="assets/images/user1.png" alt="user" />
+            <span style="color: #d9d9d9">
+              {{ currentLanguageSet?.user }}
+              <span style="color: #d9d9d9">:</span>
+              <span style="color: #ffffff; margin-left: 5px">{{
+                userName | titlecase
+              }}</span>
+            </span>
+          </a>
+        </li>
+        <!-- <li
+          *ngIf="servicePoint"
+          class="nav-item servicePoint cursorPointer"
+          style="margin-top: 6px; margin-right: 5px"
+          [routerLink]="'/servicePoint'"
+          matTooltip="{{ currentLanguageSet?.servicePoint }}">
+          <a>
+            <img src="assets/images/placeholder.png" alt="servicepoint" />
+            <span style="color: #d9d9d9"
+              >{{ currentLanguageSet?.servicePoint }}
+              <span style="color: #d9d9d9">:</span>
+              <span style="color: #ffffff; margin-left: 5px">{{
+                servicePoint | titlecase
+              }}</span>
+            </span>
+          </a>
+        </li> -->
+        <li
+          class="nav-item cursorPointer"
+          *ngIf="isAuthenticated"
+          style="margin-top: 6px; margin-right: 5px"
+        >
+          <mat-icon
+            alt="Help"
+            [matMenuTriggerFor]="menu"
+            [matTooltip]="currentLanguageSet?.help"
+            >help_outline</mat-icon
+          >
+        </li>
+        <li
+          *ngIf="isAuthenticated"
+          class="nav-item logout cursorPointer"
+          style="margin-top: 6px"
+          matTooltip="{{ currentLanguageSet?.logOut }}"
+        >
+          <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
+          <a tabindex="{0}" (click)="logout()">
+            <mat-icon color="warn">power_settings_new</mat-icon>
+          </a>
+        </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<div *ngIf="showRoles" class="container-fluid d-flex justify-content-center">
+<div *ngIf="showRoles" class="container-fluid">
   <nav class="navbar navbar-expand-lg">
     <div class="collapse navbar-collapse" id="main-navbar">
       <ul
         class="nav navbar-nav ml-auto"
         *ngFor="let item of filteredNavigation; let isLast = last"
       >
-        <li class="nav-item" *ngIf="item.role === 'Registrar'">
+        <!-- <li class="nav-item" *ngIf="item.role === 'Registrar'">
           <button
             class="nav-btn"
             mat-button
@@ -138,7 +146,7 @@
           </button>
           <mat-menu
             class="registrar-menu"
-            #items="matMenu"
+            #items="matMenu"a
             yPosition="below"
             xPosition="after"
             [overlapTrigger]="false"
@@ -152,7 +160,25 @@
               {{ value.label }}
             </button>
           </mat-menu>
+        </li> -->
+        <li
+          class="nav-item"
+          *ngIf="
+            item.role === 'Registrar' &&
+            item.work[1].link === '/registrar/search'
+          "
+        >
+          <button
+            class="nav-btn"
+            mat-button
+            [routerLink]="[item.work[1].link]"
+            routerLinkActive="active"
+            [ngClass]="{ active: updateCSSToShowActiveRegistrar }"
+          >
+            {{ item.work[1].label }} <span class="caret"></span>
+          </button>
         </li>
+
         <li
           class="nav-item"
           *ngIf="item.role !== 'Registrar' && item.role !== 'TC Specialist'"

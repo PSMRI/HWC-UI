@@ -17,6 +17,12 @@ jobs:
       
     - name: Checkout code
       uses: actions/checkout@v3
+      with:
+        submodules: true  # Include submodules
+        fetch-depth: 0    # Ensure the full history is fetched
+
+    - name: Update submodules
+      run: git submodule update --init --recursive
         
 
     - name: Set up Java
@@ -41,10 +47,10 @@ jobs:
             npm run build
         
     - name: Create WAR file 
-      run: jar -cvf hwc-ui-next.war -C dist .
+      run: jar -cvf hwc-ui.war -C dist .
       
     - name: Upload WAR file as artifact
       uses: actions/upload-artifact@v2 
       with:
         name: HWC-UI
-        path: hwc-ui-next.war 
+        path: hwc-ui.war 

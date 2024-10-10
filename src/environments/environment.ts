@@ -24,16 +24,16 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-const commonIP = 'http://183.82.107.186:8080';
-const identityIP = 'http://183.82.107.186:8080';
-const tmIP = 'http://183.82.107.186:8080';
-const IP104 = 'http://183.82.107.186:8080';
-const mmuIP = 'http://183.82.107.186:8080';
-const schedulerIP = 'http://183.82.107.186:8080';
-const adminIP = 'http://183.82.107.186:8080';
-const inventoryUI_IP = 'http://183.82.107.186:8080';
+const commonIP = 'https://amritwprdev.piramalswasthya.org';
+const identityIP = 'https://amritwprdev.piramalswasthya.org';
+const tmIP = 'https://amritwprdev.piramalswasthya.org';
+const IP104 = 'https://amritwprdev.piramalswasthya.org';
+const mmuIP = 'https://amritwprdev.piramalswasthya.org';
+const schedulerIP = 'https://amritwprdev.piramalswasthya.org';
+const adminIP = 'https://amritwprdev.piramalswasthya.org';
+const inventoryUI_IP = 'https://amritwprdev.piramalswasthya.org';
 
-const FHIRIP = 'http://183.82.107.186:8080';
+const FHIRIP = 'https://amritwprdev.piramalswasthya.org';
 const SERVER_IP = '10.208.122.39';
 const SWYMED_IP = '14.143.13.109';
 
@@ -70,10 +70,10 @@ export const environment = {
 
   parentAPI: `${TM_API}`,
 
-  INVENTORY_URL: inventoryUI_IP + '/hwc-inventory-ui-next/#/redirin?',
+  INVENTORY_URL: inventoryUI_IP + '/hwc-inventory/#/redirin?',
   fallbackUrl: '/pharmacist/redirfallback',
   redirInUrl: '/pharmacist/redirin',
-  TELEMEDICINE_URL: schedulerIP + '/hwc-scheduler-ui-next/#/?',
+  TELEMEDICINE_URL: schedulerIP + '/hwc-scheduler/#/?',
 
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/nurse-doctor/tcspecialist-worklist`,
@@ -135,6 +135,8 @@ export const environment = {
   nurseMasterDataUrl: `${TM_API}master/nurse/masterData/`,
   doctorMasterDataUrl: `${TM_API}master/doctor/masterData/`,
   snomedCTRecordURL: `${TM_API}snomed/getSnomedCTRecord`,
+  getDistrictTalukUrl: `${MMU_API}location/get/DistrictTalukMaster/`,
+
   /**
    * Lab Data Urls
    */
@@ -519,4 +521,16 @@ export const environment = {
   getDiseaseDataUrls: `${API104}diseaseController/getDiseasesByID`,
   getDiseaseNamesUrls: `${API104}diseaseController/getAvailableDiseases`,
   getAdminCdssStatus: `${ADMIN_API}uptsu/getCdssData`,
+
+  /** Previous Anthropometry  Urls */
+  getPreviousAnthropometryUrl: `${TM_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
+  /* Customization APIs*/
+  getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+
+  /*Biometric with Health ID*/
+  getdeviceRDServiceUrl: `${COMMON_API}biometric/getBiometricData/`,
+  confirmAadharBio: `${FHIR_API}healthIDWithBio/confirmWithAadhaarBio`,
+
+  generateABHAForBio: `${FHIR_API}healthIDWithBio/verifyBio`,
+  generateABHAForBioMobileOTP: `${FHIR_API}healthIDWithBio/generateMobileOTP`,
 };

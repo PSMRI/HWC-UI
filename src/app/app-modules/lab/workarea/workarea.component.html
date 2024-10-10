@@ -274,45 +274,45 @@
                                       "
                                     >
                                       <div>
-                                        <mat-select
-                                          class="p-t-12"
-                                          [style.width]="'100%'"
-                                          formControlName="compOptSelected"
-                                          style="line-height: unset"
-                                          placeholder="{{
+                                        <mat-form-field>
+                                          <mat-label>{{
                                             currentLanguageSet?.common?.result
-                                          }}"
-                                          [required]="
-                                            procedure.value.isMandatory ===
-                                              true &&
-                                            procedure.value.procedureName ===
-                                              testName &&
-                                            stripSelected === true
-                                              ? true
-                                              : false ||
-                                                  (procedure.value
-                                                    .procedureName !==
-                                                    testName &&
-                                                    procedure.value
-                                                      .isMandatory === true)
+                                          }}</mat-label>
+                                          <mat-select
+                                            [style.width]="'100%'"
+                                            formControlName="compOptSelected"
+                                            [required]="
+                                              procedure.value.isMandatory ===
+                                                true &&
+                                              procedure.value.procedureName ===
+                                                testName &&
+                                              stripSelected === true
                                                 ? true
-                                                : false
-                                          "
-                                        >
-                                          <mat-option
-                                            *ngFor="
-                                              let options of component?.controls
-                                                .compOpt?.controls
+                                                : false ||
+                                                    (procedure.value
+                                                      .procedureName !==
+                                                      testName &&
+                                                      procedure.value
+                                                        .isMandatory === true)
+                                                  ? true
+                                                  : false
                                             "
-                                            [value]="options.value.name"
-                                            >{{ options.value.name }}
-                                          </mat-option>
-                                        </mat-select>
+                                          >
+                                            <mat-option
+                                              *ngFor="
+                                                let options of component
+                                                  ?.controls.compOpt?.controls
+                                              "
+                                              [value]="options.value.name"
+                                              >{{ options.value.name }}
+                                            </mat-option>
+                                          </mat-select>
+                                        </mat-form-field>
                                       </div>
                                     </section>
                                     <div
                                       style="
-                                        bottom: -5px;
+                                        bottom: -17px;
                                         position: absolute;
                                         width: 90%;
                                         text-align: center;

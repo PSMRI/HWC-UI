@@ -26,7 +26,7 @@ import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-hi
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
