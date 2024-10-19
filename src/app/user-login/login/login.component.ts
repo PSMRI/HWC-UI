@@ -37,6 +37,7 @@ import { MasterDownloadComponent } from 'src/app/app-modules/data-sync/master-do
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
+
 export class LoginComponent implements OnInit {
   dynamictype = 'password';
   encryptedVar: any;
