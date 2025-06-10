@@ -34,7 +34,7 @@
       >
         <ng-container [formGroupName]="i" class="col-12">
           <div class="row">
-            <div class="col-9">
+            <div class="col-6">
               <mat-form-field class="input-full-width">
                 <input
                   matInput
@@ -66,11 +66,23 @@
                 >
               </mat-form-field>
             </div>
-            <div class="col-3 m-t-10" style="padding: 0px">
+            <div class="col-6 m-t-10" style="padding: 0px">
               <button
                 mat-mini-fab
                 type="button"
-                class="mat_warn_circle"
+                style="margin-right: 3px"
+                color="primary"
+                class="mat-add-btn"
+                *ngIf="isLast"
+                [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
+                (click)="addDiagnosis()"
+              >
+                {{ current_language_set?.common?.add }}
+              </button>
+              <button
+                mat-mini-fab
+                type="button"
+                class="mat-remove-btn"
                 style="margin-right: 5px"
                 color="warn"
                 *ngIf="
@@ -84,19 +96,7 @@
                 "
                 (click)="removeDiagnosisFromList(i, diagnosis)"
               >
-                <mat-icon>close</mat-icon>
-              </button>
-              <button
-                mat-mini-fab
-                type="button"
-                style="margin-right: 3px"
-                color="primary"
-                class="mat_blue_circle"
-                *ngIf="isLast"
-                [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
-                (click)="addDiagnosis()"
-              >
-                <mat-icon>add</mat-icon>
+                {{ current_language_set?.common?.remove }}
               </button>
             </div>
           </div>
@@ -104,20 +104,4 @@
       </div>
     </ng-container>
   </div>
-  <!-- <div class="col-xs-12 col-sm-6 m-t-6">
-    <header class="mat-expansion-panel-header tabcolor">
-      <h4>{{ current_language_set?.DiagnosisDetails?.specialistssdvice }}</h4>
-    </header>
-    <mat-form-field class="input-full-width">
-      <textarea
-        matInput
-        defaultNull
-        matTextareaAutosize
-        maxlength="300"
-        name="specialistAdvice"
-        formControlName="instruction"
-      >
-      </textarea>
-    </mat-form-field>
-  </div> -->
 </div>

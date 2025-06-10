@@ -212,19 +212,8 @@
           </div>
           <div
             class="col-xs-12 col-sm-6 col-md-2 col-lg-2 box"
-            style="margin-top: 20px"
+            style="margin-top: 35px"
           >
-            <button
-              mat-mini-fab
-              [id]="'removeBtn' + i"
-              *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-              (click)="removeCheifComplaint(i, complaint)"
-              color="warn"
-              style="margin-right: 15px !important"
-              class="mat_warn_circle"
-            >
-              <span class="material-icons">close</span>
-            </button>
             <button
               mat-mini-fab
               [id]="'addBtn' + i"
@@ -232,9 +221,20 @@
               [disabled]="checkComplaintFormValidity(complaint)"
               (click)="addCheifComplaint()"
               color="primary"
-              class="mat_blue_circle"
+              class="mat-add-btn"
             >
-              <span class="material-icons">add</span>
+              {{ current_language_set?.common?.add }}
+            </button>
+            <button
+              mat-mini-fab
+              [id]="'removeBtn' + i"
+              *ngIf="i !== 0 || (i === 0 && complaint.touched)"
+              (click)="removeCheifComplaint(i, complaint)"
+              color="warn"
+              style="margin-right: 15px; margin-top: 25px !important"
+              class="mat-remove-btn"
+            >
+              {{ current_language_set?.common?.remove }}
             </button>
           </div>
         </ng-container>
@@ -253,7 +253,7 @@
       >
         <ng-container [formGroupName]="i" class="col-12">
           <div class="row">
-            <div class="col-8">
+            <div class="col-10">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
                   current_language_set?.casesheet?.clinicalObs
@@ -288,8 +288,19 @@
               <button
                 mat-mini-fab
                 type="button"
-                style="float: inline-end"
-                class="mat_warn_circle"
+                color="primary"
+                *ngIf="isLast"
+                [disabled]="validateAddedObservations(observations)"
+                (click)="addObservations()"
+                class="mat-add-btn"
+              >
+                {{ current_language_set?.common?.add }}
+              </button>
+
+              <button
+                mat-mini-fab
+                type="button"
+                class="mat-remove-btn"
                 color="warn"
                 *ngIf="
                   i !== 0 ||
@@ -301,21 +312,7 @@
                 "
                 (click)="removeObservationsFromList(i, observations)"
               >
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-            <div class="col-2" style="margin-top: 10px">
-              <button
-                mat-mini-fab
-                type="button"
-                color="primary"
-                style="margin-left: -15px"
-                *ngIf="isLast"
-                [disabled]="validateAddedObservations(observations)"
-                (click)="addObservations()"
-                class="mat_blue_circle"
-              >
-                <mat-icon>add</mat-icon>
+                {{ current_language_set?.common?.remove }}
               </button>
             </div>
           </div>
@@ -332,9 +329,9 @@
           let isLast = last
         "
       >
-        <ng-container [formGroupName]="i">
-          <div class="col-12 row">
-            <div class="col-8">
+        <ng-container [formGroupName]="i" class="col-12">
+          <div class="row">
+            <div class="col-10">
               <mat-form-field class="input-full-width">
                 <mat-label>{{
                   current_language_set?.casesheet?.significantFind
@@ -376,9 +373,20 @@
               <button
                 mat-mini-fab
                 type="button"
+                color="primary"
+                *ngIf="isLast"
+                [disabled]="validateAddedFindings(findings)"
+                (click)="addFindings()"
+                class="mat-add-btn"
+              >
+                {{ current_language_set?.common?.add }}
+              </button>
+
+              <button
+                mat-mini-fab
+                type="button"
                 color="warn"
-                style="float: inline-end"
-                class="mat_warn_circle"
+                class="mat-remove-btn"
                 *ngIf="
                   i !== 0 ||
                   (i === 0 &&
@@ -389,21 +397,7 @@
                 "
                 (click)="removeFindingsFromList(i, findings)"
               >
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-            <div class="col-2" style="margin-top: 10px">
-              <button
-                mat-mini-fab
-                type="button"
-                color="primary"
-                *ngIf="isLast"
-                style="margin-left: -15px"
-                [disabled]="validateAddedFindings(findings)"
-                (click)="addFindings()"
-                class="mat_blue_circle"
-              >
-                <mat-icon>add</mat-icon>
+                {{ current_language_set?.common?.remove }}
               </button>
             </div>
           </div>

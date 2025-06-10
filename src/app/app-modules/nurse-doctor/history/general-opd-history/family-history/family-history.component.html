@@ -115,28 +115,28 @@
         <div class="col-sm-6 col-md-3 box action-btn-container pull-right">
           <button
             mat-mini-fab
+            color="primary"
+            class="mat-add-btn"
+            *ngIf="isLast"
+            [disabled]="checkValidity(familyDisease)"
+            id="addFamilyDisease"
+            (click)="addFamilyDisease()"
+          >
+            {{ currentLanguageSet?.common?.add }}
+          </button>
+          <button
+            mat-mini-fab
             color="warn"
             id="removeFamilyDisease"
-            class="mat_warn_circle"
-            style="margin-right: 5px"
+            class="mat-remove-btn"
+            style="margin-left: 3px"
             *ngIf="
               i !== 0 ||
               (i === 0 && (familyDisease.touched || familyDisease.dirty))
             "
             (click)="removeFamilyDisease(i, familyDisease)"
           >
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
-          <button
-            mat-mini-fab
-            color="primary"
-            class="mat_blue_circle"
-            *ngIf="isLast"
-            [disabled]="checkValidity(familyDisease)"
-            id="addFamilyDisease"
-            (click)="addFamilyDisease()"
-          >
-            <mat-icon class="md-18">add</mat-icon>
+            {{ currentLanguageSet?.common?.remove }}
           </button>
         </div>
       </ng-container>

@@ -296,7 +296,8 @@
       "TCPending": "Tele-Consultation Pending",
       "selectAll": "सभी का चयन करे",
       "confirmWhetherBeneficiaryHasArrived": "पुष्टि करें कि क्या लाभार्थी आ गया है",
-      "startTest": "Start Test"
+      "startTest": "परीक्षण शुरू करें",
+      "remove": "हटाएं"
     },
     "idrs": {
       
