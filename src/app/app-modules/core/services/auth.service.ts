@@ -14,13 +14,18 @@ export class AuthService {
     private http: HttpClient,
   ) {}
 
-  login(userName: any, password: any, doLogout: any) {
-    return this.http.post(environment.loginUrl, {
+  login(userName: any, password: any, doLogout: any, captchaToken?: string) {
+    const requestBody: any = {
       userName: userName,
       password: password,
       doLogout: doLogout,
       withCredentials: true,
-    });
+    };
+
+    if (captchaToken) {
+      requestBody.captchaToken = captchaToken;
+    }
+    return this.http.post(environment.loginUrl, requestBody);
   }
 
   userLogoutPreviousSession(userName: any) {

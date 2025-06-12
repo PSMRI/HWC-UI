@@ -61,6 +61,9 @@ const biologicalScreeningDeviceAPI = `${ADMIN_API}diagnostics/biologicalScreenin
 const FHIR_API = `${FHIRIP}fhirapi-v1.0/`;
 const mmuUICasesheet = `${hwcUI_IP}aam/`;
 const sessionStorageEncKey = '';
+const siteKey = '';
+const captchaChallengeURL = '';
+const enableCaptcha = false;
 
 export const environment = {
   production: false,
@@ -551,4 +554,8 @@ export const environment = {
   printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+
+  siteKey: siteKey,
+  captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha,
 };

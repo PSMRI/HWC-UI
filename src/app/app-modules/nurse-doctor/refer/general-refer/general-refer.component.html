@@ -63,12 +63,11 @@
       </div>
 
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 box">
-        <mat-form-field [style.width]="'53%'">
+        <mat-form-field [style.width]="'50%'">
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.Referdetails?.referredtoinstitute
           }}</mat-label>
           <mat-select
-            class="inputFieldWidth"
             (ngModelChange)="higherhealthcarecenter($event)"
             name="referredToInstituteName"
             formControlName="referredToInstituteName"
@@ -93,7 +92,7 @@
           visitCategory.toLowerCase() === 'fp & contraceptive services'
         "
       >
-        <mat-form-field class="input-full-width">
+        <mat-form-field [style.width]="'50%'">
           <mat-label>{{ currentLanguageSet?.other }}</mat-label>
           <input
             autocomplete="off"
@@ -106,6 +105,57 @@
           />
         </mat-form-field>
       </div>
+    </div>
+    <div
+      class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+      style="display: flex"
+      *ngIf="
+        visitCategory.toLowerCase() !== 'fp & contraceptive services' &&
+        visitCategory.toLowerCase() !== 'ncd screening'
+      "
+    >
+      <div
+        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlock"
+        class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment"
+      >
+        {{ currentLanguageSet?.Referdetails?.referralReason }}*
+      </div>
+      <ng-template #elseBlock>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
+          {{ currentLanguageSet?.Referdetails?.referralReason }}
+        </div>
+      </ng-template>
+      <div
+        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText"
+        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+      >
+        <mat-form-field class="referreason" [style.width]="'50%'">
+          <textarea
+            matInput
+            allowText="textAreaValidator"
+            matTextareaAutosize
+            required="true"
+            formControlName="referralReason"
+            name="Remarks"
+            maxLength="300"
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+      <ng-template #elseBlockText>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <mat-form-field class="referreason" [style.width]="'50%'">
+            <textarea
+              matInput
+              allowText="textAreaValidator"
+              matTextareaAutosize
+              formControlName="referralReason"
+              name="Remarks"
+              maxLength="300"
+            ></textarea>
+          </mat-form-field>
+        </div>
+      </ng-template>
     </div>
 
     <div
@@ -138,57 +188,6 @@
         </mat-form-field>
       </div>
     </div>
-    <div
-      class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-      style="display: flex"
-      *ngIf="
-        visitCategory.toLowerCase() !== 'fp & contraceptive services' &&
-        visitCategory.toLowerCase() !== 'ncd screening'
-      "
-    >
-      <div
-        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlock"
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment"
-      >
-        {{ currentLanguageSet?.Referdetails?.referralReason }}*
-      </div>
-      <ng-template #elseBlock>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
-          {{ currentLanguageSet?.Referdetails?.referralReason }}
-        </div>
-      </ng-template>
-      <div
-        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText"
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
-      >
-        <mat-form-field class="referreason" class="inputFieldWidth">
-          <textarea
-            matInput
-            allowText="textAreaValidator"
-            matTextareaAutosize
-            required="true"
-            formControlName="referralReason"
-            name="Remarks"
-            maxLength="300"
-          ></textarea>
-        </mat-form-field>
-      </div>
-
-      <ng-template #elseBlockText>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-          <mat-form-field class="referreason" style="width: 220px">
-            <textarea
-              matInput
-              allowText="textAreaValidator"
-              matTextareaAutosize
-              formControlName="referralReason"
-              name="Remarks"
-              maxLength="300"
-            ></textarea>
-          </mat-form-field>
-        </div>
-      </ng-template>
-    </div>
 
     <div
       class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-20"
@@ -214,7 +213,7 @@
         class="col-xs-6 col-sm-6 col-md-3 col-lg-3"
         *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText"
       >
-        <mat-form-field [style.width]="'100%'">
+        <mat-form-field [style.width]="'50%'">
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.Referdetails?.referralReason
           }}</mat-label>
@@ -238,7 +237,7 @@
       </div>
       <ng-template #elseBlockText>
         <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field [style.width]="'100%'">
+          <mat-form-field [style.width]="'50%'">
             <mat-label>
               {{ currentLanguageSet?.Referdetails?.referralReason }}</mat-label
             >
@@ -269,7 +268,7 @@
         class="box col-xs-12 col-sm-6 col-md-3 col-lg-3 pull-right"
         *ngIf="enableOthersReferralTextField"
       >
-        <mat-form-field class="input-full-width">
+        <mat-form-field [style.width]="'50%'">
           <mat-label>{{ currentLanguageSet?.other }}</mat-label>
           <input
             autocomplete="off"
@@ -291,11 +290,8 @@
       <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
         {{ currentLanguageSet?.Referdetails?.revisitDate }}
       </div>
-      <div
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
-        style="padding-left: 0px; width: 280px"
-      >
-        <mat-form-field [style.width]="'100%'">
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <mat-form-field [style.width]="'50%'">
           <mat-label class="mat-label-text">{{
             currentLanguageSet?.Referdetails?.revisitDate
           }}</mat-label>

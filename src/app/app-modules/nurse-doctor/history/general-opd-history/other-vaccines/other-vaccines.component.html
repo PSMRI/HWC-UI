@@ -1,26 +1,23 @@
 <div class="row m-t-10" [formGroup]="otherVaccinesForm">
   <div class="col-xs-12" formArrayName="otherVaccines">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label m-t-10">
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCOtherVaccines"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+      (click)="getPreviousOtherVaccineDetails()"
+      (keydown.enter)="getPreviousOtherVaccineDetails()"
+      (keydown.space)="getPreviousOtherVaccineDetails()"
+    >
+      <mat-icon class="md-18 ms-2">history</mat-icon>
+      <span class="previousHistory">
         {{
           currentLanguageSet?.historyData?.Othervaccineshistory
             ?.previousothervaccineshistory
         }}
       </span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{
-          this.currentLanguageSet?.DurationData?.previousDetails
-        }}"
-        id="previousANCOtherVaccines"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousOtherVaccineDetails()"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
+    </button>
     <div
       class="row multi-row-select"
       *ngFor="

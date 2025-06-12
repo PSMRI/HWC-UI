@@ -25,6 +25,8 @@ import { SpecialistLoginComponent } from './../specialist-login/specialist-login
 import { SetLanguageComponent } from '../set-language.component';
 import { HttpServiceService } from '../../services/http-service.service';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AuthService } from '../../services';
 @Component({
   selector: 'app-footer',
   templateUrl: './app-footer.component.html',
@@ -38,15 +40,19 @@ export class AppFooterComponent implements OnInit, DoCheck {
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
     public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
+    private auth: AuthService,
   ) {}
 
   year: any;
   today: any;
+  version: any; // Placeholder for version, replace with actual version if available
+  commitDetailsUI: any;
   ngOnInit() {
     this.assignSelectedLanguage();
     this.today = new Date();
     this.year = this.today.getFullYear();
-    console.log('inside footer', this.year);
+    this.getUIVersionAndCommitDetails();
     setInterval(() => {
       this.status = navigator.onLine;
     }, 1000);
@@ -70,8 +76,24 @@ export class AppFooterComponent implements OnInit, DoCheck {
           action: 'Save',
         },
       });
-    snackBarRef.afterDismissed().subscribe(() => {
-      //console.log('locsl', JSON.parse(localStorage.getItem('swymedLogin')));
-    });
+    snackBarRef.afterDismissed().subscribe(() => {});
+  }
+
+  getUIVersionAndCommitDetails() {
+    const commitDetailsPath: any = 'assets/git-version.json';
+    this.auth.getUIVersionAndCommitDetails(commitDetailsPath).subscribe(
+      (res: { version?: string }) => {
+        if (res && res.version) {
+          this.commitDetailsUI = res;
+          this.version = res.version;
+        } else {
+          this.version = 'NA';
+        }
+      },
+      (err) => {
+        console.log('err', err);
+        this.version = 'NA';
+      },
+    );
   }
 }

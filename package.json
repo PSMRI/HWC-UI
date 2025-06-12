@@ -22,7 +22,7 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{ts,html}": [
+    "src/**/*.ts": [
       "eslint --fix"
     ]
   },
