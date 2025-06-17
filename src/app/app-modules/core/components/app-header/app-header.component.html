@@ -49,8 +49,19 @@
           matTooltip="{{ currentLanguageSet?.common?.connectBluetooth }}"
           [ngClass]="{ connected: isConnected }"
         >
+         <button
+            (click)="openIOT()"
+            matTooltip="POCT"
+            aria-label="Open POCT diagnostics"
+            class="svg-button"
+          >
+            <img
+              src="assets/images/diagnostics.svg"
+              alt="POCT point"
+              class="svg"
+            />
+          </button>
         
-        <img src="assets/images/diagnostics.svg" alt="POCT point" (click)="openIOT()"  class="svg" matTooltip="POCT" />  
         </li>
         <mat-menu #menu="matMenu" x-position="before" class="m-t-40">
           <button mat-menu-item (click)="showVersionAndCommitDetails()">
