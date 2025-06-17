@@ -305,7 +305,8 @@
             "sNo": "S.No.",
             "confirmWhetherBeneficiaryHasArrived": "Confirm Whether Beneficiary has arrived",
             "startTest":"Start Test",
-            "remove": "Remove"
+            "remove": "Remove",
+            "poct": "POCT"
         },
         "idrs": {
                 

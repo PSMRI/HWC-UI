@@ -304,7 +304,8 @@
             "sNo": "ಸ.ನಂ.",
             "confirmWhetherBeneficiaryHasArrived": "ಫಲಾನುಭವಿ ಬಂದಿದ್ದಾರೆಯೇ ಎಂಬುದನ್ನು ದೃಢೀಕರಿಸಿ",
             "startTest":"ಪರೀಕ್ಷೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ",
-            "remove": "ತೆಗೆದುಹಾಕಿ"
+            "remove": "ತೆಗೆದುಹಾಕಿ",
+            "poct": "POCT"
         },
         "idrs": {
                 
