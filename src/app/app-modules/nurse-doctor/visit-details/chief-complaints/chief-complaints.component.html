@@ -142,8 +142,7 @@
               (click)="addCheifComplaint()"
               color="primary"
             >
-              Add
-              <!-- <span class="material-icons">add</span> -->
+              {{ currentLanguageSet?.common?.add }}
             </button>
 
             <button
@@ -156,8 +155,7 @@
               (click)="removeCheifComplaint(i, complaint)"
               color="warn"
             >
-              Remove
-              <!-- <span class="material-icons">close</span> -->
+              {{ currentLanguageSet?.common?.remove }}
             </button>
           </div>
         </div>
