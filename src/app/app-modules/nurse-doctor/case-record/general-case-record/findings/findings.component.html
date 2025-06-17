@@ -219,7 +219,7 @@
               [id]="'addBtn' + i"
               *ngIf="isLast"
               [disabled]="checkComplaintFormValidity(complaint)"
-              (click)="addCheifComplaint()"
+              (click)="addChiefComplaint()"
               color="primary"
               class="mat-add-btn"
             >
@@ -229,7 +229,7 @@
               mat-mini-fab
               [id]="'removeBtn' + i"
               *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-              (click)="removeCheifComplaint(i, complaint)"
+              (click)="removeChiefComplaint(i, complaint)"
               color="warn"
               style="margin-right: 15px; margin-top: 25px !important"
               class="mat-remove-btn"
