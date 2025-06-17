@@ -44,7 +44,7 @@ export class DiagnosisSearchComponent implements OnInit, DoCheck, OnChanges {
   diagnosis$ = [];
   pageCount: any;
   selectedDiagnosisList: any = [];
-  displayedColumns: any = ['ConceptID', 'term', 'empty'];
+  displayedColumns: any = ['term', 'empty'];
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   diagnosis = new MatTableDataSource<any>();
 
