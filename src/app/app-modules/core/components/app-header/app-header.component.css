@@ -157,6 +157,12 @@ mat-menu {
     border-left: 4px solid transparent;
   }
 
+  .svg{
+    filter: brightness(0) invert(1);
+    height: 35px;
+    width: 35px;
+  }
+
   @media screen  and (min-width:768px) and (max-width:1024px) {
     
   }
