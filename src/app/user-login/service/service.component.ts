@@ -338,7 +338,6 @@ export class ServiceComponent implements OnInit, DoCheck {
         this.telemedicineService.routeToTeleMedecine();
         break;
       default:
-        this.router.navigate(['/nurse-doctor/doctor-worklist']);
         this.goToWorkList();
         break;
     }

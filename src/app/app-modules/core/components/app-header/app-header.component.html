@@ -52,7 +52,6 @@
          <button
             (click)="openIOT()"
             matTooltip="POCT"
-            aria-label="Open POCT diagnostics"
             class="svg-button"
           >
             <img
@@ -64,9 +63,6 @@
         
         </li>
         <mat-menu #menu="matMenu" x-position="before" class="m-t-40">
-          <button mat-menu-item (click)="showVersionAndCommitDetails()">
-            {{ currentLanguageSet?.version }} : {{ versionUI }}
-          </button>
           <button mat-menu-item>
             <a target="_blank" rel="noopener noreferrer" href="{{ license }}">{{
               currentLanguageSet?.licenseInfo
