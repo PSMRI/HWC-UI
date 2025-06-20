@@ -24,7 +24,8 @@
 
 .previous-history{
     display: flex;
-    align-items: baseline;
+    align-items:center; 
+    text-align: start;
 }
 
 :host /deep/ .mat-select-placeholder {

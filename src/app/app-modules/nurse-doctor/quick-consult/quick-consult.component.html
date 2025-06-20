@@ -41,19 +41,6 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="ConceptID">
-                  <th
-                    mat-header-cell
-                    style="border-bottom: none"
-                    *matHeaderCellDef
-                    mat-sort-header
-                  >
-                    {{ currentLanguageSet?.common?.ConceptID }}
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.conceptID }}
-                  </td>
-                </ng-container>
 
                 <ng-container matColumnDef="description">
                   <th
@@ -931,8 +918,8 @@
                   class="col-md-2"
                   *ngIf="
                     currentPrescription.formID &&
-                    currentPrescription.formID !== '1' &&
-                    currentPrescription.formID !== '2'
+                    currentPrescription.formID !== 1 &&
+                    currentPrescription.formID !== 2
                   "
                 >
                   <mat-form-field [style.width]="'100%'">
@@ -960,10 +947,10 @@
                     'col-md-4':
                       !currentPrescription.formID ||
                       (currentPrescription.formID &&
-                        currentPrescription.formID <= '2'),
+                        currentPrescription.formID <= 2),
                     'col-md-3':
                       currentPrescription.formID &&
-                      currentPrescription.formID > '2'
+                      currentPrescription.formID > 2
                   }"
                 >
                   <mat-form-field [style.width]="'100%'">

@@ -165,7 +165,7 @@ export class QuickConsultComponent
   rbsTestResultSubscription!: Subscription;
   rbsTestResultCurrent: any;
 
-  displayedColumns: any = ['chiefcomplaint', 'ConceptID', 'description'];
+  displayedColumns: any = ['chiefcomplaint', 'description'];
 
   dataSource = new MatTableDataSource<any>();
 

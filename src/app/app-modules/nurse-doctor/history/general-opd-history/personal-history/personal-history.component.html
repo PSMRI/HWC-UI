@@ -1,73 +1,62 @@
 <ng-container [formGroup]="generalPersonalHistoryForm">
   <div class="col-12">
     <div class="row m-t-10 m-b-10">
-      <div class="col-4 text-right previous-history pull-right">
-        <p class="font-history-label">
-          {{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.previousAllergyhistory
-          }}
-        </p>
-        <button
-          type="button"
-          mat-icon-button
-          matTooltip="{{
-            this.currentLanguageSet?.DurationData?.previousDetails
-          }}"
-          id="previousAllergyHistory"
-          class="mat_icon_blue"
-          color="primary"
-          (click)="getPreviousAllergyHistory()"
-        >
-          <mat-icon class="md-18">history</mat-icon>
-        </button>
-      </div>
-      <div
-        class="col-4 text-right previous-history pull-right"
-        *ngIf="beneficiary?.ageVal >= 13"
+      <button
+        type="button"
+        class="col-4 text-right previous-history pull-right mat-icon-button mat_icon_blue"
+        id="previousTobaccoHistory"
+        color="primary"
+        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+        (click)="getPreviousTobaccoHistory()"
+        (keydown.enter)="getPreviousTobaccoHistory()"
+        (keydown.space)="getPreviousTobaccoHistory()"
       >
-        <p class="font-history-label">
-          {{
-            currentLanguageSet?.historyData?.ancHistory
-              ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
-          }}
-        </p>
-        <button
-          type="button"
-          mat-icon-button
-          matTooltip="{{
-            this.currentLanguageSet?.DurationData?.previousDetails
-          }}"
-          id="previousAlcoholHistory"
-          class="mat_icon_blue"
-          color="primary"
-          (click)="getPreviousAlcoholHistory()"
-        >
-          <mat-icon class="md-18">history</mat-icon>
-        </button>
-      </div>
-      <div
-        class="col-4 text-right previous-history pull-right"
-        *ngIf="beneficiary?.ageVal >= 13"
-      >
-        <p class="font-history-label">
+        <mat-icon class="md-18 ms-2">history</mat-icon>
+        <span class="previousHistory">
           {{
             currentLanguageSet?.historyData?.ancHistory
               ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
           }}
-        </p>
-        <button
-          type="button"
-          mat-icon-button
-          matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-          id="previousTobaccoHistory"
-          class="mat_icon_blue"
-          color="primary"
-          (click)="getPreviousTobaccoHistory()"
-        >
-          <mat-icon class="md-24">history</mat-icon>
-        </button>
-      </div>
+        </span>
+      </button>
+
+      <button
+        type="button"
+        class="col-4 text-right previous-history pull-right mat-icon-button mat_icon_blue"
+        id="previousAlcoholHistory"
+        color="primary"
+        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+        (click)="getPreviousAlcoholHistory()"
+        (keydown.enter)="getPreviousAlcoholHistory()"
+        (keydown.space)="getPreviousAlcoholHistory()"
+      >
+        <mat-icon class="md-18 ms-2">history</mat-icon>
+        <span class="previousHistory">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
+          }}
+        </span>
+      </button>
+
+      <button
+        type="button"
+        class="col-4 text-right previous-history pull-right mat-icon-button mat_icon_blue"
+        id="previousAllergyHistory"
+        color="primary"
+        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+        (click)="getPreviousAllergyHistory()"
+        (keydown.enter)="getPreviousAllergyHistory()"
+        (keydown.space)="getPreviousAllergyHistory()"
+      >
+        <mat-icon class="md-18 ms-2">history</mat-icon>
+        <span class="previousHistory">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.personalHistoryANC_OPD_NCD_PNC?.previousAllergyhistory
+          }}
+        </span>
+      </button>
     </div>
   </div>
   <div class="row m-t-10">

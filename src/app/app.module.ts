@@ -55,6 +55,7 @@ import { RegistrarService } from './app-modules/registrar/shared/services/regist
 import { RegistrationModule } from 'Common-UI/src/registrar/registration.module';
 import { SharedModule } from './app-modules/core/components/shared/shared.module';
 import { RegistrarModule } from './app-modules/registrar/registrar.module';
+import { CaptchaComponent } from './user-login/captcha/captcha.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { RegistrarModule } from './app-modules/registrar/registrar.module';
     SetPasswordComponent,
     SetSecurityQuestionsComponent,
     TmLogoutComponent,
+    CaptchaComponent,
   ],
   imports: [
     BrowserModule,

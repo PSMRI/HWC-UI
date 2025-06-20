@@ -1,22 +1,21 @@
-<div class="col-12" style="text-align: end">
-  <span class="font-history-label m-t-10">
+<button
+  type="button"
+  class="history-label col-12 mat-icon-button mat_icon_blue"
+  id="previousANCMenstrualHistory"
+  color="primary"
+  matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+  (click)="getPreviousMenstrualHistory()"
+  (keydown.enter)="getPreviousMenstrualHistory()"
+  (keydown.space)="getPreviousMenstrualHistory()"
+>
+  <mat-icon class="md-18 ms-2">history</mat-icon>
+  <span class="previousHistory">
     {{
       currentLanguageSet?.historyData?.Previousmenstrualhistory
         ?.previousmenstrualhistory
     }}
   </span>
-  <button
-    type="button"
-    mat-icon-button
-    matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-    id="previousANCMenstrualHistory"
-    class="mat_icon_blue"
-    color="primary"
-    (click)="getPreviousMenstrualHistory()"
-  >
-    <mat-icon class="md-18">history</mat-icon>
-  </button>
-</div>
+</button>
 <div class="row m-t-10" [formGroup]="menstrualHistoryForm">
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
     <mat-form-field [style.width]="'100%'">

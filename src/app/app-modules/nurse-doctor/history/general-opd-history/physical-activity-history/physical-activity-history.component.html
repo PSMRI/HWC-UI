@@ -1,11 +1,5 @@
 <ng-container [formGroup]="physicalActivityHistory">
   <div class="col-12" style="text-align: end">
-    <p class="font-history-label m-t-10">
-      {{
-        currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
-          ?.previousPhysicalActivityHistory
-      }}
-    </p>
     <button
       type="button"
       mat-icon-button
@@ -17,6 +11,12 @@
     >
       <mat-icon class="md-18">history</mat-icon>
     </button>
+    <p class="font-history-label m-t-10">
+      {{
+        currentLanguageSet?.historyData?.ncdPhysicalActivityHistory
+          ?.previousPhysicalActivityHistory
+      }}
+    </p>
   </div>
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box hbx">
     <label class="control-label" for="physicalActivityType">{{

@@ -8,7 +8,7 @@ import { SpinnerService } from './app-modules/core/services/spinner.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  title = 'HWC-Facility-App';
+  title = 'AAM-Facility-App';
 
   constructor(
     private router: Router,

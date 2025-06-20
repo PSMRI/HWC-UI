@@ -176,13 +176,10 @@ export class GeneralPatientVitalsComponent
     console.log('page54' + visitCategory1);
     if (this.visitCategory === 'General OPD (QC)') {
       this.hideForANCAndQC = false;
+      this.showGlucoseQC = false;
     } else {
       this.hideForANCAndQC = true;
-    }
-    if (this.visitCategory === 'General OPD (QC)') {
       this.showGlucoseQC = true;
-    } else {
-      this.showGlucoseQC = false;
     }
 
     if (String(this.mode) === 'view') {

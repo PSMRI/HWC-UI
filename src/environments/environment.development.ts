@@ -61,6 +61,9 @@ const biologicalScreeningDeviceAPI = `${ADMIN_API}diagnostics/biologicalScreenin
 const FHIR_API = `${FHIRIP}fhirapi-v1.0/`;
 const mmuUICasesheet = `${hwcUI_IP}aam/`;
 const sessionStorageEncKey = '';
+const siteKey = '';
+const captchaChallengeURL = '';
+const enableCaptcha = false;
 
 export const environment = {
   production: false,
@@ -79,11 +82,11 @@ export const environment = {
   IdrsOrCbac: ['IDRS', 'CBAC'],
   parentAPI: `${HWC_API}`,
 
-  INVENTORY_URL: `${inventoryUI_IP}hwc-inventory/#/redirin?`,
+  INVENTORY_URL: `${inventoryUI_IP}aam-inventory/#/redirin?`,
   fallbackUrl: `/pharmacist/redirfallback`,
   redirInUrl: `/pharmacist/redirin`,
 
-  TELEMEDICINE_URL: `${schedulerUI_IP}hwc-scheduler/#/?`,
+  TELEMEDICINE_URL: `${schedulerUI_IP}aam-scheduler/#/?`,
   fallbackMMUUrl: `/logout-tm`,
   redirInMMUUrl: `/common/tcspecialist-worklist`,
 
@@ -551,4 +554,8 @@ export const environment = {
   printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+
+  siteKey: siteKey,
+  captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha,
 };

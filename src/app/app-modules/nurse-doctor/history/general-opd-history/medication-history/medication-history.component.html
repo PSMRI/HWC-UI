@@ -1,24 +1,23 @@
 <div class="row m-t-10" [formGroup]="medicationHistoryForm">
   <div class="col-xs-12" formArrayName="medicationHistoryList">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label m-t-10">
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCMedicationHistory"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+      (click)="getPreviousMedicationHistory()"
+      (keydown.enter)="getPreviousMedicationHistory()"
+      (keydown.space)="getPreviousMedicationHistory()"
+    >
+      <mat-icon class="md-18 ms-2">history</mat-icon>
+      <span class="previousHistory">
         {{
           currentLanguageSet?.historyData?.ancHistory?.medicationANC_OPD_NCD_PNC
             ?.PreviousHistory
         }}
       </span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCMedicationHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousMedicationHistory()"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
+    </button>
 
     <div
       class="row multi-row-select"
