@@ -38,7 +38,7 @@
                 "fullName": "ಪೂರ್ಣ ಹೆಸರು",
                 "maritalStatus": "ವೈವಾಹಿಕ ಸ್ಥಿತಿ",
                 "contactNo": "ಸಂಪರ್ಕ ಸಂಖ್ಯೆ",
-                "alternateNumber":"ಪರ್ಯಾಯ ಸಂಪರ್ಕ ಸಂಖ್ಯೆ",
+                "alternateNumber":"ಪರ್ಯಾಯ ಸಂಖ್ಯೆ",
                 "gender": "ಲಿಂಗ",
                 "age": "ವಯಸ್ಸು",
                 "ageUnit": "ವಯಸ್ಸಿನ ಘಟಕ",
@@ -303,7 +303,9 @@
             "selectAll": "ಎಲ್ಲವನ್ನು ಆರಿಸು",
             "sNo": "ಸ.ನಂ.",
             "confirmWhetherBeneficiaryHasArrived": "ಫಲಾನುಭವಿ ಬಂದಿದ್ದಾರೆಯೇ ಎಂಬುದನ್ನು ದೃಢೀಕರಿಸಿ",
-            "startTest":"ಪರೀಕ್ಷೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ"
+            "startTest":"ಪರೀಕ್ಷೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ",
+            "remove": "ತೆಗೆದುಹಾಕಿ",
+            "poct": "POCT"
         },
         "idrs": {
                 
@@ -2071,7 +2073,7 @@
         "externalID": "ಬಾಹ್ಯ ಐಡಿ",
         "registertoAMRIT": "ಅಮೃತಗೆ ನೋಂದಾಯಿಸಿ",
         "pleaseEnterValidInput": "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇನ್‌ಪುಟ್ ಅನ್ನು ನಮೂದಿಸಿ",
-        "pleaseEnterValidInputFor": "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇನ್‌ಪುಟ್ ಅನ್ನು ನಮೂದಿಸಿ",
+        "pleaseEnterValidInputFor": "ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಇನ್‌ಪುಟ್ ಅನ್ನು ನಮೂದಿಸಿ ",
         "errorInfetchingStates": "ಸ್ಥಿತಿಗಳನ್ನು ಪಡೆಯುವಲ್ಲಿ ದೋಷ",
         "pleaseRegisterBeneficiaryInAMRIT": "ದಯವಿಟ್ಟು ಅಮೃತ ನಲ್ಲಿ ಫಲಾನುಭವಿಯನ್ನು ನೋಂದಾಯಿಸಿ",
         "noFurtherRecordsToShow": "ತೋರಿಸಲು ಹೆಚ್ಚಿನ ದಾಖಲೆಗಳಿಲ್ಲ",
@@ -2107,7 +2109,29 @@
         "riskFactors": "Risk Factors",
         "treatment": "Treatment",
         "selfcare": "Self-Care",
-        "investigations": "Investigations"
+        "investigations": "Investigations",
+        "noRecordsFound": "No Records Found",
+        "enterMobileNumberToBeLinkedWithAbha": "Enter Phone number to be linked with ABHA",
+        "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?",
+        "abhaCardAlreadyExists": "ABHA already exists for the Aadhaar Number",
+        "enterABHANumber": "Please Enter ABHA Number",
+        "enterABHAAddress": "Please Enter ABHA Address",
+        "enterAadhaarNumber": "Please Enter Aadhaar Number",
+        "enterMobileNumber": "Please Enter Mobile Number",
+        "enterCorrectAuthIdForAuthMode": "Please Enter correct Authentication ID for choosen AuthMode",
+        "abhaAddressFound" : "ABHA Address Found:",
+        "searchAndDownloadAbha": "Search and Download ABHA",
+        "abhaSearchMode": "ABHA Search Mode*",
+        "verifyAbha": "Verify ABHA",
+        "issueInAbhaCard": "Issue in printing ABHA Card",
+        "verifyMobileOtp": "Verify Mobile OTP",
+        "enterMobileOtp": "Enter Mobile OTP",
+        "verify": "Verify",
+        "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
+        "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID",
+        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
+        "continueButton": "ಮುಂದುವರಿಸಿ"
+
     }  
 
     

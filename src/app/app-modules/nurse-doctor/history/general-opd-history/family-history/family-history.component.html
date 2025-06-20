@@ -1,24 +1,23 @@
 <div class="row m-t-10" [formGroup]="familyHistoryForm">
   <div class="col-xs-12" formArrayName="familyDiseaseList">
-    <div class="col-12" style="text-align: end">
-      <p class="font-history-label m-t-10">
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCFamilyHistory"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+      (click)="getPreviousFamilyHistory()"
+      (keydown.enter)="getPreviousFamilyHistory()"
+      (keydown.space)="getPreviousFamilyHistory()"
+    >
+      <mat-icon class="md-18 ms-2">history</mat-icon>
+      <span class="previousHistory">
         {{
           currentLanguageSet?.historyData?.ancHistory
             ?.familyHistoryDataANC_OPD_NCD_PNC?.previousFamilyHistory
         }}
-      </p>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCFamilyHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousFamilyHistory()"
-      >
-        <mat-icon class="md-18"> history</mat-icon>
-      </button>
-    </div>
+      </span>
+    </button>
     <div
       class="row multi-row-select"
       *ngFor="
@@ -91,15 +90,7 @@
           </mat-form-field>
         </div>
 
-        <div
-          class="col-xs-12 col-sm-6 col-md-3 box"
-          *ngIf="
-            (familyDisease?.value?.diseaseType !== null &&
-              familyDisease?.value?.diseaseType !== '') ||
-            familyDisease?.value?.diseaseType?.diseaseType === 'None' ||
-            familyDisease?.value?.diseaseType?.diseaseType === 'Nil'
-          "
-        >
+        <div class="col-xs-12 col-sm-6 col-md-3 box">
           <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">{{
               currentLanguageSet?.historyData?.ancHistory
@@ -121,28 +112,31 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm-6 col-md-3 box action-btn-container pull-right">
-          <button
-            mat-mini-fab
-            color="warn"
-            id="removeFamilyDisease"
-            class="mat_warn_circle"
-            style="margin-right: 5px"
-            *ngIf="i !== 0 || (i === 0 && familyDisease.touched)"
-            (click)="removeFamilyDisease(i, familyDisease)"
-          >
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
+        <div class="col-sm-6 col-md-4 box action-btn-container pull-right">
           <button
             mat-mini-fab
             color="primary"
-            class="mat_blue_circle"
+            class="mat-add-btn"
             *ngIf="isLast"
             [disabled]="checkValidity(familyDisease)"
             id="addFamilyDisease"
             (click)="addFamilyDisease()"
           >
-            <mat-icon class="md-18">add</mat-icon>
+            {{ currentLanguageSet?.common?.add }}
+          </button>
+          <button
+            mat-mini-fab
+            color="warn"
+            id="removeFamilyDisease"
+            class="mat-remove-btn"
+            style="margin-left: 3px"
+            *ngIf="
+              i !== 0 ||
+              (i === 0 && (familyDisease.touched || familyDisease.dirty))
+            "
+            (click)="removeFamilyDisease(i, familyDisease)"
+          >
+            {{ currentLanguageSet?.common?.remove }}
           </button>
         </div>
       </ng-container>

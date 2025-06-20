@@ -30,7 +30,7 @@ ul li div i {
 }
 
 .abnormal {
-    color: red
+    color: red !important
 }
 
 .marker {
@@ -77,3 +77,9 @@ md-expansion-panel {
 .valueCheck {
     padding: 5px;
 }
+
+.fontawesomesvg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -.125em;
+  }

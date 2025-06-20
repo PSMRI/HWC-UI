@@ -2143,6 +2143,9 @@ input:-webkit-autofill:hover {
 
 .font-history-label {
   color: #ff9900 !important;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: initial;
 }
 
 /* New css added by neeraj to make textbot and dropdown font similar on 02-04-2018 */
@@ -2159,4 +2162,20 @@ input:-webkit-autofill:hover {
 
 .md2-datepicker-placeholder {
   font-weight: bold;
+}
+
+.previousHistory {
+  color: #ff9900 !important;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: initial;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.history-label {
+  display: flex; 
+  align-items:center; 
+  text-align: start;
+  
 }

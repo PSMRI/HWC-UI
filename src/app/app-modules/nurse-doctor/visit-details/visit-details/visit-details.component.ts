@@ -38,7 +38,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { environment } from 'src/environments/environment';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-visit-details',
@@ -92,6 +93,7 @@ export class PatientVisitDetailsComponent
     private ncdScreeningService: NcdScreeningService,
     private nurseService: NurseService,
     private route: ActivatedRoute,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -157,13 +159,13 @@ export class PatientVisitDetailsComponent
     this.nurseService.mmuVisitData = false;
     if (String(this.mode) === 'view') {
       this.loadNurseMasters();
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.disableVisit = true;
       this.getVisitDetails(visitID, benRegID);
     }
 
-    const specialistFlagString = localStorage.getItem('specialistFlag');
+    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
@@ -171,8 +173,8 @@ export class PatientVisitDetailsComponent
     ) {
       this.loadNurseMasters();
       console.log('MMUSpecialist');
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getMMUVisitDetails(visitID, benRegID);
     }
   }
@@ -180,7 +182,7 @@ export class PatientVisitDetailsComponent
   enableCbacIdrs(visitID: any, benRegID: any) {
     const obj = {
       beneficiaryRegId: benRegID,
-      visitCode: localStorage.getItem('visitCode'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
     };
 
     console.log('obj in enableCbacIdrs', obj);
@@ -229,7 +231,11 @@ export class PatientVisitDetailsComponent
           this.templateNurseMasterData = masterData;
           this.templateVisitReasons = this.templateNurseMasterData.visitReasons;
           this.templateVisitCategories =
-            this.templateNurseMasterData.visitCategories;
+            this.templateNurseMasterData.visitCategories.filter(
+              (visit: any) =>
+                visit.visitCategory.toLowerCase() !== 'cancer screening',
+            );
+          this.templateFilterVisitCategories = [];
           this.templateFilterVisitCategories = this.templateVisitCategories;
           console.log(
             'this.templateFilterVisitCategories in 247',
@@ -241,7 +247,7 @@ export class PatientVisitDetailsComponent
 
   visitDetSubscription: any;
   getMMUVisitDetails(visitID: any, benRegID: any) {
-    const visitCategory = localStorage.getItem('visitCategory');
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
     this.visitDetSubscription = this.doctorService
       .getVisitComplaintDetails(benRegID, visitID)
       .subscribe((value: any) => {
@@ -275,32 +281,36 @@ export class PatientVisitDetailsComponent
           }
           if (visitCategory === 'NCD care') {
             const visitDetails = value.data.NCDCareNurseVisitDetail;
-
+            this.doctorService.fileIDs =
+              value.data.NCDCareNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
             this.loadConfirmedDiseasesFromNCD();
           }
           if (visitCategory === 'PNC') {
             const visitDetails = value.data.PNCNurseVisitDetail;
-
+            this.doctorService.fileIDs = value.data.PNCNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
           }
           if (visitCategory === 'COVID-19 Screening') {
             console.log('visitData', value.data);
             const visitDetails = value.data.covid19NurseVisitDetail;
+            this.doctorService.fileIDs =
+              value.data.covid19NurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
           }
           if (visitCategory === 'Neonatal and Infant Health Care Services') {
             const visitDetails = value.data.neonatalNurseVisitDetail;
-
+            this.doctorService.fileIDs =
+              value.data.neonatalNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
           }
           if (visitCategory === 'Childhood & Adolescent Healthcare Services') {
             const visitDetails = value.data.cacNurseVisitDetail;
-
+            this.doctorService.fileIDs = value.data.cacNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.disableVisit = true;
           }
@@ -327,7 +337,7 @@ export class PatientVisitDetailsComponent
   visitDetailsSubscription: any;
   getVisitDetails(visitID: any, benRegID: any) {
     console.log('visitID and benRegID in 356', visitID, benRegID);
-    const visitCategory = localStorage.getItem('visitCategory');
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
     this.visitDetailsSubscription = this.doctorService
       .getVisitComplaintDetails(benRegID, visitID)
       .subscribe((value: any) => {
@@ -361,28 +371,32 @@ export class PatientVisitDetailsComponent
           }
           if (visitCategory === 'NCD care') {
             const visitDetails = value.data.NCDCareNurseVisitDetail;
-
+            this.doctorService.fileIDs =
+              value.data.NCDCareNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
             this.loadConfirmedDiseasesFromNCD();
           }
           if (visitCategory === 'PNC') {
             const visitDetails = value.data.PNCNurseVisitDetail;
-
+            this.doctorService.fileIDs = value.data.PNCNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
           if (visitCategory === 'COVID-19 Screening') {
             console.log('visitData', value.data);
             const visitDetails = value.data.covid19NurseVisitDetail;
+            this.doctorService.fileIDs =
+              value.data.covid19NurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
           if (visitCategory === 'Neonatal and Infant Health Care Services') {
             const visitDetails = value.data.neonatalNurseVisitDetail;
-
+            this.doctorService.fileIDs =
+              value.data.neonatalNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
           if (visitCategory === 'Childhood & Adolescent Healthcare Services') {
             const visitDetails = value.data.cacNurseVisitDetail;
-
+            this.doctorService.fileIDs = value.data.cacNurseVisitDetail.fileIDs;
             this.patientVisitDetailsForm.patchValue(visitDetails);
           }
 
@@ -459,7 +473,7 @@ export class PatientVisitDetailsComponent
   reasonSelected(visitReason: any) {
     this.templateFilterVisitCategories = [];
     this.patientVisitDetailsForm.controls['visitCategory'].setValue(null);
-    localStorage.setItem('visitReason', visitReason);
+    this.sessionstorage.setItem('visitReason', visitReason);
     if (visitReason === 'Screening') {
       this.templateFilterVisitCategories = this.templateVisitCategories.filter(
         (item: any) =>
@@ -633,7 +647,7 @@ export class PatientVisitDetailsComponent
     this.previousConfirmedDiseasesList = [];
     this.enableConfirmedDiseases = false;
 
-    localStorage.setItem('visiCategoryANC', visitCategory);
+    this.sessionstorage.setItem('visiCategoryANC', visitCategory);
     if (visitCategory === 'ANC') {
       this.templatePregnancyStatus = ['Yes'];
       this.patientVisitDetailsForm.patchValue({ pregnancyStatus: 'Yes' });
@@ -693,7 +707,7 @@ export class PatientVisitDetailsComponent
     this.previousConfirmedDiseasesList = [];
     this.enableConfirmedDiseases = false;
     const obj = {
-      beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
+      beneficiaryRegId: this.sessionstorage.getItem('beneficiaryRegID'),
     };
 
     this.nurseService

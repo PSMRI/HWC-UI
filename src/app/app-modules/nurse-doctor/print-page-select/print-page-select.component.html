@@ -155,9 +155,7 @@
   </div>
   <div
     class="col-xs-12 col-sm-6 col-md-6 m-t-15"
-    *ngIf="
-      visitCategory.toLowerCase() !== 'neonatal and infant health care services'
-    "
+    *ngIf="isCovidVaccinationStatusVisible"
   >
     <mat-checkbox
       (change)="unCheckSelectAll()"

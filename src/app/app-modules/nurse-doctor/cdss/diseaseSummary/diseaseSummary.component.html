@@ -1,7 +1,11 @@
 <form [formGroup]="DiseaseSummaryForm" autocomplete="off">
   <div class="row m-t-20">
-    <div class="col-xs-12 col-sm-6 col-md-4" *ngIf="!viewMode">
-      <mat-form-field [style.width]="'100%'">
+    <div
+      class="col-xs-12 col-sm-6 col-md-4"
+      style="margin-top: 25px"
+      *ngIf="!viewMode"
+    >
+      <mat-form-field [style.width]="'100%'" #diseaseAutocompleteField>
         <mat-label class="mat-label-text">
           {{
             currentLanguageSet?.nurseData?.chiefComplaintsDetails
@@ -10,33 +14,40 @@
         </mat-label>
         <input
           [matAutocomplete]="auto"
-          #inp="matAutocompleteTrigger"
-          (focus)="inputFocused(inp)"
+          #diseaseElementInput
           type="text"
           matInput
           name="diseaseSummary"
           formControlName="diseaseSummary"
           (input)="
             showDiseaseSummary(
-              DiseaseSummaryForm.controls['diseaseSummary'].value
+              DiseaseSummaryForm.controls['diseaseSummary'].value,
+              diseaseAutocompleteField,
+              diseaseElementInput
             )
           "
           (keyup.enter)="
             showDiseaseSummary(
-              DiseaseSummaryForm.controls['diseaseSummary'].value
+              DiseaseSummaryForm.controls['diseaseSummary'].value,
+              diseaseAutocompleteField,
+              diseaseElementInput
             )
           "
         />
         <mat-autocomplete
           #auto="matAutocomplete"
-          autoActiveFirstOption
           (optionSelected)="
             showDiseaseSummary(
-              DiseaseSummaryForm.controls['diseaseSummary'].value
+              DiseaseSummaryForm.controls['diseaseSummary'].value,
+              diseaseAutocompleteField,
+              diseaseElementInput
             )
           "
         >
-          <mat-option *ngFor="let compl of diseaseNames" [value]="compl">
+          <mat-option
+            *ngFor="let compl of filteredOptions | async"
+            [value]="compl"
+          >
             {{ compl }}
           </mat-option>
         </mat-autocomplete>

@@ -24,17 +24,20 @@ import { Router, Resolve, ActivatedRouteSnapshot } from '@angular/router';
 
 import { ServicePointService } from './service-point.service';
 import { map } from 'rxjs';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Injectable()
 export class ServicePointResolve implements Resolve<any> {
   constructor(
     private servicePointService: ServicePointService,
     private router: Router,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    const serviceProviderId: any = localStorage.getItem('providerServiceID');
-    const userId: any = localStorage.getItem('userID');
+    const serviceProviderId: any =
+      this.sessionstorage.getItem('providerServiceID');
+    const userId: any = this.sessionstorage.getItem('userID');
     return this.servicePointService
       .getServicePoints(userId, serviceProviderId)
       .pipe(

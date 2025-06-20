@@ -22,6 +22,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import * as CryptoJS from 'crypto-js';
 import {
   AuthService,
@@ -53,6 +54,7 @@ export class SetPasswordComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -60,7 +62,7 @@ export class SetPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.uname = localStorage.getItem('userName');
+    this.uname = this.sessionstorage.getItem('userName');
   }
 
   showPWD() {
@@ -153,7 +155,7 @@ export class SetPasswordComponent implements OnInit {
     this.authService.logout().subscribe((res: any) => {
       this.router.navigate(['/login']).then((result) => {
         if (result) {
-          localStorage.clear();
+          this.sessionstorage.clear();
           sessionStorage.clear();
         }
       });

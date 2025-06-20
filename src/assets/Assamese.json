@@ -37,7 +37,7 @@
         "lastName": "উপাধী (চাৰন্যেম)",
         "maritalStatus": "বৈবাহিক স্থিতি",
         "contactNo": "যোগাযোগৰ নম্বৰ",
-        "alternateNumber":"Alternate Contact Number",
+        "alternateNumber":"Alternate Number",
         "gender": "লিঙ্গ",
         "age": "বয়স",
         "ageUnit": "বয়সৰ একক",
@@ -299,7 +299,9 @@
       "selectAll": "সকলো বাছক",
       "sNo": "ক্ৰমিক নং",
       "confirmWhetherBeneficiaryHasArrived": "হিতাধিকাৰী আহিছে নে নাই নিশ্চিত কৰক",
-      "startTest": "Start Test"
+      "startTest": "টেষ্ট আৰম্ভ কৰক",
+      "remove": "অপসাৰণ",
+      "poct": "POCT"
     },
     "idrs": {
     
@@ -2054,7 +2056,7 @@
         "externalID": "External ID",
         "registertoAMRIT": "Register to AMRIT",
         "pleaseEnterValidInput": "Please enter a valid input",
-        "pleaseEnterValidInputFor": "Please enter a valid input for",
+        "pleaseEnterValidInputFor": "Please enter a valid input for ",
         "errorInfetchingStates": "Error in fetching states",
         "pleaseRegisterBeneficiaryInAMRIT": "Please register the beneficiary in AMRIT",
         "noFurtherRecordsToShow": "No further records to show",
@@ -2074,8 +2076,26 @@
         "riskFactors": "Risk Factors",
         "treatment": "Treatment",
         "selfcare": "Self-Care",
-        "investigations": "Investigations"
+        "investigations": "Investigations",
+        "noRecordsFound": "No Records Found",
+        "enterMobileNumberToBeLinkedWithAbha": "Enter Phone number to be linked with ABHA",
+        "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?",
+        "abhaCardAlreadyExists": "ABHA already exists for the Aadhaar Number",
+        "enterABHANumber": "Please Enter ABHA Number",
+        "enterABHAAddress": "Please Enter ABHA Address",
+        "enterAadhaarNumber": "Please Enter Aadhaar Number",
+        "enterMobileNumber": "Please Enter Mobile Number",
+        "enterCorrectAuthIdForAuthMode": "Please Enter correct Authentication ID for choosen AuthMode",
+        "abhaAddressFound" : "ABHA Address Found:",
+        "searchAndDownloadAbha": "Search and Download ABHA",
+        "abhaSearchMode": "ABHA Search Mode*",
+        "verifyAbha": "Verify ABHA",
+        "issueInAbhaCard": "Issue in printing ABHA Card",
+        "fileUploadedSuccessfully": "File Uploaded successfully",
+        "verifyMobileOtp": "Verify Mobile OTP",
+        "enterMobileOtp": "Enter Mobile OTP",
+        "verify": "Verify",
+        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue"
 
-      
       }
 }

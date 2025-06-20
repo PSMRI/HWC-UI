@@ -126,11 +126,19 @@ button[disabled].full-width-login-schedule {
 
 .full-width-refresh {
     width: 100%;
-    margin-top: 10px;
     margin-bottom: 10px;
     height: 35px;
     border-radius: 16px;
     font-size: 15px;
     font-weight: bold;
     max-width: 110px;
+}
+@media screen  and (min-width:360px) and (max-width:430px) {
+  .fit_to_content{
+    width: fit-content !important;
+
+  }
+  .mat_blue{
+    margin-top: 2px;
+  }
 }

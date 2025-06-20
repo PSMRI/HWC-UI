@@ -1,22 +1,24 @@
 <div class="row m-t-10" [formGroup]="comorbidityConcurrentConditionsForm">
   <div class="col-xs-12" formArrayName="comorbidityConcurrentConditionsList">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label">{{
-        currentLanguageSet?.historyData?.ancHistory?.combordityANC_OPD_NCD_PNC
-          ?.PreviousDetails
-      }}</span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCComorbidityHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousComorbidityHistory()"
-      >
-        <mat-icon class="md-18"> history</mat-icon>
-      </button>
-    </div>
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCComorbidityHistory"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+      (click)="getPreviousComorbidityHistory()"
+      (keydown.enter)="getPreviousComorbidityHistory()"
+      (keydown.space)="getPreviousComorbidityHistory()"
+    >
+      <mat-icon class="md-18 ms-2">history</mat-icon>
+      <span class="previousHistory">
+        {{
+          currentLanguageSet?.historyData?.ancHistory?.combordityANC_OPD_NCD_PNC
+            ?.PreviousDetails
+        }}
+      </span>
+    </button>
+
     <div
       class="col-12 row multi-row-select"
       style="margin: 15px 0px 15px 0px; background-color: #f0f5f5"
@@ -34,7 +36,7 @@
             comorbidityConcurrentConditions.value.comorbidConditions
               ?.comorbidCondition === 'Other'
               ? 'col-2 box'
-              : 'col-3 box'
+              : 'col-2 box'
           "
         >
           <mat-form-field [style.width]="'100%'">
@@ -140,12 +142,23 @@
             {{ currentLanguageSet?.inactiveForFutureVisits }}
           </mat-checkbox>
         </div>
-        <div class="col-2 box action-btn-container" style="text-align: end">
+        <div class="col-sm-6 col-md-4 box action-btn-container">
+          <button
+            mat-mini-fab
+            color="primary"
+            *ngIf="isLast"
+            class="mat-add-btn"
+            [disabled]="checkValidity(comorbidityConcurrentConditions)"
+            id="addComorbidityConcurrentConditions"
+            (click)="addComorbidityConcurrentConditions()"
+          >
+            {{ currentLanguageSet?.common?.add }}
+          </button>
           <button
             mat-mini-fab
             color="warn"
-            class="mat_warn_circle"
-            style="margin-right: 3px"
+            class="mat-remove-btn"
+            style="margin-left: 3px"
             id="removeComorbidityConcurrentConditions"
             *ngIf="
               i !== 0 ||
@@ -160,18 +173,7 @@
               )
             "
           >
-            <mat-icon class="md-18"> close</mat-icon>
-          </button>
-          <button
-            mat-mini-fab
-            color="primary"
-            *ngIf="isLast"
-            class="mat_blue_circle"
-            [disabled]="checkValidity(comorbidityConcurrentConditions)"
-            id="addComorbidityConcurrentConditions"
-            (click)="addComorbidityConcurrentConditions()"
-          >
-            <mat-icon class="md-18"> add</mat-icon>
+            {{ currentLanguageSet?.common?.remove }}
           </button>
         </div>
       </ng-container>

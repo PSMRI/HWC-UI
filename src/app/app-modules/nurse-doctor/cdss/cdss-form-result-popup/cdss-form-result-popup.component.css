@@ -42,10 +42,6 @@
     margin: 20px;
   }
 
-  .mat-icon {
-    margin: 20px;
-  }
-
   .mat-dialog-actions:last-child {
     margin-bottom: 0px;
     margin-right: 5px;
@@ -57,4 +53,19 @@
   .button-submit-disabled[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
+    }
+
+    .dialog-header-panel{
+      display: flex;
+    }
+    .close {
+      border: unset;
+      background-color: unset;
+      margin-left: 55em;
+      min-width: 0;
+      border-color: unset !important;
+      width: 0px;
+      height: 0px;
+      z-index: 3;
+      margin-top: 20px;
     }

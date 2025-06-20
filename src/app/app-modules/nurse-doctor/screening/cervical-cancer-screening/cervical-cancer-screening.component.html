@@ -6,10 +6,17 @@
   >
     <div
       class="pull-right"
+      style="text-align: end"
       [hidden]="hideRemoveFunctionalityInDoctorIfSuspected"
     >
-      <button mat-icon-button (click)="hideCervicalScreeningForm()">
-        <mat-icon matTooltip="Remove" class="md-24 matIcon-button-style"
+      <button
+        mat-icon-button
+        (click)="hideCervicalScreeningForm()"
+        style="border: unset; background-color: unset"
+      >
+        <mat-icon
+          matTooltip="Remove"
+          class="md-24 matIcon-button-style mat_icon_blue"
           >close</mat-icon
         >
       </button>
@@ -26,12 +33,13 @@
         [checked]="visualExaminationSuspected"
         (change)="markAsUnsuspected($event.checked)"
       ></mat-checkbox>
-      <mat-label style="color: grey; margin-bottom: 15px">{{
+      <mat-label class="ng-tns-font" style="color: grey; margin-bottom: 15px">{{
         currentLanguageSet?.MarkAsSuspected
       }}</mat-label>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <mat-label
+        class="ng-tns-font"
         *ngIf="visualExaminationSuspected"
         style="color: red; margin-bottom: 15px"
         >* {{ currentLanguageSet?.cervicalCancerScreeningSuspected }}</mat-label
@@ -43,7 +51,7 @@
         style="white-space: nowrap"
       >
         <mat-form-field>
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.visualExamination }}
           </mat-label>
           <mat-select

@@ -22,18 +22,23 @@
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class PharmacistService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    readonly sessionstorage: SessionStorageService,
+  ) {}
 
   getPharmacistWorklist() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const fetchUrl =
-      localStorage.getItem('providerServiceID') +
-      `/${localStorage.getItem('serviceID')}/${vanID}`;
+      this.sessionstorage.getItem('providerServiceID') +
+      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
     return this.http.get(environment.pharmacistWorklist + fetchUrl);
   }
 }

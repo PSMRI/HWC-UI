@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row m-t-10">
-    <div class="col-xs-8 col-sm-6 col-md-4">
+    <div class="col-xs-8 col-sm-6 col-md-4 fit_to_content">
       <div class="sw">
         <input
           type="search"
@@ -16,7 +16,7 @@
         </button>
       </div>
     </div>
-    <div class="col-xs-4 col-sm-6 col-md-8">
+    <div class="col-xs-4 col-sm-6 col-md-8 fit_to_content">
       <button
         mat-raised-button
         id="caseSheetButton"
@@ -41,10 +41,11 @@
   <div class="row m-t-10 m-b-40">
     <div class="col-sm-12">
       <mat-card>
-        <section class="table-responsive" style="padding-bottom: 40px">
-          <div class="mat-elevation-z8 responsiveTable">
+        <section class="">
+          <div class="">
             <table
               mat-table
+              class="table table-striped"
               [dataSource]="dataSource"
               aria-describedby="doctorWorklist"
             >
@@ -55,7 +56,7 @@
                   *matHeaderCellDef
                   mat-sort-header
                 >
-                  {{ currentLanguageSet?.casesheet?.serialNo }}
+                  {{ currentLanguageSet?.coreComponents?.sno }}
                 </th>
                 <td
                   mat-cell
@@ -161,24 +162,6 @@
                   </span>
                   /
                   <span style="color: #a6a6a6">{{ element.benVisitNo }}</span>
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="district">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
-                  {{ currentLanguageSet?.bendetails?.district }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadDoctorExaminationPage(element)"
-                >
-                  {{ element.districtName | titlecase }} /
-                  {{ element.villageName | titlecase }}
                 </td>
               </ng-container>
               <ng-container matColumnDef="visitDate">
@@ -349,7 +332,7 @@
                   <li>
                     <div class="marker-c-d"></div>
                     <p>
-                      {{ currentLanguageSet?.alerts?.info?.consultationDone }}
+                      {{ currentLanguageSet?.alerts?.info?.consultation_done }}
                     </p>
                   </li>
                   <li>
@@ -379,62 +362,48 @@
           >
             <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
           </div>
-          <div class="col-12 row">
-            <div class="col-12">
-              <ul class="description" *ngIf="dataSource.data.length > 0">
-                <li>
-                  <div class="marker-p-f-c"></div>
-                  <p>
-                    {{
-                      currentLanguageSet?.alerts?.info?.pendingForConsultation
-                    }}
-                  </p>
-                </li>
-                <li>
-                  <div class="marker-p-f-t-c"></div>
-                  <p>{{ currentLanguageSet?.alerts?.info?.pendingForTC }}</p>
-                </li>
-                <li>
-                  <div class="marker-t-c-c"></div>
-                  <p>{{ currentLanguageSet?.alerts?.info?.tCCancelled }}</p>
-                </li>
-                <li>
-                  <div class="marker-p-f-t"></div>
-                  <p>
-                    {{
-                      currentLanguageSet?.alerts?.info?.pendingforLabtestResult
-                    }}
-                  </p>
-                </li>
-                <li>
-                  <div class="marker-t-d"></div>
-                  <p>{{ currentLanguageSet?.alerts?.info?.labtestDone }}</p>
-                </li>
-                <li>
-                  <div class="marker-c-d"></div>
-                  <p>
-                    {{ currentLanguageSet?.alerts?.info?.consultationDone }}
-                  </p>
-                </li>
-                <li>
-                  <div class="marker-a-f-t-p"></div>
-                  <p>
-                    {{
-                      currentLanguageSet?.alerts?.info?.fetosenseTest_pending
-                    }}
-                  </p>
-                </li>
-                <li>
-                  <div class="marker-a-f-t-d"></div>
-                  <p>
-                    {{ currentLanguageSet?.alerts?.info?.fetosenseTest_done }}
-                  </p>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-        <div class="col-12" style="margin-top: 10px">
+
+          <ul
+            class="description"
+            style="margin-bottom: unset"
+            *ngIf="dataSource.data.length > 0"
+          >
+            <li>
+              <div class="marker-p-f-c"></div>
+              <p>
+                {{ currentLanguageSet?.alerts?.info?.pendingForConsultation }}
+              </p>
+            </li>
+            <li>
+              <div class="marker-p-f-t"></div>
+              <p>
+                {{ currentLanguageSet?.alerts?.info?.pendingforLabtestResult }}
+              </p>
+            </li>
+            <li>
+              <div class="marker-t-d"></div>
+              <p>{{ currentLanguageSet?.alerts?.info?.labtestDone }}</p>
+            </li>
+            <li>
+              <div class="marker-c-d"></div>
+              <p>
+                {{ currentLanguageSet?.alerts?.info?.consultation_done }}
+              </p>
+            </li>
+            <li>
+              <div class="marker-a-f-t-p"></div>
+              <p>
+                {{ currentLanguageSet?.alerts?.info?.fetosenseTest_pending }}
+              </p>
+            </li>
+            <li>
+              <div class="marker-a-f-t-d"></div>
+              <p>
+                {{ currentLanguageSet?.alerts?.info?.fetosenseTest_done }}
+              </p>
+            </li>
+          </ul>
+
           <mat-paginator
             style="display: unset !important"
             [pageSizeOptions]="[5, 10, 20]"
@@ -444,7 +413,7 @@
             aria-label="Select patient in doctorWorklist"
           >
           </mat-paginator>
-        </div>
+        </section>
       </mat-card>
     </div>
   </div>

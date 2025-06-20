@@ -26,22 +26,26 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Injectable()
 export class WorkareaCanActivate implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    readonly sessionstorage: SessionStorageService,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     if (
       !(
-        localStorage.getItem('visitCode') &&
-        localStorage.getItem('benFlowID') &&
-        localStorage.getItem('visitCategory') &&
-        localStorage.getItem('beneficiaryRegID') &&
-        localStorage.getItem('visitID') &&
-        localStorage.getItem('beneficiaryID') &&
-        localStorage.getItem('doctorFlag') &&
-        localStorage.getItem('nurseFlag')
+        this.sessionstorage.getItem('visitCode') &&
+        this.sessionstorage.getItem('benFlowID') &&
+        this.sessionstorage.getItem('visitCategory') &&
+        this.sessionstorage.getItem('beneficiaryRegID') &&
+        this.sessionstorage.getItem('visitID') &&
+        this.sessionstorage.getItem('beneficiaryID') &&
+        this.sessionstorage.getItem('doctorFlag') &&
+        this.sessionstorage.getItem('nurseFlag')
       )
     ) {
       return false;

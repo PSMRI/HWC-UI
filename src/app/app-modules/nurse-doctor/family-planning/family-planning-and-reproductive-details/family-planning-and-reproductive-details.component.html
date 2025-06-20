@@ -1,9 +1,12 @@
 <div class="row m-t-20" [formGroup]="familyPlanningAndReproductiveForm">
   <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
     <div class="form-group">
-      <label class="control-label" for="familyPlanningAndReproductive">{{
-        current_language_set?.fertilityStatus
-      }}</label>
+      <label
+        class="control-label"
+        style="padding-top: 10px"
+        for="familyPlanningAndReproductive"
+        >{{ current_language_set?.fertilityStatus }}</label
+      >
       <div class="clearfix"></div>
       <mat-radio-group
         id="fertilityStatus"
@@ -251,46 +254,50 @@
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="fertilityStatus === 'Fertile'"
     >
-      <mat-label class="mat-label-text">
-        {{ current_language_set?.unitOfAge }}
-      </mat-label>
-      <mat-select
-        [style.width]="'100%'"
-        formControlName="unitOfAge"
-        (selectionChange)="
-          checkAgeOfYoungestChildValidation(
-            familyPlanningAndReproductiveForm.controls['ageOfYoungestChild']
-              .value
-          )
-        "
-      >
-        <mat-option
-          *ngFor="let ageUnit of ageUnitMasterData"
-          [value]="ageUnit.name"
+      <mat-form-field>
+        <mat-label class="mat-label-text">
+          {{ current_language_set?.unitOfAge }}
+        </mat-label>
+        <mat-select
+          [style.width]="'100%'"
+          formControlName="unitOfAge"
+          (selectionChange)="
+            checkAgeOfYoungestChildValidation(
+              familyPlanningAndReproductiveForm.controls['ageOfYoungestChild']
+                .value
+            )
+          "
         >
-          {{ ageUnit.name }}
-        </mat-option>
-      </mat-select>
+          <mat-option
+            *ngFor="let ageUnit of ageUnitMasterData"
+            [value]="ageUnit.name"
+          >
+            {{ ageUnit.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div
       class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
       *ngIf="fertilityStatus === 'Fertile'"
     >
-      <mat-label class="mat-label-text">
-        {{ current_language_set?.youngestChildGender }}
-      </mat-label>
-      <mat-select
-        [style.width]="'100%'"
-        formControlName="youngestChildGender"
-        (selectionChange)="onValueChange()"
-      >
-        <mat-option
-          *ngFor="let youngestChildGender of genderMasterData"
-          [value]="youngestChildGender.genderName"
-          >{{ youngestChildGender.genderName }}
-        </mat-option>
-      </mat-select>
+      <mat-form-field>
+        <mat-label class="mat-label-text">
+          {{ current_language_set?.youngestChildGender }}
+        </mat-label>
+        <mat-select
+          [style.width]="'100%'"
+          formControlName="youngestChildGender"
+          (selectionChange)="onValueChange()"
+        >
+          <mat-option
+            *ngFor="let youngestChildGender of genderMasterData"
+            [value]="youngestChildGender.genderName"
+            >{{ youngestChildGender.genderName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div
@@ -298,38 +305,41 @@
       style="margin-bottom: 15px !important"
       *ngIf="fertilityStatus === 'Fertile'"
     >
-      <mat-label class="mat-label-text">
-        {{ current_language_set?.currentlyUsingFPMethod }}
-      </mat-label>
-      <mat-select
-        multiple
-        class="select-full-width"
-        name="currentFPMethod"
-        formControlName="currentlyUsingFpMethod"
-        (selectionChange)="
-          populateSterilizationForTubectomyOrVasectomy();
-          populateDosesFieldForAntara();
-          currentlyUsingFPOther();
-          resetcurrentlyUsingFPOptions(
-            familyPlanningAndReproductiveForm.controls['currentlyUsingFpMethod']
-              .value
-          )
-        "
-      >
-        <ng-container *ngFor="let currentFPMethod of currentlyFPMethod">
-          <mat-option
-            class="dropdownHeight"
-            [value]="currentFPMethod.name"
-            [disabled]="
-              currentFPMethod.name === 'None'
-                ? disableCurrentlyUsingFPNone
-                : disableAllOptions
-            "
-          >
-            {{ currentFPMethod.name }}
-          </mat-option>
-        </ng-container>
-      </mat-select>
+      <mat-form-field>
+        <mat-label class="mat-label-text">
+          {{ current_language_set?.currentlyUsingFPMethod }}
+        </mat-label>
+        <mat-select
+          multiple
+          class="select-full-width"
+          name="currentFPMethod"
+          formControlName="currentlyUsingFpMethod"
+          (selectionChange)="
+            populateSterilizationForTubectomyOrVasectomy();
+            populateDosesFieldForAntara();
+            currentlyUsingFPOther();
+            resetcurrentlyUsingFPOptions(
+              familyPlanningAndReproductiveForm.controls[
+                'currentlyUsingFpMethod'
+              ].value
+            )
+          "
+        >
+          <ng-container *ngFor="let currentFPMethod of currentlyFPMethod">
+            <mat-option
+              class="dropdownHeight"
+              [value]="currentFPMethod.name"
+              [disabled]="
+                currentFPMethod.name === 'None'
+                  ? disableCurrentlyUsingFPNone
+                  : disableAllOptions
+              "
+            >
+              {{ currentFPMethod.name }}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div

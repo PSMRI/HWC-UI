@@ -1,28 +1,44 @@
 <form [formGroup]="cdssForm" autocomplete="off">
   <div class="row m-t-20">
-    <div class="col-xs-12 col-sm-6 col-md-4" *ngIf="!viewMode">
-      <mat-form-field [style.width]="'100%'">
+    <div
+      class="col-xs-12 col-sm-6 col-md-4"
+      style="margin-top: 25px"
+      *ngIf="!viewMode"
+    >
+      <mat-form-field [style.width]="'100%'" #autocompleteField>
         <mat-label class="mat-label-text">
           {{ currentLanguageSet?.presentChiefComplaint }}
         </mat-label>
         <input
           matInput
-          #inp="matAutocompleteTrigger"
-          (focus)="inputFocused(inp)"
+          #elementInput
           [matAutocomplete]="auto"
           formControlName="presentChiefComplaint"
           (input)="
-            getQuestions(cdssForm.controls['presentChiefComplaint'].value)
+            getQuestions(
+              cdssForm.controls['presentChiefComplaint'].value,
+              autocompleteField,
+              elementInput
+            )
           "
           (keyup.enter)="
-            getQuestions(cdssForm.controls['presentChiefComplaint'].value)
+            getQuestions(
+              cdssForm.controls['presentChiefComplaint'].value,
+              autocompleteField,
+              elementInput
+            )
           "
         />
         <mat-autocomplete
           #auto="matAutocomplete"
-          (optionSelected)="getQuestions($event.option.value)"
+          (optionSelected)="
+            getQuestions($event.option.value, autocompleteField, elementInput)
+          "
         >
-          <mat-option *ngFor="let compl of chiefComplaints" [value]="compl">
+          <mat-option
+            *ngFor="let compl of filteredOptions | async"
+            [value]="compl"
+          >
             {{ compl }}
           </mat-option>
         </mat-autocomplete>

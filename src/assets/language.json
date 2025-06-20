@@ -1088,7 +1088,7 @@
                 "imageNotFound": "Image not found",
                 "familyDisease": "Family Disease history",
                 "dataUpdated": "Data updated successfully",
-                "pendingForConsultation": "Pending For Tele-Consultation",
+                "pendingForConsultation": "Pending For Consultation",
                 "consultationDone": "Tele-Consultation Done",
                 "pendingForTC": "Pending For TC",
                 "tCCancelled": "TC Cancelled",

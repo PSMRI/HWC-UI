@@ -32,7 +32,8 @@ import {
 import { FormGroup } from '@angular/forms';
 import { MasterdataService, DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-contact-history',
@@ -65,6 +66,7 @@ export class ContactHistoryComponent
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private masterdataService: MasterdataService,
+    readonly sessionstorage: SessionStorageService,
   ) {
     this.masterdataService.listen().subscribe((m: any) => {
       console.log(m);
@@ -73,7 +75,7 @@ export class ContactHistoryComponent
   }
   ngOnInit() {
     this.assignSelectedLanguage();
-    localStorage.setItem('contact', 'null');
+    this.sessionstorage.setItem('contact', 'null');
     console.log('contactvalue' + this.patientCovidForm.value);
     this.getContactHistoryMasterData();
   }
@@ -87,8 +89,8 @@ export class ContactHistoryComponent
   }
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getContactDetails(benRegID, visitID);
     }
   }
@@ -151,14 +153,15 @@ export class ContactHistoryComponent
           this.contactData = selectedContact;
           this.contactList = selectedContact;
 
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
             parseInt(specialistFlagString) === 100
           ) {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getMMUContactDetails(benRegID, visitID);
           }
         }
@@ -169,30 +172,30 @@ export class ContactHistoryComponent
     console.log('ConsoleStaus' + this.contactStatus.length);
     if (this.contactStatus.length !== 0) {
       if (this.contactStatus.indexOf('None of the above') > -1) {
-        localStorage.setItem('contact', 'false');
+        this.sessionstorage.setItem('contact', 'false');
 
         this.contactData = this.contactList.filter((item: any) => {
           return item === 'None of the above';
         });
       } else {
-        localStorage.setItem('contact', 'true');
+        this.sessionstorage.setItem('contact', 'true');
         this.contactData = this.contactList.filter((item: any) => {
           return item !== 'None of the above';
         });
       }
-      this.cont = localStorage.getItem('contact');
+      this.cont = this.sessionstorage.getItem('contact');
       this.httpServiceService.filter(this.cont);
     } else {
       this.contactData = this.contactList;
-      localStorage.setItem('contact', 'null');
-      this.cont = localStorage.getItem('contact');
+      this.sessionstorage.setItem('contact', 'null');
+      this.cont = this.sessionstorage.getItem('contact');
       this.httpServiceService.filter(this.cont);
     }
   }
 
   onSymptomFilterClick(symp: any) {
     console.log('Symptom Travel' + symp);
-    this.allSymp = localStorage.getItem('allSymptom');
+    this.allSymp = this.sessionstorage.getItem('allSymptom');
     if (this.allSymp === 'true') {
       this.contactReqiured = 'false';
     } else {

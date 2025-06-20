@@ -122,3 +122,20 @@ img {
   left: 0;
   z-index: 99;
 }
+.mat-drawer-inner-container {
+ 
+  background-color: #F2F2F0 !important;
+}
+
+.fab-bottom-left {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.fab-bottom-left button {
+  margin-bottom: 12px;
+}

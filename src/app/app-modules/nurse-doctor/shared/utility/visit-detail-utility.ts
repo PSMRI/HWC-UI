@@ -20,12 +20,17 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 export class VisitDetailUtils {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    readonly sessionstorage: SessionStorageService,
+  ) {}
 
   createPatientVisitForm(diasableFlag = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       patientVisitDetailsForm: this.createPatientVisitDetails(diasableFlag),
@@ -43,12 +48,13 @@ export class VisitDetailUtils {
       cbacScreeningForm: this.createCBACForm(diasableFlag),
       vanID: JSON.parse(serviceLineDetails).vanID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
-      createdBy: localStorage.getItem('userName'),
+      createdBy: this.sessionstorage.getItem('userName'),
     });
   }
 
   createPatientAdherenceForm(disableFlag = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,
@@ -66,7 +72,8 @@ export class VisitDetailUtils {
   }
 
   createPatientInvestigationsForm(disableFlag = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,
@@ -88,7 +95,8 @@ export class VisitDetailUtils {
   }
 
   createPatientChiefComplaintsForm(disableFlag: any): FormGroup {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,
@@ -107,7 +115,8 @@ export class VisitDetailUtils {
   }
 
   createPatientVisitDetails(disableFlag = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,
@@ -161,7 +170,8 @@ export class VisitDetailUtils {
   }
 
   createPatientSymptomsForm(disableFlag = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,
@@ -175,7 +185,8 @@ export class VisitDetailUtils {
     });
   }
   createPatientCovidForm(disableFlag = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,
@@ -283,7 +294,8 @@ export class VisitDetailUtils {
     });
   }
   createCdssForm(disableFlag = false) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       presentChiefComplaintDb: this.createPresentCheifComplaint(),

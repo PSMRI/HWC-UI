@@ -17,3 +17,7 @@
 .mat-form-field {
   line-height: unset;
 }
+
+.mdc-form-field>label {
+  font-weight: 700 !important;
+}

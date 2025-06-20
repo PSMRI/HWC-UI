@@ -15,3 +15,8 @@
 md-icon.search-btn {
     color: #52575C !important;
 }
+
+table {
+    width: 100%;
+    border: 1px solid lightgray;
+  }

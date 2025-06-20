@@ -20,7 +20,8 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { Component, DoCheck, Input, OnChanges, OnInit } from '@angular/core';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
 @Component({
@@ -61,7 +62,10 @@ export class ScreeningCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   enableBreastForm = false;
   enableCervicalForm = false;
 
-  constructor(private httpServiceService: HttpServiceService) {}
+  constructor(
+    private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
+  ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
@@ -74,6 +78,13 @@ export class ScreeningCaseSheetComponent implements OnChanges, OnInit, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    if (
+      this.currentLanguageSet === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.currentLanguageSet =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   ngOnChanges() {

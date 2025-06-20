@@ -28,18 +28,53 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { SetLanguageComponent } from '../../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../../core/components/set-language.component';
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { HttpServiceService } from '../../../core/services/http-service.service';
 import { Subscription } from 'rxjs';
 import { DoctorService } from '../../shared/services/doctor.service';
 import { MasterdataService } from '../../shared/services/masterdata.service';
 import { GeneralUtils } from '../../shared/utility/general-utility';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-childhood-oral-vitamin',
   templateUrl: './childhood-oral-vitamin.component.html',
   styleUrls: ['./childhood-oral-vitamin.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class ChildhoodOralVitaminComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
@@ -55,7 +90,7 @@ export class ChildhoodOralVitaminComponent
 
   currentLanguageSet: any;
   today: any;
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
   nurseMasterDataSubscription!: Subscription;
   oralVitaminADoses: any = [];
   vaccineStatus = ['Given', 'Not Given'];
@@ -69,6 +104,7 @@ export class ChildhoodOralVitaminComponent
     private fb: FormBuilder,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   todayDate = new Date();
