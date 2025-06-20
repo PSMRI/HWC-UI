@@ -159,6 +159,99 @@
     </div>
 
     <div
+      class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-20"
+      style="display: flex"
+      *ngIf="
+        visitCategory.toLowerCase() === 'fp & contraceptive services' ||
+        visitCategory.toLowerCase() === 'ncd screening'
+      "
+    >
+      <div
+        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlock"
+        class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment"
+      >
+        {{ currentLanguageSet?.Referdetails?.referralReason }}*
+      </div>
+      <ng-template #elseBlock>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
+          {{ currentLanguageSet?.Referdetails?.referralReason }}
+        </div>
+      </ng-template>
+
+      <div
+        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
+        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText"
+      >
+        <mat-form-field [style.width]="'50%'">
+          <mat-label class="mat-label-text">{{
+            currentLanguageSet?.Referdetails?.referralReason
+          }}</mat-label>
+          <mat-select
+            multiple
+            name="referralReasonList"
+            formControlName="referralReasonList"
+            (selectionChange)="
+              checkForOthersOption(
+                referForm.controls['referralReasonList'].value
+              )
+            "
+            required
+          >
+            <mat-option *ngFor="let refer of fpReferral" [value]="refer.name">
+              {{ refer.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <ng-template #elseBlockText>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <mat-form-field [style.width]="'50%'">
+            <mat-label class="mat-label-text">
+              {{ currentLanguageSet?.Referdetails?.referralReason }}</mat-label
+            >
+            <mat-select
+              multiple
+              name="referralReasonList"
+              formControlName="referralReasonList"
+              (selectionChange)="
+                checkForOthersOption(
+                  referForm.controls['referralReasonList'].value
+                )
+              "
+            >
+              <mat-option
+                class="dropdownHeight"
+                *ngFor="let refer of fpReferral"
+                [value]="refer.name"
+              >
+                {{ refer.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </ng-template>
+
+      <div
+        class="box col-xs-6 col-sm-6 col-md-3 col-lg-3 pull-right"
+        *ngIf="enableOthersReferralTextField"
+      >
+        <mat-form-field [style.width]="'50%'">
+          <mat-label>{{ currentLanguageSet?.other }}</mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            defaultNull
+            maxlength="100"
+            allowText="alphaspace"
+            formControlName="otherReferralReason"
+            name="otherReferralReason"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <div
       class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
       style="display: flex"
       *ngIf="visitCategory.toLowerCase() !== 'fp & contraceptive services'"
@@ -189,100 +282,7 @@
       </div>
     </div>
 
-    <div
-      class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-20"
-      style="display: flex"
-      *ngIf="
-        visitCategory.toLowerCase() === 'fp & contraceptive services' ||
-        visitCategory.toLowerCase() === 'ncd screening'
-      "
-    >
-      <div
-        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlock"
-        class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment"
-      >
-        {{ currentLanguageSet?.Referdetails?.referralReason }}*
-      </div>
-      <ng-template #elseBlock>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
-          {{ currentLanguageSet?.Referdetails?.referralReason }}
-        </div>
-      </ng-template>
-
-      <div
-        class="col-xs-6 col-sm-6 col-md-3 col-lg-3"
-        *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText"
-      >
-        <mat-form-field [style.width]="'50%'">
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.Referdetails?.referralReason
-          }}</mat-label>
-          <mat-select
-            multiple
-            class="inputFieldWidth"
-            name="referralReasonList"
-            formControlName="referralReasonList"
-            (selectionChange)="
-              checkForOthersOption(
-                referForm.controls['referralReasonList'].value
-              )
-            "
-            required
-          >
-            <mat-option *ngFor="let refer of fpReferral" [value]="refer.name">
-              {{ refer.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <ng-template #elseBlockText>
-        <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
-          <mat-form-field [style.width]="'50%'">
-            <mat-label>
-              {{ currentLanguageSet?.Referdetails?.referralReason }}</mat-label
-            >
-            <mat-select
-              multiple
-              class="inputFieldWidth"
-              name="referralReasonList"
-              formControlName="referralReasonList"
-              (selectionChange)="
-                checkForOthersOption(
-                  referForm.controls['referralReasonList'].value
-                )
-              "
-            >
-              <mat-option
-                class="dropdownHeight"
-                *ngFor="let refer of fpReferral"
-                [value]="refer.name"
-              >
-                {{ refer.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </ng-template>
-
-      <div
-        class="box col-xs-12 col-sm-6 col-md-3 col-lg-3 pull-right"
-        *ngIf="enableOthersReferralTextField"
-      >
-        <mat-form-field [style.width]="'50%'">
-          <mat-label>{{ currentLanguageSet?.other }}</mat-label>
-          <input
-            autocomplete="off"
-            matInput
-            defaultNull
-            maxlength="100"
-            allowText="alphaspace"
-            formControlName="otherReferralReason"
-            name="otherReferralReason"
-          />
-        </mat-form-field>
-      </div>
-    </div>
-
+    
     <div
       class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-10"
       style="display: flex"
