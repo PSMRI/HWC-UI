@@ -265,8 +265,8 @@
             currentLanguageSet?.Referdetails?.additionalservices
           }}</mat-label>
           <mat-select
-            (ngModelChange)="additionalservices($event)"
-            multiple="true"
+            (selectionChange)="additionalservices($event.value)"
+            multiple
             name="refrredToAdditionalServiceList"
             formControlName="refrredToAdditionalServiceList"
           >
