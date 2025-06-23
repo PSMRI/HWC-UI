@@ -4419,12 +4419,19 @@ export class WorkareaComponent
           if (data.abdmFacilityID && data.abdmFacilityName) {
             this.abdmFacilityId = data.abdmFacilityID;
             this.abdmFacilityName = data.abdmFacilityName;
+            this.sessionstorage.setItem('abdmFacilityId', data.abdmFacilityID);
+            this.sessionstorage.setItem(
+              'abdmFacilityName',
+              data.abdmFacilityName,
+            );
             this.saveAbdmFacilityForVisit();
           }
         } else {
           this.confirmationService.confirm(res.errorMessage, 'info');
           this.abdmFacilityId = null;
           this.abdmFacilityName = null;
+          this.sessionstorage.setItem('abdmFacilityId', null);
+          this.sessionstorage.setItem('abdmFacilityName', null);
           this.saveAbdmFacilityForVisit();
         }
       },

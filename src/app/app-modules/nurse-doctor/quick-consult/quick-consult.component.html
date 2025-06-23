@@ -141,13 +141,25 @@
               </div>
 
               <div
-                class="col-sm-2 col-md-2 box action-btn-container pull-right"
+                class="col-sm-2 col-md-4 box action-btn-container pull-right"
               >
+                <button
+                  *ngIf="isLast"
+                  class="mat-add-btn"
+                  type="button"
+                  mat-mini-fab
+                  color="primary"
+                  [id]="'addBtn' + i"
+                  [disabled]="checkComplaintFormValidity(chiefComplaint)"
+                  (click)="addChiefComplaint()"
+                >
+                  {{ currentLanguageSet?.common?.add }}
+                </button>
                 <button
                   type="button"
                   mat-mini-fab
                   color="warn"
-                  class="mat_warn_circle"
+                  class="mat-remove-btn"
                   style="margin-right: 5px"
                   [id]="'removeBtn' + i"
                   *ngIf="
@@ -167,20 +179,7 @@
                   "
                   (click)="deleteChiefComplaint(i, chiefComplaint)"
                 >
-                  <span class="material-icons"> close</span>
-                </button>
-
-                <button
-                  *ngIf="isLast"
-                  class="mat_blue_circle"
-                  type="button"
-                  mat-mini-fab
-                  color="primary"
-                  [id]="'addBtn' + i"
-                  [disabled]="checkComplaintFormValidity(chiefComplaint)"
-                  (click)="addChiefComplaint()"
-                >
-                  <span class="material-icons">add</span>
+                  {{ currentLanguageSet?.common?.remove }}
                 </button>
               </div>
             </ng-container>
@@ -621,7 +620,7 @@
                   >
                     <ng-container [formGroupName]="i">
                       <div class="col-xs-12 col-sm-9 m-t-10">
-                        <mat-form-field class="input-full-width">
+                       <mat-form-field class="input-full-width">
                           <input
                             matInput
                             allowText="inputFieldValidator"
@@ -660,9 +659,23 @@
                         <button
                           mat-mini-fab
                           type="button"
+                          class="mat-add-btn"
+                          style="margin-left: 5px"
+                          color="primary"
+                          *ngIf="isLast"
+                          [disabled]="
+                            checkProvisionalDiagnosisValidity(diagnosis)
+                          "
+                          (click)="addDiagnosis()"
+                        >
+                          {{ currentLanguageSet?.common?.add }}
+                        </button>
+                        <button
+                          mat-mini-fab
+                          type="button"
                           class="pull-left"
                           color="warn"
-                          class="mat_warn_circle"
+                          class="mat-remove-btn"
                           *ngIf="
                             diagnosis.get('provisionalDiagnosisList')
                               ?.disabled ||
@@ -679,21 +692,7 @@
                           "
                           (click)="removeDiagnosisFromList(i, diagnosis)"
                         >
-                          <mat-icon> close</mat-icon>
-                        </button>
-                        <button
-                          mat-mini-fab
-                          type="button"
-                          class="mat_blue_circle"
-                          style="margin-left: 5px"
-                          color="primary"
-                          *ngIf="isLast"
-                          [disabled]="
-                            checkProvisionalDiagnosisValidity(diagnosis)
-                          "
-                          (click)="addDiagnosis()"
-                        >
-                          <mat-icon> add</mat-icon>
+                          {{ currentLanguageSet?.common?.remove }}
                         </button>
                       </div>
                     </ng-container>
@@ -1133,10 +1132,10 @@
                               id="deleteMedicine"
                               (click)="deleteMedicine(j, drug.value.id)"
                               color="warn"
-                              class="mat_warn_circle"
+                              class="mat-remove-btn"
                               style="margin-bottom: 20px"
                             >
-                              <span class="material-icons">close</span>
+                              {{ currentLanguageSet?.common?.remove }}
                             </button>
                           </div>
                         </div>

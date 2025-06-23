@@ -299,7 +299,9 @@
       "selectAll": "সকলো বাছক",
       "sNo": "ক্ৰমিক নং",
       "confirmWhetherBeneficiaryHasArrived": "হিতাধিকাৰী আহিছে নে নাই নিশ্চিত কৰক",
-      "startTest": "Start Test"
+      "startTest": "টেষ্ট আৰম্ভ কৰক",
+      "remove": "অপসাৰণ",
+      "poct": "POCT"
     },
     "idrs": {
     
