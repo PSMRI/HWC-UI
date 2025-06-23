@@ -47,11 +47,24 @@
               >
             </mat-form-field>
           </div>
-          <div class="col-xs-12 col-sm-3 m-t-10" style="padding: 0px">
+          <div class="col-xs-12 col-md-12 col-sm-6 m-t-10" style="padding: 0px">
+            
             <button
               mat-mini-fab
               type="button"
-              class="mat_warn_circle"
+              style="margin-right: 3px"
+              class="mat-add-btn"
+              color="primary"
+              *ngIf="isLast"
+              [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
+              (click)="addDiagnosis()"
+            >
+              {{current_language_set?.common?.add}}
+            </button>
+            <button
+              mat-mini-fab
+              type="button"
+              class="mat-remove-btn"
               color="warn"
               *ngIf="
                 diagnosis.get('provisionalDiagnosisList')?.disabled ||
@@ -64,19 +77,7 @@
               "
               (click)="removeDiagnosisFromList(i, diagnosis)"
             >
-              <mat-icon>close</mat-icon>
-            </button>
-            <button
-              mat-mini-fab
-              type="button"
-              style="margin-right: 3px"
-              class="mat_blue_circle"
-              color="primary"
-              *ngIf="isLast"
-              [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
-              (click)="addDiagnosis()"
-            >
-              <mat-icon>add</mat-icon>
+              {{current_language_set?.common?.remove}}
             </button>
           </div>
         </ng-container>
