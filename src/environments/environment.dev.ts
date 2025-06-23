@@ -61,7 +61,6 @@ const biologicalScreeningDeviceAPI = `${ADMIN_API}diagnostics/biologicalScreenin
 const FHIR_API = `${FHIRIP}fhir-api/`;
 const mmuUICasesheet = `${hwcUI_IP}aam/`;
 const sessionStorageEncKey = '';
-
 const siteKey = '';
 const captchaChallengeURL = '';
 const enableCaptcha = false;
