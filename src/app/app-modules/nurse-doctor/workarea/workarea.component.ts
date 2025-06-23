@@ -131,7 +131,7 @@ export class WorkareaComponent
   patientMedicalForm!: FormGroup;
   patientBirthImmunizationHistoryForm!: FormGroup;
 
-  showESanjeevaniBtn = false;
+  showESanjeevaniBtn = 0;
   tm = false;
   current_language_set: any;
   attendant: any;
@@ -232,6 +232,7 @@ export class WorkareaComponent
   disableSubmitButton = false;
   eSanjeevaniFlagArry: any = [];
   nurseRole: any;
+  doctorRole: any;
 
   ngOnInit() {
     this.nurseService.setUpdateForHrpStatus(false);
@@ -4683,9 +4684,13 @@ export class WorkareaComponent
 
             this.beneficiaryAge = beneficiary.ageVal;
             this.nurseRole = beneficiary.nurseFlag;
+            this.doctorRole = beneficiary.doctorFlag;
             if (this.nurseRole === 1) {
               this.eSanjeevaniFlagArry =
                 this.confirmationService.eSanjeevaniFlagArry;
+            } else if (this.doctorRole === 1) {
+              this.eSanjeevaniFlagArry =
+                this.confirmationService.eSanjeevaniDoctorFlagArry;
             }
             this.checkNurseFlag();
           }
@@ -5588,11 +5593,17 @@ export class WorkareaComponent
     if (
       this.eSanjeevaniFlagArry !== undefined &&
       this.eSanjeevaniFlagArry !== null &&
-      this.eSanjeevaniFlagArry === true
+      this.eSanjeevaniFlagArry === 'ESanjeevani'
     ) {
-      this.showESanjeevaniBtn = true;
+      this.showESanjeevaniBtn = 1;
+    } else if (
+      this.eSanjeevaniFlagArry !== undefined &&
+      this.eSanjeevaniFlagArry !== null &&
+      this.eSanjeevaniFlagArry === 'Swymed'
+    ) {
+      this.showESanjeevaniBtn = 2;
     } else {
-      this.showESanjeevaniBtn = false;
+      this.showESanjeevaniBtn = 0;
     }
   }
   openEsanjeevaniPortal() {

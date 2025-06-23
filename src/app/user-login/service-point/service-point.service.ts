@@ -59,10 +59,12 @@ export class ServicePointService {
       vanIDx = vanId;
     }
     const spPSMIDx = this.sessionstorage.getItem('providerServiceID');
+    const userId = this.sessionstorage.getItem('userID');
 
     return this.http.post(environment.demographicsCurrentMasterUrl, {
       vanID: vanIDx,
       spPSMID: spPSMIDx,
+      userID: userId,
     });
   }
 
