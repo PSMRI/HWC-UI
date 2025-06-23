@@ -22,6 +22,7 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
+import { ConfirmationService } from '../../core/services/confirmation.service';
 
 @Component({
   selector: 'app-doctor-tm-worklist-wrapper',
@@ -31,11 +32,17 @@ import { HttpServiceService } from '../../core/services/http-service.service';
 export class DoctorTmWorklistWrapperComponent implements OnInit, DoCheck {
   app: any;
   current_language_set: any;
+  teleConsultationFlag: any;
 
-  constructor(public httpServiceService: HttpServiceService) {}
+  constructor(
+    public httpServiceService: HttpServiceService,
+    private confirmationService: ConfirmationService,
+  ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
+    this.teleConsultationFlag =
+      this.confirmationService.eSanjeevaniDoctorFlagArry;
   }
 
   ngDoCheck() {
