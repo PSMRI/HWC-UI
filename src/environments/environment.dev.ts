@@ -37,7 +37,7 @@ const SWYMED_IP = '14.143.13.109';
 const adminIP = 'https://amritwprdev.piramalswasthya.org/';
 const FHIRIP = 'https://amritwprdev.piramalswasthya.org/';
 const identityIP = 'https://amritwprdev.piramalswasthya.org/';
-const IDENTITY_API = `${identityIP}identity-0.0.1/`;
+const IDENTITY_API = `${identityIP}identity-api/`;
 const IP104 = 'https://amritwprdev.piramalswasthya.org/';
 
 // With API MAN Configuration
@@ -48,23 +48,27 @@ const IP104 = 'https://amritwprdev.piramalswasthya.org/';
 //  const SCHEDULER_API = `http://${IP}:8080/apiman-gateway/IEMR/Scheduling/1.0/`;
 
 // Without API MAN Configuration
-const COMMON_API_OPEN = `${commonIP}commonapi-v1.0/`;
-const COMMON_API = `${commonIP}commonapi-v1.0/`;
-const HWC_API = `${hwcIP}hwc-facility-service/`;
-const TM_API = `${tmIP}tmapi-v1.0/`;
-const MMU_API = `${mmuIP}mmuapi-v1.0/`;
-const COMMON_API_OPEN_SYNC = `${SERVER_IP}commonapi-v1.0/`;
-const SCHEDULER_API = `${schedulerIP}schedulerapi-v1.0/`;
-const ADMIN_API = `${adminIP}adminapi-v1.0/`;
-const API104 = `${IP104}104api-v1.0/`;
+const COMMON_API_OPEN = `${commonIP}common-api/`;
+const COMMON_API = `${commonIP}common-api/`;
+const HWC_API = `${hwcIP}hwc-api/`;
+const TM_API = `${tmIP}tm-api/`;
+const MMU_API = `${mmuIP}mmu-api/`;
+const COMMON_API_OPEN_SYNC = `${SERVER_IP}common-api/`;
+const SCHEDULER_API = `${schedulerIP}scheduler-api/`;
+const ADMIN_API = `${adminIP}admin-api/`;
+const API104 = `${IP104}104-api/`;
 const biologicalScreeningDeviceAPI = `${ADMIN_API}diagnostics/biologicalScreeningDevice/`;
-const FHIR_API = `${FHIRIP}fhirapi-v1.0/`;
+const FHIR_API = `${FHIRIP}fhir-api/`;
 const mmuUICasesheet = `${hwcUI_IP}aam/`;
 const sessionStorageEncKey = '';
+const siteKey = '';
+const captchaChallengeURL = '';
+const enableCaptcha = false;
 
 export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
+
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
@@ -275,7 +279,6 @@ export const environment = {
   saveDoctorCovidDetails: `${HWC_API}pandemic/covid/save/doctorData`,
   updateCovidHistoryDetailsUrl: `${HWC_API}pandemic/covid/update/historyScreen`,
   updateCovidVitalsDetailsUrl: `${HWC_API}pandemic/covid/update/vitalScreen`,
-  getCovidVisitDetailsUrl: ``,
   getCovidHistoryDetailsUrl: `${HWC_API}pandemic/covid/getBenCovid19HistoryDetails`,
   getCovidVitalDetailsUrl: `${HWC_API}pandemic/covid/getBenVitalDetailsFrmNurseCovid`,
   getCovidDoctorDetails: `${HWC_API}pandemic/covid/getBenCaseRecordFromDoctorCovid`,
@@ -551,4 +554,8 @@ export const environment = {
   printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`,
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
+
+  siteKey: siteKey,
+  captchaChallengeURL: captchaChallengeURL,
+  enableCaptcha: enableCaptcha,
 };

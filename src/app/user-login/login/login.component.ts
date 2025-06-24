@@ -53,6 +53,7 @@ export class LoginComponent implements OnInit {
   _ivSize: any;
   _iterationCount: any;
   eSanjeevaniArr: any = [];
+  eSanjeevaniArrForDoctor: any = [];
 
   @ViewChild('focus') private elementRef!: ElementRef;
   captchaToken!: string;
@@ -171,11 +172,20 @@ export class LoginComponent implements OnInit {
                     'nurse'
                   ) {
                     this.eSanjeevaniArr =
-                      res.data.previlegeObj[0].roles[i].isSanjeevani;
+                      res.data.previlegeObj[0].roles[i].teleConsultation;
+                  }
+                  if (
+                    res.data.previlegeObj[0].roles[i].RoleName.toLowerCase() ===
+                    'doctor'
+                  ) {
+                    this.eSanjeevaniArrForDoctor =
+                      res.data.previlegeObj[0].roles[i].teleConsultation;
                   }
                 }
                 this.confirmationService.eSanjeevaniFlagArry =
                   this.eSanjeevaniArr;
+                this.confirmationService.eSanjeevaniDoctorFlagArry =
+                  this.eSanjeevaniArrForDoctor;
               } else {
                 this.confirmationService.alert(
                   'Seems you are logged in from somewhere else, Logout from there & try back in.',
