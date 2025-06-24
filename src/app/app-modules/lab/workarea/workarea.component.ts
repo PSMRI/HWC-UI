@@ -712,6 +712,7 @@ export class WorkareaComponent
           (res: any) => {
             if (res.data.statusCode === 200) {
               const fileContent = res.data.data.response;
+
               // window.open(fileContent, '_blank');
               const fileWindow = window.open('', '_blank');
 
@@ -734,6 +735,7 @@ export class WorkareaComponent
               } else {
                 this.confirmationService.alert("Popup blocked. Please allow popups.", 'err');
               }
+
             }
           },
           (err) => {
