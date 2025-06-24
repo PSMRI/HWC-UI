@@ -24,6 +24,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../shared/services/doctor.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-case-record',
@@ -61,6 +62,7 @@ export class CaseRecordComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -90,8 +92,8 @@ export class CaseRecordComponent implements OnInit, OnDestroy {
     this.doctorService.setCapturedCaserecordDeatilsByDoctor(null);
   }
   fetchCaseRecordDetails() {
-    const visitID = localStorage.getItem('visitID');
-    const benRegID = localStorage.getItem('beneficiaryRegID');
+    const visitID = this.sessionstorage.getItem('visitID');
+    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
     this.doctorService
       .getCaseRecordAndReferDetails(benRegID, visitID, this.visitCategory)
       .subscribe((caserecordResponse: any) => {

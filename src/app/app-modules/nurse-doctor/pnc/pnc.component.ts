@@ -37,12 +37,47 @@ import {
 } from '../shared/services';
 import { ActivatedRoute } from '@angular/router';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-pnc',
   templateUrl: './pnc.component.html',
   styleUrls: ['./pnc.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   @Input()
@@ -62,6 +97,7 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
     private route: ActivatedRoute,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -82,8 +118,8 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
 
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
     }
 
     if (String(this.mode) === 'update') {
@@ -175,11 +211,11 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
 
   updatePatientPNC(patientPNCForm: any) {
     const temp = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      benVisitID: localStorage.getItem('visitID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      modifiedBy: localStorage.getItem('userName'),
-      visitCode: localStorage.getItem('visitCode'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benVisitID: this.sessionstorage.getItem('visitID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      modifiedBy: this.sessionstorage.getItem('userName'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
     };
 
     this.doctorService.updatePNCDetails(patientPNCForm, temp).subscribe(
@@ -288,29 +324,30 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
           this.selectDeliveryTypes = this.masterData.deliveryTypes;
 
           if (
-            localStorage.getItem('visitReason') !== undefined &&
-            localStorage.getItem('visitReason') !== 'undefined' &&
-            localStorage.getItem('visitReason') !== null &&
-            localStorage.getItem('visitReason') === 'Follow Up' &&
+            this.sessionstorage.getItem('visitReason') !== undefined &&
+            this.sessionstorage.getItem('visitReason') !== 'undefined' &&
+            this.sessionstorage.getItem('visitReason') !== null &&
+            this.sessionstorage.getItem('visitReason') === 'Follow Up' &&
             this.attendant === 'nurse'
           ) {
             this.getPreviousVisitPNCDetails();
           }
 
           if (this.mode) {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.patchDataToFields(benRegID, visitID);
           }
 
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
             parseInt(specialistFlagString) === 100
           ) {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.patchDataToFields(benRegID, visitID);
           }
         }
@@ -318,7 +355,7 @@ export class PncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousVisitPNCDetails() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
 
     this.doctorService
       .getPreviousPNCDetails(benRegID)

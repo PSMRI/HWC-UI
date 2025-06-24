@@ -21,6 +21,7 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { AuthService } from 'src/app/app-modules/core/services';
 @Component({
   selector: 'app-tm-logout',
@@ -31,11 +32,12 @@ export class TmLogoutComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     sessionStorage.clear();
-    localStorage.clear();
+    this.sessionstorage.clear();
     this.router.navigate(['/login']);
   }
 }

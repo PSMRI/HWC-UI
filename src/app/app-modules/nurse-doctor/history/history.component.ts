@@ -23,6 +23,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DoctorService } from '../shared/services/doctor.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-history',
@@ -51,6 +52,7 @@ export class HistoryComponent implements OnChanges, OnInit {
   constructor(
     private doctorService: DoctorService,
     private route: ActivatedRoute,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -74,8 +76,8 @@ export class HistoryComponent implements OnChanges, OnInit {
     }
   }
   generalHistory() {
-    const visitID = localStorage.getItem('visitID');
-    const benRegID = localStorage.getItem('beneficiaryRegID');
+    const visitID = this.sessionstorage.getItem('visitID');
+    const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
     this.doctorService
       .getGeneralHistoryDetails(benRegID, visitID)
       .subscribe((historyresponse: any) => {

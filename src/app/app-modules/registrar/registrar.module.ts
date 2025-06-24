@@ -54,6 +54,7 @@ import { MaterialModule } from '../core/material.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { FamilyTaggingService } from './shared/services/familytagging.service';
 import { RegistrarService } from './shared/services/registrar.service';
+import { SharedModule } from '../core/components/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -65,6 +66,7 @@ import { RegistrarService } from './shared/services/registrar.service';
     ReactiveFormsModule,
     MatDatepickerModule,
     BsDatepickerModule.forRoot(),
+    SharedModule,
   ],
 
   providers: [RegistrarService, FamilyTaggingService],

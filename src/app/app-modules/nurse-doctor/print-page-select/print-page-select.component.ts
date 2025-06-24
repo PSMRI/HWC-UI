@@ -22,7 +22,7 @@
 import { Component, OnInit, Inject, DoCheck } from '@angular/core';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 
 @Component({
   selector: 'app-case-sheet-print-page-select',
@@ -58,6 +58,7 @@ export class PrintPageSelectComponent implements OnInit, DoCheck {
   currentLanguageSet: any;
   language_file_path: any = './assets/';
   language: any;
+  isCovidVaccinationStatusVisible = false;
 
   constructor(
     public dialogRef: MatDialogRef<PrintPageSelectComponent>,

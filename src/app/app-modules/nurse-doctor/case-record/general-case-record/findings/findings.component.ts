@@ -47,10 +47,11 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 
 import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { Subscription } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-findings',
@@ -99,13 +100,14 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
     private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService,
   ) {
-    this.formUtils = new GeneralUtils(this.fb);
+    this.formUtils = new GeneralUtils(this.fb, this.sessionstorage);
   }
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.visitCategory = localStorage.getItem('visitCategory');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
     this.getDoctorMasterData();
     this.getBeneficiaryDetails();
     this.nurseService.clearNCDScreeningProvision();
@@ -177,14 +179,15 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     visitCategory: any,
     visitCode: any,
   ) {
-    this.findingSubscription = this.doctorService
-      .getMMUCaseRecordAndReferDetails(
+    const caseRecordData = (this.findingSubscription =
+      this.doctorService.getMMUCaseRecordAndReferDetails(
         beneficiaryRegID,
         visitID,
         visitCategory,
         visitCode,
-      )
-      .subscribe((res: any) => {
+      ));
+    if (caseRecordData) {
+      caseRecordData.subscribe((res: any) => {
         if (res && res.statusCode === 200 && res.data && res.data.findings) {
           const findings = res.data.findings;
           this.complaintList = findings.complaints.slice();
@@ -195,6 +198,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
           this.generalFindingsForm.patchValue(res.data.findings);
         }
       });
+    }
   }
 
   filterInitialComplaints(element: any) {
@@ -232,14 +236,17 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
             this.chiefComplaintMaster.slice();
 
           if (String(this.caseRecordMode) === 'view') {
-            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            this.visitID = localStorage.getItem('visitID');
-            this.visitCategory = localStorage.getItem('visitCategory');
+            this.beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            this.visitID = this.sessionstorage.getItem('visitID');
+            this.visitCategory = this.sessionstorage.getItem('visitCategory');
             const specialistFlagString =
-              localStorage.getItem('specialist_flag');
+              this.sessionstorage.getItem('specialist_flag');
             if (
-              localStorage.getItem('referredVisitCode') === 'undefined' ||
-              localStorage.getItem('referredVisitCode') === null
+              this.sessionstorage.getItem('referredVisitCode') ===
+                'undefined' ||
+              this.sessionstorage.getItem('referredVisitCode') === null ||
+              this.sessionstorage.getItem('referredVisitCode') === ''
             ) {
               this.getFindingDetails();
             } else if (
@@ -250,14 +257,14 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
                 this.beneficiaryRegID,
                 this.visitID,
                 this.visitCategory,
-                localStorage.getItem('visitCode'),
+                this.sessionstorage.getItem('visitCode'),
               );
             } else {
               this.getMMUFindingDetails(
                 this.beneficiaryRegID,
-                localStorage.getItem('referredVisitID'),
+                this.sessionstorage.getItem('referredVisitID'),
                 this.visitCategory,
-                localStorage.getItem('referredVisitCode'),
+                this.sessionstorage.getItem('referredVisitCode'),
               );
             }
           }
@@ -312,7 +319,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  addCheifComplaint() {
+  addChiefComplaint() {
     const complaintFormArray = <FormArray>(
       this.generalFindingsForm.controls['complaints']
     );
@@ -331,7 +338,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     complaintFormArray.push(this.formUtils.initChiefComplaints());
   }
 
-  removeCheifComplaint(i: number, complaintForm: AbstractControl<any, any>) {
+  removeChiefComplaint(i: number, complaintForm: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.current_language_set.alerts.info.warn)
       .subscribe((result) => {

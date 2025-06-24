@@ -33,8 +33,9 @@ import { HrpService } from '../../shared/services/hrp.service';
 import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { MmuRbsDetailsComponent } from 'src/app/app-modules/core/component/mmu-rbs-details/mmu-rbs-details.component';
-import { IotcomponentComponent } from 'src/app/app-modules/core/component/iotcomponent/iotcomponent.component';
+import { MmuRbsDetailsComponent } from 'src/app/app-modules/core/components/mmu-rbs-details/mmu-rbs-details.component';
+import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',
@@ -99,6 +100,7 @@ export class GeneralPatientVitalsComponent
     private testInVitalsService: TestInVitalsService,
     private route: ActivatedRoute,
     private ncdScreeningService: NcdScreeningService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -116,10 +118,17 @@ export class GeneralPatientVitalsComponent
     this.hideVitalsForm();
     this.rbsPopup = false;
     this.rbsCheckBox = true;
+    this.ncdTemperature = false;
     this.nurseService.clearNCDTemp();
     this.nurseService.clearRbsSelectedInInvestigation();
     this.idrsscore.clearDiabetesSelected();
     this.doctorService.setValueToEnableVitalsUpdateButton(false);
+    this.nurseService.ncdTemp$.subscribe((response) =>
+      response === undefined
+        ? (this.ncdTemperature = false)
+        : (this.ncdTemperature = response),
+    );
+
     this.httpServiceService.currentLangugae$.subscribe(
       (response) => (this.currentLanguageSet = response),
     );
@@ -131,10 +140,12 @@ export class GeneralPatientVitalsComponent
           ? (this.rbsSelectedInInvestigation = false)
           : (this.rbsSelectedInInvestigation = response),
       );
-    if (localStorage.getItem('mmuReferredVisitCode')) {
-      this.referredVisitcode = localStorage.getItem('mmuReferredVisitCode');
-    } else if (localStorage.getItem('referredVisitCode')) {
-      this.referredVisitcode = localStorage.getItem('referredVisitCode');
+    if (this.sessionstorage.getItem('mmuReferredVisitCode')) {
+      this.referredVisitcode = this.sessionstorage.getItem(
+        'mmuReferredVisitCode',
+      );
+    } else if (this.sessionstorage.getItem('referredVisitCode')) {
+      this.referredVisitcode = this.sessionstorage.getItem('referredVisitCode');
     } else {
       this.referredVisitcode = 'undefined';
     }
@@ -161,34 +172,31 @@ export class GeneralPatientVitalsComponent
   }
 
   ngOnChanges() {
-    const visitCategory1 = localStorage.getItem('visitCategory');
+    const visitCategory1 = this.sessionstorage.getItem('visitCategory');
     console.log('page54' + visitCategory1);
     if (this.visitCategory === 'General OPD (QC)') {
       this.hideForANCAndQC = false;
+      this.showGlucoseQC = false;
     } else {
       this.hideForANCAndQC = true;
-    }
-    if (this.visitCategory === 'General OPD (QC)') {
       this.showGlucoseQC = true;
-    } else {
-      this.showGlucoseQC = false;
     }
 
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getGeneralVitalsData();
       this.doctorScreen = true;
     }
 
-    const specialistFlagString = localStorage.getItem('specialistFlag');
+    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
       parseInt(specialistFlagString) === 100
     ) {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getGeneralVitalsData();
     }
 
@@ -196,19 +204,46 @@ export class GeneralPatientVitalsComponent
       this.doctorScreen = true;
       this.updateGeneralVitals(this.patientVitalsForm);
     }
+
+    this.attendant = this.route.snapshot.params['attendant'];
+    if (this.attendant === 'nurse') {
+      this.getPreviousVisitAnthropometry();
+    }
+  }
+
+  previousAnthropometryDataSubscription: any;
+  getPreviousVisitAnthropometry() {
+    this.previousAnthropometryDataSubscription = this.doctorService
+      .getPreviousVisitAnthropometry({
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      })
+      .subscribe((anthropometryData: any) => {
+        if (
+          anthropometryData &&
+          anthropometryData.data &&
+          anthropometryData.data.response &&
+          anthropometryData.data.response !== 'Visit code is not found' &&
+          anthropometryData.data.response !== 'No data found'
+        ) {
+          const heightStr = anthropometryData.data.response.toString();
+          this.patientVitalsForm.controls['height_cm'].patchValue(
+            heightStr.endsWith('.0')
+              ? Math.round(anthropometryData.data.response)
+              : anthropometryData.data.response,
+          );
+
+          if (this.visitCategory === 'ANC') {
+            this.hrpService.setHeightFromVitals(
+              this.patientVitalsForm.controls['height_cm'].value,
+            );
+          }
+        }
+      });
   }
 
   checkNurseRequirements(medicalForm: any) {
     const vitalsForm = this.patientVitalsForm;
     const required = [];
-
-    if (
-      this.enableLungAssessment === true &&
-      this.benAge >= 18 &&
-      this.nurseService.isAssessmentDone === false
-    ) {
-      required.push('Please perform Lung Assessment');
-    }
 
     if (this.visitCategory === 'NCD screening') {
       if (vitalsForm.controls['height_cm'].errors) {
@@ -348,12 +383,12 @@ export class GeneralPatientVitalsComponent
   loadMMURBS() {
     this.doctorService
       .getRBSPreviousVitals({
-        benRegID: localStorage.getItem('beneficiaryRegID'),
-        benVisitID: localStorage.getItem('referredVisitID'),
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+        benVisitID: this.sessionstorage.getItem('referredVisitID'),
         visitCode:
           this.attendant !== 'nurse'
-            ? localStorage.getItem('referredVisitCode')
-            : localStorage.getItem('mmuReferredVisitCode'),
+            ? this.sessionstorage.getItem('referredVisitCode')
+            : this.sessionstorage.getItem('mmuReferredVisitCode'),
       })
       .subscribe((data) => {
         if (data) {
@@ -394,8 +429,8 @@ export class GeneralPatientVitalsComponent
   getGeneralVitalsData() {
     this.generalVitalsDataSubscription = this.doctorService
       .getGenericVitals({
-        benRegID: localStorage.getItem('beneficiaryRegID'),
-        benVisitID: localStorage.getItem('visitID'),
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+        benVisitID: this.sessionstorage.getItem('visitID'),
       })
       .subscribe((vitalsData) => {
         if (vitalsData) {
@@ -479,6 +514,8 @@ export class GeneralPatientVitalsComponent
     if (this.disablingVitalsSectionSubscription)
       this.disablingVitalsSectionSubscription.unsubscribe();
     this.nurseService.isAssessmentDone = false;
+    if (this.previousAnthropometryDataSubscription)
+      this.previousAnthropometryDataSubscription.unsubscribe();
   }
 
   checkDiasableRBS() {
@@ -1113,8 +1150,8 @@ export class GeneralPatientVitalsComponent
   }
 
   getHRPDetails() {
-    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
+    const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const visitCode = this.sessionstorage.getItem('visitCode');
     this.doctorService
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {
@@ -1137,7 +1174,7 @@ export class GeneralPatientVitalsComponent
   }
 
   getGender() {
-    const gender = localStorage.getItem('beneficiaryGender');
+    const gender = this.sessionstorage.getItem('beneficiaryGender');
     if (gender === 'Female') this.benGenderType = 1;
     else if (gender === 'Male') this.benGenderType = 0;
     else if (gender === 'Transgender') this.benGenderType = 2;

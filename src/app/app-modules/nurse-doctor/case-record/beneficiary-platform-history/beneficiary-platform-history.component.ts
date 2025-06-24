@@ -26,10 +26,11 @@ import { BeneficiaryMctsCallHistoryComponent } from '../beneficiary-mcts-call-hi
 import { CaseSheetComponent } from '../../case-sheet/case-sheet.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { environment } from 'src/environments/environment';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-beneficiary-platform-history',
@@ -119,6 +120,7 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -291,19 +293,33 @@ export class BeneficiaryPlatformHistoryComponent implements OnInit, DoCheck {
       .subscribe((res) => {
         console.log('print', print);
         if (res) {
-          localStorage.setItem('previousCaseSheetVisitCode', visit.visitCode);
-          localStorage.setItem('previousCaseSheetBenFlowID', visit.benFlowID);
-          localStorage.setItem(
+          this.sessionstorage.setItem(
+            'previousCaseSheetVisitCode',
+            visit.visitCode,
+          );
+          this.sessionstorage.setItem(
+            'previousCaseSheetBenFlowID',
+            visit.benFlowID,
+          );
+          this.sessionstorage.setItem(
             'previousCaseSheetVisitCategory',
             visit.VisitCategory,
           );
-          localStorage.setItem(
+          this.sessionstorage.setItem(
             'previousCaseSheetBeneficiaryRegID',
             visit.beneficiaryRegID,
           );
-          localStorage.setItem('previousCaseSheetVisitID', visit.benVisitID);
+          this.sessionstorage.setItem(
+            'previousCaseSheetVisitID',
+            visit.visitCode,
+          );
+          this.sessionstorage.setItem(
+            'currentLanguageSet',
+            this.current_language_set,
+          );
           if (print) {
             const url = environment.newTaburl;
+            // window.location.href = url + '#/nurse-doctor/print/' + serviceType + '/' + 'previous';
             window.open(
               url + '#/nurse-doctor/print/' + serviceType + '/' + 'previous',
             );

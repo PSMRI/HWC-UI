@@ -32,10 +32,11 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { LabService } from '../shared/services';
 import { CameraService } from '../../core/services/camera.service';
 import * as moment from 'moment';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-worklist',
@@ -75,11 +76,12 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     public httpServiceService: HttpServiceService,
     private labService: LabService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    localStorage.setItem('currentRole', 'Lab Technician');
+    this.sessionstorage.setItem('currentRole', 'Lab Technician');
     this.loadWorklist();
     this.beneficiaryDetailsService.reset();
     this.removeBeneficiaryDataForVisit();
@@ -96,22 +98,22 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
   }
 
   removeBeneficiaryDataForVisit() {
-    localStorage.removeItem('visitCode');
-    localStorage.removeItem('beneficiaryGender');
-    localStorage.removeItem('benFlowID');
-    localStorage.removeItem('visitCategory');
-    localStorage.removeItem('visitReason');
-    localStorage.removeItem('beneficiaryRegID');
-    localStorage.removeItem('visitID');
-    localStorage.removeItem('beneficiaryID');
-    localStorage.removeItem('doctorFlag');
-    localStorage.removeItem('nurseFlag');
-    localStorage.removeItem('pharmacist_flag');
-    localStorage.removeItem('specialistFlag');
+    this.sessionstorage.removeItem('visitCode');
+    this.sessionstorage.removeItem('beneficiaryGender');
+    this.sessionstorage.removeItem('benFlowID');
+    this.sessionstorage.removeItem('visitCategory');
+    this.sessionstorage.removeItem('visitReason');
+    this.sessionstorage.removeItem('beneficiaryRegID');
+    this.sessionstorage.removeItem('visitID');
+    this.sessionstorage.removeItem('beneficiaryID');
+    this.sessionstorage.removeItem('doctorFlag');
+    this.sessionstorage.removeItem('nurseFlag');
+    this.sessionstorage.removeItem('pharmacist_flag');
+    this.sessionstorage.removeItem('specialistFlag');
   }
 
   ngOnDestroy() {
-    localStorage.removeItem('currentRole');
+    this.sessionstorage.removeItem('currentRole');
   }
 
   loadWorklist() {
@@ -253,29 +255,47 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
       )
       .subscribe((result) => {
         if (result) {
-          localStorage.setItem('doctorFlag', beneficiary.labObject.doctorFlag);
-          localStorage.setItem('nurseFlag', beneficiary.labObject.nurseFlag);
-          localStorage.setItem('visitID', beneficiary.benVisitID);
-          localStorage.setItem(
+          this.sessionstorage.setItem(
+            'doctorFlag',
+            beneficiary.labObject.doctorFlag,
+          );
+          this.sessionstorage.setItem(
+            'nurseFlag',
+            beneficiary.labObject.nurseFlag,
+          );
+          this.sessionstorage.setItem('visitID', beneficiary.benVisitID);
+          this.sessionstorage.setItem(
             'beneficiaryRegID',
             beneficiary.beneficiaryRegID,
           );
-          localStorage.setItem('beneficiaryID', beneficiary.beneficiaryID);
-          localStorage.setItem('visitCategory', beneficiary.VisitCategory);
-          localStorage.setItem('benFlowID', beneficiary.benFlowID);
-          localStorage.setItem('visitCode', beneficiary.labObject.visitCode);
+          this.sessionstorage.setItem(
+            'beneficiaryID',
+            beneficiary.beneficiaryID,
+          );
+          this.sessionstorage.setItem(
+            'visitCategory',
+            beneficiary.VisitCategory,
+          );
+          this.sessionstorage.setItem('benFlowID', beneficiary.benFlowID);
+          this.sessionstorage.setItem(
+            'visitCode',
+            beneficiary.labObject.visitCode,
+          );
           if (
             beneficiary.labObject.specialist_flag &&
             beneficiary.labObject.specialist_flag >= 0
           ) {
-            localStorage.setItem(
+            this.sessionstorage.setItem(
               'specialist_flag',
               beneficiary.labObject.specialist_flag,
             );
           } else {
-            localStorage.setItem('specialist_flag', 'null');
+            this.sessionstorage.setItem('specialist_flag', 'null');
           }
-          console.log(localStorage.getItem('visitCode'), 'visitCodebeforedave');
+          console.log(
+            this.sessionstorage.getItem('visitCode'),
+            'visitCodebeforedave',
+          );
           this.router.navigate(['/lab/patient/', beneficiary.beneficiaryRegID]);
         }
       });

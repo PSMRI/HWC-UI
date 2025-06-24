@@ -36,8 +36,9 @@ import {
 } from '../../../shared/services';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-perinatal-history',
@@ -65,6 +66,7 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private dialog: MatDialog,
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -91,7 +93,8 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
             this.getGeneralHistory();
           }
 
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -144,6 +147,12 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
               })[0];
 
           this.perinatalHistoryForm.patchValue(this.perinatalHistoryData);
+          //enabling the fields
+          if (this.perinatalHistoryForm.controls['typeOfDelivery'].value) {
+            this.perinatalHistoryForm?.get('typeOfDelivery')?.enable();
+          } else {
+            this.perinatalHistoryForm?.get('typeOfDelivery')?.disable();
+          }
         }
       });
   }
@@ -193,6 +202,12 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
       this.selectDeliveryTypes = this.masterData.deliveryTypes;
     }
     this.perinatalHistoryForm.patchValue({ otherPlaceOfDelivery: null });
+    //enabling the fields
+    if (this.placeOfDelivery.deliveryPlace) {
+      this.perinatalHistoryForm?.get('typeOfDelivery')?.enable();
+    } else {
+      this.perinatalHistoryForm?.get('typeOfDelivery')?.disable();
+    }
   }
 
   resetOtherComplicationAtBirth() {
@@ -200,7 +215,7 @@ export class PerinatalHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousPerinatalHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     console.log('here checkig', this.visitCategory);
 
     this.nurseService

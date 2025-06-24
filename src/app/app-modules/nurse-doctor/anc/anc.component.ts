@@ -33,7 +33,8 @@ import { ConfirmationService } from '../../core/services/confirmation.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { BeneficiaryDetailsService } from '../../core/services';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-anc',
@@ -61,6 +62,7 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     public beneficiaryDetailsService: BeneficiaryDetailsService,
     private route: ActivatedRoute,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -80,15 +82,17 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     this.patientANCImmunizationForm = this.patientANCForm.get(
       'patientANCImmunizationForm',
     ) as FormGroup;
-    this.visitReason = localStorage.getItem('visitReason');
+    this.visitReason = this.sessionstorage.getItem('visitReason');
     if (
-      localStorage.getItem('visitReason') !== undefined &&
-      localStorage.getItem('visitReason') !== 'undefined' &&
-      localStorage.getItem('visitReason') !== null &&
-      localStorage.getItem('visitReason') === 'Follow Up' &&
+      this.sessionstorage.getItem('visitReason') !== undefined &&
+      this.sessionstorage.getItem('visitReason') !== 'undefined' &&
+      this.sessionstorage.getItem('visitReason') !== null &&
+      this.sessionstorage.getItem('visitReason') === 'Follow Up' &&
       this.attendant === 'nurse'
     )
-      this.patchDataToFieldsRevisit(localStorage.getItem('beneficiaryRegID'));
+      this.patchDataToFieldsRevisit(
+        this.sessionstorage.getItem('beneficiaryRegID'),
+      );
   }
 
   ngDoCheck() {
@@ -102,17 +106,17 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
 
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.patchDataToFields(benRegID, visitID);
     }
-    const specialistFlagString = localStorage.getItem('specialistFlag');
+    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
     if (
       specialistFlagString !== null &&
       parseInt(specialistFlagString) === 100
     ) {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.patchDataToFields(benRegID, visitID);
     }
     if (String(this.mode) === 'update') {
@@ -127,21 +131,22 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
 
   updateANCDetailsSubs: any;
   updatePatientANC(patientANCForm: any) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const temp = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      benVisitID: localStorage.getItem('visitID'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      sessionID: localStorage.getItem('sessionID'),
-      modifiedBy: localStorage.getItem('userName'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      benVisitID: this.sessionstorage.getItem('visitID'),
+      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
+      sessionID: this.sessionstorage.getItem('sessionID'),
+      modifiedBy: this.sessionstorage.getItem('userName'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       parkingPlaceID: parkingPlaceID,
       vanID: vanID,
-      benFlowID: localStorage.getItem('benFlowID'),
-      visitCode: localStorage.getItem('visitCode'),
+      benFlowID: this.sessionstorage.getItem('benFlowID'),
+      visitCode: this.sessionstorage.getItem('visitCode'),
     };
 
     this.updateANCDetailsSubs = this.doctorService
@@ -163,8 +168,8 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   }
 
   getHRPDetails() {
-    const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    const visitCode = localStorage.getItem('visitCode');
+    const beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    const visitCode = this.sessionstorage.getItem('visitCode');
     this.doctorService
       .getHRPDetails(beneficiaryRegID, visitCode)
       .subscribe((res: any) => {
@@ -209,7 +214,8 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
                   this.patientANCForm.controls['obstetricFormulaForm']
                 )).controls['bloodGroup'].disable();
             }
-            const specialistFlagString = localStorage.getItem('specialistFlag');
+            const specialistFlagString =
+              this.sessionstorage.getItem('specialistFlag');
             if (
               specialistFlagString !== null &&
               parseInt(specialistFlagString) === 100
@@ -269,7 +275,8 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
                   this.patientANCForm.controls['obstetricFormulaForm']
                 )).controls['bloodGroup'].disable();
             }
-            const specialistFlagString = localStorage.getItem('specialistFlag');
+            const specialistFlagString =
+              this.sessionstorage.getItem('specialistFlag');
             if (
               specialistFlagString !== null &&
               parseInt(specialistFlagString) === 100

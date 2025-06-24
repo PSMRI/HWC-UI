@@ -28,7 +28,8 @@ import {
 } from '@angular/forms';
 import { GeneralUtils } from '../../nurse-doctor/shared/utility/general-utility';
 import { MatDialog } from '@angular/material/dialog';
-import { DiagnosisSearchComponent } from '../component/diagnosis-search/diagnosis-search.component';
+import { DiagnosisSearchComponent } from '../components/diagnosis-search/diagnosis-search.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Directive({
   selector: '[appSignificantFindings]',
 })
@@ -46,12 +47,13 @@ export class SignificantFindingsDirective {
   @HostListener('click') onClick() {
     if (this.el.nativeElement.nodeName !== 'INPUT') this.openDialog();
   }
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
 
   constructor(
     private fb: FormBuilder,
     private el: ElementRef,
     private dialog: MatDialog,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   openDialog(): void {

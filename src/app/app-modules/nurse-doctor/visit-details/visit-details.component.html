@@ -22,17 +22,7 @@
     <app-cbac [mode]="mode" [cbacScreeningForm]="cbacScreeningForm"></app-cbac>
   </mat-expansion-panel>
 
-  <mat-expansion-panel
-    *ngIf="
-      hideAll === true ||
-      showNcdScreeningVisit === true ||
-      showANCVisit === true ||
-      showPNCVisit === true ||
-      showOPD === true ||
-      showFamilyPlanning === true ||
-      showChildAndAdolescent === true
-    "
-  >
+  <mat-expansion-panel *ngIf="isCovidVaccinationStatusVisible">
     <mat-expansion-panel-header>
       <h5>{{ currentLanguageSet?.covidVaccinationStatus }}</h5>
     </mat-expansion-panel-header>

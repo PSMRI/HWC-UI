@@ -1,0 +1,237 @@
+<nav class="navbar navbar-expand-lg navbar-iemr">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand">
+        <img src="assets/images/logo.png" alt="Logo" />
+      </a>
+    </div>
+
+    <button
+      class="navbar-toggler ms-auto"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#top-navbar,#main-navbar"
+    >
+      <mat-icon class="white-icon">menu</mat-icon>
+    </button>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse menu-font" id="top-navbar">
+      <ul class="navbar-nav ms-auto flex-row">
+        <li *ngIf="status" class="nav-item alignWord menu-font">
+          <span>{{ currentLanguageSet?.common?.SelectLanguage }}: </span>
+        </li>
+        <li
+          *ngIf="status"
+          class="nav-item alignDropDown"
+          style="margin-right: 8px"
+        >
+          <select
+            style="font-size: 13px"
+            class="menu-font drop-arrow border-radius-20 height-30 width120px pull-right"
+            name="app_language"
+            [(ngModel)]="app_language"
+            (change)="changeLanguage(app_language)"
+          >
+            <option
+              *ngFor="let language of languageArray"
+              [value]="language.languageName"
+            >
+              {{ language.languageName }}
+            </option>
+          </select>
+        </li>
+
+        <li
+          *ngIf="isAuthenticated"
+          style="margin-right: 8px"
+          class="nav-item cursorPointer"
+          matTooltip="{{ currentLanguageSet?.common?.connectBluetooth }}"
+          [ngClass]="{ connected: isConnected }"
+        >
+         <button
+            (click)="openIOT()"
+            matTooltip="POCT"
+            aria-label="Open POCT diagnostics"
+            class="svg-button"
+          >
+            <img
+              src="assets/images/diagnostics.svg"
+              alt="POCT point"
+              class="svg"
+            />
+          </button>
+        
+        </li>
+        <mat-menu #menu="matMenu" x-position="before" class="m-t-40">
+          <button mat-menu-item>
+            <a target="_blank" rel="noopener noreferrer" href="{{ license }}">{{
+              currentLanguageSet?.licenseInfo
+            }}</a>
+          </button>
+        </mat-menu>
+
+        <li
+          class="nav-item"
+          style="margin-top: 6px; margin-right: 8px"
+          *ngIf="userName"
+          matTooltip="{{ currentLanguageSet?.user }}"
+        >
+          <a>
+            <img src="assets/images/user1.png" alt="user" />
+            <span style="color: #d9d9d9">
+              {{ currentLanguageSet?.user }}
+              <span style="color: #d9d9d9">:</span>
+              <span style="color: #ffffff; margin-left: 5px">{{
+                userName | titlecase
+              }}</span>
+            </span>
+          </a>
+        </li>
+        <!-- <li
+          *ngIf="servicePoint"
+          class="nav-item servicePoint cursorPointer"
+          style="margin-top: 6px; margin-right: 5px"
+          [routerLink]="'/servicePoint'"
+          matTooltip="{{ currentLanguageSet?.servicePoint }}">
+          <a>
+            <img src="assets/images/placeholder.png" alt="servicepoint" />
+            <span style="color: #d9d9d9"
+              >{{ currentLanguageSet?.servicePoint }}
+              <span style="color: #d9d9d9">:</span>
+              <span style="color: #ffffff; margin-left: 5px">{{
+                servicePoint | titlecase
+              }}</span>
+            </span>
+          </a>
+        </li> -->
+        <li
+          class="nav-item cursorPointer"
+          *ngIf="isAuthenticated"
+          style="margin-top: 6px; margin-right: 5px"
+        >
+          <mat-icon
+            alt="Help"
+            [matMenuTriggerFor]="menu"
+            [matTooltip]="currentLanguageSet?.help"
+            >help_outline</mat-icon
+          >
+        </li>
+        <li
+          *ngIf="isAuthenticated"
+          class="nav-item logout cursorPointer"
+          style="margin-top: 6px"
+          matTooltip="{{ currentLanguageSet?.logOut }}"
+        >
+          <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
+          <a tabindex="{0}" (click)="logout()">
+            <mat-icon color="warn">power_settings_new</mat-icon>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div *ngIf="showRoles" class="container-fluid">
+  <nav class="navbar navbar-expand-lg">
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul
+        class="nav navbar-nav ml-auto"
+        *ngFor="let item of filteredNavigation; let isLast = last"
+      >
+        <!-- <li class="nav-item" *ngIf="item.role === 'Registrar'">
+          <button
+            class="nav-btn"
+            mat-button
+            [matMenuTriggerFor]="items"
+            [ngClass]="{ active: updateCSSToShowActiveRegistrar }"
+          >
+            {{ item.label }}
+            <span class="caret"></span>
+          </button>
+          <mat-menu
+            class="registrar-menu"
+            #items="matMenu"a
+            yPosition="below"
+            xPosition="after"
+            [overlapTrigger]="false"
+          >
+            <button
+              mat-menu-item
+              *ngFor="let value of item.work"
+              [routerLink]="[value.link]"
+              routerLinkActive="active"
+            >
+              {{ value.label }}
+            </button>
+          </mat-menu>
+        </li> -->
+        <li
+          class="nav-item"
+          *ngIf="
+            item.role === 'Registrar' &&
+            item.work[1].link === '/registrar/search'
+          "
+        >
+          <button
+            class="nav-btn"
+            mat-button
+            [routerLink]="[item.work[1].link]"
+            routerLinkActive="active"
+            [ngClass]="{ active: updateCSSToShowActiveRegistrar }"
+          >
+            {{ item.work[1].label }}
+          </button>
+        </li>
+
+        <li
+          class="nav-item"
+          *ngIf="item.role !== 'Registrar' && item.role !== 'TC Specialist'"
+          [ngClass]="{ active: updateCSSToShowActiveRegistrar }"
+        >
+          <button
+            class="nav-btn"
+            mat-button
+            [routerLink]="[item.link]"
+            routerLinkActive="active"
+          >
+            {{ item.label }}
+          </button>
+        </li>
+        <li class="nav-item" *ngIf="item.role === 'TC Specialist'">
+          <button class="nav-btn" mat-button [matMenuTriggerFor]="TCitems">
+            {{ item.label }}
+            <span class="caret"></span>
+          </button>
+          <mat-menu
+            class="tc-menu md-menuwidth"
+            #TCitems="matMenu"
+            yPosition="below"
+            xPosition="after"
+            [overlapTrigger]="false"
+          >
+            <span *ngFor="let value of item.work">
+              <button
+                mat-menu-item
+                *ngIf="value.label === 'Worklist'"
+                [routerLink]="[value.link]"
+                routerLinkActive="active"
+              >
+                {{ value.labelName }}
+              </button>
+              <button
+                mat-menu-item
+                *ngIf="value.label === 'Timesheet'"
+                (click)="navigateToTeleMedicine()"
+                routerLinkActive="active"
+              >
+                {{ value.labelName }}
+              </button>
+            </span>
+          </mat-menu>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>

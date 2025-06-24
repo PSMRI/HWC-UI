@@ -1,7 +1,7 @@
-# AMRIT - Health and Wellness Centre (HWC) 
+# AMRIT - Ayushman Arogya Mandir(AAM) 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  ![branch parameter](https://github.com/PSMRI/HWC-UI/actions/workflows/sast-and-package.yml/badge.svg)
 
-Health and Wellness Centre (HWC) is one of the comprehensive applications of AMRIT designed to capture details of 7 Service packages as per guidelines which should be available at Health and Wellness centre.
+Ayushman Arogya Mandir (AAM) is one of the comprehensive applications of AMRIT designed to capture details of 7 Service packages as per guidelines which should be available at Ayushman Arogya Mandir.
 
 ### Primary Features
 * Provide medical advice and services to beneficiaries
@@ -28,9 +28,10 @@ This microservice is built on Java, Spring boot framework and MySQL DB.
 
 ### Prerequisites 
 * HWC-API module should be running
-* JDK 1.8
+* JDK 17
 * Maven 
-* Nodejs v8.9.0
+* Nodejs v18.10.0
+* MySQL
 
 
 ## Installation
@@ -53,7 +54,7 @@ https://github.com/coreybutler/nvm-windows/releases
 Steps to download nvm and node: https://dev.to/skaytech/how-to-install-node-version-manager-nvm-for-windows-10-4nbi
 
 Install Node.js using below command:
-`nvm install 8.9.0`
+`nvm install 18.10.0`
 
 Check Node.js version:
 `node --version`
@@ -62,11 +63,11 @@ Check npm version:
 `npm --version`
 
 Using the below command to specify the version of npm that you wish to use. In our case, since we have only one version installed. Let's go with that.
- `nvm use 8.9.0`
+ `nvm use 18.10.0`
 
 * Angular CLI Installation
 Angular CLI is a command line tool for Angular. You can install it globally using npm with the following command:
-`npm install -g @angular/cli@1.7.0`
+`npm install -g @angular/cli@16.2.10`
 
 * Python Installation [ If you face any Python related error during node_modules installation]
 Download Python 2.7.12
@@ -101,11 +102,11 @@ C:\Users\ myFolder\AppData\Roaming\npm
 
 Note: After changing environment variables, please restart your system and check again.
 
-* Steps to clone and setup HWC-Facility-APP:
-1. Clone HWC-Facility-App from GitHub fork branch in your local system using below command:
+* Steps to clone and setup AAM-Facility-APP:
+1. Clone AAM-Facility-App from GitHub fork branch in your local system using below command:
       `git clone <repository-url>`
 
-2. Open hwc-facility-app project code in Visual Studio Code
+2. Open aam-facility-app project code in Visual Studio Code
 
 3. Navigate to your project folder and execute below command for node_modules installation:
       `npm install`
@@ -139,4 +140,39 @@ It creates a `environment.ci.ts` file with all environment variables used in the
 
 ## Usage
 All features have been exposed as REST endpoints. Refer to the SWAGGER API specification for details.
+
+### Initializing Submodule `Common-UI`
+
+To initialize the `Common-UI` submodule, follow these steps
+
+
+1. Clone the `aam-ui` project
+   ```bash
+   git clone https://github.com/PSMRI/HWC-UI
+2. Navigate to the project directory and pull the latest changes from the develop branch
+   cd aam-ui
+   git checkout develop
+   git pull origin develop
+
+3. Open the integrated terminal for the common-ui submodule and initialize it
+
+   cd Common-UI
+   git init
+   git remote add origin https://github.com/PSMRI/Common-UI
+   git submodule update --init --recursive
+
+4. Check the available branches and switch to the develop branch
+
+   git branch
+   git checkout develop
+   git pull origin develop
+
+## Filing Issues
+
+If you encounter any issues, bugs, or have feature requests, please file them in the [main AMRIT repository](https://github.com/PSMRI/AMRIT/issues). Centralizing all feedback helps us streamline improvements and address concerns efficiently.  
+
+## Join Our Community
+
+We’d love to have you join our community discussions and get real-time support!  
+Join our [Discord server](https://discord.gg/FVQWsf5ENS) to connect with contributors, ask questions, and stay updated.  
 

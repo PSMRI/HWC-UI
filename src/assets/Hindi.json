@@ -36,7 +36,7 @@
         "maritalStatus": "वैवाहिक स्थिति",
         "lastName": "उपनाम",
         "contactNo": "संपर्क नंबर",
-        "alternateNumber":"Alternate Contact Number",
+        "alternateNumber":"Alternate Number",
         "gender": "लिंग",
         "age": "आयु",
         "ageUnit": "उम्र यूनिट",
@@ -296,7 +296,9 @@
       "TCPending": "Tele-Consultation Pending",
       "selectAll": "सभी का चयन करे",
       "confirmWhetherBeneficiaryHasArrived": "पुष्टि करें कि क्या लाभार्थी आ गया है",
-      "startTest": "Start Test"
+      "startTest": "परीक्षण शुरू करें",
+      "remove": "हटाएं",
+      "poct": "POCT"
     },
     "idrs": {
       
@@ -2066,7 +2068,7 @@
         "externalID": "External ID",
         "registertoAMRIT": "Register to AMRIT",
         "pleaseEnterValidInput": "Please enter a valid input",
-        "pleaseEnterValidInputFor": "Please enter a valid input for",
+        "pleaseEnterValidInputFor": "Please enter a valid input for ",
         "errorInfetchingStates": "Error in fetching states",
         "pleaseRegisterBeneficiaryInAMRIT": "Please register the beneficiary in AMRIT",
         "noFurtherRecordsToShow": "No further records to show",
@@ -2085,7 +2087,28 @@
         "riskFactors": "Risk Factors",
         "treatment": "Treatment",
         "selfcare": "Self-Care",
-        "investigations": "Investigations"
-
+        "investigations": "Investigations",
+        "noRecordsFound": "No Records Found",
+        "enterMobileNumberToBeLinkedWithAbha": "Enter Phone number to be linked with ABHA",
+        "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?",
+        "abhaCardAlreadyExists": "ABHA already exists for the Aadhaar Number",
+        "enterABHANumber": "Please Enter ABHA Number",
+        "enterABHAAddress": "Please Enter ABHA Address",
+        "enterAadhaarNumber": "Please Enter Aadhaar Number",
+        "enterMobileNumber": "Please Enter Mobile Number",
+        "enterCorrectAuthIdForAuthMode": "Please Enter correct Authentication ID for choosen AuthMode",
+        "abhaAddressFound" : "ABHA Address Found:",
+        "searchAndDownloadAbha": "Search and Download ABHA",
+        "abhaSearchMode": "ABHA Search Mode*",
+        "verifyAbha": "Verify ABHA",
+        "issueInAbhaCard": "Issue in printing ABHA Card",
+        "fileUploadedSuccessfully": "File Uploaded successfully",
+        "verifyMobileOtp": "Verify Mobile OTP",
+        "enterMobileOtp": "Enter Mobile OTP",
+        "verify": "Verify",
+        "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
+        "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID",
+        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
+        "continueButton": "जारी रखें"
       }
 }

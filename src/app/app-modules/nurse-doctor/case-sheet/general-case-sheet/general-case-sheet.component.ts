@@ -34,8 +34,9 @@ import { Location } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ActivatedRoute } from '@angular/router';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { PrintPageSelectComponent } from '../../print-page-select/print-page-select.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-case-sheet',
@@ -84,6 +85,7 @@ export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private route: ActivatedRoute,
     public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -91,29 +93,35 @@ export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
 
     let caseSheetRequest;
     if (this.dataStore === 'current') {
-      this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+      this.visitCategory = this.sessionstorage.getItem(
+        'caseSheetVisitCategory',
+      );
       caseSheetRequest = {
-        VisitCategory: localStorage.getItem('caseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('caseSheetBenFlowID'),
-        benVisitID: localStorage.getItem('caseSheetVisitID'),
-        beneficiaryRegID: localStorage.getItem('caseSheetBeneficiaryRegID'),
-        visitCode: localStorage.getItem('visitCode'),
+        VisitCategory: this.sessionstorage.getItem('caseSheetVisitCategory'),
+        benFlowID: this.sessionstorage.getItem('caseSheetBenFlowID'),
+        benVisitID: this.sessionstorage.getItem('caseSheetVisitID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
+          'caseSheetBeneficiaryRegID',
+        ),
+        visitCode: this.sessionstorage.getItem('visitCode'),
       };
       this.getCasesheetData(caseSheetRequest);
     }
     if (this.dataStore === 'previous') {
       this.hideBack = true;
 
-      this.visitCategory = localStorage.getItem(
+      this.visitCategory = this.sessionstorage.getItem(
         'previousCaseSheetVisitCategory',
       );
       caseSheetRequest = {
-        VisitCategory: localStorage.getItem('previousCaseSheetVisitCategory'),
-        benFlowID: localStorage.getItem('previousCaseSheetBenFlowID'),
-        beneficiaryRegID: localStorage.getItem(
+        VisitCategory: this.sessionstorage.getItem(
+          'previousCaseSheetVisitCategory',
+        ),
+        benFlowID: this.sessionstorage.getItem('previousCaseSheetBenFlowID'),
+        beneficiaryRegID: this.sessionstorage.getItem(
           'previousCaseSheetBeneficiaryRegID',
         ),
-        visitCode: localStorage.getItem('previousCaseSheetVisitCode'),
+        visitCode: this.sessionstorage.getItem('previousCaseSheetVisitCode'),
       };
       this.getCasesheetData(caseSheetRequest);
     }
@@ -128,6 +136,13 @@ export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+    if (
+      this.current_language_set === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.current_language_set =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   dataStore: any;

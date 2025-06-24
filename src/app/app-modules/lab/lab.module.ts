@@ -39,6 +39,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MaterialModule } from '../core/material.module';
 import { MatIconModule } from '@angular/material/icon';
+import { SharedModule } from '../core/components/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatDatepickerModule,
     MatTooltipModule,
     MatIconModule,
+    SharedModule,
   ],
   declarations: [
     WorkareaComponent,

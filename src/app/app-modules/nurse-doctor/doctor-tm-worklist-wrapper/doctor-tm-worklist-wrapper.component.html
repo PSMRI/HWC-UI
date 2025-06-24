@@ -3,7 +3,13 @@
     <mat-tab label="{{ current_language_set?.tabs?.current }}">
       <app-doctor-worklist></app-doctor-worklist>
     </mat-tab>
-    <mat-tab label="{{ current_language_set?.tabs?.future }}">
+    <mat-tab
+      *ngIf="
+        teleConsultationFlag === 'ESanjeevani' ||
+        teleConsultationFlag === 'Swymed'
+      "
+      label="{{ current_language_set?.tabs?.future }}"
+    >
       <app-tm-future-worklist></app-tm-future-worklist>
     </mat-tab>
   </mat-tab-group>

@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DOCUMENT } from '@angular/common';
 import { Observable } from 'rxjs';
-import { CameraDialogComponent } from '../component/camera-dialog/camera-dialog.component';
+import { CameraDialogComponent } from '../components/camera-dialog/camera-dialog.component';
 
 @Injectable()
 export class CameraService {

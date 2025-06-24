@@ -34,7 +34,7 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { HrpService } from '../../shared/services/hrp.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 
 @Component({
   selector: 'app-nurse-obstetric-formula',

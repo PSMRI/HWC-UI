@@ -33,14 +33,51 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
 import { Subscription } from 'rxjs';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-refer',
   templateUrl: './general-refer.component.html',
   styleUrls: ['./general-refer.component.css'],
-  providers: [DatePipe],
+  providers: [
+    {
+      provide: DatePipe,
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
@@ -87,13 +124,14 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     private dialog: MatDialog,
     private confirmationService: ConfirmationService,
     private ncdScreeningService: NcdScreeningService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.visitCategory = localStorage.getItem('visitCategory');
-    if (localStorage.getItem('referredVisitCode')) {
-      this.referredVisitcode = localStorage.getItem('referredVisitCode');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
+    if (this.sessionstorage.getItem('referredVisitCode')) {
+      this.referredVisitcode = this.sessionstorage.getItem('referredVisitCode');
     } else {
       this.referredVisitcode = 'undefined';
     }
@@ -118,7 +156,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     checkdate.setMonth(this.today.getMonth() + 3);
     this.maxSchedulerDate = checkdate;
     this.tomorrow = d;
-    this.designation = localStorage.getItem('designation');
+    this.designation = this.sessionstorage.getItem('designation');
   }
 
   ngOnDestroy() {
@@ -134,7 +172,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
         if (masterData) {
           console.log('masterData=', masterData);
           this.higherHealthcareCenter = masterData.higherHealthCare;
-          if (this.higherHealthcareCenter.length === 0) {
+          if (this.higherHealthcareCenter?.length === 0) {
             this.instituteFlag = false;
             sessionStorage.setItem('instFlag', 'false');
           } else {
@@ -225,7 +263,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
 
             if (this.enableCBACForm === true) {
               this.fpReferral = masterData.referralReasonList;
-              if (localStorage.getItem('beneficiaryGender') === 'Male') {
+              if (this.sessionstorage.getItem('beneficiaryGender') === 'Male') {
                 if (
                   masterData.referralReasonList !== undefined &&
                   masterData.referralReasonList !== null
@@ -309,9 +347,10 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
           }
 
           if (String(this.referMode) === 'view') {
-            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            this.visitID = localStorage.getItem('visitID');
-            this.visitCategory = localStorage.getItem('visitCategory');
+            this.beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            this.visitID = this.sessionstorage.getItem('visitID');
+            this.visitCategory = this.sessionstorage.getItem('visitCategory');
             this.getReferDetails();
           }
         }
@@ -324,19 +363,23 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
       this.doctorService.populateCaserecordResponse$.subscribe((res) => {
         if (res && res.statusCode === 200 && res.data && res.data.Refer) {
           const referAndRevistData = res.data.Refer;
-          const referedToInstitute = this.higherHealthcareCenter.filter(
-            (item: any) => {
-              return (
-                item.institutionID === referAndRevistData.referredToInstituteID
-              );
-            },
-          );
-          if (referedToInstitute.length > 0) {
-            referAndRevistData.referredToInstituteName = referedToInstitute[0];
+          if (referAndRevistData && referAndRevistData.referredToInstituteID) {
+            const referedToInstitute = this.higherHealthcareCenter.filter(
+              (item: any) => {
+                return (
+                  item.institutionID ===
+                  referAndRevistData.referredToInstituteID
+                );
+              },
+            );
+            if (referedToInstitute.length > 0) {
+              referAndRevistData.referredToInstituteName =
+                referedToInstitute[0];
+            }
+            this.higherhealthcarecenter(
+              referAndRevistData.referredToInstituteName,
+            );
           }
-          this.higherhealthcarecenter(
-            referAndRevistData.referredToInstituteName,
-          );
           if (
             referAndRevistData.referralReasonList !== undefined &&
             referAndRevistData.referralReasonList !== null
@@ -365,7 +408,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   get ReferralReason() {
     return this.referForm.get('referralReason');
   }
-  checkdate(revisitDate: any) {
+  checkdate(revisitDate: Date) {
     this.today = new Date();
     const d = new Date();
     const checkdate = new Date();
@@ -373,6 +416,13 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
     checkdate.setMonth(this.today.getMonth() + 3);
     this.maxSchedulerDate = checkdate;
     this.tomorrow = d;
+
+    const localDate = new Date(
+      revisitDate.getTime() - revisitDate.getTimezoneOffset() * 60000,
+    );
+
+    this.referForm.patchValue({ revisitDate: localDate.toISOString() });
+    console.log('revisitDate', revisitDate);
   }
 
   canDisable(service: any) {
@@ -427,7 +477,7 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousReferralHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousReferredHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -469,14 +519,26 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
 
   loadMMUReferDeatils() {
     const reqObj = {
-      benRegID: localStorage.getItem('beneficiaryRegID'),
-      visitCode: localStorage.getItem('referredVisitCode'),
-      benVisitID: localStorage.getItem('referredVisitID'),
+      benRegID:
+        this.sessionstorage.getItem('beneficiaryRegID') &&
+        this.sessionstorage.getItem('beneficiaryRegID') !== ''
+          ? this.sessionstorage.getItem('beneficiaryRegID')
+          : null,
+      visitCode:
+        this.sessionstorage.getItem('referredVisitCode') &&
+        this.sessionstorage.getItem('referredVisitCode') !== ''
+          ? this.sessionstorage.getItem('referredVisitCode')
+          : null,
+      benVisitID:
+        this.sessionstorage.getItem('referredVisitID') &&
+        this.sessionstorage.getItem('referredVisitID') !== ''
+          ? this.sessionstorage.getItem('referredVisitID')
+          : null,
       fetchMMUDataFor: 'Referral',
     };
     if (
-      localStorage.getItem('referredVisitCode') !== 'undefined' &&
-      localStorage.getItem('referredVisitID') !== 'undefined'
+      this.sessionstorage.getItem('referredVisitCode') !== 'undefined' &&
+      this.sessionstorage.getItem('referredVisitID') !== 'undefined'
     ) {
       this.doctorService.getMMUData(reqObj).subscribe(
         (res: any) => {

@@ -23,7 +23,7 @@ import { Component, DoCheck, OnInit } from '@angular/core';
 import { NurseService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 
 @Component({
   selector: 'app-nurse-worklist-wrapper',

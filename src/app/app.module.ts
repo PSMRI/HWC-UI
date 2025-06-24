@@ -52,6 +52,10 @@ import { CbacService } from './app-modules/nurse-doctor/shared/services/cbac.ser
 import { HrpService } from './app-modules/nurse-doctor/shared/services/hrp.service';
 import { FamilyTaggingService } from './app-modules/registrar/shared/services/familytagging.service';
 import { RegistrarService } from './app-modules/registrar/shared/services/registrar.service';
+import { RegistrationModule } from 'Common-UI/src/registrar/registration.module';
+import { SharedModule } from './app-modules/core/components/shared/shared.module';
+import { RegistrarModule } from './app-modules/registrar/registrar.module';
+import { CaptchaComponent } from './user-login/captcha/captcha.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +67,7 @@ import { RegistrarService } from './app-modules/registrar/shared/services/regist
     SetPasswordComponent,
     SetSecurityQuestionsComponent,
     TmLogoutComponent,
+    CaptchaComponent,
   ],
   imports: [
     BrowserModule,
@@ -78,6 +83,8 @@ import { RegistrarService } from './app-modules/registrar/shared/services/regist
     MatGridListModule,
     DataSYNCModule,
     CoreModule.forRoot(),
+    SharedModule,
+    RegistrationModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

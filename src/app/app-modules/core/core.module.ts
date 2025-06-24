@@ -29,30 +29,30 @@ import { AuthGuard } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { TelemedicineService } from './services/telemedicine.service';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonDialogComponent } from './component/common-dialog/common-dialog.component';
+import { CommonDialogComponent } from './components/common-dialog/common-dialog.component';
 import { HttpServiceService } from './services/http-service.service';
-import { AllergenSearchComponent } from './component/allergen-search/allergen-search.component';
-import { SpecialistLoginComponent } from './component/specialist-login/specialist-login.component';
-import { AppHeaderComponent } from './component/app-header/app-header.component';
-import { BeneficiaryDetailsComponent } from './component/beneficiary-details/beneficiary-details.component';
-import { CalibrationComponent } from './component/calibration/calibration.component';
-import { CameraDialogComponent } from './component/camera-dialog/camera-dialog.component';
-import { DiagnosisSearchComponent } from './component/diagnosis-search/diagnosis-search.component';
-import { IotBluetoothComponent } from './component/iot-bluetooth/iot-bluetooth.component';
-import { IotcomponentComponent } from './component/iotcomponent/iotcomponent.component';
-import { MmuRbsDetailsComponent } from './component/mmu-rbs-details/mmu-rbs-details.component';
-import { OpenPreviousVisitDetailsComponent } from './component/open-previous-visit-details/open-previous-visit-details.component';
-import { PreviousDetailsComponent } from './component/previous-details/previous-details.component';
-import { ShowCommitAndVersionDetailsComponent } from './component/show-commit-and-version-details/show-commit-and-version-details.component';
-import { PreviousImmunizationServiceDetailsComponent } from './component/previous-immunization-service-details/previous-immunization-service-details.component';
-import { SpinnerComponent } from './component/spinner/spinner.component';
-import { TextareaDialog } from './component/textarea-dialog/textarea-dialog.service';
-import { TextareaDialogComponent } from './component/textarea-dialog/textarea-dialog.component';
+import { AllergenSearchComponent } from './components/allergen-search/allergen-search.component';
+import { SpecialistLoginComponent } from './components/specialist-login/specialist-login.component';
+import { AppHeaderComponent } from './components/app-header/app-header.component';
+import { BeneficiaryDetailsComponent } from './components/beneficiary-details/beneficiary-details.component';
+import { CalibrationComponent } from './components/calibration/calibration.component';
+import { CameraDialogComponent } from './components/camera-dialog/camera-dialog.component';
+import { DiagnosisSearchComponent } from './components/diagnosis-search/diagnosis-search.component';
+import { IotBluetoothComponent } from './components/iot-bluetooth/iot-bluetooth.component';
+import { IotcomponentComponent } from './components/iotcomponent/iotcomponent.component';
+import { MmuRbsDetailsComponent } from './components/mmu-rbs-details/mmu-rbs-details.component';
+import { OpenPreviousVisitDetailsComponent } from './components/open-previous-visit-details/open-previous-visit-details.component';
+import { PreviousDetailsComponent } from './components/previous-details/previous-details.component';
+import { ShowCommitAndVersionDetailsComponent } from './components/show-commit-and-version-details/show-commit-and-version-details.component';
+import { PreviousImmunizationServiceDetailsComponent } from './components/previous-immunization-service-details/previous-immunization-service-details.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { TextareaDialog } from './components/textarea-dialog/textarea-dialog.service';
+import { TextareaDialogComponent } from './components/textarea-dialog/textarea-dialog.component';
 import { UserLoginModule } from 'src/app/user-login/user-login.module';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { IotService } from './services/iot.service';
-import { AppFooterComponent } from './component/app-footer/app-footer.component';
-import { HealthIdDisplayModalComponent } from './component/health-id-display-modal/health-id-display-modal.component';
+import { AppFooterComponent } from './components/app-footer/app-footer.component';
+import { HealthIdDisplayModalComponent } from './components/health-id-display-modal/health-id-display-modal.component';
 import { ConfirmationService } from './services/confirmation.service';
 import {
   CameraService,
@@ -79,10 +79,11 @@ import { NgChartsModule } from 'ng2-charts';
 import { WebcamModule } from 'ngx-webcam';
 import { MasterdataService } from '../nurse-doctor/shared/services';
 import { RegistrarService } from '../registrar/shared/services/registrar.service';
-import { SetLanguageComponent } from './component/set-language.component';
+import { SetLanguageComponent } from './components/set-language.component';
 import { ClinicalObservationsDirective } from './directives/clinical-observations.directive';
 import { SignificantFindingsDirective } from './directives/significant-findings.directive';
 import { ViewRadiologyUploadedFilesComponent } from '../lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { SharedModule } from './components/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -97,6 +98,7 @@ import { ViewRadiologyUploadedFilesComponent } from '../lab/view-radiology-uploa
     NgChartsModule,
     WebcamModule,
     MatTableModule,
+    SharedModule,
   ],
   declarations: [
     CommonDialogComponent,
@@ -104,8 +106,6 @@ import { ViewRadiologyUploadedFilesComponent } from '../lab/view-radiology-uploa
     TextareaDialogComponent,
     SpinnerComponent,
     BeneficiaryDetailsComponent,
-    AppFooterComponent,
-    AppHeaderComponent,
     PreviousDetailsComponent,
     PreviousImmunizationServiceDetailsComponent,
     MmuRbsDetailsComponent,
@@ -141,8 +141,6 @@ import { ViewRadiologyUploadedFilesComponent } from '../lab/view-radiology-uploa
     SpinnerComponent,
     BeneficiaryDetailsComponent,
     SpecialistLoginComponent,
-    AppFooterComponent,
-    AppHeaderComponent,
     DiagnosisSearchComponent,
     PreviousDetailsComponent,
     PreviousImmunizationServiceDetailsComponent,
