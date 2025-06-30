@@ -83,8 +83,7 @@ interface prescribe {
   encapsulation: ViewEncapsulation.None,
 })
 export class QuickConsultComponent
-  implements OnInit, OnDestroy, OnChanges, DoCheck
-{
+  implements OnInit, OnDestroy, OnChanges, DoCheck {
   utils = new QuickConsultUtils(this.fb, this.sessionstorage);
 
   @ViewChild('prescriptionForm')
@@ -168,6 +167,7 @@ export class QuickConsultComponent
   displayedColumns: any = ['chiefcomplaint', 'description'];
 
   dataSource = new MatTableDataSource<any>();
+  suggestedDiagnosisList: any= [];
 
   constructor(
     private fb: FormBuilder,
@@ -181,7 +181,7 @@ export class QuickConsultComponent
     private testInVitalsService: TestInVitalsService,
     private nurseService: NurseService,
     readonly sessionstorage: SessionStorageService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.doctorService.setCapturedCaserecordDeatilsByDoctor(null);
@@ -301,9 +301,8 @@ export class QuickConsultComponent
 
   displayFn(option: any): string {
     if (option) {
-      return `${option.itemName} ${option.strength}${
-        option.unitOfMeasurement ? option.unitOfMeasurement : ''
-      }${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`;
+      return `${option.itemName} ${option.strength}${option.unitOfMeasurement ? option.unitOfMeasurement : ''
+        }${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`;
     } else {
       return '';
     }
@@ -417,11 +416,11 @@ export class QuickConsultComponent
             .confirm(
               'info ' + typeOfDrug,
               this.currentLanguageSet.stockNotAvailableWouldYouPrescribe +
-                ' ' +
-                option.itemName +
-                ' ' +
-                (option.strength ? option.strength : '') +
-                (option.unitOfMeasurement ? option.unitOfMeasurement : ''),
+              ' ' +
+              option.itemName +
+              ' ' +
+              (option.strength ? option.strength : '') +
+              (option.unitOfMeasurement ? option.unitOfMeasurement : ''),
             )
             .subscribe((res: any) => {
               if (!res) {
@@ -518,7 +517,7 @@ export class QuickConsultComponent
             const visitCategory = this.sessionstorage.getItem('visitCategory');
             if (
               this.sessionstorage.getItem('referredVisitCode') ===
-                'undefined' ||
+              'undefined' ||
               this.sessionstorage.getItem('referredVisitCode') === undefined ||
               this.sessionstorage.getItem('referredVisitCode') === null ||
               this.sessionstorage.getItem('referredVisitCode') === ''
@@ -1324,13 +1323,21 @@ export class QuickConsultComponent
       }
     }
   }
+ 
   checkProvisionalDiagnosisValidity(provisionalDiagnosis: any) {
-    const temp = provisionalDiagnosis.value;
-    if (temp.term && temp.conceptID) {
-      return false;
-    } else {
-      return true;
+    if (!provisionalDiagnosis || !provisionalDiagnosis.value) {
+      return true; // Disable if form group is missing
     }
+    const temp = provisionalDiagnosis.value;
+    const val = temp.viewProvisionalDiagnosisProvided;
+    // Enable Add if at least 3 chars are typed OR a valid object is selected
+    if (typeof val === 'string') {
+      return !(val && val.length >= 3);
+    }
+    if (val && typeof val === 'object' && val.term && val.conceptID) {
+      return false;
+    }
+    return true;
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
@@ -1348,5 +1355,23 @@ export class QuickConsultComponent
     } else {
       return true;
     }
+  }
+
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService.searchDiagnosisBasedOnPageNo(value, index).subscribe((results: any) => {
+        this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+      });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    this.patientQuickConsultForm.get(['provisionalDiagnosisList', index])?.setValue(selected);
   }
 }
