@@ -53,7 +53,6 @@ export class ServicePointService {
     if (serviceLineDetails && serviceLineDetails !== '') {
       vanIDJsn = JSON.parse(serviceLineDetails);
       vanIDx = vanIDJsn.vanID;
-      console.error('vanID><', vanIDx);
     }
     if (!vanIDx || vanIDx === '') {
       vanIDx = vanId;
@@ -74,7 +73,6 @@ export class ServicePointService {
   }
 
   getCdssAdminDetails(providerServiceMapID: any) {
-    console.error('providerServiceMapID', providerServiceMapID);
     return this.http.get(
       environment.getAdminCdssStatus + '/' + providerServiceMapID,
     );
