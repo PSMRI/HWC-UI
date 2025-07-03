@@ -613,7 +613,7 @@
                   <!-- Diagnosis Input -->
                   <div class="col-xs-12 col-sm-8 col-md-9">
                     <mat-form-field class="input-full-width" appearance="fill">
-                      <mat-label>{{ currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis }}*</mat-label>
+                      <mat-label>{{ currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis }}</mat-label>
                       <input matInput type="text" autocomplete="off" name="viewProvisionalDiagnosisProvided"
                         formControlName="viewProvisionalDiagnosisProvided" minlength="3" maxlength="100" required
                         #diagnosisInput [matAutocomplete]="autoDiagnosis"
