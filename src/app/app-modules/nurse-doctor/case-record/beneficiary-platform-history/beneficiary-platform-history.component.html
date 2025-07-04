@@ -22,7 +22,7 @@
               type="button"
               mat-raised-button
               color="primary"
-              class="btn-green"
+              class="mat_green"
               (click)="getServiceHistory(service.serviceID)"
             >
               {{ current_language_set?.common?.load }}
@@ -195,7 +195,7 @@
                   <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
                   <span
                     class="material-icons cursorPointer"
-                    (click)="getVisitDetails('MMU', element, false)"
+                    (click)="getVisitDetails('HWC', element, false)"
                     tabindex="{0}"
                     >visibility</span
                   >
@@ -223,7 +223,7 @@
                   <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
                   <mat-icon
                     class="cursorPointer"
-                    (click)="getVisitDetails('MMU', element, true)"
+                    (click)="getVisitDetails('HWC', element, true)"
                     >print</mat-icon
                   >
                 </td>
@@ -619,7 +619,7 @@
                   <button
                     mat-raised-button
                     color="primary"
-                    class="md-small"
+                    class="md-small mat_blue"
                     (click)="getPatientMCTSCallHistory(element)"
                   >
                     {{ current_language_set?.common?.viewQnA }}

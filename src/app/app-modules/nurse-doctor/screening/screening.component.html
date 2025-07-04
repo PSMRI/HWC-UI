@@ -52,7 +52,10 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="diabetes">
+  <div
+    class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-section-padding"
+    *ngIf="diabetes"
+  >
     <app-diabetes-screening
       [mode]="ncdScreeningMode"
       [diabetesScreeningForm]="diabetesScreeningForm"
@@ -60,7 +63,10 @@
       (diabetesFormStatus)="getDiabetesFormStatus($event)"
     ></app-diabetes-screening>
   </div>
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="hypertension">
+  <div
+    class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-section-padding"
+    *ngIf="hypertension"
+  >
     <app-hypertension-screening
       [mode]="ncdScreeningMode"
       [hypertensionScreeningForm]="hypertensionScreeningForm"
@@ -68,7 +74,10 @@
       (hypertensionFormStatus)="getHypertensionFormStatus($event)"
     ></app-hypertension-screening>
   </div>
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="oral">
+  <div
+    class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-section-padding"
+    *ngIf="oral"
+  >
     <app-oral-cancer-screening
       [mode]="ncdScreeningMode"
       [confirmDiseasesList]="confirmDiseaseArray"
@@ -77,7 +86,10 @@
       (oralFormStatus)="getOralFormStatus($event)"
     ></app-oral-cancer-screening>
   </div>
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="breast">
+  <div
+    class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-section-padding"
+    *ngIf="breast"
+  >
     <app-breast-cancer-screening
       [mode]="ncdScreeningMode"
       [confirmDiseasesList]="confirmDiseaseArray"
@@ -85,7 +97,10 @@
       (breastFormStatus)="getBreastFormStatus($event)"
     ></app-breast-cancer-screening>
   </div>
-  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" *ngIf="cervical">
+  <div
+    class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-section-padding"
+    *ngIf="cervical"
+  >
     <app-cervical-cancer-screening
       [mode]="ncdScreeningMode"
       [confirmDiseasesList]="confirmDiseaseArray"

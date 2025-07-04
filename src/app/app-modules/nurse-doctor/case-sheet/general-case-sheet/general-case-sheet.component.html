@@ -28,9 +28,10 @@
       matTooltip="{{ current_language_set?.casesheet?.caseComponent }}"
       matTooltipPosition="left"
       matTooltipClass="iemr-tooltip"
-      class="example-fab select non-printable"
+      class="example-fab select non-printable mat_blue_circle"
       color="primary"
       (click)="selectPrintPage()"
+      style="margin-bottom: 5px"
     >
       <mat-icon>view_module</mat-icon>
     </button>
@@ -41,8 +42,9 @@
       mat-mini-fab
       matTooltip="{{ current_language_set?.casesheet?.goTop }}"
       matTooltipPosition="left"
-      class="example-fab upward non-printable"
+      class="example-fab upward non-printable mat_blue_circle"
       color="primary"
+      style="margin-bottom: 5px"
       (click)="goToTop()"
       *ngIf="!previous"
     >
@@ -55,8 +57,9 @@
       mat-mini-fab
       matTooltip="{{ current_language_set?.casesheet?.printCaseheet }}"
       matTooltipPosition="left"
-      class="example-fab print non-printable"
+      class="example-fab print non-printable mat_blue_circle"
       color="primary"
+      style="margin-bottom: 5px"
       (click)="downloadCasesheet()"
       *ngIf="!previous"
     >
@@ -69,7 +72,7 @@
       mat-mini-fab
       matTooltip="{{ current_language_set?.casesheet?.workList }}"
       matTooltipPosition="left"
-      class="example-fab back non-printable"
+      class="example-fab back non-printable mat_blue_circle"
       color="primary"
       (click)="goBack()"
       *ngIf="!hideBack"

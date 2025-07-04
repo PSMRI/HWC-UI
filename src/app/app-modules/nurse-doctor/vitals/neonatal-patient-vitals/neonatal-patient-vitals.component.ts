@@ -36,8 +36,10 @@ import {
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
-import { IotcomponentComponent } from 'src/app/app-modules/core/component/iotcomponent/iotcomponent.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
+import { ActivatedRoute } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-nurse-neonatal-patient-vitals',
@@ -65,6 +67,7 @@ export class NeonatalPatientVitalsComponent
   startTempTest = environment.startTempurl;
   doctorScreen = false;
   benGenderType: any;
+  attendant: any;
 
   constructor(
     private dialog: MatDialog,
@@ -73,6 +76,8 @@ export class NeonatalPatientVitalsComponent
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private nurseService: NurseService,
+    private route: ActivatedRoute,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -83,26 +88,31 @@ export class NeonatalPatientVitalsComponent
 
   ngOnChanges() {
     if (String(this.mode) === 'view') {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getGeneralVitalsData();
       this.doctorScreen = true;
     }
 
-    const specialistFlagString = localStorage.getItem('specialistFlag');
+    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
       parseInt(specialistFlagString) === 100
     ) {
-      const visitID = localStorage.getItem('visitID');
-      const benRegID = localStorage.getItem('beneficiaryRegID');
+      const visitID = this.sessionstorage.getItem('visitID');
+      const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
       this.getGeneralVitalsData();
     }
 
     if (String(this.mode) === 'update') {
       this.doctorScreen = true;
       this.updateGeneralVitals(this.neonatalVitalsForm);
+    }
+
+    this.attendant = this.route.snapshot.params['attendant'];
+    if (this.attendant === 'nurse') {
+      this.getPreviousVisitAnthropometry();
     }
   }
 
@@ -121,6 +131,29 @@ export class NeonatalPatientVitalsComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+
+  getPreviousVisitAnthropometry() {
+    this.generalVitalsDataSubscription = this.doctorService
+      .getPreviousVisitAnthropometry({
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      })
+      .subscribe((anthropometryData: any) => {
+        if (
+          anthropometryData &&
+          anthropometryData.data &&
+          anthropometryData.data.response &&
+          anthropometryData.data.response !== 'Visit code is not found' &&
+          anthropometryData.data.response !== 'No data found'
+        ) {
+          const heightStr = anthropometryData.data.response.toString();
+          this.neonatalVitalsForm.controls['height_cm'].patchValue(
+            heightStr.endsWith('.0')
+              ? Math.round(anthropometryData.data.response)
+              : anthropometryData.data.response,
+          );
+        }
+      });
   }
 
   benGenderAndAge: any;
@@ -202,8 +235,8 @@ export class NeonatalPatientVitalsComponent
   getGeneralVitalsData() {
     this.generalVitalsDataSubscription = this.doctorService
       .getGenericVitals({
-        benRegID: localStorage.getItem('beneficiaryRegID'),
-        benVisitID: localStorage.getItem('visitID'),
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+        benVisitID: this.sessionstorage.getItem('visitID'),
       })
       .subscribe((vitalsData) => {
         if (vitalsData) {
@@ -314,7 +347,7 @@ export class NeonatalPatientVitalsComponent
   }
 
   getGender() {
-    const gender = localStorage.getItem('beneficiaryGender');
+    const gender = this.sessionstorage.getItem('beneficiaryGender');
     if (gender === 'Female') this.benGenderType = 1;
     else if (gender === 'Male') this.benGenderType = 0;
     else if (gender === 'Transgender') this.benGenderType = 2;

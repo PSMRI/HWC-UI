@@ -31,9 +31,10 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { environment } from 'src/environments/environment';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-doctor-investigations',
@@ -99,6 +100,7 @@ export class DoctorInvestigationsComponent
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
     private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -116,7 +118,7 @@ export class DoctorInvestigationsComponent
         this.hypertensionSelected = response;
         this.changeOfConfirmedHypertension(this.hypertensionSelected);
       });
-    this.visitCategoryCheck = localStorage.getItem('visitCategory');
+    this.visitCategoryCheck = this.sessionstorage.getItem('visitCategory');
 
     this.finalHypertensionSubscription =
       this.idrsScoreService.finalDiagnosisHypertensionConfirmation$.subscribe(
@@ -130,8 +132,8 @@ export class DoctorInvestigationsComponent
     this.sysAndDiaBp();
     this.getDoctorMasterData();
     this.getNurseMasterData();
-    if (localStorage.getItem('referredVisitCode')) {
-      this.referredVisitcode = localStorage.getItem('referredVisitCode');
+    if (this.sessionstorage.getItem('referredVisitCode')) {
+      this.referredVisitcode = this.sessionstorage.getItem('referredVisitCode');
     } else {
       this.referredVisitcode = 'undefined';
     }
@@ -329,9 +331,10 @@ export class DoctorInvestigationsComponent
             }
           });
           if (String(this.caseRecordMode) === 'view') {
-            this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            this.visitID = localStorage.getItem('visitID');
-            this.visitCategory = localStorage.getItem('visitCategory');
+            this.beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            this.visitID = this.sessionstorage.getItem('visitID');
+            this.visitCategory = this.sessionstorage.getItem('visitCategory');
             this.getInvestigationDetails();
           }
         }
@@ -510,14 +513,26 @@ export class DoctorInvestigationsComponent
 
   loadMMUInvestigation() {
     const reqObj = {
-      benRegID: localStorage.getItem('beneficiaryRegID'),
-      visitCode: localStorage.getItem('referredVisitCode'),
-      benVisitID: localStorage.getItem('referredVisitID'),
+      benRegID:
+        this.sessionstorage.getItem('beneficiaryRegID') &&
+        this.sessionstorage.getItem('beneficiaryRegID') !== ''
+          ? this.sessionstorage.getItem('beneficiaryRegID')
+          : null,
+      visitCode:
+        this.sessionstorage.getItem('referredVisitCode') &&
+        this.sessionstorage.getItem('referredVisitCode') !== ''
+          ? this.sessionstorage.getItem('referredVisitCode')
+          : null,
+      benVisitID:
+        this.sessionstorage.getItem('referredVisitID') &&
+        this.sessionstorage.getItem('referredVisitID') !== ''
+          ? this.sessionstorage.getItem('referredVisitID')
+          : null,
       fetchMMUDataFor: 'Investigation',
     };
     if (
-      localStorage.getItem('referredVisitCode') !== 'undefined' &&
-      localStorage.getItem('referredVisitID') !== 'undefined'
+      this.sessionstorage.getItem('referredVisitCode') !== 'undefined' &&
+      this.sessionstorage.getItem('referredVisitID') !== 'undefined'
     ) {
       this.doctorService.getMMUData(reqObj).subscribe(
         (res: any) => {
@@ -560,14 +575,26 @@ export class DoctorInvestigationsComponent
 
   getMMUInvestigationDetails() {
     const reqObj = {
-      benRegID: localStorage.getItem('beneficiaryRegID'),
-      visitCode: localStorage.getItem('referredVisitCode'),
-      benVisitID: localStorage.getItem('referredVisitID'),
+      benRegID:
+        this.sessionstorage.getItem('beneficiaryRegID') &&
+        this.sessionstorage.getItem('beneficiaryRegID') !== ''
+          ? this.sessionstorage.getItem('beneficiaryRegID')
+          : null,
+      visitCode:
+        this.sessionstorage.getItem('referredVisitCode') &&
+        this.sessionstorage.getItem('referredVisitCode') !== ''
+          ? this.sessionstorage.getItem('referredVisitCode')
+          : null,
+      benVisitID:
+        this.sessionstorage.getItem('referredVisitID') &&
+        this.sessionstorage.getItem('referredVisitID') !== ''
+          ? this.sessionstorage.getItem('referredVisitID')
+          : null,
       fetchMMUDataFor: 'Investigation',
     };
     if (
-      localStorage.getItem('referredVisitCode') !== 'undefined' &&
-      localStorage.getItem('referredVisitID') !== 'undefined'
+      this.sessionstorage.getItem('referredVisitCode') !== 'undefined' &&
+      this.sessionstorage.getItem('referredVisitID') !== 'undefined'
     ) {
       this.doctorService.getMMUData(reqObj).subscribe(
         (res: any) => {

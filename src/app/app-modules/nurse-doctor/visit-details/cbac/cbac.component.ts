@@ -35,7 +35,8 @@ import {
   BeneficiaryDetailsService,
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-cbac',
@@ -132,9 +133,9 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   cbacFamilyHistoryBpdiabetesScore = 0;
   beneficiaryGender: any;
   beneficiaryAge: any;
-  totalCbacScore!: number;
+  totalCbacScore = 0;
   cbacDetailsFromNurse: any;
-  totalScore!: number;
+  totalScore = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -143,6 +144,7 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
   @Input()
   cbacScreeningForm!: FormGroup;
@@ -216,16 +218,20 @@ export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   getCbacDetails() {
     if (String(this.mode) === 'view') {
       const reqObj = {
-        visitID: localStorage.getItem('visitID'),
-        beneficiaryRegId: localStorage.getItem('beneficiaryRegID'),
-        visitCode: localStorage.getItem('visitCode'),
+        visitID: this.sessionstorage.getItem('visitID'),
+        beneficiaryRegId: this.sessionstorage.getItem('beneficiaryRegID'),
+        visitCode: this.sessionstorage.getItem('visitCode'),
       };
       this.cbacService.fetchCbacDetails(reqObj).subscribe((response: any) => {
         if (response.data !== null && response.statusCode === 200) {
           console.log('cbac fetched data from nurse', response.data);
           this.cbacDetailsFromNurse = response.data;
           const cbacData = response.data;
-          if (cbacData !== null && cbacData !== undefined) {
+          if (
+            cbacData !== null &&
+            cbacData !== undefined &&
+            cbacData.totalScore
+          ) {
             this.totalScore = cbacData.totalScore;
             this.cbacScreeningForm.patchValue({
               totalScore:

@@ -31,8 +31,9 @@ import { ActivatedRoute } from '@angular/router';
 import { GeneralUtils } from 'src/app/app-modules/nurse-doctor/shared/utility';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { Subscription } from 'rxjs';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-ncd-care-diagnosis',
@@ -40,7 +41,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./ncd-care-diagnosis.component.css'],
 })
 export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
 
   @Input()
   generalDiagnosisForm!: FormGroup;
@@ -61,6 +62,8 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   visitCategory: any;
   attendantType: any;
   enableNCDCondition = false;
+  suggestedDiagnosisList: any = [];
+
   constructor(
     private fb: FormBuilder,
     private masterdataService: MasterdataService,
@@ -68,12 +71,13 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.getDoctorMasterData();
     this.assignSelectedLanguage();
-    this.designation = localStorage.getItem('designation');
+    this.designation = this.sessionstorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.generalDiagnosisForm.controls['specialistDiagnosis'].enable();
       this.specialist = true;
@@ -81,7 +85,7 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
       this.generalDiagnosisForm.controls['specialistDiagnosis'].disable();
       this.specialist = false;
     }
-    this.visitCategory = localStorage.getItem('visitCategory');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
     this.attendantType = this.route.snapshot.params['attendant'];
     if (this.attendantType === 'doctor') {
       this.enableNCDCondition = true;
@@ -115,7 +119,7 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
         let ncdCareConditionsMasterData = [];
         if (masterData.ncdCareConditions)
           ncdCareConditionsMasterData = masterData.ncdCareConditions.slice();
-        if (localStorage.getItem('beneficiaryGender') === 'Male') {
+        if (this.sessionstorage.getItem('beneficiaryGender') === 'Male') {
           if (
             masterData.ncdCareConditions !== undefined &&
             masterData.ncdCareConditions !== null
@@ -136,9 +140,10 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
         if (masterData.ncdCareTypes)
           this.ncdCareTypes = masterData.ncdCareTypes.slice();
         if (String(this.caseRecordMode) === 'view') {
-          const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-          const visitID = localStorage.getItem('visitID');
-          const visitCategory = localStorage.getItem('visitCategory');
+          const beneficiaryRegID =
+            this.sessionstorage.getItem('beneficiaryRegID');
+          const visitID = this.sessionstorage.getItem('visitID');
+          const visitCategory = this.sessionstorage.getItem('visitCategory');
           this.getDiagnosisDetails(beneficiaryRegID, visitID, visitCategory);
         }
       }
@@ -286,5 +291,35 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
     if (this.diagnosisSubscription) {
       this.diagnosisSubscription.unsubscribe();
     }
+  }
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    // this.patientQuickConsultForm.get(['provisionalDiagnosisList', index])?.setValue(selected);
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList',
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }

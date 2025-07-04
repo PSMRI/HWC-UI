@@ -1,70 +1,61 @@
 <ng-container [formGroup]="generalPersonalHistoryForm">
-  <div class="row m-t-10 m-b-10">
-    <div class="col-xs-4 text-right previous-history pull-right">
-      <p class="font-history-label">
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.previousAllergyhistory
-        }}
-      </p>
+  <div class="col-12">
+    <div class="row m-t-10 m-b-10">
       <button
         type="button"
-        mat-icon-button
-        matTooltip="{{
-          this.currentLanguageSet?.DurationData?.previousDetails
-        }}"
-        id="previousAllergyHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousAllergyHistory()"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
-    <div
-      class="col-xs-4 text-right previous-history pull-right"
-      *ngIf="beneficiary?.ageVal >= 13"
-    >
-      <p class="font-history-label">
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
-        }}
-      </p>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{
-          this.currentLanguageSet?.DurationData?.previousDetails
-        }}"
-        id="previousAlcoholHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousAlcoholHistory()"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
-    <div
-      class="col-xs-4 text-right previous-history pull-right"
-      *ngIf="beneficiary?.ageVal >= 13"
-    >
-      <p class="font-history-label">
-        {{
-          currentLanguageSet?.historyData?.ancHistory
-            ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
-        }}
-      </p>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+        class="col-4 text-right previous-history pull-right mat-icon-button mat_icon_blue"
         id="previousTobaccoHistory"
-        class="mat_icon_blue"
         color="primary"
+        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
         (click)="getPreviousTobaccoHistory()"
+        (keydown.enter)="getPreviousTobaccoHistory()"
+        (keydown.space)="getPreviousTobaccoHistory()"
       >
-        <mat-icon class="md-24">history</mat-icon>
+        <mat-icon class="md-18 ms-2">history</mat-icon>
+        <span class="previousHistory">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.personalHistoryANC_OPD_NCD_PNC?.previousTobaccohistory
+          }}
+        </span>
+      </button>
+
+      <button
+        type="button"
+        class="col-4 text-right previous-history pull-right mat-icon-button mat_icon_blue"
+        id="previousAlcoholHistory"
+        color="primary"
+        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+        (click)="getPreviousAlcoholHistory()"
+        (keydown.enter)="getPreviousAlcoholHistory()"
+        (keydown.space)="getPreviousAlcoholHistory()"
+      >
+        <mat-icon class="md-18 ms-2">history</mat-icon>
+        <span class="previousHistory">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.personalHistoryANC_OPD_NCD_PNC?.previousAlcoholhistory
+          }}
+        </span>
+      </button>
+
+      <button
+        type="button"
+        class="col-4 text-right previous-history pull-right mat-icon-button mat_icon_blue"
+        id="previousAllergyHistory"
+        color="primary"
+        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+        (click)="getPreviousAllergyHistory()"
+        (keydown.enter)="getPreviousAllergyHistory()"
+        (keydown.space)="getPreviousAllergyHistory()"
+      >
+        <mat-icon class="md-18 ms-2">history</mat-icon>
+        <span class="previousHistory">
+          {{
+            currentLanguageSet?.historyData?.ancHistory
+              ?.personalHistoryANC_OPD_NCD_PNC?.previousAllergyhistory
+          }}
+        </span>
       </button>
     </div>
   </div>
@@ -340,27 +331,28 @@
           </div>
 
           <div
-            class="col-sm-2 col-md-2 box action-btn-container pull-right padding-0-left-right-al"
+            class="action-btn-container pull-right padding-0-left-right-al"
+            style="text-align: end"
           >
-            <button
-              mat-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && tobacco.touched)"
-              (click)="removeTobacco(i, tobacco)"
-            >
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
             <button
               mat-mini-fab
               color="primary"
               *ngIf="isLast"
-              class="mat_blue_circle"
+              class="mat-add-btn"
               [disabled]="checkTobaccoValidity(tobacco)"
               (click)="addTobacco()"
             >
-              <mat-icon class="md-18">add</mat-icon>
+              {{ currentLanguageSet?.common?.add }}
+            </button>
+            <button
+              mat-mini-fab
+              color="warn"
+              class="mat-remove-btn"
+              style="margin-left: 3px"
+              *ngIf="i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))"
+              (click)="removeTobacco(i, tobacco)"
+            >
+              {{ currentLanguageSet?.common?.remove }}
             </button>
           </div>
         </ng-container>
@@ -514,27 +506,28 @@
           </div>
 
           <div
-            class="col-sm-2 col-md-2 box action-btn-container pull-right padding-0-left-right-al"
+            class="col-12 box action-btn-container pull-right padding-0-left-right-al"
+            style="text-align: end"
           >
             <button
               mat-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && alcohol.touched)"
-              (click)="removeAlcohol(i, alcohol)"
-            >
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
-            <button
-              mat-mini-fab
               color="primary"
-              class="mat_blue_circle"
+              class="mat-add-btn"
               *ngIf="isLast"
               [disabled]="checkAlcoholValidity(alcohol)"
               (click)="addAlcohol()"
             >
-              <mat-icon class="md-18">add</mat-icon>
+              {{ currentLanguageSet?.common?.add }}
+            </button>
+            <button
+              mat-mini-fab
+              color="warn"
+              class="mat-remove-btn"
+              style="margin-left: 3px"
+              *ngIf="i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))"
+              (click)="removeAlcohol(i, alcohol)"
+            >
+              {{ currentLanguageSet?.common?.remove }}
             </button>
           </div>
         </ng-container>
@@ -555,7 +548,7 @@
     </mat-card-header>
     <mat-card-content formArrayName="allergicList">
       <div
-        class="col-12 row multi-row-select"
+        class="row multi-row-select"
         *ngFor="
           let allergy of getAllergyList();
           let i = index;
@@ -565,7 +558,7 @@
         [ngClass]="{ odd: !isOdd }"
       >
         <ng-container [formGroupName]="i">
-          <div class="col-3 box">
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
             <mat-form-field [style.width]="'100%'">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.ancHistory
@@ -585,7 +578,7 @@
             </mat-form-field>
           </div>
 
-          <div class="col-3 box">
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
             <mat-form-field class="input-full-width">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.ancHistory
@@ -612,7 +605,7 @@
               >
             </mat-form-field>
           </div>
-          <div class="col-3 box" [hidden]="true">
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" [hidden]="true">
             <mat-form-field class="input-full-width">
               <mat-label class="mat-label-text">{{
                 currentLanguageSet?.historyData?.opd_NCD_PNCHistory
@@ -671,22 +664,13 @@
           </div>
 
           <div
-            class="col-2 box action-btn-container pull-right padding-0-left-right-al"
+            class="col-12 box action-btn-container pull-right padding-0-left-right-al"
+            style="text-align: end"
           >
             <button
               mat-mini-fab
-              color="warn"
-              class="mat_warn_circle"
-              style="margin-right: 3px"
-              *ngIf="i !== 0 || (i === 0 && allergy.touched)"
-              (click)="removeAllergy(i, allergy)"
-            >
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
-            <button
-              mat-mini-fab
               color="primary"
-              class="mat_blue_circle"
+              class="mat-add-btn"
               *ngIf="
                 isLast &&
                 generalPersonalHistoryForm.get('allergicList')?.value?.length <
@@ -695,7 +679,17 @@
               [disabled]="checkAllergyValidity(allergy)"
               (click)="addAllergy()"
             >
-              <mat-icon class="md-18">add</mat-icon>
+              {{ currentLanguageSet?.common?.add }}
+            </button>
+            <button
+              mat-mini-fab
+              color="warn"
+              class="mat-remove-btn"
+              style="margin-left: 3px; margin-right: 3px"
+              *ngIf="i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))"
+              (click)="removeAllergy(i, allergy)"
+            >
+              {{ currentLanguageSet?.common?.remove }}
             </button>
           </div>
         </ng-container>

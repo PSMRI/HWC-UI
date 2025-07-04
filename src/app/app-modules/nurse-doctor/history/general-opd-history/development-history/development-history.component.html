@@ -1,23 +1,22 @@
 <div class="row m-t-20" [formGroup]="developmentHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <p class="font-history-label m-t-10">
+  <button
+    type="button"
+    class="history-label col-12 mat-icon-button mat_icon_blue"
+    id="previousDevelopmentalHistory"
+    color="primary"
+    matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+    (click)="getPreviousDevelopmentalHistory()"
+    (keydown.enter)="getPreviousDevelopmentalHistory()"
+    (keydown.space)="getPreviousDevelopmentalHistory()"
+  >
+    <mat-icon class="md-18 ms-2">history</mat-icon>
+    <span class="previousHistory">
       {{
         currentLanguageSet?.historyData?.opd_NCD_PNCHistory?.development
           ?.previousDevelopmentalHistory
       }}
-    </p>
-    <button
-      type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-      id="previousDevelopmentalHistory"
-      class="mat_icon_blue"
-      color="primary"
-      (click)="getPreviousDevelopmentalHistory()"
-    >
-      <mat-icon class="md-18">history</mat-icon>
-    </button>
-  </div>
+    </span>
+  </button>
   <div>
     <div class="row" style="margin-left: 0px">
       <div class="col-xs-12 col-sm-6 col-md-6 box">

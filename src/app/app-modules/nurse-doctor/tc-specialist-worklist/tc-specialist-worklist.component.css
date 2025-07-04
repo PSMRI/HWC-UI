@@ -58,30 +58,44 @@ ul li div {
 
 .marker-p-f-c {
   background: #336CFB;
+  margin-right: 5px !important;
+
 }
 
 .marker-p-f-d-u {
   background: brown;
+  margin-right: 5px !important;
+
 }
 
 .marker-p-f-t {
   background: #e44e4f;
+  margin-right: 5px !important;
+
 }
 
 .marker-t-d {
   background: #eaaa26;
+  margin-right: 5px !important;
+
 }
 
 .marker-c-d {
   background: #43760f;
+  margin-right: 5px !important;
+
 }
 
 .marker-a-f-t-p {
   background:#9b1717;
+  margin-right: 5px !important;
+
 }
 
 .marker-a-f-t-d {
   background:#ba8212;
+  margin-right: 5px !important;
+
 }
 
 .visitStatus {
@@ -198,7 +212,6 @@ table {
 
 .full-width-refresh {
     width: 100%;
-    margin-top: 10px;
     margin-bottom: 10px;
     height: 35px;
     border-radius: 16px;

@@ -15,6 +15,10 @@ import { environment } from 'src/environments/environment';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { SpinnerService } from './spinner.service';
 import { ConfirmationService } from './confirmation.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { AuthService } from 'src/app/app-modules/core/services';
 
 @Injectable({
   providedIn: 'root',
@@ -27,12 +31,24 @@ export class HttpInterceptorService implements HttpInterceptor {
     private router: Router,
     private confirmationService: ConfirmationService,
     private http: HttpClient,
+    readonly sessionstorage: SessionStorageService,
+    public httpServiceService: HttpServiceService,
+    private authService: AuthService,
   ) {}
+
+  assignSelectedLanguage() {
+    if (!this.currentLanguageSet) {
+      const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+      getLanguageJson.setLanguage();
+      this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    }
+  }
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler,
   ): Observable<HttpEvent<any>> {
+    this.assignSelectedLanguage();
     const key: any = sessionStorage.getItem('key');
     let modifiedReq = null;
     if (key !== undefined && key !== null) {
@@ -73,12 +89,29 @@ export class HttpInterceptorService implements HttpInterceptor {
       url.indexOf('user/userAuthenticate') < 0
     ) {
       sessionStorage.clear();
-      localStorage.clear();
+      this.sessionstorage.clear();
       setTimeout(() => this.router.navigate(['/login']), 0);
       this.confirmationService.alert(response.errorMessage, 'error');
+    } else if (
+      response.statusCode === 5000 &&
+      response.errorMessage ===
+        'Unable to fetch session object from Redis server'
+    ) {
+      this.handleSessionExpiry(
+        this.currentLanguageSet.sessionExpiredPleaseLogin,
+      );
     } else {
       this.startTimer();
     }
+  }
+
+  handleSessionExpiry(message: string): void {
+    if (this.authService.sessionExpiredHandled) return;
+    this.authService.sessionExpiredHandled = true;
+    sessionStorage.clear();
+    this.sessionstorage.clear();
+    this.confirmationService.alert(message, 'error');
+    setTimeout(() => this.router.navigate(['/login']), 0);
   }
 
   startTimer() {
@@ -105,7 +138,7 @@ export class HttpInterceptorService implements HttpInterceptor {
               } else if (result.action === 'timeout') {
                 clearTimeout(this.timerRef);
                 sessionStorage.clear();
-                localStorage.clear();
+                this.sessionstorage.clear();
                 this.confirmationService.alert(
                   this.currentLanguageSet.sessionExpired,
                   'error',
@@ -115,7 +148,7 @@ export class HttpInterceptorService implements HttpInterceptor {
                 setTimeout(() => {
                   clearTimeout(this.timerRef);
                   sessionStorage.clear();
-                  localStorage.clear();
+                  this.sessionstorage.clear();
                   this.confirmationService.alert(
                     this.currentLanguageSet.sessionExpired,
                     'error',

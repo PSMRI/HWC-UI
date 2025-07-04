@@ -10,12 +10,12 @@
     <br />
     <br />
     <span *ngIf="!contactFlag">
-      <mat-form-field [style.width]="'100%'">
+      <mat-form-field [style.width]="'50%'">
         <mat-label class="mat-label-text">{{
           currentLanguageSet?.covid?.historyOfContact
         }}</mat-label>
         <mat-select
-          class="input-full-width vox"
+          class=""
           [multiple]="true"
           name="contactStatus"
           formControlName="contactStatus"

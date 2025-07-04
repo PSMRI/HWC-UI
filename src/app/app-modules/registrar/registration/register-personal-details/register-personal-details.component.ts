@@ -40,13 +40,47 @@ import { setTheme } from 'ngx-bootstrap/utils';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { Subscription } from 'rxjs';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-register-personal-details',
   templateUrl: './register-personal-details.component.html',
   styleUrls: ['./register-personal-details.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class RegisterPersonalDetailsComponent
   implements OnInit, AfterViewChecked, DoCheck, OnDestroy
@@ -63,6 +97,8 @@ export class RegisterPersonalDetailsComponent
   genderCategory: any = 'Male';
   revisitData: any;
   revisitDataSubscription: any;
+  maritalSubscription!: Subscription;
+  MaritalStatus = false;
 
   @Input()
   personalDetailsForm!: FormGroup;
@@ -72,8 +108,6 @@ export class RegisterPersonalDetailsComponent
 
   @ViewChild(BsDatepickerDirective) datepicker!: BsDatepickerDirective;
   personalDataOnHealthIDSubscription!: Subscription;
-  maritalSubscription!: Subscription;
-  MaritalStatus = false;
 
   @HostListener('window:scroll')
   onScrollEvent() {
@@ -153,6 +187,7 @@ export class RegisterPersonalDetailsComponent
     if (this.personalDataOnHealthIDSubscription) {
       this.personalDataOnHealthIDSubscription.unsubscribe();
     }
+    this.registrarService.clearMaritalDetails();
   }
 
   setPhoneSelectionEnabledByDefault() {
@@ -434,21 +469,6 @@ export class RegisterPersonalDetailsComponent
     }
   }
 
-  isMaritalStatus() {
-    this.maritalSubscription = this.registrarService.maritalStatus$.subscribe(
-      (response) => {
-        if (response === true) {
-          this.MaritalStatus = true;
-          this.enableMaritalStatus = true;
-          this.onGenderSelected();
-        } else {
-          this.MaritalStatus = false;
-          this.enableMaritalStatus = false;
-        }
-      },
-    );
-  }
-
   /**
    *
    * Gender Selection - Transgender Confirmation
@@ -638,16 +658,30 @@ export class RegisterPersonalDetailsComponent
     }
   }
 
+  isMaritalStatus() {
+    this.maritalSubscription = this.registrarService.maritalStatus$.subscribe(
+      (response) => {
+        if (response === true) {
+          this.MaritalStatus = true;
+          this.enableMaritalStatus = true;
+          this.onGenderSelected();
+        } else {
+          this.MaritalStatus = false;
+          this.enableMaritalStatus = false;
+        }
+      },
+    );
+  }
+
   /**
    *
    * Change Age as per changed in Calendar
    */
   dobChangeByCalender(dobval: any) {
     const date = new Date(this.dateForCalendar);
-    console.log(this.personalDetailsForm.value.dob);
     if (
       this.dateForCalendar &&
-      (!dobval || dobval.length === 10) &&
+      (dobval || dobval.length === 10) &&
       this.personalDetailsForm.controls['dob'].valid
     ) {
       const dateDiff = Date.now() - date.getTime();
@@ -693,8 +727,10 @@ export class RegisterPersonalDetailsComponent
       this.personalDetailsForm.value.ageUnit === 'Years'
     ) {
       this.enableMaritalStatus = true;
+      this.MaritalStatus = true;
     } else {
       this.enableMaritalStatus = false;
+      this.MaritalStatus = false;
       this.clearMaritalStatus();
     }
   }

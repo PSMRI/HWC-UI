@@ -27,7 +27,8 @@ import {
   OnChanges,
   OnDestroy,
 } from '@angular/core';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
 @Component({
@@ -43,7 +44,10 @@ export class PncCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   pNCCaseSheetData: any;
   current_language_set: any;
 
-  constructor(public httpServiceService: HttpServiceService) {}
+  constructor(
+    public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
+  ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
@@ -56,6 +60,13 @@ export class PncCaseSheetComponent implements OnChanges, OnInit, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+    if (
+      this.current_language_set === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.current_language_set =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   ngOnChanges() {

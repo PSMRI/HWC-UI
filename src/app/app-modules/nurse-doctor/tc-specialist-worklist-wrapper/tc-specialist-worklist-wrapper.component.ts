@@ -21,7 +21,7 @@
  */
 import { Component, DoCheck, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 
 @Component({

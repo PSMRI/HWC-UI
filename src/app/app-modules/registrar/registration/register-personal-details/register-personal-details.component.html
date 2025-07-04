@@ -90,10 +90,7 @@
           </mat-form-field>
         </div>
 
-        <div
-          class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
-          style="margin-bottom: 50px"
-        >
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
           <div class="row">
             <div class="col-xs-2 col-sm-2 m-t-15" style="padding-top: 7px">
               <mat-checkbox
@@ -188,29 +185,34 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box">
-          <mat-form-field [style.width]="'100%'">
-            <mat-icon matSuffix>event</mat-icon>
+          <mat-form-field
+            [style.width]="'96%'"
+            class="mat_form_field_width_one"
+          >
             <mat-label class="mat-label-text">{{
               current_language_set?.ro?.personalInfo?.dob
             }}</mat-label>
             <input
-              autocomplete="off"
-              readonly="true"
               matInput
-              id="dob-input"
               [(ngModel)]="dateForCalendar"
-              type="text"
-              #dobval
-              (onHidden)="dobChangeByCalender(dobval.value)"
-              (change)="dobChangeByCalender(dobval.value)"
-              [bsConfig]="bsConfig"
-              [minDate]="minDate"
-              [maxDate]="today"
-              #dp="bsDatepicker"
-              maxlength="10"
-              bsDatepicker
+              name="dob"
               formControlName="dob"
+              [min]="minDate"
+              [max]="today"
+              [matDatepicker]="dobPicker"
+              ng-readonly="true"
+              autocomplete="off"
+              #dobval
+              id="dob-input"
+              type="text"
+              (dateInput)="dobChangeByCalender(dobval.value)"
+              (dateChange)="dobChangeByCalender(dobval.value)"
             />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="dobPicker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #dobPicker></mat-datepicker>
           </mat-form-field>
         </div>
 
@@ -261,7 +263,7 @@
 
         <div
           class="col-xs-12 col-sm-6 col-md-3 col-lg-3 box"
-          *ngIf="enableMaritalStatus"
+          *ngIf="enableMaritalStatus && MaritalStatus"
         >
           <mat-form-field [style.width]="'100%'">
             <mat-label class="mat-label-text">
@@ -323,7 +325,7 @@
               autocomplete="off"
               matInput
               allowText="number"
-              (selectionChange)="checkAgeAtMarriage()"
+              (change)="checkAgeAtMarriage()"
               [required]="enableMarriageDetails"
               formControlName="ageAtMarriage"
               minlength="2"

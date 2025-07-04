@@ -105,7 +105,6 @@ md2-pagination {
 
   .full-width-refresh {
       width: 100%;
-      margin-top: 10px;
       margin-bottom: 10px;
       height: 35px;
       border-radius: 16px;
@@ -130,5 +129,14 @@ md2-pagination {
     bottom: 1px;
     width: 4px;
     background: #43760f;
+    }
+    @media screen  and (min-width:360px) and (max-width:430px) {
+      .fit_to_content{
+        width: fit-content !important;
+  
+      }
+      .mat_blue{
+        margin-top: 2px;
+      }
     }
   

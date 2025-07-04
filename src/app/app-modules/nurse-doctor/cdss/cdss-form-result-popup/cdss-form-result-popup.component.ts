@@ -28,7 +28,7 @@ import {
 import { CDSSService } from '../../shared/services/cdss-service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { LocalDataSource } from 'angular2-smart-table';
 
 @Component({
@@ -323,11 +323,11 @@ export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   changePage(val: any) {
     this.diseasess = [];
     this.indexArray = [];
-    if (val === 2) {
+    if (val === '2') {
       this.page3 = false;
       this.page2 = true;
     }
-    if (val === 1) {
+    if (val === '1') {
       this.page2 = false;
       this.page1 = true;
     }

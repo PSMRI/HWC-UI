@@ -1,5 +1,5 @@
 <app-header [showRoles]="false"></app-header>
-<div class="container" style="margin-top: 8%">
+<div class="container" style="margin-top: 8%; overflow: hidden">
   <section>
     <div class="col-md-12 col-sm-12 col-lg-12">
       <div class="row m-t-20 min-height: 240px">
@@ -13,25 +13,33 @@
               {{ this.fullName }}</span
             >
           </p>
-
-          <div class="note">
-            {{ currentLanguageSet?.clickonServiceToProceed }}
-          </div>
-          <li
-            tabindex="{0}"
-            class="width310px"
-            (click)="selectService(service)"
-            (keydown.enter)="selectService(true)"
-            (keyup.enter)="selectService(true)"
-          >
+          <br />
+          <p>
+            <span style="font-size: 18px; font-weight: 550">
+              AYUSHMAN AROGYA MANDIR
+            </span>
+          </p>
+          <li tabindex="0" class="width310px">
             <div style="margin-top: 30px">
-              <ul class="list-unstyled text-center p-t-15">
+              <ul class="list-unstyled p-t-15">
                 <li class="f-s-20">
                   <div class="p-l-15 line-height-65">
                     <img
-                      src="assets/images/TM.png"
-                      alt="HWC"
-                    />&nbsp;&nbsp;&nbsp; <br />HWC
+                      style="width: 160px; height: 140px; cursor: default"
+                      src="assets/images/AAM-Image.png"
+                      alt="AAM"
+                    />&nbsp;&nbsp;&nbsp; <br />
+                    <button
+                      id="resendButton"
+                      mat-raised-button
+                      type="button"
+                      style="margin-right: 20px"
+                      color="primary"
+                      class="mat_blue"
+                      (click)="selectService(service)"
+                    >
+                      {{ currentLanguageSet?.continueButton }}
+                    </button>
                   </div>
                 </li>
               </ul>

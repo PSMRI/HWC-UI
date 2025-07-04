@@ -2,7 +2,7 @@
   <div class="title info">
     <h4>{{ currentLanguageSet?.aBHACard }}</h4>
     <button
-      class="pull-right close-btn"
+      class="pull-right close-btn mat_icon_white"
       matTooltip="{{ currentLanguageSet?.common.close }}"
       matDialogClose
       (click)="closeDialog()"
@@ -23,7 +23,12 @@
   </div>
 
   <div class="row" class="image-container m-t-10">
-    <button mat-raised-button color="primary" (click)="downloadHealthIDCard()">
+    <button
+      class="mat_blue"
+      mat-raised-button
+      color="primary"
+      (click)="downloadHealthIDCard()"
+    >
       {{ currentLanguageSet?.coreComponents?.download }}
     </button>
   </div>

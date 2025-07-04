@@ -20,12 +20,17 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 export class CancerUtils {
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    readonly sessionstorage: SessionStorageService,
+  ) {}
 
   ngOnInIt() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
   }
 
   createCancerPatientFamilyMedicalHistoryForm() {
@@ -35,7 +40,8 @@ export class CancerUtils {
   }
 
   initDiseases(): FormGroup {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryRegID: null,
       benVisitID: null,
@@ -51,7 +57,8 @@ export class CancerUtils {
   }
 
   createCancerPatientPerosnalHistoryForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     return this.fb.group({
       beneficiaryRegID: null,
       benVisitID: null,
@@ -87,7 +94,8 @@ export class CancerUtils {
   }
 
   createCancerPatientObstetricHistoryForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,
@@ -127,7 +135,8 @@ export class CancerUtils {
   }
 
   createNurseCancerPatientVitalsForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       beneficiaryRegID: null,
@@ -167,7 +176,8 @@ export class CancerUtils {
   }
 
   createAbdominalExaminationForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       abdominalInspection_Normal: null,
@@ -189,7 +199,8 @@ export class CancerUtils {
   }
 
   createBreastExaminationForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       everBreastFed: null,
@@ -211,7 +222,8 @@ export class CancerUtils {
   }
 
   createGynecologicalExaminationForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       appearanceOfCervix: null,
@@ -231,7 +243,8 @@ export class CancerUtils {
   }
 
   createOralExaminationForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       limitedMouthOpening: null,
@@ -314,7 +327,8 @@ export class CancerUtils {
   ];
 
   createSignsForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       shortnessOfBreath: null,
@@ -346,7 +360,8 @@ export class CancerUtils {
   }
 
   createCancerReferForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       referredToInstituteID: null,
@@ -363,7 +378,8 @@ export class CancerUtils {
   }
 
   createCancerDiagnosisForm() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
       provisionalDiagnosisPrimaryDoctor: null,

@@ -38,9 +38,10 @@ import { ViewFileComponent } from './../view-file/view-file.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { IotcomponentComponent } from '../../core/component/iotcomponent/iotcomponent.component';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-workarea',
@@ -48,8 +49,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
   styleUrls: ['./workarea.component.css'],
 })
 export class WorkareaComponent
-  implements OnInit, CanComponentDeactivate, DoCheck
-{
+  implements OnInit, CanComponentDeactivate, DoCheck {
   @ViewChild('sidenav')
   sidenav: any;
 
@@ -96,13 +96,14 @@ export class WorkareaComponent
     private masterdataService: MasterDataService,
     public httpServiceService: HttpServiceService,
     private labService: LabService,
-  ) {}
+    readonly sessionstorage: SessionStorageService,
+  ) { }
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.visitID = localStorage.getItem('visitID');
-    this.visitCode = localStorage.getItem('visitCode');
-    this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
+    this.visitID = this.sessionstorage.getItem('visitID');
+    this.visitCode = this.sessionstorage.getItem('visitCode');
+    this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
     this.httpServiceService.currentLangugae$.subscribe(
       (response) => (this.currentLanguageSet = response),
     );
@@ -351,8 +352,8 @@ export class WorkareaComponent
         });
         this.confirmationService.alert(
           this.currentLanguageSet.alerts.info.valueDetails +
-            ' ' +
-            `${component.value.range_min} to ${component.value.range_max}`,
+          ' ' +
+          `${component.value.range_min} to ${component.value.range_max}`,
         );
       }
     }
@@ -438,10 +439,10 @@ export class WorkareaComponent
             console.log('File Size' + this.fileList[0].size / 1000 / 1000);
             this.confirmationService.alert(
               this.currentLanguageSet.fileSizeShouldNotExceed +
-                ' ' +
-                this.maxFileSize +
-                ' ' +
-                this.currentLanguageSet.mb,
+              ' ' +
+              this.maxFileSize +
+              ' ' +
+              this.currentLanguageSet.mb,
               'error',
             );
           } else if (this.file) {
@@ -501,12 +502,13 @@ export class WorkareaComponent
       fileName: this.file !== undefined ? this.file.name : '',
       fileExtension:
         this.file !== undefined ? '.' + this.file.name.split('.')[1] : '',
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      userID: localStorage.getItem('userID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      userID: this.sessionstorage.getItem('userID'),
       fileContent: fileContent !== undefined ? fileContent.split(',')[1] : '',
-      createdBy: localStorage.getItem('userName'),
-      vanID: JSON.parse(localStorage.getItem('serviceLineDetails') ?? '{}')
-        ?.vanID,
+      createdBy: this.sessionstorage.getItem('userName'),
+      vanID: JSON.parse(
+        this.sessionstorage.getItem('serviceLineDetails') ?? '{}',
+      )?.vanID,
       isUploaded: false,
     };
 
@@ -710,7 +712,30 @@ export class WorkareaComponent
           (res: any) => {
             if (res.data.statusCode === 200) {
               const fileContent = res.data.data.response;
-              location.href = fileContent;
+
+              // window.open(fileContent, '_blank');
+              const fileWindow = window.open('', '_blank');
+
+              if (fileWindow) {
+                fileWindow.document.write(`
+                   <html>
+                   <head>
+                   <title>File Preview</title>
+                   <style>
+                     body, html { margin: 0; padding: 0; height: 100%; }
+                     iframe { width: 100%; height: 100%; border: none; }
+                   </style>
+                   </head>
+                    <body>
+                  <iframe src="${fileContent}"></iframe>
+                  </body>
+                  </html>
+            `);
+
+              } else {
+                this.confirmationService.alert("Popup blocked. Please allow popups.", 'err');
+              }
+
             }
           },
           (err) => {
@@ -857,10 +882,10 @@ export class WorkareaComponent
       .confirm(
         'info',
         this.currentLanguageSet.alerts.info.confirmSubmit +
-          ' ' +
-          `${option}` +
-          ' ' +
-          this.currentLanguageSet.alerts.info.labObservation,
+        ' ' +
+        `${option}` +
+        ' ' +
+        this.currentLanguageSet.alerts.info.labObservation,
       )
       .subscribe(
         (res) => {
@@ -869,30 +894,31 @@ export class WorkareaComponent
               ...this.technicianForm.value,
             });
             techForm['labCompleted'] = labCompleted;
-            techForm['createdBy'] = localStorage.getItem('userName');
-            techForm['doctorFlag'] = localStorage.getItem('doctorFlag');
-            techForm['nurseFlag'] = localStorage.getItem('nurseFlag');
+            techForm['createdBy'] = this.sessionstorage.getItem('userName');
+            techForm['doctorFlag'] = this.sessionstorage.getItem('doctorFlag');
+            techForm['nurseFlag'] = this.sessionstorage.getItem('nurseFlag');
             techForm['beneficiaryRegID'] =
-              localStorage.getItem('beneficiaryRegID');
-            techForm['beneficiaryID'] = localStorage.getItem('beneficiaryID');
-            techForm['benFlowID'] = localStorage.getItem('benFlowID');
-            techForm['visitID'] = localStorage.getItem('visitID');
-            techForm['visitCode'] = localStorage.getItem('visitCode');
+              this.sessionstorage.getItem('beneficiaryRegID');
+            techForm['beneficiaryID'] =
+              this.sessionstorage.getItem('beneficiaryID');
+            techForm['benFlowID'] = this.sessionstorage.getItem('benFlowID');
+            techForm['visitID'] = this.sessionstorage.getItem('visitID');
+            techForm['visitCode'] = this.sessionstorage.getItem('visitCode');
             techForm['providerServiceMapID'] =
-              localStorage.getItem('providerServiceID');
+              this.sessionstorage.getItem('providerServiceID');
 
             if (
-              localStorage.getItem('specialist_flag') === 'null' ||
-              localStorage.getItem('specialist_flag') === ''
+              this.sessionstorage.getItem('specialist_flag') === 'null' ||
+              this.sessionstorage.getItem('specialist_flag') === ''
             ) {
               techForm['specialist_flag'] = null;
             } else {
               techForm['specialist_flag'] =
-                localStorage.getItem('specialist_flag');
+                this.sessionstorage.getItem('specialist_flag');
             }
 
             const serviceLineDetails: any =
-              localStorage.getItem('serviceLineDetails');
+              this.sessionstorage.getItem('serviceLineDetails');
             const servicePointDetails = JSON.parse(serviceLineDetails);
 
             techForm['vanID'] = servicePointDetails.vanID;
@@ -937,17 +963,17 @@ export class WorkareaComponent
                   this.currentLanguageSet.alerts.info.datafillSuccessfully,
                   'success',
                 );
-                localStorage.removeItem('doctorFlag');
-                localStorage.removeItem('nurseFlag');
-                localStorage.removeItem('visitID');
-                localStorage.removeItem('beneficiaryRegID');
-                localStorage.removeItem('beneficiaryID');
-                localStorage.removeItem('visitCategory');
-                localStorage.removeItem('visitReason');
-                localStorage.removeItem('benFlowID');
-                localStorage.removeItem('visitCode');
-                localStorage.removeItem('specialist_flag');
-                localStorage.removeItem('specialistFlag');
+                this.sessionstorage.removeItem('doctorFlag');
+                this.sessionstorage.removeItem('nurseFlag');
+                this.sessionstorage.removeItem('visitID');
+                this.sessionstorage.removeItem('beneficiaryRegID');
+                this.sessionstorage.removeItem('beneficiaryID');
+                this.sessionstorage.removeItem('visitCategory');
+                this.sessionstorage.removeItem('visitReason');
+                this.sessionstorage.removeItem('benFlowID');
+                this.sessionstorage.removeItem('visitCode');
+                this.sessionstorage.removeItem('specialist_flag');
+                this.sessionstorage.removeItem('specialistFlag');
                 this.technicianForm.reset();
                 this.router.navigate(['/lab/worklist']);
                 console.log('data input done', res);
@@ -957,7 +983,7 @@ export class WorkareaComponent
             });
           }
         },
-        (err) => {},
+        (err) => { },
       );
   }
   sideNavModeChange(sidenav: any) {

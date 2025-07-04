@@ -2,25 +2,31 @@
     margin:20px 5px 5px 5px;
     color: white; 
     float: left;
+    height: 35px;
   }
   .green button{
     background-color: green;
+    border: unset !important;
     margin:5px;
     color: white; 
     float: left;
   }
   .active {
     background-color: green;
+    border: unset !important;
   }
 
   .inactive {
-    background-color: rgba(31, 76, 226, 0.724);
+    background-color:rgba(31, 76, 226, 0.724);
+    border: unset !important;
   }
 .disableOnConfirmed {
-  background-color: grey;
+  background-color: #808080;
+  border: unset !important;
 }
   .btn-group button {
-    background-color: #C21F1F;
+    background-color: #ff5252;
+    border: unset !important;
     margin:5px;
     color: white;
     float: left; 
@@ -28,17 +34,27 @@
 
 
   .btn-stylConfirm button {
-    background-color: #C21F1F;
+    background-color: #ff5252;
+    border: unset !important;
     margin:5px;
     color: white;
     float: left;
+    height: 35px;
   }
   .btn-stylSuspect button {
     background-color: orange;
+    border: unset !important;
     margin:5px;
     color: white;
     float: left;
+    height: 35px;
   }
   .center-align{
     align-content: center;
   }
+
+.screen-section-padding{
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+}

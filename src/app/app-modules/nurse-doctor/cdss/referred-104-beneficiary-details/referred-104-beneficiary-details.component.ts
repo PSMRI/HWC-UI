@@ -28,8 +28,9 @@ import {
   ConfirmationService,
 } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-referred-104-beneficiary-details',
@@ -62,6 +63,7 @@ export class Referred104BeneficiaryDetailsComponent implements OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
     private registrarService: RegistrarService,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -83,7 +85,7 @@ export class Referred104BeneficiaryDetailsComponent implements OnInit, DoCheck {
     const reqObj = {
       beneficiaryRegID: null,
       beneficiaryName: null,
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
+      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       phoneNo: null,
       HealthID: null,
       HealthIDNumber: null,
@@ -107,7 +109,7 @@ export class Referred104BeneficiaryDetailsComponent implements OnInit, DoCheck {
         console.log(this.regDate);
       }
     });
-    const benFlowID: any = localStorage.getItem('beneficiaryRegID');
+    const benFlowID: any = this.sessionstorage.getItem('beneficiaryRegID');
 
     this.beneficiaryDetailsService
       .getBeneficiaryImage(benFlowID)

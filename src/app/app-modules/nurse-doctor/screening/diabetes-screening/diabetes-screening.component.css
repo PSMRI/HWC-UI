@@ -72,4 +72,21 @@ md-expansion-panel {
   .button-status-disabled[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
+    color: white;
+    background-color: #336CFB !important;
+  
+  }
+
+  .fontawesomesvg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -.125em;
+  }
+
+
+  .ng-tns-font{
+    font-weight: 600 !important;
+    font-family: SF-UI-Display-Regular, "Helvetica Neue", sans-serif;
+    font-size: 15px !important;
+    margin-bottom: -5px !important;
   }

@@ -43,8 +43,9 @@ import { ValidationUtils } from '../../../shared/utility/validation-utility';
 import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary-details.service';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-medication-history',
@@ -73,6 +74,7 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -100,7 +102,8 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
           if (String(this.mode) === 'view') {
             this.getGeneralHistory();
           }
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -216,7 +219,7 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousMedicationHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousMedicationHistory(benRegID, this.visitCategory)
       .subscribe(

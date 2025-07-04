@@ -50,26 +50,38 @@ ul li div {
 
 .marker-p-f-c {
   background: #336CFB;
+  margin-right: 5px !important;
+
 }
 
 .marker-p-f-t {
   background: #e44e4f;
+  margin-right: 5px !important;
+
 }
 
 .marker-t-d {
   background: #eaaa26;
+  margin-right: 5px !important;
+
 }
 
 .marker-c-d {
   background: #43760f;
+  margin-right: 5px !important;
+
 }
 
 .marker-p-f-t-c {
   background: #9933ff;
+  margin-right: 5px !important;
+
 }
 
 .marker-t-c-c {
   background: black;
+  margin-right: 5px !important;
+
 }
 
 .color-rows>td {
@@ -210,11 +222,19 @@ button[disabled].full-width-login-voice-chat {
 
 .full-width-refresh {
     width: 100%;
-    margin-top: 10px;
     margin-bottom: 10px;
     height: 35px;
     border-radius: 16px;
     font-size: 15px;
     font-weight: bold;
     max-width: 110px;
+}
+@media screen  and (min-width:360px) and (max-width:430px) {
+  .fit_to_content{
+    width: fit-content !important;
+
+  }
+  .mat_blue{
+    margin-top: 2px;
+  }
 }

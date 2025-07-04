@@ -1,14 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  Router,
-  RouteConfigLoadStart,
-  RouteConfigLoadEnd,
-  ResolveStart,
-  NavigationCancel,
-  NavigationStart,
-  NavigationEnd,
-  NavigationError,
-} from '@angular/router';
+import { Router } from '@angular/router';
 import { SpinnerService } from './app-modules/core/services/spinner.service';
 
 @Component({
@@ -17,7 +8,7 @@ import { SpinnerService } from './app-modules/core/services/spinner.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  title = 'HWC-Facility-App';
+  title = 'AAM-Facility-App';
 
   constructor(
     private router: Router,

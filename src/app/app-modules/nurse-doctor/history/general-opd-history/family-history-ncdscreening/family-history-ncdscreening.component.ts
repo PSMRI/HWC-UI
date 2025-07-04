@@ -36,8 +36,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services/beneficiary-details.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-family-history-ncdscreening',
@@ -81,6 +82,7 @@ export class FamilyHistoryNcdscreeningComponent
     private idrsscore: IdrsscoreService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private httpServices: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -124,7 +126,8 @@ export class FamilyHistoryNcdscreeningComponent
             this.getGeneralHistory();
           }
 
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
           if (
             specialistFlagString !== null &&
             parseInt(specialistFlagString) === 100
@@ -421,7 +424,7 @@ export class FamilyHistoryNcdscreeningComponent
   }
 
   getPreviousFamilyHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousFamilyHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -538,7 +541,7 @@ export class FamilyHistoryNcdscreeningComponent
       }
 
       console.log('score', IDRSScoreForFamilyMembes);
-      localStorage.setItem(
+      this.sessionstorage.setItem(
         'IdRSScoreFamilyHistory',
         IDRSScoreForFamilyMembes.toString(),
       );

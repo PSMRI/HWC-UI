@@ -40,7 +40,7 @@ import { environment } from 'src/environments/environment';
 import { RegistrarService } from '../shared/services/registrar.service';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FamilyTaggingService } from '../shared/services/familytagging.service';

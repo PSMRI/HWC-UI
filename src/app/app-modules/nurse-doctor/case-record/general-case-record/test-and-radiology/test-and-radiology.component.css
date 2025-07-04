@@ -14,3 +14,17 @@ embed{
     height:500px;
     width:100%;
 }
+
+table {
+    width: 100%;
+    border: 1px solid lightgray;
+  }
+
+  .mat-mdc-tab-body.mat-mdc-tab-body-active {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 1;
+    flex-grow: 1;
+    padding: 1px !important;
+}

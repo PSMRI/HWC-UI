@@ -50,28 +50,29 @@ import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { IotcomponentComponent } from '../../core/component/iotcomponent/iotcomponent.component';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { IotcomponentComponent } from '../../core/components/iotcomponent/iotcomponent.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 interface prescribe {
-  id: string;
-  drugID: string;
-  drugName: string;
-  drugStrength: string;
-  drugUnit: string;
-  quantity: string;
-  formID: string;
-  qtyPrescribed: string;
-  route: string;
-  formName: string;
-  dose: string;
-  frequency: string;
-  duration: string;
-  unit: string;
-  instructions: string;
-  sctCode: string;
-  sctTerm: string;
+  id: any;
+  drugID: any;
+  drugName: any;
+  drugStrength: any;
+  drugUnit: any;
+  quantity: any;
+  formID: any;
+  qtyPrescribed: any;
+  route: any;
+  formName: any;
+  dose: any;
+  frequency: any;
+  duration: any;
+  unit: any;
+  instructions: any;
+  sctCode: any;
+  sctTerm: any;
   isEDL: any;
 }
 
@@ -84,7 +85,7 @@ interface prescribe {
 export class QuickConsultComponent
   implements OnInit, OnDestroy, OnChanges, DoCheck
 {
-  utils = new QuickConsultUtils(this.fb);
+  utils = new QuickConsultUtils(this.fb, this.sessionstorage);
 
   @ViewChild('prescriptionForm')
   prescriptionForm!: NgForm;
@@ -103,24 +104,24 @@ export class QuickConsultComponent
   pageLimits: any = [];
   startRBSTest = environment.startRBSurl;
   currentPrescription: prescribe = {
-    id: '',
-    drugID: '',
-    drugName: '',
-    drugStrength: '',
-    drugUnit: '',
-    qtyPrescribed: '',
-    quantity: '',
-    route: '',
-    formID: '',
-    formName: '',
-    dose: '',
-    frequency: '',
-    duration: '',
-    unit: '',
-    instructions: '',
-    sctCode: '',
-    sctTerm: '',
-    isEDL: '',
+    id: null,
+    drugID: null,
+    drugName: null,
+    drugStrength: null,
+    drugUnit: null,
+    qtyPrescribed: null,
+    quantity: null,
+    route: null,
+    formID: null,
+    formName: null,
+    dose: null,
+    frequency: null,
+    duration: null,
+    unit: null,
+    instructions: null,
+    sctCode: null,
+    sctTerm: null,
+    isEDL: false,
   };
 
   tempDrugName: any;
@@ -164,9 +165,10 @@ export class QuickConsultComponent
   rbsTestResultSubscription!: Subscription;
   rbsTestResultCurrent: any;
 
-  displayedColumns: any = ['chiefcomplaint', 'ConceptID', 'description'];
+  displayedColumns: any = ['chiefcomplaint', 'description'];
 
   dataSource = new MatTableDataSource<any>();
+  suggestedDiagnosisList: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -179,6 +181,7 @@ export class QuickConsultComponent
     private dialog: MatDialog,
     private testInVitalsService: TestInVitalsService,
     private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -187,7 +190,7 @@ export class QuickConsultComponent
     this.nurseService.clearRbsSelectedInInvestigation();
     this.nurseService.clearRbsInVitals();
     this.assignSelectedLanguage();
-    this.designation = localStorage.getItem('designation');
+    this.designation = this.sessionstorage.getItem('designation');
     if (this.designation === 'TC Specialist') {
       this.patientQuickConsultForm.controls['instruction'].enable();
       this.specialist = true;
@@ -196,7 +199,7 @@ export class QuickConsultComponent
       this.specialist = false;
     }
 
-    this.createdBy = localStorage.getItem('userName');
+    this.createdBy = this.sessionstorage.getItem('userName');
     this.getPrescriptionForm();
     this.setLimits();
     this.makeDurationMaster();
@@ -446,24 +449,24 @@ export class QuickConsultComponent
 
   clearCurrentDetails() {
     this.currentPrescription = {
-      id: '',
-      drugID: '',
-      drugName: '',
-      drugStrength: '',
-      drugUnit: '',
-      quantity: '',
-      formID: '',
-      route: '',
-      qtyPrescribed: '',
-      formName: '',
-      dose: '',
-      frequency: '',
-      duration: '',
-      unit: '',
-      instructions: '',
-      sctCode: '',
-      sctTerm: '',
-      isEDL: '',
+      id: null,
+      drugID: null,
+      drugName: null,
+      drugStrength: null,
+      drugUnit: null,
+      quantity: null,
+      formID: null,
+      route: null,
+      qtyPrescribed: null,
+      formName: null,
+      dose: null,
+      frequency: null,
+      duration: null,
+      unit: null,
+      instructions: null,
+      sctCode: null,
+      sctTerm: null,
+      isEDL: false,
     };
     this.tempDrugName = null;
     this.prescriptionForm.form.markAsUntouched();
@@ -507,14 +510,19 @@ export class QuickConsultComponent
 
           this.loadVitalsFromNurse();
 
-          const specialistFlagString = localStorage.getItem('specialist_flag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialist_flag');
           if (String(this.quickConsultMode) === 'view') {
-            const beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-            const visitID = localStorage.getItem('visitID');
-            const visitCategory = localStorage.getItem('visitCategory');
+            const beneficiaryRegID =
+              this.sessionstorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const visitCategory = this.sessionstorage.getItem('visitCategory');
             if (
-              localStorage.getItem('referredVisitCode') === 'undefined' ||
-              localStorage.getItem('referredVisitCode') === null
+              this.sessionstorage.getItem('referredVisitCode') ===
+                'undefined' ||
+              this.sessionstorage.getItem('referredVisitCode') === undefined ||
+              this.sessionstorage.getItem('referredVisitCode') === null ||
+              this.sessionstorage.getItem('referredVisitCode') === ''
             ) {
               this.getDiagnosisDetails(
                 beneficiaryRegID,
@@ -529,14 +537,14 @@ export class QuickConsultComponent
                 beneficiaryRegID,
                 visitID,
                 visitCategory,
-                localStorage.getItem('visitCode'),
+                this.sessionstorage.getItem('visitCode'),
               );
             } else {
               this.getMMUDiagnosisDetails(
                 beneficiaryRegID,
-                localStorage.getItem('referredVisitID'),
+                this.sessionstorage.getItem('referredVisitID'),
                 visitCategory,
-                localStorage.getItem('referredVisitCode'),
+                this.sessionstorage.getItem('referredVisitCode'),
               );
             }
           }
@@ -563,18 +571,20 @@ export class QuickConsultComponent
     visitCategory: any,
     visitCode: any,
   ) {
-    this.MMUdiagnosisSubscription = this.doctorService
-      .getMMUCaseRecordAndReferDetails(
+    this.MMUdiagnosisSubscription =
+      this.doctorService.getMMUCaseRecordAndReferDetails(
         beneficiaryRegID,
         visitID,
         visitCategory,
         visitCode,
-      )
-      .subscribe((res: any) => {
+      );
+    if (this.MMUdiagnosisSubscription) {
+      this.MMUdiagnosisSubscription.subscribe((res: any) => {
         if (res && res.statusCode === 200 && res.data) {
           this.patchDiagnosisDetails(res.data);
         }
       });
+    }
   }
 
   filterInitialComplaints(element: any) {
@@ -776,8 +786,8 @@ export class QuickConsultComponent
   loadVitalsFromNurse() {
     this.getQuickConsultSubscription = this.doctorService
       .getGenericVitals({
-        benRegID: localStorage.getItem('beneficiaryRegID'),
-        benVisitID: localStorage.getItem('visitID'),
+        benRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+        benVisitID: this.sessionstorage.getItem('visitID'),
       })
       .subscribe((res) => {
         if (
@@ -1315,13 +1325,21 @@ export class QuickConsultComponent
       }
     }
   }
+
   checkProvisionalDiagnosisValidity(provisionalDiagnosis: any) {
-    const temp = provisionalDiagnosis.value;
-    if (temp.term && temp.conceptID) {
-      return false;
-    } else {
-      return true;
+    if (!provisionalDiagnosis || !provisionalDiagnosis.value) {
+      return true; // Disable if form group is missing
     }
+    const temp = provisionalDiagnosis.value;
+    const val = temp.viewProvisionalDiagnosisProvided;
+    // Enable Add if at least 3 chars are typed OR a valid object is selected
+    if (typeof val === 'string') {
+      return !(val && val.length >= 3);
+    }
+    if (val && typeof val === 'object' && val.term && val.conceptID) {
+      return false;
+    }
+    return true;
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
@@ -1339,5 +1357,35 @@ export class QuickConsultComponent
     } else {
       return true;
     }
+  }
+
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    const diagnosisFormArray = this.patientQuickConsultForm.get(
+      'provisionalDiagnosisList',
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { RegistrationUtils } from '../shared/utility/registration-utility';

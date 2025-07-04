@@ -40,6 +40,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MaterialModule } from '../core/material.module';
+import { SharedModule } from '../core/components/shared/shared.module';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { MaterialModule } from '../core/material.module';
     MatChipsModule,
     MatDatepickerModule,
     MatTooltipModule,
+    SharedModule,
   ],
   declarations: [
     DashboardComponent,

@@ -43,9 +43,10 @@ import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary
 import { MatDialog } from '@angular/material/dialog';
 import { RegistrarService } from 'src/app/app-modules/registrar/shared/services/registrar.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { ValidationUtils } from '../../../shared/utility/validation-utility';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-other-vaccines',
@@ -81,6 +82,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     private masterdataService: MasterdataService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -147,7 +149,8 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
             this.getGeneralHistory();
           }
 
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -329,7 +332,7 @@ export class OtherVaccinesComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   getPreviousOtherVaccineDetails() {
-    const benRegID = localStorage.getItem('beneficiaryRegID') || '{}';
+    const benRegID = this.sessionstorage.getItem('beneficiaryRegID') || '{}';
     this.nurseService
       .getPreviousOtherVaccines(benRegID, this.visitCategory)
       .subscribe(

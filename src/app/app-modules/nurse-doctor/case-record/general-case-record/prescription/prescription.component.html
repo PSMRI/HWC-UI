@@ -197,8 +197,8 @@
       class="col-md-3 box"
       *ngIf="
         currentPrescription.formID &&
-        currentPrescription.formID !== '1' &&
-        currentPrescription.formID !== '2'
+        currentPrescription.formID !== 1 &&
+        currentPrescription.formID !== 2
       "
     >
       <mat-form-field>
@@ -402,19 +402,19 @@
                   id="editMedicine"
                   (click)="editMedicine(j, drug.value.id)"
                   color="primary"
-                  class="mat_blue_circle"
+                  class="mat-add-btn"
                 >
-                  <span class="material-icons">edit</span>
+                  {{ current_language_set?.common?.edit }}
                 </button>
                 <button
-                  style="margin-left: 10px"
+                  style="margin-left: 10px; margin-top: 25px"
                   mat-mini-fab
                   id="deleteMedicine"
                   (click)="deleteMedicine(j, drug.value.id)"
                   color="warn"
-                  class="mat_warn_circle"
+                  class="mat-remove-btn"
                 >
-                  <span class="material-icons">close</span>
+                  {{ current_language_set?.common?.remove }}
                 </button>
               </div>
             </div>

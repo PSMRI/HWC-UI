@@ -30,7 +30,8 @@ import { MasterdataService } from '../../shared/services/masterdata.service';
 import { CdssFormResultPopupComponent } from '../cdss-form-result-popup/cdss-form-result-popup.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-cdss-104-form',
@@ -67,6 +68,7 @@ export class Cdss104FormComponent implements OnInit, DoCheck {
     private confirmationService: ConfirmationService,
     private dialog: MatDialog,
     private masterdataService: MasterdataService,
+    readonly sessionstorage: SessionStorageService,
     private router: Router,
   ) {}
 
@@ -122,8 +124,9 @@ export class Cdss104FormComponent implements OnInit, DoCheck {
 
   getChiefComplaintSymptoms() {
     const reqObj = {
-      age: localStorage.getItem('patientAge'),
-      gender: localStorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
+      age: this.sessionstorage.getItem('patientAge'),
+      gender:
+        this.sessionstorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
     };
 
     this.cdssService.getcheifComplaintSymptoms(reqObj).subscribe((res: any) => {
@@ -145,9 +148,11 @@ export class Cdss104FormComponent implements OnInit, DoCheck {
       searchSymptom !== ''
     ) {
       const reqObj = {
-        age: localStorage.getItem('patientAge'),
+        age: this.sessionstorage.getItem('patientAge'),
         gender:
-          localStorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
+          this.sessionstorage.getItem('beneficiaryGender') === 'Male'
+            ? 'M'
+            : 'F',
         symptom: searchSymptom,
       };
       this.cdssService.getCdssQuestions(reqObj).subscribe((res: any) => {
@@ -185,9 +190,11 @@ export class Cdss104FormComponent implements OnInit, DoCheck {
       disableClose: true,
       data: {
         patientData: {
-          age: localStorage.getItem('patientAge'),
+          age: this.sessionstorage.getItem('patientAge'),
           gender:
-            localStorage.getItem('beneficiaryGender') === 'Male' ? 'M' : 'F',
+            this.sessionstorage.getItem('beneficiaryGender') === 'Male'
+              ? 'M'
+              : 'F',
           symptom: searchSymptom,
         },
       },
@@ -281,21 +288,22 @@ export class Cdss104FormComponent implements OnInit, DoCheck {
   }
 
   saveData() {
-    const patientAge: any = localStorage.getItem('patientAge');
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const patientAge: any = this.sessionstorage.getItem('patientAge');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const reqObj = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
-      beneficiaryID: localStorage.getItem('beneficiaryID'),
-      patientName: localStorage.getItem('patientName'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
+      beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
+      patientName: this.sessionstorage.getItem('patientName'),
       patientAge: patientAge,
       patientGenderID:
-        localStorage.getItem('beneficiaryGender') === 'Male' ? 1 : 2,
-      sessionID: localStorage.getItem('sessionID'),
-      serviceID: localStorage.getItem('serviceID'),
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      createdBy: localStorage.getItem('userName'),
+        this.sessionstorage.getItem('beneficiaryGender') === 'Male' ? 1 : 2,
+      sessionID: this.sessionstorage.getItem('sessionID'),
+      serviceID: this.sessionstorage.getItem('serviceID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      createdBy: this.sessionstorage.getItem('userName'),
       vanID: JSON.parse(serviceLineDetails).vanID,
-      benCallID: localStorage.getItem('benCallID'),
+      benCallID: this.sessionstorage.getItem('benCallID'),
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       selecteDiagnosisID: this.sctID_psd_toSave,
       selecteDiagnosis:

@@ -1,9 +1,9 @@
 h5 {
-    font-weight: bold;
+    font-weight: bold !important;
 }
 
 .mat-expansion-panel-header {
-    padding: 0 15px;
+    padding: 0 15px !important;
 }
 
 .abnormal {
@@ -84,4 +84,10 @@ legend {
 
 .tabcolor {
   background: #E1EAFF !important;
+}
+
+.fontawesomesvg {
+  width: 1em;
+  height: 1em;
+  vertical-align: -.125em;
 }

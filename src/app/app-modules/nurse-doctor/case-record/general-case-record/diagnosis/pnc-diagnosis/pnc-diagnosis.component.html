@@ -193,7 +193,7 @@
           </mat-radio-group>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+      <!-- <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
         <header class="mat-expansion-panel-header tabcolor">
           <h4>
             {{ current_language_set?.DiagnosisDetails?.specialistdignosis }}
@@ -213,7 +213,7 @@
           >
           </textarea>
         </mat-form-field>
-      </div>
+      </div> -->
     </div>
 
     <div class="row" *ngIf="isMaternalDeath">
@@ -265,7 +265,6 @@
             formControlName="dateOfDeath"
             [min]="minimumDeathDate"
           />
-          <mat-hint>MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"

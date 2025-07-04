@@ -266,26 +266,30 @@
   </div>
 
   <div class="col-xs-12 m-t-5">
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 box m-t-15 pull-left">
-      <button mat-raised-button color="primary" (click)="getHRPStatus()">
+    <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 box m-t-15 pull-left">
+      <button
+        mat-raised-button
+        color="primary"
+        class="mat_blue"
+        (click)="getHRPStatus()"
+      >
         {{ current_language_set?.checkHrpStatus }}
       </button>
-    </div>
-
-    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 m-t-5 pull-right">
       <div class="btn-group" *ngFor="let value of fetosenseTestMaster">
         <button
           mat-raised-button
           color="primary"
           [id]="value.foetalMonitorTestId"
-          class="button-overall-disabled"
+          class="button-overall-disabled mat_blue"
           [disabled]="checkTestPrescribed(value.foetalMonitorTestId)"
           (click)="sendTestDetails(value.foetalMonitorTestId, value.testName)"
         >
           {{ value.testName }}
         </button>
       </div>
+    </div>
 
+    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 m-t-5 pull-right">
       <div *ngFor="let value of fetosenseTestMaster">
         <p style="text-align: left; color: green">
           <strong>{{

@@ -4,7 +4,8 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { TelemedicineService } from 'src/app/app-modules/core/services/telemedicine.service';
 import { ServicePointService } from './../service-point/service-point.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -21,7 +22,9 @@ export class ServiceComponent implements OnInit, DoCheck {
   vanServicepointDetails: any;
   vansList = [];
   vanID!: string;
+  currVanId: any;
   serviceDetails: any;
+  stateName: any;
 
   constructor(
     private router: Router,
@@ -30,20 +33,37 @@ export class ServiceComponent implements OnInit, DoCheck {
     private servicePointService: ServicePointService,
     private confirmationService: ConfirmationService,
     public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    localStorage.removeItem('providerServiceID');
-    const services: any = localStorage.getItem('services');
+    // this.sessionstorage.removeItem('providerServiceID');
+    const services: any = this.sessionstorage.getItem('services');
     this.servicesList = JSON.parse(services);
-    this.fullName = localStorage.getItem('fullName');
+    if (this.servicesList.length === 1) {
+      this.sessionstorage.setItem(
+        'providerServiceID',
+        this.servicesList[0].providerServiceID,
+      );
+      this.sessionstorage.setItem(
+        'serviceName',
+        this.servicesList[0].serviceName,
+      );
+      this.sessionstorage.setItem('serviceID', this.servicesList[0].serviceID);
+      sessionStorage.setItem(
+        'apimanClientKey',
+        this.servicesList[0].apimanClientKey,
+      );
+    }
+    this.fullName = this.sessionstorage.getItem('fullName');
   }
 
   getServicePoint() {
-    const serviceProviderId: any = localStorage.getItem('providerServiceID');
-    const userId: any = localStorage.getItem('userID');
-    const data: any = localStorage.getItem('loginDataResponse');
+    const serviceProviderId: any =
+      this.sessionstorage.getItem('providerServiceID');
+    const userId: any = this.sessionstorage.getItem('userID');
+    const data: any = this.sessionstorage.getItem('loginDataResponse');
     const jsonData = JSON.parse(data);
     const designation = jsonData.designation.designationName;
     this.servicePointService
@@ -56,6 +76,7 @@ export class ServiceComponent implements OnInit, DoCheck {
 
             if (data.UserVanSpDetails && data.UserVanSpDetails.length > 0) {
               this.vanServicepointDetails = data.UserVanSpDetails;
+              this.currVanId = this.vanServicepointDetails[0].vanID;
               this.filterVanList(this.vanServicepointDetails);
               this.getDemographics();
               this.checkRoleAndDesingnationMappedForservice(
@@ -97,7 +118,7 @@ export class ServiceComponent implements OnInit, DoCheck {
   getServiceLineDetails() {
     const serviceLineDetails: any = this.vansList[0];
     console.log('serviceLineDetails', serviceLineDetails);
-    localStorage.setItem(
+    this.sessionstorage.setItem(
       'serviceLineDetails',
       JSON.stringify(serviceLineDetails),
     );
@@ -106,16 +127,19 @@ export class ServiceComponent implements OnInit, DoCheck {
       serviceLineDetails.facilityID !== undefined &&
       serviceLineDetails.facilityID !== null
     )
-      sessionStorage.setItem('facilityID', serviceLineDetails.facilityID);
+      this.sessionstorage.setItem('facilityID', serviceLineDetails.facilityID);
     if (serviceLineDetails.servicePointID)
-      localStorage.setItem('servicePointID', serviceLineDetails.servicePointID);
+      this.sessionstorage.setItem(
+        'servicePointID',
+        serviceLineDetails.servicePointID,
+      );
     if (serviceLineDetails.servicePointName)
-      localStorage.setItem(
+      this.sessionstorage.setItem(
         'servicePointName',
         serviceLineDetails.servicePointName,
       );
     if (serviceLineDetails.vanSession)
-      localStorage.setItem('sessionID', serviceLineDetails.vanSession);
+      this.sessionstorage.setItem('sessionID', serviceLineDetails.vanSession);
   }
 
   loginDataResponse: any;
@@ -129,17 +153,126 @@ export class ServiceComponent implements OnInit, DoCheck {
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
 
-  selectService(service: any) {
-    localStorage.setItem('providerServiceID', service.providerServiceID);
-    console.log(localStorage.getItem('provideServiceID'));
-    localStorage.setItem('serviceName', service.serviceName);
-    localStorage.setItem('serviceID', service.serviceID);
-    sessionStorage.setItem('apimanClientKey', service.apimanClientKey);
-    const loginDataResponse: any = localStorage.getItem('loginDataResponse');
-    this.loginDataResponse = JSON.parse(loginDataResponse);
-    this.serviceDetails = service;
-    this.getServicePoint();
-    this.getCdssAdminStatus();
+  async selectService(service: any) {
+    try {
+      this.sessionstorage.setItem(
+        'providerServiceID',
+        service.providerServiceID,
+      );
+      this.sessionstorage.setItem('serviceName', service.serviceName);
+      this.sessionstorage.setItem('serviceID', service.serviceID);
+      sessionStorage.setItem('apimanClientKey', service.apimanClientKey);
+      const loginDataResponse: any =
+        this.sessionstorage.getItem('loginDataResponse');
+      this.loginDataResponse = JSON.parse(loginDataResponse);
+      this.serviceDetails = service;
+      // Wait until this completes before proceeding
+      await this.getServicePointAsync();
+      this.getCdssAdminStatus();
+    } catch (err) {
+      this.confirmationService.alert(
+        'An error occurred. Please try again.',
+        'error',
+      );
+      console.error(err);
+    }
+  }
+  getServicePointAsync(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const serviceProviderId: any =
+        this.sessionstorage.getItem('providerServiceID');
+      const userId: any = this.sessionstorage.getItem('userID');
+      const loginData = this.sessionstorage.getItem('loginDataResponse');
+      const parsedLoginData = JSON.parse(loginData);
+      const designation = parsedLoginData.designation?.designationName;
+      this.servicePointService
+        .getServicePoints(userId, serviceProviderId)
+        .subscribe({
+          next: async (res: any) => {
+            if (res.statusCode === 200 && res.data) {
+              const data = res.data;
+              if (data.UserVanSpDetails?.length > 0) {
+                this.vanServicepointDetails = data.UserVanSpDetails;
+                this.currVanId = this.vanServicepointDetails[0].vanID;
+                this.filterVanList(this.vanServicepointDetails);
+                this.getDemographics();
+                await this.handleRoleDesignationRouting(); // wait until navigation is done
+                resolve();
+              } else if (designation === 'TC Specialist') {
+                await this.handleRoleDesignationRouting();
+                resolve();
+              } else {
+                this.confirmationService.alert(
+                  'Service points not found.',
+                  'error',
+                );
+                this.router.navigate(['/service']);
+                reject();
+              }
+            } else {
+              this.confirmationService.alert(res.errorMessage, 'error');
+              this.router.navigate(['/service']);
+              reject();
+            }
+          },
+          error: (err) => {
+            this.confirmationService.alert(err, 'error');
+            reject(err);
+          },
+        });
+    });
+  }
+
+  async handleRoleDesignationRouting(): Promise<void> {
+    const loginDataResponse = this.loginDataResponse;
+
+    const service = this.serviceDetails;
+
+    let serviceData: any;
+
+    if (loginDataResponse.previlegeObj) {
+      serviceData = loginDataResponse.previlegeObj.find(
+        (item: any) => item.serviceName === service.serviceName,
+      );
+
+      if (serviceData?.roles?.length > 0) {
+        this.roleArray = [];
+
+        serviceData.roles.forEach((role: any) => {
+          role.serviceRoleScreenMappings.forEach((serviceRole: any) => {
+            this.roleArray.push(serviceRole.screen.screenName);
+          });
+        });
+
+        this.sessionstorage.setItem('role', JSON.stringify(this.roleArray));
+
+        const designation = loginDataResponse.designation?.designationName;
+
+        if (designation && this.roleArray.includes(designation)) {
+          this.sessionstorage.setItem('designation', designation);
+
+          await this.routeToDesignation(designation);
+        } else {
+          this.confirmationService.alert(
+            this.currentLanguageSet.alerts.info.rolesNotMatched,
+
+            'error',
+          );
+        }
+      } else {
+        this.confirmationService.alert(
+          this.currentLanguageSet.alerts.info.mapRoleFeature,
+
+          'error',
+        );
+      }
+    } else {
+      this.confirmationService.alert(
+        this.currentLanguageSet.alerts.info.mapRoleFeature,
+
+        'error',
+      );
+    }
   }
 
   checkRoleAndDesingnationMappedForservice(
@@ -172,7 +305,7 @@ export class ServiceComponent implements OnInit, DoCheck {
           });
         });
         if (this.roleArray && this.roleArray.length > 0) {
-          localStorage.setItem('role', JSON.stringify(this.roleArray));
+          this.sessionstorage.setItem('role', JSON.stringify(this.roleArray));
           this.checkMappedDesignation(this.loginDataResponse);
         } else {
           this.confirmationService.alert(
@@ -219,7 +352,7 @@ export class ServiceComponent implements OnInit, DoCheck {
 
   checkDesignationWithRole() {
     if (this.roleArray.includes(this.designation)) {
-      localStorage.setItem('designation', this.designation);
+      this.sessionstorage.setItem('designation', this.designation);
       this.routeToDesignation(this.designation);
     } else {
       this.confirmationService.alert(
@@ -235,19 +368,21 @@ export class ServiceComponent implements OnInit, DoCheck {
   }
 
   getDemographics() {
-    this.servicePointService.getMMUDemographics().subscribe((res: any) => {
-      if (res && res.statusCode === 200) {
-        this.saveDemographicsToStorage(res.data);
-      } else {
-        this.locationGathetingIssues();
-      }
-    });
+    this.servicePointService
+      .getMMUDemographics(this.currVanId)
+      .subscribe((res: any) => {
+        if (res && res.statusCode === 200) {
+          this.saveDemographicsToStorage(res.data);
+        } else {
+          this.locationGathetingIssues();
+        }
+      });
   }
 
   saveDemographicsToStorage(data: any) {
     if (data) {
       if (data.stateMaster && data.stateMaster.length >= 1) {
-        localStorage.setItem('location', JSON.stringify(data));
+        this.sessionstorage.setItem('location', JSON.stringify(data));
       } else {
         this.locationGathetingIssues();
       }
@@ -257,9 +392,13 @@ export class ServiceComponent implements OnInit, DoCheck {
 
     console.log('statesList', this.statesList);
     this.stateID = data.stateMaster.stateID;
+    this.saveLocationDataToStorage();
   }
 
   locationGathetingIssues() {
+    const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
+    getLanguageJson.setLanguage();
+    this.current_language_set = getLanguageJson.currentLanguageObject;
     this.confirmationService.alert(
       this.current_language_set.coreComponents
         .issuesInGettingLocationTryToReLogin,
@@ -267,55 +406,47 @@ export class ServiceComponent implements OnInit, DoCheck {
     );
   }
   goToWorkList() {
-    this.designation = localStorage.getItem('designation');
+    this.designation = this.sessionstorage.getItem('designation');
     this.routeToDesignationWorklist(this.designation);
   }
 
-  routeToDesignationWorklist(designation: any) {
+  routeToDesignationWorklist(designation: any): Promise<boolean> {
     switch (designation) {
       case 'Registrar':
-        this.router.navigate(['/registrar/registration']);
-        break;
+        return this.router.navigate(['/registrar/registration']);
       case 'Nurse':
-        this.router.navigate(['/nurse-doctor/nurse-worklist']);
-        break;
+        return this.router.navigate(['/nurse-doctor/nurse-worklist']);
       case 'Doctor':
-        this.router.navigate(['/nurse-doctor/doctor-worklist']);
-        break;
+        return this.router.navigate(['/nurse-doctor/doctor-worklist']);
       case 'Lab Technician':
-        this.router.navigate(['/lab']);
-        break;
+        return this.router.navigate(['/lab']);
       case 'Pharmacist':
-        this.router.navigate(['/pharmacist']);
-        break;
+        return this.router.navigate(['/pharmacist']);
       case 'Radiologist':
-        this.router.navigate(['/nurse-doctor/radiologist-worklist']);
-        break;
+        return this.router.navigate(['/nurse-doctor/radiologist-worklist']);
       case 'Oncologist':
-        this.router.navigate(['/nurse-doctor/oncologist-worklist']);
-        break;
+        return this.router.navigate(['/nurse-doctor/oncologist-worklist']);
       default:
+        return Promise.resolve(false);
     }
   }
 
-  routeToDesignation(designation: any) {
+  routeToDesignation(designation: any): Promise<boolean> {
     switch (designation) {
       case 'TC Specialist':
-        this.router.navigate(['/nurse-doctor/tcspecialist-worklist']);
-        break;
+        return this.router.navigate(['/nurse-doctor/tcspecialist-worklist']);
       case 'Supervisor':
-        this.telemedicineService.routeToTeleMedecine();
-        break;
+        this.telemedicineService.routeToTeleMedecine(); // if this is a navigation, make it return a Promise too
+        return Promise.resolve(true);
       default:
-        this.router.navigate(['/servicePoint']);
-        this.goToWorkList();
-        break;
+        return this.routeToDesignationWorklist(designation);
     }
   }
 
-  getCdssAdminStatus() {
-    const psmid = localStorage.getItem('providerServiceID');
-    this.servicePointService
+  async getCdssAdminStatus() {
+    const psmid = this.sessionstorage.getItem('providerServiceID');
+    // if(psmid){
+    await this.servicePointService
       .getCdssAdminDetails(psmid)
       .subscribe((res: any) => {
         if (
@@ -324,8 +455,35 @@ export class ServiceComponent implements OnInit, DoCheck {
           res.data.isCdss !== undefined &&
           res.data.isCdss !== null
         ) {
-          localStorage.setItem('isCdss', res.data.isCdss);
+          this.sessionstorage.setItem('isCdss', res.data.isCdss);
         }
       });
+    // }
+  }
+
+  saveLocationDataToStorage() {
+    setTimeout(() => {
+      const location: any = this.sessionstorage.getItem('location');
+      const data = JSON.parse(location);
+      this.stateName = data.stateMaster.find((item: any) => {
+        if (item.stateID === data.otherLoc.stateID) return item.stateName;
+      });
+      const locationData = {
+        stateID: data.otherLoc.stateID,
+        stateName: this.stateName.stateName,
+        districtID: data.otherLoc.districtList[0].districtID,
+        districtName: data.otherLoc.districtList[0].districtName,
+        blockName: data.otherLoc.districtList[0].blockName,
+        blockID: data.otherLoc.districtList[0].blockId,
+        subDistrictID: data.otherLoc.districtList[0].districtBranchID,
+        villageName: data.otherLoc.districtList[0].villageName,
+      };
+
+      // Convert the object into a JSON string
+      const locationDataJSON = JSON.stringify(locationData);
+
+      // Store the JSON string in this.sessionstorage
+      this.sessionstorage.setItem('locationData', locationDataJSON);
+    }, 1000);
   }
 }

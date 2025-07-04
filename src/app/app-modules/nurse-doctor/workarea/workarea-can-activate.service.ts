@@ -21,24 +21,25 @@
  */
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Injectable()
 export class WorkareaCanActivate implements CanActivate {
-  constructor() {}
+  constructor(readonly sessionstorage: SessionStorageService) {}
 
   canActivate() {
-    const visitCategory = localStorage.getItem('visitCategory');
+    const visitCategory = this.sessionstorage.getItem('visitCategory');
     if (visitCategory) {
       if (
         !(
-          localStorage.getItem('visitCode') &&
-          localStorage.getItem('beneficiaryGender') &&
-          localStorage.getItem('benFlowID') &&
-          localStorage.getItem('visitCategory') &&
-          localStorage.getItem('beneficiaryRegID') &&
-          localStorage.getItem('visitID') &&
-          localStorage.getItem('beneficiaryID') &&
-          localStorage.getItem('nurseFlag')
+          this.sessionstorage.getItem('visitCode') &&
+          this.sessionstorage.getItem('beneficiaryGender') &&
+          this.sessionstorage.getItem('benFlowID') &&
+          this.sessionstorage.getItem('visitCategory') &&
+          this.sessionstorage.getItem('beneficiaryRegID') &&
+          this.sessionstorage.getItem('visitID') &&
+          this.sessionstorage.getItem('beneficiaryID') &&
+          this.sessionstorage.getItem('nurseFlag')
         )
       ) {
         return false;
@@ -48,10 +49,10 @@ export class WorkareaCanActivate implements CanActivate {
     } else {
       if (
         !(
-          localStorage.getItem('beneficiaryGender') &&
-          localStorage.getItem('beneficiaryRegID') &&
-          localStorage.getItem('beneficiaryID') &&
-          localStorage.getItem('benFlowID')
+          this.sessionstorage.getItem('beneficiaryGender') &&
+          this.sessionstorage.getItem('beneficiaryRegID') &&
+          this.sessionstorage.getItem('beneficiaryID') &&
+          this.sessionstorage.getItem('benFlowID')
         )
       ) {
         return false;

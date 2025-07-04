@@ -26,7 +26,6 @@
               currentLanguageSet?.ro?.locInfo?.state
             }}</mat-label>
             <mat-select
-              [style.width]="'150%'"
               formControlName="stateID"
               [required]="true"
               (selectionChange)="onStateChange()"
@@ -49,7 +48,6 @@
               currentLanguageSet?.ro?.locInfo?.district_Town_City
             }}</mat-label>
             <mat-select
-              [style.width]="'150%'"
               [required]="true"
               formControlName="districtID"
               [disabled]="disableDistrict"
@@ -72,7 +70,6 @@
               currentLanguageSet?.ro?.locInfo?.taluk
             }}</mat-label>
             <mat-select
-              [style.width]="'150%'"
               [required]="true"
               formControlName="blockID"
               [disabled]="disableSubDistrict"
@@ -95,7 +92,6 @@
               currentLanguageSet?.ro?.locInfo?.street
             }}</mat-label>
             <mat-select
-              [style.width]="'150%'"
               [required]="true"
               formControlName="villageID"
               [disabled]="patientRevisit && disableSubDistrict"

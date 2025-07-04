@@ -34,7 +34,8 @@ import { DataSyncUtils } from '../shared/utility/data-sync-utility';
 import { CanComponentDeactivate } from '../../core/services/can-deactivate-guard.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-workarea',
@@ -55,6 +56,7 @@ export class WorkareaComponent
     private dataSyncService: DataSyncService,
     private fb: FormBuilder,
     private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   syncTableGroupList: any = [];
@@ -63,8 +65,8 @@ export class WorkareaComponent
   ngOnInit() {
     this.assignSelectedLanguage();
     if (
-      localStorage.getItem('serverKey') !== null ||
-      localStorage.getItem('serverKey') !== undefined
+      this.sessionstorage.getItem('serverKey') !== null ||
+      this.sessionstorage.getItem('serverKey') !== undefined
     ) {
       this.getDataSYNCGroup();
     } else {
@@ -82,7 +84,7 @@ export class WorkareaComponent
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
   ngOnDestroy() {
-    localStorage.removeItem('serverKey');
+    this.sessionstorage.removeItem('serverKey');
   }
 
   getDataSYNCGroup() {
@@ -199,11 +201,11 @@ export class WorkareaComponent
       .subscribe((result) => {
         if (result) {
           const serviceLineDetails: any =
-            localStorage.getItem('serviceLineDetails');
+            this.sessionstorage.getItem('serviceLineDetails');
           const vanID = JSON.parse(serviceLineDetails).vanID;
           const reqObj = {
             vanID: vanID,
-            providerServiceMapID: localStorage.getItem(
+            providerServiceMapID: this.sessionstorage.getItem(
               'dataSyncProviderServiceMapID',
             ),
           };

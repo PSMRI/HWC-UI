@@ -3,11 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.iemr.hwc-ui-next</groupId>
-	<artifactId>HWC-UI-NEXT</artifactId>
-	<version>1.0</version>
-	<name>HWC-UI-NEXT</name>
-	<description>Piramal - HWC: Module ui</description>
+	<groupId>com.iemr.aam-ui</groupId>
+	<artifactId>aam-ui</artifactId>
+	<version>3.1.0</version>
+	<name>AAM-UI</name>
+	<description>Piramal - AAM: Module ui</description>
 	<packaging>war</packaging>
 	<profiles>
 		<profile>
@@ -56,7 +56,7 @@
 	<!-- we could create individual properties similar to variables -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<final-name>hwc-app-facility</final-name>
+		<final-name>aam-app-facility</final-name>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
     <environment>${ENV_VAR}</environment>
@@ -75,7 +75,7 @@
 
 	<!-- install the necessary node_modules & compile in prod mode -->
 	<build>
-		<finalName>hwc-ui-next</finalName>
+		<finalName>${artifactId}-${version}</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>

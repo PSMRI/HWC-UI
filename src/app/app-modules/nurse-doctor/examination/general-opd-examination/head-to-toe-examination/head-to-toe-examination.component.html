@@ -1,10 +1,15 @@
 <div class="row m-t-20" [formGroup]="headToToeExaminationForm">
   <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 box">
     <div class="form-group">
-      <label class="control-label" for="headToToeExamination">{{
-        current_language_set?.ExaminationData?.ANC_OPD_PNCExamination?.headToToe
-          ?.headexamination
-      }}</label>
+      <label
+        class="control-label"
+        style="padding-top: 10px"
+        for="headToToeExamination"
+        >{{
+          current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
+            ?.headToToe?.headexamination
+        }}</label
+      >
       <div class="clearfix"></div>
       <mat-radio-group
         id="headtoToeExam"

@@ -44,8 +44,9 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { VisitDetailUtils } from '../../shared/utility/visit-detail-utility';
 import { Observable } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-chief-complaints',
@@ -76,8 +77,6 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   visitComplaintDet: any;
   ncdTemperature = false;
   enableProvisionalDiag = false;
-  chiefComplaint: any;
-  duration: any;
   dataSource = new MatTableDataSource<any>();
   displayedColumns: any = [
     'chiefComplaint',
@@ -94,14 +93,15 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
+    readonly sessionstorage: SessionStorageService,
   ) {
-    this.formUtility = new VisitDetailUtils(this.fb);
+    this.formUtility = new VisitDetailUtils(this.fb, this.sessionstorage);
   }
 
   ngOnInit() {
     this.ncdTemperature = false;
     this.assignSelectedLanguage();
-    const specialistFlagString = localStorage.getItem('specialistFlag');
+    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
 
     if (
       specialistFlagString !== null &&
@@ -128,7 +128,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   onInputDuration(complaintForm: AbstractControl) {
-    if (this.duration) {
+    if (complaintForm.value.duration) {
       complaintForm.get('unitOfDuration')?.enable();
     } else {
       complaintForm.get('unitOfDuration')?.disable();
@@ -151,8 +151,8 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             this.chiefComplaintMaster.slice();
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getChiefComplaints(benRegID, visitID);
           }
         }
@@ -170,19 +170,20 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             this.chiefComplaintMaster.slice();
 
           if (String(this.mode) === 'view') {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getChiefComplaints(benRegID, visitID);
           }
 
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
             parseInt(specialistFlagString) === 100
           ) {
-            const visitID = localStorage.getItem('visitID');
-            const benRegID = localStorage.getItem('beneficiaryRegID');
+            const visitID = this.sessionstorage.getItem('visitID');
+            const benRegID = this.sessionstorage.getItem('beneficiaryRegID');
             this.getMMUChiefComplaints(benRegID, visitID);
           }
         }
@@ -498,7 +499,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             .toLowerCase()
             .indexOf(complaint.toLowerCase().trim()) >= 0,
       );
-      if (this.chiefComplaint) {
+      if (complaint) {
         complaintForm.get('duration')?.enable();
         complaintForm.get('description')?.enable();
       }
@@ -518,7 +519,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
             .toLowerCase()
             .indexOf(complaint.chiefComplaint.toLowerCase().trim()) >= 0,
       );
-      if (this.chiefComplaint) {
+      if (complaint) {
         complaintForm.get('duration')?.enable();
         complaintForm.get('description')?.enable();
       }
@@ -535,7 +536,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   reEnterChiefComplaint(complaintForm: AbstractControl) {
-    if (this.chiefComplaint) {
+    if (complaintForm.value.chiefComplaint) {
       complaintForm.get('duration')?.enable();
       complaintForm.get('description')?.enable();
     } else {

@@ -23,7 +23,7 @@ import { Component, DoCheck, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from './../../core/services/confirmation.service';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 
 @Component({
   selector: 'app-redir-in',

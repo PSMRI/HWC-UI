@@ -26,10 +26,11 @@ import { Router } from '@angular/router';
 import * as CryptoJS from 'crypto-js';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { DataSyncService } from '../shared/service/data-sync.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-data-sync-login',
@@ -63,6 +64,7 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,
+    readonly sessionstorage: SessionStorageService,
   ) {
     this._keySize = 256;
     this._ivSize = 128;
@@ -163,11 +165,11 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
                   mmuService.length > 0
                 ) {
                   this.showProgressBar = false;
-                  localStorage.setItem('serverKey', res.data.key);
+                  this.sessionstorage.setItem('serverKey', res.data.key);
                   this.getDataSyncMMU(res);
                 } else {
                   this.showProgressBar = false;
-                  localStorage.removeItem('serverKey');
+                  this.sessionstorage.removeItem('serverKey');
                   this.confirmationService.alert(
                     "User doesn't have previlege to perform this activity. Please contact administrator.",
                   );
@@ -202,7 +204,7 @@ export class DataSyncLoginComponent implements OnInit, DoCheck {
       const mmuService = res.data.previlegeObj.filter((item: any) => {
         return item.serviceName === 'MMU';
       });
-      localStorage.setItem(
+      this.sessionstorage.setItem(
         'dataSyncProviderServiceMapID',
         mmuService[0].providerServiceMapID,
       );

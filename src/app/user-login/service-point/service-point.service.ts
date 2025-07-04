@@ -26,6 +26,7 @@ import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +35,7 @@ export class ServicePointService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   getServicePoints(userId: string, serviceProviderId: string) {
@@ -43,19 +45,30 @@ export class ServicePointService {
     });
   }
 
-  getMMUDemographics() {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
-    const spPSMID = localStorage.getItem('providerServiceID');
+  getMMUDemographics(vanId?: any) {
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
+    let vanIDJsn: any;
+    let vanIDx: any;
+    if (serviceLineDetails && serviceLineDetails !== '') {
+      vanIDJsn = JSON.parse(serviceLineDetails);
+      vanIDx = vanIDJsn.vanID;
+    }
+    if (!vanIDx || vanIDx === '') {
+      vanIDx = vanId;
+    }
+    const spPSMIDx = this.sessionstorage.getItem('providerServiceID');
+    const userId = this.sessionstorage.getItem('userID');
 
     return this.http.post(environment.demographicsCurrentMasterUrl, {
-      vanID: vanID,
-      spPSMID: spPSMID,
+      vanID: vanIDx,
+      spPSMID: spPSMIDx,
+      userID: userId,
     });
   }
 
   getSwymedMailLogin() {
-    const userID = localStorage.getItem('userID');
+    const userID = this.sessionstorage.getItem('userID');
     return this.http.get(environment.getSwymedMailLoginUrl + userID);
   }
 

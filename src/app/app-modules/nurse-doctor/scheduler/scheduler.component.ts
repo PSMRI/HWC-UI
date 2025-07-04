@@ -26,12 +26,47 @@ import { DoctorService } from '../shared/services/doctor.service';
 import { NurseService } from '../shared/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-scheduler',
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class SchedulerComponent implements OnInit, DoCheck {
   schedulerForm!: FormGroup;
@@ -45,6 +80,7 @@ export class SchedulerComponent implements OnInit, DoCheck {
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private fb: FormBuilder,
     public mdDialogRef: MatDialogRef<SchedulerComponent>,
+    readonly sessionstorage: SessionStorageService,
   ) {}
   today!: Date;
   schedulerDate!: Date;
@@ -65,8 +101,8 @@ export class SchedulerComponent implements OnInit, DoCheck {
       clear: true,
     };
 
-    localStorage.setItem('setComorbid', 'false');
-    this.ansComorbid = localStorage.getItem('setComorbid');
+    this.sessionstorage.setItem('setComorbid', 'false');
+    this.ansComorbid = this.sessionstorage.getItem('setComorbid');
     this.nurseService.filter(this.ansComorbid);
     this.mdDialogRef.close(modalClear);
   }
@@ -186,9 +222,9 @@ export class SchedulerComponent implements OnInit, DoCheck {
       specialistDetails: null,
     });
     const specialistReqObj = {
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       specializationID: this.specialization.specializationID,
-      userID: localStorage.getItem('userID'),
+      userID: this.sessionstorage.getItem('userID'),
     };
 
     this.doctorService.getSpecialist(specialistReqObj).subscribe(
@@ -252,8 +288,8 @@ export class SchedulerComponent implements OnInit, DoCheck {
       });
       console.log('modalData', modalData);
 
-      localStorage.setItem('setComorbid', 'true');
-      this.ansComorbid = localStorage.getItem('setComorbid');
+      this.sessionstorage.setItem('setComorbid', 'true');
+      this.ansComorbid = this.sessionstorage.getItem('setComorbid');
       this.nurseService.filter(this.ansComorbid);
 
       this.mdDialogRef.close(modalData);

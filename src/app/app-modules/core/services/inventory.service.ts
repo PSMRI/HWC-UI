@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Injectable, Inject } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ConfirmationService } from '../../core/services/confirmation.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Injectable()
 export class InventoryService {
   inventoryUrl: any;
@@ -9,6 +10,7 @@ export class InventoryService {
 
   constructor(
     @Inject(DOCUMENT) private document: any,
+    readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService,
   ) {}
 
@@ -50,8 +52,8 @@ export class InventoryService {
   }
 
   getFacilityID() {
-    if (sessionStorage.getItem('facilityID')) {
-      return sessionStorage.getItem('facilityID');
+    if (this.sessionstorage.getItem('facilityID')) {
+      return this.sessionstorage.getItem('facilityID');
     } else {
       return undefined;
     }
@@ -71,19 +73,19 @@ export class InventoryService {
 
   getVanID() {
     const serviceLineDetailsData: any =
-      localStorage.getItem('serviceLineDetails');
+      this.sessionstorage.getItem('serviceLineDetails');
     const serviceLineDetails = JSON.parse(serviceLineDetailsData);
     return serviceLineDetails.vanID;
   }
   getppID() {
     const serviceLineDetailsData: any =
-      localStorage.getItem('serviceLineDetails');
+      this.sessionstorage.getItem('serviceLineDetails');
     const serviceLineDetails = JSON.parse(serviceLineDetailsData);
     return serviceLineDetails.parkingPlaceID;
   }
 
   getServiceDetails() {
-    const serviceName = localStorage.getItem('serviceName');
+    const serviceName = this.sessionstorage.getItem('serviceName');
     return serviceName;
   }
 }

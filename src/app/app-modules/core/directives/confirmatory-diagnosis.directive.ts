@@ -34,11 +34,12 @@ import {
   FormGroup,
   AbstractControl,
 } from '@angular/forms';
-import { SetLanguageComponent } from '../component/set-language.component';
+import { SetLanguageComponent } from '../components/set-language.component';
 import { HttpServiceService } from '../services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralUtils } from '../../nurse-doctor/shared/utility';
-import { DiagnosisSearchComponent } from '../component/diagnosis-search/diagnosis-search.component';
+import { DiagnosisSearchComponent } from '../components/diagnosis-search/diagnosis-search.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 @Directive({
   selector: '[appConfirmatoryDiagnosis]',
 })
@@ -58,13 +59,14 @@ export class ConfirmatoryDiagnosisDirective implements OnInit, DoCheck {
   @HostListener('click') onClick() {
     if (this.el.nativeElement.nodeName !== 'INPUT') this.openDialog();
   }
-  utils = new GeneralUtils(this.fb);
+  utils = new GeneralUtils(this.fb, this.sessionstorage);
 
   constructor(
     private fb: FormBuilder,
     private el: ElementRef,
     private dialog: MatDialog,
     private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {

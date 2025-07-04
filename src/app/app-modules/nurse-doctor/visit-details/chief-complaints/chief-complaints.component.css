@@ -26,6 +26,6 @@ h5{
 
 table {
     width: 100%;
-    color: #52575C !important;
+    border: 1px solid lightgray;
   }
   

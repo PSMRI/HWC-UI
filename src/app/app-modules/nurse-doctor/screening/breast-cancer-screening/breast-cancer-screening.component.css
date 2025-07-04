@@ -6,6 +6,12 @@ h5 {
     font-weight: bold;
 }
 
+.ng-tns-font{
+    font-weight: 600 !important;
+    font-family: SF-UI-Display-Regular, "Helvetica Neue", sans-serif;
+    font-size: 15px !important;
+    margin-bottom: -5px !important;
+  }
 .mat-expansion-panel-header {
     background: rgba(37, 55, 70, 0.2);
 }

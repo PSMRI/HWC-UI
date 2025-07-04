@@ -49,7 +49,7 @@ import {
 } from '@angular/material/dialog';
 
 import { ViewHealthIdCardComponent } from './view-health-id-card/view-health-id-card.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HealthIdOtpSuccessComponent } from '../../health-id-otp-generation/health-id-otp-generation.component';
 import { environment } from 'src/environments/environment';
 import { ConsentFormComponent } from '../../consent-form/consent-form.component';
@@ -143,11 +143,6 @@ export class RegisterOtherDetailsComponent
 
     const formGroupIndexed = <FormGroup>id.at(0);
     this.filtergovIDs(aadharId, 0);
-    formGroupIndexed.patchValue({
-      type: aadharId,
-      idValue: this.registrarService.aadharNumberNew,
-      allow: this.getAllowedGovChars(aadharId),
-    });
   }
 
   ngDoCheck() {
@@ -945,11 +940,7 @@ export class RegisterOtherDetailsComponent
           }
         }
       }
-      if (c > 1 || c === 0 || cflag)
-        this.confirmationService.alert(
-          this.currentLanguageSet.validHealthIDMessage,
-          'error',
-        );
+      if (c > 1 || c === 0 || cflag) console.log('Print Data');
     }
     if (healthidval && c === 1 && !cflag) {
       this.openDialogForValidate();
@@ -1491,8 +1482,8 @@ export class HealthIdValidateComponent implements OnInit, DoCheck {
               address: this.address,
             };
             const dialogRef = this.dialog.open(HealthIdOtpSuccessComponent, {
-              height: '260px',
-              width: '420px',
+              height: '460px',
+              width: '520px',
               disableClose: true,
               data: res,
             });

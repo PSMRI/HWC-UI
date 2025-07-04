@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+// import { Component, DoCheck, Input, OnChanges, OnInit } from '@angular/core';
+// import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
 import {
   Component,
   DoCheck,
@@ -27,10 +29,10 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { Timestamp } from 'rxjs';
 
 @Component({
   selector: 'app-neonatal-and-infant-service-case-sheet',
@@ -71,12 +73,12 @@ export class NeonatalAndInfantServiceCaseSheetComponent
 
   constructor(
     private httpServiceService: HttpServiceService,
-    private beneficiaryDetailsService: BeneficiaryDetailsService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+    this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
   }
 
   ngDoCheck() {
@@ -87,6 +89,13 @@ export class NeonatalAndInfantServiceCaseSheetComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    if (
+      this.currentLanguageSet === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.currentLanguageSet =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   getAgeValueNew(age: any) {

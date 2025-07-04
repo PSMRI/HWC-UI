@@ -9,7 +9,18 @@ h5 {
 .box {
     height: 60px;
 }
-
+::ng-deep .mat-input-element::placeholder {
+    font-size: 9px; /* Your desired font size */
+}
+.mat-form-field label {
+    font-size: 9px; /* When it is normal */
+    font-family: 'Arial', sans-serif; /* Set your desired font family */
+  }
+  
+  .mat-form-field.mat-form-field-should-float label {
+    font-size: 10px; /* When it floats up and gets smaller */
+  }
+  
 input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -37,6 +48,8 @@ ul li div i {
 .button-status-disabled[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
+    color: white;
+    background-color: #336CFB !important;
   }
 
 .full-width-status {
@@ -51,4 +64,22 @@ ul li div i {
   }
 .abnormal {
     color: red
+}
+.custom-disabled-button {
+    color: white;
+    background-color: blue;
+  }
+.fontawesomesvg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -.125em;
+  }
+  .col-lg-4{
+    width: 31.2%
+  }
+  .ng-tns-font{
+    font-weight: 600 !important;
+    font-family: SF-UI-Display-Regular, "Helvetica Neue", sans-serif;
+    font-size: 15px !important;
+    margin-bottom: -5px !important;
 }

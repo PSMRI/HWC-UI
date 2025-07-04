@@ -29,12 +29,13 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { RegistrarService } from '../../registrar/shared/services/registrar.service';
 import { Subscription } from 'rxjs';
 import { DoctorService } from '../shared/services/doctor.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-family-planning',
@@ -68,6 +69,7 @@ export class FamilyPlanningComponent
     private registrarService: RegistrarService,
     private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -85,13 +87,13 @@ export class FamilyPlanningComponent
     ) as FormGroup;
     this.assignSelectedLanguage();
     this.attendant = this.route.snapshot.params['attendant'];
-    this.visitReason = localStorage.getItem('visitReason');
+    this.visitReason = this.sessionstorage.getItem('visitReason');
     this.doctorService.getBenFamilyDetailsRevisit(null);
     if (
-      localStorage.getItem('visitReason') !== undefined &&
-      localStorage.getItem('visitReason') !== 'undefined' &&
-      localStorage.getItem('visitReason') !== null &&
-      localStorage.getItem('visitReason')?.trim().toLowerCase() ===
+      this.sessionstorage.getItem('visitReason') !== undefined &&
+      this.sessionstorage.getItem('visitReason') !== 'undefined' &&
+      this.sessionstorage.getItem('visitReason') !== null &&
+      this.sessionstorage.getItem('visitReason')?.trim().toLowerCase() ===
         'follow up' &&
       this.attendant === 'nurse'
     ) {
@@ -109,7 +111,7 @@ export class FamilyPlanningComponent
 
   ngOnChanges() {
     if (String(this.familyPlanningMode) === 'update') {
-      const visitCategory = localStorage.getItem('visitCategory');
+      const visitCategory = this.sessionstorage.getItem('visitCategory');
       this.updateFamilyPlanningFromDoctor(
         this.patientMedicalForm,
         visitCategory,

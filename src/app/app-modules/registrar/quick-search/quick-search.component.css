@@ -16,7 +16,7 @@
 }
 
 .grayborder {
-  border-bottom: 1px solid lightgray;
+  /* border-bottom: 1px solid lightgray; */
 }
 
 #searchDialog {

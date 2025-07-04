@@ -30,7 +30,7 @@ table {
 
 .example-scrolling-content {
   flex: auto;
-  padding: 20px;
+  padding: 16px;
   background: #f2f2f0 !important;
   min-height: 500px;
 }
@@ -207,3 +207,10 @@ table {
 .contentNav {
     padding: 20px 0px;
   }
+.mat-side-nav-content {
+    margin-left:60px;
+  }
+  /* .modal-title{
+    font-size: 24px;
+    font-weight: 700;
+  } */

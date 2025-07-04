@@ -19,7 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  DoCheck,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ViewTestReportComponent } from './view-test-report/view-test-report.component';
 import { ConfirmationService } from '../../../../core/services/confirmation.service';
 import { DoctorService } from '../../../shared/services';
@@ -28,11 +34,14 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MatDialog } from '@angular/material/dialog';
 import { IdrsscoreService } from '../../../shared/services/idrsscore.service';
 import { TestInVitalsService } from '../../../shared/services/test-in-vitals.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-test-and-radiology',
@@ -50,6 +59,16 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
   amritFilePath: any;
   vitalsRBSResp: any = null;
 
+  displayedColumns: any = [
+    'date',
+    'testName',
+    'componentName',
+    'result',
+    'measurementUnit',
+    'remarks',
+  ];
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  filteredLabResults = new MatTableDataSource<any>();
   constructor(
     private doctorService: DoctorService,
     public httpServiceService: HttpServiceService,
@@ -59,6 +78,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     private idrsScoreService: IdrsscoreService,
     public sanitizer: DomSanitizer,
     private testInVitalsService: TestInVitalsService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   currentLabRowsPerPage = 5;
@@ -70,12 +90,12 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
   visitID: any;
   visitCategory: any;
   ngOnInit() {
-    this.beneficiaryRegID = localStorage.getItem('beneficiaryRegID');
-    this.visitID = localStorage.getItem('visitID');
+    this.beneficiaryRegID = this.sessionstorage.getItem('beneficiaryRegID');
+    this.visitID = this.sessionstorage.getItem('visitID');
     this.assignSelectedLanguage();
     this.testInVitalsService.clearVitalsRBSValueInReports();
     this.testInVitalsService.clearVitalsRBSValueInReportsInUpdate();
-    this.visitCategory = localStorage.getItem('visitCategory');
+    this.visitCategory = this.sessionstorage.getItem('visitCategory');
     if (
       this.visitCategory.toLowerCase() ===
         'neonatal and infant health care services' ||
@@ -83,8 +103,9 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
         'childhood & adolescent healthcare services'
     ) {
       if (
-        localStorage.getItem('referredVisitCode') === 'undefined' ||
-        localStorage.getItem('referredVisitCode') === null
+        this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
+        this.sessionstorage.getItem('referredVisitCode') === null ||
+        this.sessionstorage.getItem('referredVisitCode') === ''
       ) {
         this.getTestResults(this.visitCategory);
       } else {
@@ -121,8 +142,9 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
         }
 
         if (
-          localStorage.getItem('referredVisitCode') === 'undefined' ||
-          localStorage.getItem('referredVisitCode') === null
+          this.sessionstorage.getItem('referredVisitCode') === 'undefined' ||
+          this.sessionstorage.getItem('referredVisitCode') === null ||
+          this.sessionstorage.getItem('referredVisitCode') === ''
         ) {
           this.getTestResults(this.visitCategory);
         } else {
@@ -188,7 +210,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
       });
       this.labResults = [vitalsRBSResponse].concat(this.labResults);
 
-      this.filteredLabResults = this.labResults;
+      this.filteredLabResults.data = this.labResults;
+      this.filteredLabResults.paginator = this.paginator;
 
       this.currentLabPageChanged({
         page: this.currentLabActivePage,
@@ -204,7 +227,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
           this.labResults.splice(index, 1);
       });
 
-      this.filteredLabResults = this.labResults;
+      this.filteredLabResults.data = this.labResults;
+      this.filteredLabResults.paginator = this.paginator;
 
       this.currentLabPageChanged({
         page: this.currentLabActivePage,
@@ -227,10 +251,12 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
           this.labResults = res.data.LabReport.filter((lab: any) => {
             return lab.procedureType === 'Laboratory';
           });
-          this.filteredLabResults = this.labResults;
+          this.filteredLabResults.data = this.labResults;
+          this.filteredLabResults.paginator = this.paginator;
 
           if (visitCategory === 'NCD screening') {
-            this.filteredLabResults.forEach((element: any) => {
+            this.filteredLabResults.paginator = this.paginator;
+            this.filteredLabResults.data.forEach((element: any) => {
               if (element.procedureName === environment.RBSTest) {
                 return element.componentList.forEach((element1: any) => {
                   if (element1.stripsNotAvailable === true) {
@@ -246,7 +272,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
             this.labResults = [this.vitalsRBSResp].concat(this.labResults);
           }
 
-          this.filteredLabResults = this.labResults;
+          this.filteredLabResults.data = this.labResults;
+          this.filteredLabResults.paginator = this.paginator;
 
           this.radiologyResults = res.data.LabReport.filter(
             (radiology: any) => {
@@ -270,29 +297,36 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     let mmulabResultsRef = [];
     let respObj;
     //Calling TM Reports
-    this.doctorService
-      .getMMUCaseRecordAndReferDetails(
+    const doctorCasesheetData =
+      this.doctorService.getMMUCaseRecordAndReferDetails(
         beneficiaryRegID,
         visitID,
         visitCategory,
-        localStorage.getItem('visitCode'),
-      )
-      .subscribe((res: any) => {
+        this.sessionstorage.getItem('visitCode'),
+      );
+    if (doctorCasesheetData) {
+      doctorCasesheetData.subscribe((res: any) => {
         console.log('response archive', res);
-        if (res && res.statusCode === 200 && res.data) {
+        if (
+          res !== undefined &&
+          res !== null &&
+          res.statusCode === 200 &&
+          res.data
+        ) {
           console.log('labresult', res.data.LabReport);
           mmulabResults = res.data.LabReport.filter((lab: any) => {
             return lab.procedureType === 'Laboratory';
           });
-          this.filteredLabResults = mmulabResults;
+          this.filteredLabResults.data = mmulabResults;
+          this.filteredLabResults.paginator = this.paginator;
 
           //Calling MMU Reports
           this.testMMUResultsSubscription = this.doctorService
             .getMMUCaseRecordAndReferDetails(
               beneficiaryRegID,
-              localStorage.getItem('referredVisitID'),
+              this.sessionstorage.getItem('referredVisitID'),
               visitCategory,
-              localStorage.getItem('referredVisitCode'),
+              this.sessionstorage.getItem('referredVisitCode'),
             )
             .subscribe((response: any) => {
               if (response && response.statusCode === 200 && response.data) {
@@ -303,19 +337,20 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
                 );
                 labTestArray = mmulabResultsRef;
 
-                for (
-                  let i = 0, j = this.filteredLabResults.length;
-                  i < labTestArray.length;
-                  i++, j++
-                ) {
-                  this.filteredLabResults[j] = labTestArray[i];
-                }
-                console.log('labTestArray', labTestArray);
+                // for (
+                //   let i = 0, j = this.filteredLabResults.data.length;
+                //   i < labTestArray.length;
+                //   i++, j++
+                // ) {
+                //   this.filteredLabResults.data[j] = labTestArray[i];
+                // }
+                // console.log('labTestArray', labTestArray);
 
-                this.labResults = this.filteredLabResults;
+                this.labResults = this.filteredLabResults.data;
 
                 if (visitCategory === 'NCD screening') {
-                  this.filteredLabResults.forEach((element: any) => {
+                  this.filteredLabResults.paginator = this.paginator;
+                  this.filteredLabResults.data.forEach((element: any) => {
                     if (element.procedureName === environment.RBSTest) {
                       return element.componentList.forEach((element1: any) => {
                         if (element1.stripsNotAvailable === true) {
@@ -334,7 +369,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
                   );
                 }
 
-                this.filteredLabResults = this.labResults;
+                this.filteredLabResults.data = this.labResults;
+                this.filteredLabResults.paginator = this.paginator;
 
                 this.radiologyResults = res.data.LabReport.filter(
                   (radiology: any) => {
@@ -378,6 +414,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
             });
         }
       });
+    }
   }
 
   getGeneralVitalsData(beneficiaryRegID: any, visitID: any) {
@@ -411,7 +448,8 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
             };
 
             this.labResults = [vitalsRBSResponse].concat(this.labResults);
-            this.filteredLabResults = this.labResults;
+            this.filteredLabResults.data = this.labResults;
+            this.filteredLabResults.paginator = this.paginator;
 
             this.currentLabPageChanged({
               page: this.currentLabActivePage,
@@ -422,16 +460,18 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
       });
   }
 
-  filteredLabResults: any = [];
+  // filteredLabResults: any = [];
   filterProcedures(searchTerm?: string) {
     if (!searchTerm) {
-      this.filteredLabResults = this.labResults;
+      this.filteredLabResults.data = this.labResults;
+      this.filteredLabResults.paginator = this.paginator;
     } else {
-      this.filteredLabResults = [];
+      this.filteredLabResults.data = [];
+      this.filteredLabResults.paginator = this.paginator;
       this.labResults.forEach((item: any) => {
         const value: string = '' + item.procedureName;
         if (value.toLowerCase().indexOf(searchTerm.toLowerCase()) >= 0) {
-          this.filteredLabResults.push(item);
+          this.filteredLabResults.data.push(item);
         }
       });
     }
@@ -447,7 +487,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
     console.log('called', event);
     const startItem = (event.page - 1) * event.itemsPerPage;
     const endItem = event.page * event.itemsPerPage;
-    this.currentLabPagedList = this.filteredLabResults.slice(
+    this.currentLabPagedList = this.filteredLabResults.data.slice(
       startItem,
       endItem,
     );
@@ -475,7 +515,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
           (res: any) => {
             if (res.data.statusCode === 200) {
               const fileContent = res.data.data.response;
-              location.href = fileContent;
+              window.open(fileContent, '_blank');
             }
           },
           (err: any) => {
@@ -493,7 +533,7 @@ export class TestAndRadiologyComponent implements OnInit, DoCheck, OnDestroy {
   visitCode: any;
   showArchivedTestResult(visitCode: any) {
     const archivedReport = {
-      beneficiaryRegID: localStorage.getItem('beneficiaryRegID'),
+      beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       visitCode: visitCode.visitCode,
     };
     this.doctorService

@@ -27,7 +27,8 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 
@@ -70,10 +71,11 @@ export class ChildAndAdolescentOralVitaminACaseSheetComponent
   constructor(
     private httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
-    this.visitCategory = localStorage.getItem('caseSheetVisitCategory');
+    this.visitCategory = this.sessionstorage.getItem('caseSheetVisitCategory');
     this.assignSelectedLanguage();
   }
 
@@ -97,6 +99,13 @@ export class ChildAndAdolescentOralVitaminACaseSheetComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    if (
+      this.currentLanguageSet === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.currentLanguageSet =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   ngOnChanges() {

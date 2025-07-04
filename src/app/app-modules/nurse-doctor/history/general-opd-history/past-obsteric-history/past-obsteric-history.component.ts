@@ -45,8 +45,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { HrpService } from '../../../shared/services/hrp.service';
 import { BeneficiaryDetailsService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-past-obsteric-history',
@@ -84,8 +85,9 @@ export class PastObstericHistoryComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
+    readonly sessionstorage: SessionStorageService,
   ) {
-    this.formUtility = new GeneralUtils(this.fb);
+    this.formUtility = new GeneralUtils(this.fb, this.sessionstorage);
   }
 
   ngOnInit() {
@@ -146,9 +148,9 @@ export class PastObstericHistoryComponent
     ] as FormArray;
     this.clearFormArray(temp1);
 
-    if (localStorage.getItem('serviceLineDetails')) {
+    if (this.sessionstorage.getItem('serviceLineDetails')) {
       const serviceLineDetails: any =
-        localStorage.getItem('serviceLineDetails');
+        this.sessionstorage.getItem('serviceLineDetails');
       const vanID = JSON.parse(serviceLineDetails).vanID;
       const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
@@ -178,7 +180,8 @@ export class PastObstericHistoryComponent
             this.getGeneralHistory();
           }
 
-          const specialistFlagString = localStorage.getItem('specialistFlag');
+          const specialistFlagString =
+            this.sessionstorage.getItem('specialistFlag');
 
           if (
             specialistFlagString !== null &&
@@ -431,7 +434,7 @@ export class PastObstericHistoryComponent
   }
 
   getPreviousObstetricHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousObstetricHistory(benRegID, this.visitCategory)
       .subscribe(

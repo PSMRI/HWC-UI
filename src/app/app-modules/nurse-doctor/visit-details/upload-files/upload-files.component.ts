@@ -35,9 +35,10 @@ import { ConfirmationService } from '../../../core/services/confirmation.service
 import { DoctorService } from '../../shared/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-patient-upload-files',
@@ -85,6 +86,7 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     private dialog: MatDialog,
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -99,7 +101,7 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
   }
   ngOnChanges() {
-    const specialistFlagString = localStorage.getItem('specialistFlag');
+    const specialistFlagString = this.sessionstorage.getItem('specialistFlag');
 
     if (String(this.mode) === 'view' && !this.enableFileSelection) {
       this.disableFileSelection = true;
@@ -205,7 +207,8 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
   }
   fileObj: any = [];
   assignFileObject(fileContent: any) {
-    const serviceLineDetails: any = localStorage.getItem('serviceLineDetails');
+    const serviceLineDetails: any =
+      this.sessionstorage.getItem('serviceLineDetails');
     const vanID = JSON.parse(serviceLineDetails).vanID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
@@ -213,10 +216,10 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
       fileName: this.file !== undefined ? this.file.name : '',
       fileExtension:
         this.file !== undefined ? '.' + this.file.name.split('.')[1] : '',
-      providerServiceMapID: localStorage.getItem('providerServiceID'),
-      userID: localStorage.getItem('userID'),
+      providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
+      userID: this.sessionstorage.getItem('userID'),
       fileContent: fileContent !== undefined ? fileContent.split(',')[1] : '',
-      createdBy: localStorage.getItem('userName'),
+      createdBy: this.sessionstorage.getItem('userName'),
       vanID: vanID,
       isUploaded: false,
     };
@@ -250,12 +253,21 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
             this.savedFileData.push(file);
             this.fileIDs.push(file.kmFileManagerID);
           });
+          this.confirmationService.alert(
+            this.currentLanguageSet.fileUploadedSuccessfully,
+            'success',
+          );
           this.fileObj.map((file: any) => {
             file.isUploaded = true;
           });
           this.savedFileData.map((file: any) => {
             file.isUploaded = true;
           });
+        } else {
+          this.confirmationService.alert(
+            'File Upload failed, Please try again',
+            'warn',
+          );
         }
       },
       (err: any) => {
@@ -334,7 +346,7 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
           (res: any) => {
             if (res.data.statusCode === 200) {
               const fileContent = res.data.data.response;
-              location.href = fileContent;
+              window.open(fileContent, '_blank');
             }
           },
           (err: any) => {

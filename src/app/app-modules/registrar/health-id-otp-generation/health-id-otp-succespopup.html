@@ -16,12 +16,28 @@
       {{ currentLanguageSet?.doYouWantToDownloadABHACard }}
     </p>
   </div>
-  <div class="action">
-    <button mat-button mat-dialog-close>
+  <div style="text-align: end">
+    <button
+      style="
+        margin-right: 10px;
+        border: 1px solid lightgray;
+        min-width: 88px !important;
+        line-height: 36px !important;
+        background-color: white !important;
+      "
+      mat-dialog-close
+    >
       {{ currentLanguageSet?.common?.no }}
     </button>
     <button
       mat-button
+      style="
+        border: 1px solid lightgray;
+        min-width: 88px !important;
+        line-height: 36px !important;
+        background-color: white !important;
+        margin-right: 10px;
+      "
       class="background-primary"
       cdkFocusInitial
       (click)="fetchOtp(succdata.healthId, succdata.healthIdNumber)"

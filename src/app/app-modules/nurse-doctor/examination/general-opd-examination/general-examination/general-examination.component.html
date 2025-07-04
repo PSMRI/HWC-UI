@@ -139,7 +139,10 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <label class="control-label" for="dangerSigns">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -164,6 +167,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     [hidden]="dangerSigns !== 'Yes'"
+    style="margin-top: 20px"
   >
     <div class="form-group">
       <mat-form-field [style.width]="'100%'">
@@ -190,7 +194,10 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <label class="control-label" for="pallor">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -208,7 +215,10 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <label class="control-label" for="jaundice">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -226,7 +236,10 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <label class="control-label" for="cyanosis">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -244,7 +257,10 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <label class="control-label" for="clubbing">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -262,7 +278,10 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <label class="control-label" for="lymphadenopathy">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -288,6 +307,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     [hidden]="lymphadenopathy !== 'Present'"
+    style="margin-top: 20px"
   >
     <div class="form-group">
       <mat-form-field [style.width]="'100%'">
@@ -316,6 +336,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     [hidden]="lymphadenopathy !== 'Present'"
+    style="margin-top: 20px"
   >
     <div class="form-group">
       <mat-form-field [style.width]="'100%'">
@@ -341,7 +362,10 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <label class="control-label" for="edema">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -366,6 +390,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     [hidden]="edema !== 'Present'"
+    style="margin-top: 20px"
   >
     <div class="form-group">
       <mat-form-field [style.width]="'100%'">
@@ -394,6 +419,7 @@
   <div
     class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
     [hidden]="edema !== 'Present'"
+    style="margin-top: 20px"
   >
     <div class="form-group">
       <label class="control-label" for="typeOfEdema">{{
@@ -423,7 +449,11 @@
       </mat-radio-group>
     </div>
   </div>
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" *ngIf="hideForANCAndQC">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="hideForANCAndQC"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <mat-label class="control-label">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -445,7 +475,11 @@
     </div>
   </div>
 
-  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box" *ngIf="hideForANCAndQC">
+  <div
+    class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box"
+    *ngIf="hideForANCAndQC"
+    style="margin-top: 20px"
+  >
     <div class="form-group">
       <mat-label class="control-label">{{
         current_language_set?.ExaminationData?.ANC_OPD_PNCExamination

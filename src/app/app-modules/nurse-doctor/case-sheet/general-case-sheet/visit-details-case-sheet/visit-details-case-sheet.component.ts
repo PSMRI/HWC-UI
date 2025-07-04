@@ -27,9 +27,10 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { NurseService } from '../../../shared/services';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-visit-details-case-sheet',
@@ -62,6 +63,7 @@ export class VisitDeatilsCaseSheetComponent
   constructor(
     private httpServiceService: HttpServiceService,
     private nurseService: NurseService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -76,6 +78,13 @@ export class VisitDeatilsCaseSheetComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+    if (
+      this.currentLanguageSet === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.currentLanguageSet =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   ngOnChanges() {

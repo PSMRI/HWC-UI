@@ -6,11 +6,12 @@ import {
 } from '@angular/material/dialog';
 import { DOCUMENT } from '@angular/common';
 import { Observable } from 'rxjs';
-import { CommonDialogComponent } from '../component/common-dialog/common-dialog.component';
+import { CommonDialogComponent } from '../components/common-dialog/common-dialog.component';
 
 @Injectable()
 export class ConfirmationService {
   eSanjeevaniFlagArry: any;
+  eSanjeevaniDoctorFlagArry: any;
   constructor(
     private dialog: MatDialog,
     @Inject(DOCUMENT) doc: any,

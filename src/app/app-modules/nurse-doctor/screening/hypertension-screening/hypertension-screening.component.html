@@ -1,10 +1,10 @@
 <mat-card class="m-t-10 m-b-5">
-  <div [formGroup]="hypertensionScreeningForm">
+  <div [formGroup]="hypertensionScreeningForm" style="padding-left: 10px">
     <div
       class="pull-right"
       [hidden]="hideRemoveFunctionalityInDoctorIfSuspected"
     >
-      <button mat-icon-button>
+      <button mat-icon-button style="border: unset; background-color: unset">
         <mat-icon
           matTooltip="Remove"
           class="md-24 matIcon-button-style"
@@ -35,15 +35,17 @@
           [checked]="isHypertensionSuspected"
           (change)="markAsUnsuspected($event.checked)"
         ></mat-checkbox>
-        <mat-label style="color: grey; margin-bottom: 15px">{{
-          currentLanguageSet?.MarkAsSuspected
-        }}</mat-label>
+        <mat-label
+          style="color: grey; margin-bottom: 15px"
+          class="ng-tns-font"
+          >{{ currentLanguageSet?.MarkAsSuspected }}</mat-label
+        >
       </div>
     </div>
     <div class="row m-t-5">
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4">
         <mat-form-field class="input-full-width">
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.systolicBPOne }}
           </mat-label>
           <input
@@ -55,6 +57,7 @@
             allowMax="320"
             name="systolicBP_1stReading"
             formControlName="systolicBP_1stReading"
+            class="test"
             (change)="
               checkSystolicBP(
                 hypertensionScreeningForm.value.systolicBP_1stReading
@@ -70,19 +73,27 @@
               abnormal: systolicBP_1stReading > 120
             }"
           />
-          <button
+
+          <svg
+            class="fontawesomesvg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
             (click)="openIOTBP1Model()"
+            onkeydown="openIOTBP1Model()"
+            tabindex="{0}"
           >
-            <span class="glyphicon glyphicon-scale"></span>
-          </button>
+            <path
+              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z"
+            />
+          </svg>
         </mat-form-field>
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4">
         <mat-form-field class="input-full-width">
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.diastolicBPOne }}
           </mat-label>
           <input
@@ -109,13 +120,20 @@
               abnormal: diastolicBP_1stReading > 80
             }"
           />
-          <button
+          <svg
+            class="fontawesomesvg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
             (click)="openIOTBP1Model()"
+            onkeydown="openIOTBP1Model()"
+            tabindex="{0}"
           >
-            <span class="glyphicon glyphicon-scale"></span>
-          </button>
+            <path
+              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z"
+            />
+          </svg>
         </mat-form-field>
       </div>
     </div>
@@ -123,7 +141,7 @@
     <div class="row m-t-5">
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4">
         <mat-form-field class="input-full-width">
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.systolicBPTwo }}
           </mat-label>
           <input
@@ -149,19 +167,26 @@
               abnormal: systolicBP_2ndReading > 120
             }"
           />
-          <button
+          <svg
+            class="fontawesomesvg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
             (click)="openIOTBP2Model()"
+            onkeydown="openIOTBP2Model()"
+            tabindex="{0}"
           >
-            <span class="glyphicon glyphicon-scale"></span>
-          </button>
+            <path
+              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z"
+            />
+          </svg>
         </mat-form-field>
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4">
         <mat-form-field class="input-full-width">
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.diastolicBPTwo }}
           </mat-label>
           <input
@@ -187,13 +212,20 @@
               abnormal: diastolicBP_2ndReading > 80
             }"
           />
-          <button
+          <svg
+            class="fontawesomesvg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
             (click)="openIOTBP2Model()"
+            onkeydown="openIOTBP2Model()"
+            tabindex="{0}"
           >
-            <span class="glyphicon glyphicon-scale"></span>
-          </button>
+            <path
+              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z"
+            />
+          </svg>
         </mat-form-field>
       </div>
     </div>
@@ -201,7 +233,7 @@
     <div class="row m-t-5">
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4">
         <mat-form-field class="input-full-width">
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.systolicBPThree }}
           </mat-label>
           <input
@@ -227,19 +259,26 @@
               abnormal: systolicBP_3rdReading > 120
             }"
           />
-          <button
+          <svg
+            class="fontawesomesvg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
             (click)="openIOTBP3Model()"
+            onkeydown="openIOTBP3Model()"
+            tabindex="{0}"
           >
-            <span class="glyphicon glyphicon-scale"></span>
-          </button>
+            <path
+              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z"
+            />
+          </svg>
         </mat-form-field>
       </div>
 
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4">
         <mat-form-field class="input-full-width">
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.diastolicBPThree }}
           </mat-label>
           <input
@@ -265,13 +304,20 @@
               abnormal: diastolicBP_3rdReading > 80
             }"
           />
-          <button
+          <svg
+            class="fontawesomesvg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"
             matTooltip="{{ currentLanguageSet?.common?.startTest }}"
             matSuffix
             (click)="openIOTBP3Model()"
+            onkeydown="openIOTBP3Model()"
+            tabindex="{0}"
           >
-            <span class="glyphicon glyphicon-scale"></span>
-          </button>
+            <path
+              d="M384 176c0 70.7-57.3 128-128 128s-128-57.3-128-128s57.3-128 128-128s128 57.3 128 128zm7.8-112C359.5 24.9 310.7 0 256 0S152.5 24.9 120.2 64H64C28.7 64 0 92.7 0 128V448c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H391.8zM296 224c0-10.6-4.1-20.2-10.9-27.4l33.6-78.3c3.5-8.1-.3-17.5-8.4-21s-17.5 .3-21 8.4L255.7 184c-22 .1-39.7 18-39.7 40c0 22.1 17.9 40 40 40s40-17.9 40-40z"
+            />
+          </svg>
         </mat-form-field>
       </div>
     </div>
@@ -279,7 +325,7 @@
     <div class="row m-t-5">
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4 box">
         <mat-form-field class="input-full-width">
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.averageSystolic }}
           </mat-label>
           <input
@@ -300,7 +346,7 @@
 
       <div class="col-xs-12 col-sm-6 col-md-3 col-lg-4 box">
         <mat-form-field class="input-full-width">
-          <mat-label>
+          <mat-label class="ng-tns-font">
             {{ currentLanguageSet?.averageDiastolic }}
           </mat-label>
           <input
@@ -324,7 +370,7 @@
       >
         <button
           mat-raised-button
-          class="full-width-status button-status-disabled"
+          class="full-width-status button-status-disabled mat_blue custom-disabled-button"
           (click)="checkBloodPressureStatus()"
           [disabled]="disableStatusButton"
           color="primary"

@@ -38,7 +38,7 @@
                 "fullName": "Full Name",
                 "maritalStatus": "Marital Status",
                 "contactNo": "Contact No",
-                "alternateNumber":"Alternate Contact Number",
+                "alternateNumber":"Alternate Number",
                 "gender": "Gender",
                 "age": "Age",
                 "ageUnit": "Age Unit",
@@ -230,7 +230,7 @@
             "noCallDetailsFound": "No call details found",
             "load": "Load",
             "noVisitFound": "No visit found",
-            "visibility": "visibility",
+            "visibility": "Visibility",
             "viewQnA": "View Q&A",
             "id": "ID",
             "viewMore": "View More",
@@ -239,7 +239,7 @@
             "bloodGlucoseTrend": "Blood Glucose Trends",
             "resultMammogram": "Results of Mammogram",
             "otherComplication": "Other Complication of Current Pregnancy",
-            "add": "add",
+            "add": "Add",
             "confirmDiagnosis": "Confirmatory Diagnosis",
             "labTest": "Test Report",
             "annotatedimagereport": "Annotated Image Report",
@@ -304,7 +304,9 @@
             "selectAll": "Select All",
             "sNo": "S.No.",
             "confirmWhetherBeneficiaryHasArrived": "Confirm Whether Beneficiary has arrived",
-            "startTest":"Start Test"
+            "startTest":"Start Test",
+            "remove": "Remove",
+            "poct": "POCT"
         },
         "idrs": {
                 
@@ -1228,7 +1230,7 @@
                 "imageNotFound": "Image not found",
                 "familyDisease": "Family Disease history",
                 "dataUpdated": "Data updated successfully",
-                "pendingForConsultation": "Pending For Tele-Consultation",
+                "pendingForConsultation": "Pending For Consultation",
                 "consultationDone": "Tele-Consultation Done",
                 "pendingForTC": "Pending For TC",
                 "tCCancelled": "TC Cancelled",
@@ -2071,7 +2073,7 @@
         "externalID": "External ID",
         "registertoAMRIT": "Register to AMRIT",
         "pleaseEnterValidInput": "Please enter a valid input",
-        "pleaseEnterValidInputFor": "Please enter a valid input for",
+        "pleaseEnterValidInputFor": "Please enter a valid input for ",
         "errorInfetchingStates": "Error in fetching states",
         "pleaseRegisterBeneficiaryInAMRIT": "Please register the beneficiary in AMRIT",
         "noFurtherRecordsToShow": "No further records to show",
@@ -2090,8 +2092,29 @@
         "riskFactors": "Risk Factors",
         "treatment": "Treatment",
         "selfcare": "Self-Care",
-        "investigations": "Investigations"
-         
+        "investigations": "Investigations",
+        "noRecordsFound": "No Records Found",
+        "enterMobileNumberToBeLinkedWithAbha": "Enter Phone number to be linked with ABHA",
+        "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?",
+        "abhaCardAlreadyExists": "ABHA already exists for the Aadhaar Number",
+        "enterABHANumber": "Please Enter ABHA Number",
+        "enterABHAAddress": "Please Enter ABHA Address",
+        "enterAadhaarNumber": "Please Enter Aadhaar Number",
+        "enterMobileNumber": "Please Enter Mobile Number",
+        "enterCorrectAuthIdForAuthMode": "Please Enter correct Authentication ID for choosen AuthMode",
+        "abhaAddressFound" : "ABHA Address Found:",
+        "searchAndDownloadAbha": "Search and Download ABHA",
+        "abhaSearchMode": "ABHA Search Mode*",
+        "verifyAbha": "Verify ABHA",
+        "issueInAbhaCard": "Issue in printing ABHA Card",
+        "fileUploadedSuccessfully": "File Uploaded successfully",
+        "verifyMobileOtp": "Verify Mobile OTP",
+        "enterMobileOtp": "Enter Mobile OTP",
+        "verify": "Verify",
+        "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
+        "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID",
+        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
+        "continueButton": "Continue"
     }
 
     

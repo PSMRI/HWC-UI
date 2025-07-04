@@ -49,8 +49,15 @@ const defaultEnvValues = {
   FHIR_API_BASE: '',
   SERVER_IP: '',
   SWYMED_IP: '',
-  SCHEDULER_UI_BASE: '',
-  INVENTORY_UI_BASE: '',
+  HWC_SCHEDULER_UI: '',
+  HWC_INVENTORY_UI: '',
+  HWC_API_BASE : '',
+  HWC_UI_BASE: '',
+  ABHA_MODE: '',
+  SESSION_STORAGE_ENC_KEY: '',
+  SITE_KEY: '',
+  CAPTCHA_CHALLENGE_URL: '',
+  ENABLE_CAPTCHA: false,
 };
 
 // Generate output data

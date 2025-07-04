@@ -36,8 +36,9 @@ import { NcdScreeningService } from '../shared/services/ncd-screening.service';
 import { Subscription } from 'rxjs';
 import { ConfirmationService } from '../../core/services';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { environment } from 'src/environments/environment';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-screening',
@@ -95,6 +96,7 @@ export class ScreeningComponent
     private masterdataService: MasterdataService,
     private confirmationService: ConfirmationService,
     private httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit(): void {
@@ -248,7 +250,7 @@ export class ScreeningComponent
   }
   ngOnChanges() {
     if (String(this.ncdScreeningMode) === 'update') {
-      const visitCategory = localStorage.getItem('visitCategory');
+      const visitCategory = this.sessionstorage.getItem('visitCategory');
       this.updateNCDScreeningDataFromDoctor(
         this.patientMedicalForm,
         visitCategory,
@@ -610,7 +612,7 @@ export class ScreeningComponent
   populateScreeningDiseasesBasedOnGender(screeningDiseases: any) {
     this.ncdScreeningDiseases = [];
     screeningDiseases.forEach((disease: any) => {
-      if (localStorage.getItem('beneficiaryGender') === 'Male') {
+      if (this.sessionstorage.getItem('beneficiaryGender') === 'Male') {
         if (
           disease.name.toLowerCase().trim() !==
             environment.breast.toLowerCase().trim() &&

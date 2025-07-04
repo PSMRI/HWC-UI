@@ -1,23 +1,22 @@
 <div class="row m-t-10" [formGroup]="feedingHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <p class="font-history-label m-t-10">
+  <button
+    type="button"
+    class="history-label col-12 mat-icon-button mat_icon_blue"
+    id="previousFeedingHistory"
+    color="primary"
+    matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+    (click)="getPreviousFeedingHistory()"
+    (keydown.enter)="getPreviousFeedingHistory()"
+    (keydown.space)="getPreviousFeedingHistory()"
+  >
+    <mat-icon class="md-18 ms-2">history</mat-icon>
+    <span class="previousHistory">
       {{
         currentLanguageSet?.historyData?.Feedinghistorydetails
           ?.previousfeedinghistory
       }}
-    </p>
-    <button
-      type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-      id="previousFeedingHistory"
-      class="mat_icon_blue"
-      color="primary"
-      (click)="getPreviousFeedingHistory()"
-    >
-      <mat-icon class="md-18">history</mat-icon>
-    </button>
-  </div>
+    </span>
+  </button>
   <div>
     <div class="box col-xs-12 col-sm-6 col-md-6 col-lg-6">
       <mat-form-field [style.width]="'100%'">

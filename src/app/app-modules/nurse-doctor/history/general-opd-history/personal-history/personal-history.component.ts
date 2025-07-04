@@ -47,9 +47,10 @@ import { BeneficiaryDetailsService } from '../../../../core/services/beneficiary
 import { MatDialog } from '@angular/material/dialog';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { NcdScreeningService } from '../../../shared/services/ncd-screening.service';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/component/previous-details/previous-details.component';
-import { AllergenSearchComponent } from 'src/app/app-modules/core/component/allergen-search/allergen-search.component';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-general-personal-history',
@@ -113,6 +114,7 @@ export class GeneralPersonalHistoryComponent
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     private ncdScreeningService: NcdScreeningService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -328,8 +330,20 @@ export class GeneralPersonalHistoryComponent
         if (temp[i].tobaccoUseType) {
           const k: any = formArray.get('' + i);
           k.patchValue(temp[i]);
+          k.markAsDirty();
           k.markAsTouched();
           this.filterTobaccoList(temp[i].tobaccoUseType, i);
+          if (
+            k?.get('number')?.value !== null &&
+            k?.get('perDay')?.value !== null &&
+            k?.get('duration')?.value !== null &&
+            k?.get('durationUnit')?.value !== null
+          ) {
+            k?.get('number')?.enable();
+            k?.get('perDay')?.enable();
+            k?.get('duration')?.enable();
+            k?.get('durationUnit')?.enable();
+          }
         }
 
         if (i + 1 < temp.length) this.addTobacco();
@@ -360,7 +374,21 @@ export class GeneralPersonalHistoryComponent
           const k: any = formArray.get('' + i);
           k.patchValue(temp[i]);
           k.markAsTouched();
+          k.markAsDirty();
           this.filterAlcoholList(temp[i].alcoholType, i);
+          if (
+            k?.get('alcoholIntakeFrequency')?.value !== null &&
+            k?.get('avgAlcoholConsumption')?.value !== null &&
+            k?.get('avgAlcoholConsumption')?.value !== null &&
+            k?.get('duration')?.value !== null &&
+            k?.get('durationUnit')?.value !== null
+          ) {
+            k?.get('alcoholIntakeFrequency')?.enable();
+            k?.get('avgAlcoholConsumption')?.enable();
+            k?.get('avgAlcoholConsumption')?.enable();
+            k?.get('duration')?.enable();
+            k?.get('durationUnit')?.enable();
+          }
         }
 
         if (i + 1 < temp.length) this.addAlcohol();
@@ -400,7 +428,15 @@ export class GeneralPersonalHistoryComponent
           const k: any = formArray.get('' + i);
           k.patchValue(temp[i]);
           k.markAsTouched();
+          k.markAsDirty();
           this.filterAlleryList(temp[i].allergyType, i);
+          if (
+            k?.get('snomedTerm')?.value !== null &&
+            k?.get('typeOfAllergicReactions')?.value !== null
+          ) {
+            k?.get('snomedTerm')?.enable();
+            k?.get('typeOfAllergicReactions')?.enable();
+          }
         }
 
         if (i + 1 < temp.length) this.addAllergy();
@@ -743,7 +779,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousTobaccoHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousTobaccoHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -804,7 +840,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousAlcoholHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousAlcoholHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -836,7 +872,7 @@ export class GeneralPersonalHistoryComponent
   }
 
   getPreviousAllergyHistory() {
-    const benRegID: any = localStorage.getItem('beneficiaryRegID');
+    const benRegID: any = this.sessionstorage.getItem('beneficiaryRegID');
     this.nurseService
       .getPreviousAllergyHistory(benRegID, this.visitCategory)
       .subscribe(
@@ -1038,7 +1074,6 @@ export class GeneralPersonalHistoryComponent
     // to enable the fields
     if (allergyForm?.value?.snomedTerm) {
       allergyForm?.get('typeOfAllergicReactions')?.enable();
-      allergyForm?.get('typeOfAllergicReactions')?.reset();
     } else {
       allergyForm?.get('typeOfAllergicReactions')?.disable();
       allergyForm?.get('typeOfAllergicReactions')?.reset();
@@ -1104,6 +1139,7 @@ export class GeneralPersonalHistoryComponent
         allergyForm.patchValue({ allergyName: null });
         this.selectedSnomedTerm = null;
         this.countForSearch = index;
+        allergyForm?.get('typeOfAllergicReactions')?.reset();
       } else if (allergyForm.value.snomedTerm === null) {
         this.confirmationService.alert(
           this.currentLanguageSet.historyData.ancHistory
@@ -1114,6 +1150,7 @@ export class GeneralPersonalHistoryComponent
         allergyForm.patchValue({ allergyName: null });
         this.selectedSnomedTerm = null;
         this.countForSearch = index;
+        allergyForm?.get('typeOfAllergicReactions')?.reset();
       }
     }
   }

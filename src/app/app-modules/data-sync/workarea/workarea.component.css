@@ -29,18 +29,25 @@ ul.description li div {
 
 .marker-p-f-c {
   background: #0b69b2;
+  margin-right: 5px !important;
 }
 
 .marker-p-f-t {
   background: #e44e4f;
+  margin-right: 5px !important;
+
 }
 
 .marker-t-d {
   background: #eaaa26;
+  margin-right: 5px !important;
+
 }
 
 .marker-c-d {
   background: #43760f;
+  margin-right: 5px !important;
+
 }
 
 .visitStatus {

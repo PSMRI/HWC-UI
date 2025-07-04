@@ -24,7 +24,8 @@
 
 .previous-history{
     display: flex;
-    align-items: baseline;
+    align-items:center; 
+    text-align: start;
 }
 
 :host /deep/ .mat-select-placeholder {
@@ -36,7 +37,7 @@
  }
 
  .lineheight {
-    line-height: 12px;
+    line-height: 15px;
  }
 
 button#previousAllergyHistory .mat-icon.material-icons {

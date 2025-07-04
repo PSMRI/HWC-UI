@@ -29,7 +29,6 @@
                 name="chiefComplaint"
                 formControlName="chiefComplaint"
                 #complaintType
-                [(ngModel)]="chiefComplaint"
                 (keyup)="suggestChiefComplaintList(complaint, i)"
                 (blur)="reEnterChiefComplaint(complaint)"
                 [matAutocomplete]="auto"
@@ -80,7 +79,6 @@
                 maxlength="2"
                 name="duration"
                 formControlName="duration"
-                [(ngModel)]="duration"
                 (input)="onInputDuration(complaint)"
                 (selectionChange)="validateDuration(complaint)"
               />
@@ -135,19 +133,7 @@
             <button
               type="button"
               mat-mini-fab
-              class="mat_warn_circle"
-              style="margin-right: 3px; margin-top: 25px"
-              [id]="'removeBtn' + i"
-              *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-              (click)="removeCheifComplaint(i, complaint)"
-              color="warn"
-            >
-              <span class="material-icons">close</span>
-            </button>
-            <button
-              type="button"
-              mat-mini-fab
-              class="mat_blue_circle"
+              class="mat-add-btn"
               type="button"
               style="margin-top: 25px"
               [id]="'addBtn' + i"
@@ -156,7 +142,20 @@
               (click)="addCheifComplaint()"
               color="primary"
             >
-              <span class="material-icons">add</span>
+              {{ currentLanguageSet?.common?.add }}
+            </button>
+
+            <button
+              type="button"
+              mat-mini-fab
+              class="mat-remove-btn"
+              style="margin-left: 3px; margin-top: 25px"
+              [id]="'removeBtn' + i"
+              *ngIf="i !== 0 || (i === 0 && complaint.touched)"
+              (click)="removeCheifComplaint(i, complaint)"
+              color="warn"
+            >
+              {{ currentLanguageSet?.common?.remove }}
             </button>
           </div>
         </div>

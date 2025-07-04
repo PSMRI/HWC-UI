@@ -29,15 +29,50 @@ import {
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { SetLanguageComponent } from '../../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../../core/components/set-language.component';
 import { HttpServiceService } from '../../../core/services/http-service.service';
 import { Subscription } from 'rxjs';
 import { DoctorService, MasterdataService } from '../../shared/services';
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from '@angular/material/core';
+import {
+  MomentDateAdapter,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-dispensation-details',
   templateUrl: './dispensation-details.component.html',
   styleUrls: ['./dispensation-details.component.css'],
+  providers: [
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-US', // Set the desired locale (e.g., 'en-GB' for dd/MM/yyyy)
+    },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: {
+          dateInput: 'LL',
+        },
+        display: {
+          dateInput: 'DD/MM/YYYY', // Set the desired display format
+          monthYearLabel: 'MMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        },
+      },
+    },
+  ],
 })
 export class DispensationDetailsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy
@@ -72,6 +107,7 @@ export class DispensationDetailsComponent
     private doctorService: DoctorService,
     private httpServiceService: HttpServiceService,
     private route: ActivatedRoute,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -305,10 +341,11 @@ export class DispensationDetailsComponent
       this.getFamilyPlanningNurseFetchDetails();
     }
     if (
-      localStorage.getItem('visitReason') !== undefined &&
-      localStorage.getItem('visitReason') !== 'undefined' &&
-      localStorage.getItem('visitReason') !== null &&
-      localStorage.getItem('visitReason')?.toLowerCase() === 'follow up' &&
+      this.sessionstorage.getItem('visitReason') !== undefined &&
+      this.sessionstorage.getItem('visitReason') !== 'undefined' &&
+      this.sessionstorage.getItem('visitReason') !== null &&
+      this.sessionstorage.getItem('visitReason')?.toLowerCase() ===
+        'follow up' &&
       this.attendant === 'nurse'
     ) {
       this.getFamilyPlanningFetchDetailsForRevisit();

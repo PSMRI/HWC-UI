@@ -1,9 +1,17 @@
 <section id="searchDialog" class="container-fluid">
   <div class="row title info">
-    <h4>{{ currentLanguageSet?.familyTaggingSearch }}</h4>
-    <button class="pull-right close-btn" (click)="onClose()" mat-icon-button>
-      <mat-icon class="md-24">close</mat-icon>
-    </button>
+    <div class="col-6">
+      <h4>{{ currentLanguageSet?.familyTaggingSearch }}</h4>
+    </div>
+    <div class="col-6">
+      <mat-icon
+        class="md-24 pull-right close-btn"
+        style="overflow: visible; cursor: pointer"
+        (click)="onClose()"
+        mat-icon-button
+        >close</mat-icon
+      >
+    </div>
   </div>
 
   <div class="overlay" *ngIf="showProgressBar">

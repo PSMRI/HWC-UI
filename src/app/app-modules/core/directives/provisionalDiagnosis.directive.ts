@@ -27,9 +27,10 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
-import { DiagnosisSearchComponent } from '../component/diagnosis-search/diagnosis-search.component';
+import { DiagnosisSearchComponent } from '../components/diagnosis-search/diagnosis-search.component';
 import { MatDialog } from '@angular/material/dialog';
 import { QuickConsultUtils } from '../../nurse-doctor/shared/utility';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Directive({
   selector: '[appDiagnosisSearch]',
@@ -48,12 +49,13 @@ export class DiagnosisSearchDirective {
   @HostListener('click') onClick() {
     if (this.el.nativeElement.nodeName !== 'INPUT') this.openDialog();
   }
-  utils = new QuickConsultUtils(this.fb);
+  utils = new QuickConsultUtils(this.fb, this.sessionstorage);
 
   constructor(
     private fb: FormBuilder,
     private el: ElementRef,
     private dialog: MatDialog,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   openDialog(): void {

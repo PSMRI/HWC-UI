@@ -33,7 +33,8 @@ import { ConfirmationService } from '../../../../core/services/confirmation.serv
 import { CameraService } from '../../../../core/services/camera.service';
 import { Subscription } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-previous-visit-details',
@@ -143,6 +144,7 @@ export class PreviousVisitDetailsComponent
     private cameraService: CameraService,
     private router: Router,
     public httpServiceService: HttpServiceService,
+    readonly sessionstorage: SessionStorageService,
   ) {}
 
   ngOnInit() {
@@ -274,13 +276,16 @@ export class PreviousVisitDetailsComponent
     const visitDateAndTime = visitDetail.createdDate;
     this.visitDateTime = new Date(visitDateAndTime).toISOString();
 
-    localStorage.setItem('caseSheetBenFlowID', 'null');
-    localStorage.setItem('caseSheetVisitCategory', visitDetail.visitCategory);
-    localStorage.setItem(
+    this.sessionstorage.setItem('caseSheetBenFlowID', 'null');
+    this.sessionstorage.setItem(
+      'caseSheetVisitCategory',
+      visitDetail.visitCategory,
+    );
+    this.sessionstorage.setItem(
       'caseSheetBeneficiaryRegID',
       visitDetail.beneficiaryRegID,
     );
-    localStorage.setItem('caseSheetVisitID', visitDetail.benVisitID);
+    this.sessionstorage.setItem('caseSheetVisitID', visitDetail.benVisitID);
     this.router.navigate(['/common/print']);
   }
 

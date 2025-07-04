@@ -22,7 +22,7 @@
 import { Component, OnInit, AfterViewInit, DoCheck } from '@angular/core';
 import { ConfirmationService } from './../../core/services/confirmation.service';
 import { Router } from '@angular/router';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 
 @Component({

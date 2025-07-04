@@ -1,23 +1,4 @@
 <div class="container-fluid">
-  <button
-    mat-mini-fab
-    style="margin-left: 10px; position: absolute"
-    class="mat_blue_circle"
-    color="primary"
-    (click)="sideNavModeChange(sidenav)"
-  >
-    <mat-icon>account_box</mat-icon>
-  </button>
-
-  <button
-    style="margin-left: 55px; position: absolute"
-    class="mat_blue_circle"
-    (click)="openBenPreviousisitDetails()"
-    matTooltip="{{ current_language_set?.benPreviousVisitDetails }}"
-  >
-    <mat-icon> description</mat-icon>
-  </button>
-
   <mat-sidenav-container class="example-sidenav-fab-container">
     <mat-sidenav #sidenav mode="side" opened="true">
       <div class="example-scrolling-content sidenav">
@@ -61,7 +42,7 @@
                 </button>
                 <button
                   *ngIf="
-                    !showESanjeevaniBtn &&
+                    showESanjeevaniBtn === 2 &&
                     !isSpecialist &&
                     visitCategory !== null &&
                     visitCategory !== undefined
@@ -78,7 +59,7 @@
 
                 <button
                   *ngIf="
-                    showESanjeevaniBtn &&
+                    showESanjeevaniBtn === 1 &&
                     !isSpecialist &&
                     visitCategory !== null &&
                     visitCategory !== undefined
@@ -713,6 +694,43 @@
             </div>
           </mat-step>
 
+          <mat-step *ngIf="showQuickConsult">
+            <ng-template matStepLabel>{{
+              current_language_set?.historyData?.QuickConsultDetails
+                ?.quickconsult
+            }}</ng-template>
+            <app-doctor-quick-consult
+              [quickConsultMode]="quickConsultMode"
+              [patientQuickConsultForm]="patientQuickConsultForm"
+            ></app-doctor-quick-consult>
+
+            <div class="row m-t-20">
+              <div class="col-sm-12 step-btn m-b-40">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  matStepperNext
+                  class="mat_blue"
+                  style="margin-top: 10px"
+                  type="button"
+                >
+                  {{ current_language_set?.common?.next }}
+                </button>
+
+                <button
+                  mat-raised-button
+                  color="primary"
+                  matStepperPrevious
+                  class="mat_blue"
+                  style="margin-top: 10px"
+                  type="button"
+                >
+                  {{ current_language_set?.common?.back }}
+                </button>
+              </div>
+            </div>
+          </mat-step>
+
           <mat-step
             *ngIf="showRefer"
             label="{{ current_language_set?.Refeails?.refer }}"
@@ -740,13 +758,26 @@
                   {{ doctorSaveAndTCSave }}
                 </button>
                 <button
-                  *ngIf="isDoctorUpdate"
+                  *ngIf="isDoctorUpdate && visitCategory !== 'General OPD (QC)'"
                   mat-raised-button
                   color="primary"
                   class="mat_green"
                   style="margin-top: 10px"
                   [disabled]="disableSubmitButton"
                   (click)="updateDoctorDiagnosisForm()"
+                  type="submit"
+                >
+                  {{ doctorUpdateAndTCSubmit }}
+                </button>
+
+                <button
+                  *ngIf="isDoctorUpdate && visitCategory === 'General OPD (QC)'"
+                  mat-raised-button
+                  color="primary"
+                  class="mat_green"
+                  style="margin-top: 10px"
+                  [disabled]="disableSubmitButton"
+                  (click)="updateQuickConsultDiagnosisForm()"
                   type="submit"
                 >
                   {{ doctorUpdateAndTCSubmit }}
@@ -820,59 +851,26 @@
               </div>
             </div>
           </mat-step>
-
-          <mat-step *ngIf="showQuickConsult">
-            <ng-template matStepLabel>{{
-              current_language_set?.historyData?.QuickConsultDetails
-                ?.quickconsult
-            }}</ng-template>
-            <app-doctor-quick-consult
-              [quickConsultMode]="quickConsultMode"
-              [patientQuickConsultForm]="patientQuickConsultForm"
-            ></app-doctor-quick-consult>
-
-            <div class="row m-t-20">
-              <div class="col-sm-12 step-btn m-b-40">
-                <button
-                  *ngIf="isDoctorSave"
-                  mat-raised-button
-                  color="primary"
-                  class="mat_green"
-                  style="margin-top: 10px"
-                  [disabled]="disableSubmitButton"
-                  (click)="submitDoctorDiagnosisForm()"
-                  type="button"
-                >
-                  {{ doctorSaveAndTCSave }}
-                </button>
-                <button
-                  *ngIf="isDoctorUpdate"
-                  mat-raised-button
-                  color="primary"
-                  class="mat_green"
-                  style="margin-top: 10px"
-                  [disabled]="disableSubmitButton"
-                  (click)="updateQuickConsultDiagnosisForm()"
-                  type="button "
-                >
-                  {{ doctorUpdateAndTCSubmit }}
-                </button>
-
-                <button
-                  mat-raised-button
-                  color="primary"
-                  matStepperPrevious
-                  class="mat_blue"
-                  style="margin-top: 10px"
-                  type="button"
-                >
-                  {{ current_language_set?.common?.back }}
-                </button>
-              </div>
-            </div>
-          </mat-step>
         </mat-horizontal-stepper>
       </form>
     </div>
   </mat-sidenav-container>
+
+  <div class="fab-bottom-left">
+    <button
+      mat-mini-fab
+      class="mat_blue_circle mb-2"
+      color="primary"
+      (click)="sideNavModeChange(sidenav)"
+    >
+      <mat-icon>account_box</mat-icon>
+    </button>
+    <button
+      class="mat_blue_circle"
+      (click)="openBenPreviousisitDetails()"
+      matTooltip="{{ current_language_set?.benPreviousVisitDetails }}"
+    >
+      <mat-icon>description</mat-icon>
+    </button>
+  </div>
 </div>

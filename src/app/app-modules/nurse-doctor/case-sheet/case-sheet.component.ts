@@ -30,7 +30,8 @@ import {
 import { Router, ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpServiceService } from '../../core/services/http-service.service';
-import { SetLanguageComponent } from '../../core/component/set-language.component';
+import { SetLanguageComponent } from '../../core/components/set-language.component';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 @Component({
   selector: 'app-case-sheet',
@@ -51,11 +52,12 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private injector: Injector,
-
+    readonly sessionstorage: SessionStorageService,
     public httpServiceService: HttpServiceService,
   ) {}
 
   ngOnInit() {
+    this.assignSelectedLanguage();
     this.caseSheetCategory();
     this.serviceType = this.route.snapshot.params['serviceType'];
     console.log('route1' + this.route.snapshot.params['serviceType']);
@@ -65,8 +67,6 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
       this.previous = input.previous;
       this.serviceType = input.serviceType;
     }
-
-    this.assignSelectedLanguage();
   }
 
   ngDoCheck() {
@@ -76,6 +76,13 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+    if (
+      this.current_language_set === undefined &&
+      this.sessionstorage.getItem('currentLanguageSet')
+    ) {
+      this.current_language_set =
+        this.sessionstorage.getItem('currentLanguageSet');
+    }
   }
 
   ngOnDestroy() {
@@ -88,14 +95,14 @@ export class CaseSheetComponent implements OnInit, DoCheck, OnDestroy {
     let type;
     if (this.previous) {
       if (dataStore === 'previous') {
-        type = localStorage.getItem('previousCaseSheetVisitCategory');
+        type = this.sessionstorage.getItem('previousCaseSheetVisitCategory');
       }
     } else {
       if (dataStore === 'current') {
-        type = localStorage.getItem('caseSheetVisitCategory');
+        type = this.sessionstorage.getItem('caseSheetVisitCategory');
       }
       if (dataStore === 'previous') {
-        type = localStorage.getItem('previousCaseSheetVisitCategory');
+        type = this.sessionstorage.getItem('previousCaseSheetVisitCategory');
       }
     }
 

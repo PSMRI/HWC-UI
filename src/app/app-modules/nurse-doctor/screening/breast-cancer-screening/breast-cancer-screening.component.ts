@@ -35,7 +35,7 @@ import { DoctorService, MasterdataService } from '../../shared/services';
 import { Subscription } from 'rxjs';
 import { ConfirmationService } from 'src/app/app-modules/core/services';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-import { SetLanguageComponent } from 'src/app/app-modules/core/component/set-language.component';
+import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { environment } from 'src/environments/environment';
 import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
 
