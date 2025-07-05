@@ -36,6 +36,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { MmuRbsDetailsComponent } from 'src/app/app-modules/core/components/mmu-rbs-details/mmu-rbs-details.component';
 import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotcomponent/iotcomponent.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-general-patient-vitals',
@@ -101,6 +102,7 @@ export class GeneralPatientVitalsComponent
     private route: ActivatedRoute,
     private ncdScreeningService: NcdScreeningService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -1182,5 +1184,13 @@ export class GeneralPatientVitalsComponent
 
   onCheckboxChange(symptomName: any, event: any) {
     symptomName = event.checked ? 1 : 0;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(fieldName, 'Vitals');
+    } catch (error) {
+      console.error(`❌ Error tracking vitals ${fieldName}:`, error);
+    }
   }
 }
