@@ -36,8 +36,11 @@
         name="visitReason"
         formControlName="visitReason"
         (selectionChange)="
-          reasonSelected(patientVisitDetailsForm.controls['visitReason'].value)
+    
+      reasonSelected(patientVisitDetailsForm.controls['visitReason'].
+value)
         "
+        (click)="trackFieldInteraction('Reason for Visit')"
         required
       >
         <mat-option
@@ -68,6 +71,7 @@
             patientVisitDetailsForm.controls['visitCategory'].value
           )
         "
+        (click)="trackFieldInteraction('Visit Category')"
         required
       >
         <mat-option
@@ -94,6 +98,7 @@
         [style.width]="'100%'"
         name="subVisitCategory"
         formControlName="subVisitCategory"
+        (click)="trackFieldInteraction('Sub Visit Category')"
       >
         <mat-option
           class="dropdownValueSubVisitCategory"
@@ -127,6 +132,7 @@
         name="pregnancyStatus"
         formControlName="pregnancyStatus"
         [attr.readonly]="visitCategory === 'ANC'"
+        (click)="trackFieldInteraction('Pregnancy Status')"
       >
         <mat-option
           *ngFor="let pregnancyStatus of templatePregnancyStatus"
@@ -161,6 +167,7 @@
         maxlength="12"
         name="rCHID"
         formControlName="rCHID"
+        (focus)="trackFieldInteraction('MCTS/RCH ID')"
         class="text-field-disabled"
       />
     </mat-form-field>
@@ -188,6 +195,7 @@
             patientVisitDetailsForm.controls['followUpForFpMethod'].value
           )
         "
+        (click)="trackFieldInteraction('Follow Up FP Method')"
         multiple
         required
       >
@@ -224,6 +232,7 @@
         allowText="alphaspace"
         name="otherFollowUpForFpMethod"
         formControlName="otherFollowUpForFpMethod"
+        (focus)="trackFieldInteraction('Other Follow Up FP Method')"
       />
     </mat-form-field>
   </div>
@@ -251,6 +260,7 @@
             patientVisitDetailsForm.controls['sideEffects'].value
           )
         "
+        (click)="trackFieldInteraction('Side Effects')"
       >
         <ng-container *ngFor="let effects of sideEffectsList">
           <mat-option class="dropdownHeight" [value]="effects.name">
@@ -277,6 +287,7 @@
         allowText="alphaspace"
         name="otherSideEffects"
         formControlName="otherSideEffects"
+        (focus)="trackFieldInteraction('Other Side Effects')"
       />
     </mat-form-field>
   </div>
@@ -292,7 +303,7 @@
     <mat-radio-group
       *ngIf="isRadioGroupVisible"
       formControlName="IdrsOrCbac"
-      (selectionChange)="enableHistoryScreenOnIdrs(IdrsOrCbac)"
+      (selectionChange)="enableHistoryScreenOnIdrs(IdrsOrCbac); trackFieldInteraction('IDRS/CBAC Selection')"
       [(ngModel)]="keyType"
     >
       <mat-radio-button color="primary" class="radio-button" value="IDRS">{{

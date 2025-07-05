@@ -39,6 +39,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { LabService } from 'src/app/app-modules/lab/shared/services';
 import { ViewRadiologyUploadedFilesComponent } from 'src/app/app-modules/lab/view-radiology-uploaded-files/view-radiology-uploaded-files.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-patient-upload-files',
@@ -87,6 +88,7 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -362,5 +364,8 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
       const x: any = document.getElementById('fileUpload');
       x.click();
     }
+  }
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Visit Details');
   }
 }

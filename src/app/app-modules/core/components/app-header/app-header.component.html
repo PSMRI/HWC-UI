@@ -180,6 +180,7 @@
             [routerLink]="[item.work[1].link]"
             routerLinkActive="active"
             [ngClass]="{ active: updateCSSToShowActiveRegistrar }"
+            (click)="trackRoleButtonClick('Registrar')"
           >
             {{ item.work[1].label }}
           </button>
@@ -195,12 +196,18 @@
             mat-button
             [routerLink]="[item.link]"
             routerLinkActive="active"
+            (click)="trackRoleButtonClick(item.role)"
           >
             {{ item.label }}
           </button>
         </li>
         <li class="nav-item" *ngIf="item.role === 'TC Specialist'">
-          <button class="nav-btn" mat-button [matMenuTriggerFor]="TCitems">
+          <button 
+            class="nav-btn" 
+            mat-button 
+            [matMenuTriggerFor]="TCitems"
+            (click)="trackRoleButtonClick('TC Specialist')"
+          >
             {{ item.label }}
             <span class="caret"></span>
           </button>
