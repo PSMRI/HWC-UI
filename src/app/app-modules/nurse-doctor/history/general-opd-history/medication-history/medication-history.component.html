@@ -6,7 +6,7 @@
       id="previousANCMedicationHistory"
       color="primary"
       matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-      (click)="getPreviousMedicationHistory()"
+      (click)="getPreviousMedicationHistory(); trackFieldInteraction('Previous Medication History')"
       (keydown.enter)="getPreviousMedicationHistory()"
       (keydown.space)="getPreviousMedicationHistory()"
     >
