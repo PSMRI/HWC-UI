@@ -48,7 +48,7 @@
                 name="pastAcuteIllness"
                 formControlName="illnessType"
                 (selectionChange)="
-                  filterPastIllnessType($event.value, i, pastIllness)
+                  filterPastIllnessType($event.value, i, pastIllness); trackFieldInteraction('Past Illness')
                 "
               >
                 <mat-option
@@ -78,6 +78,7 @@
                 allowText="alphaspace"
                 name="otherIllnessType"
                 formControlName="otherIllnessType"
+                (focus)="trackFieldInteraction('Other Past Illness')"
                 (blur)="otherIlnessForHrp()"
               />
             </mat-form-field>
@@ -97,6 +98,7 @@
                 name="timePeriodAgo"
                 formControlName="timePeriodAgo"
                 (change)="validateDuration(pastIllness)"
+                (focus)="trackFieldInteraction('Illness Duration')"
               />
             </mat-form-field>
           </div>
@@ -109,7 +111,7 @@
               <mat-select
                 name="timePeriodUnit"
                 formControlName="timePeriodUnit"
-                (selectionChange)="validateDuration(pastIllness)"
+                (selectionChange)="validateDuration(pastIllness); trackFieldInteraction('Illness Time Period')"
               >
                 <mat-option value="Days">Day(s)</mat-option>
                 <mat-option value="Weeks">Week(s)</mat-option>
@@ -181,7 +183,7 @@
               formControlName="surgeryType"
               name="surgeryType"
               (selectionChange)="
-                filterPastSurgeryType($event.value, i, pastSurgery)
+                filterPastSurgeryType($event.value, i, pastSurgery); trackFieldInteraction('Past Surgery Type')
               "
             >
               <mat-option
@@ -210,6 +212,7 @@
               allowText="alphaspace"
               name="otherSurgeryType"
               formControlName="otherSurgeryType"
+              (focus)="trackFieldInteraction('Other Past Surgery')"
             />
           </mat-form-field>
         </div>
@@ -228,6 +231,7 @@
               name="timePeriodAgo"
               formControlName="timePeriodAgo"
               (change)="validateDuration(pastSurgery)"
+              (focus)="trackFieldInteraction('Surgery Duration')"
             />
           </mat-form-field>
         </div>
@@ -241,6 +245,7 @@
               formControlName="timePeriodUnit"
               name="timePeriodUnit"
               (change)="validateDuration(pastSurgery)"
+              (selectionChange)="trackFieldInteraction('Surgery Time Period')"
             >
               <mat-option value="Days">Day(s)</mat-option>
               <mat-option value="Weeks">Week(s)</mat-option>
