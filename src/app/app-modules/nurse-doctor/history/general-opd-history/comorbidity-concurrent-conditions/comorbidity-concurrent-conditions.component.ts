@@ -47,6 +47,7 @@ import { HrpService } from '../../../shared/services/hrp.service';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-general-comorbidity-concurrent-conditions',
@@ -85,6 +86,7 @@ export class ComorbidityConcurrentConditionsComponent
     public httpServiceService: HttpServiceService,
     private masterdataService: MasterdataService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {
     this.nurseService.listen().subscribe((m: any) => {
       console.log(m);
@@ -561,5 +563,13 @@ export class ComorbidityConcurrentConditionsComponent
     // if (event.checked) {
     // } else {
     // }
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(fieldName, 'Comorbidity');
+    } catch (error) {
+      console.error(`❌ Error tracking comorbidity ${fieldName}:`, error);
+    }
   }
 }
