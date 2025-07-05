@@ -24,6 +24,7 @@ import { MasterdataService } from '../../../../shared/services';
 import { FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-musculoskeletal-system',
@@ -144,6 +145,7 @@ export class MusculoskeletalSystemComponent
   constructor(
     private masterdataService: MasterdataService,
     public httpServiceService: HttpServiceService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -171,5 +173,19 @@ export class MusculoskeletalSystemComponent
       this.masterdataService.nurseMasterData$.subscribe((masterData) => {
         if (masterData) this.selectTypeOfJoint = masterData.jointTypes;
       });
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(
+        fieldName,
+        'Musculoskeletal System',
+      );
+    } catch (error) {
+      console.error(
+        `❌ Error tracking musculoskeletal system ${fieldName}:`,
+        error,
+      );
+    }
   }
 }

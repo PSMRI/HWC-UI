@@ -23,6 +23,7 @@ import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-head-to-toe-examination',
@@ -40,6 +41,7 @@ export class HeadToToeExaminationComponent implements OnInit, DoCheck {
   constructor(
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -118,5 +120,19 @@ export class HeadToToeExaminationComponent implements OnInit, DoCheck {
   }
   get nipples() {
     return this.headToToeExaminationForm.controls['nipples'].value;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(
+        fieldName,
+        'Head to Toe Examination',
+      );
+    } catch (error) {
+      console.error(
+        `❌ Error tracking head to toe examination ${fieldName}:`,
+        error,
+      );
+    }
   }
 }

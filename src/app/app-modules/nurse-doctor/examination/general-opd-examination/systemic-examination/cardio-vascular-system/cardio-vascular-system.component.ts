@@ -23,7 +23,7 @@ import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
-
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 @Component({
   selector: 'app-nurse-cardio-vascular-system',
   templateUrl: './cardio-vascular-system.component.html',
@@ -34,7 +34,10 @@ export class CardioVascularSystemComponent implements OnInit, DoCheck {
   cardioVascularSystemForm!: FormGroup;
   current_language_set: any;
 
-  constructor(public httpServiceService: HttpServiceService) {}
+  constructor(
+    public httpServiceService: HttpServiceService,
+    private trackingService: AmritTrackingService,
+  ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
@@ -47,5 +50,19 @@ export class CardioVascularSystemComponent implements OnInit, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(
+        fieldName,
+        'Cardiovascular System',
+      );
+    } catch (error) {
+      console.error(
+        `❌ Error tracking cardiovascular system ${fieldName}:`,
+        error,
+      );
+    }
   }
 }

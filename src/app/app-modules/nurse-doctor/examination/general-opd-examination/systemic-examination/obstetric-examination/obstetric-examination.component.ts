@@ -35,6 +35,7 @@ import {
 } from 'src/app/app-modules/nurse-doctor/shared/services';
 import { HrpService } from 'src/app/app-modules/nurse-doctor/shared/services/hrp.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 @Component({
   selector: 'app-nurse-anc-obstetric-examination',
   templateUrl: './obstetric-examination.component.html',
@@ -217,6 +218,7 @@ export class ObstetricExaminationComponent
     private datePipe: DatePipe,
     readonly sessionstorage: SessionStorageService,
     private doctorService: DoctorService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnDestroy() {
@@ -502,4 +504,18 @@ export class ObstetricExaminationComponent
   }
 
   /*END*/
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(
+        fieldName,
+        'Obstetric Examination',
+      );
+    } catch (error) {
+      console.error(
+        `❌ Error tracking obstetric examination ${fieldName}:`,
+        error,
+      );
+    }
+  }
 }
