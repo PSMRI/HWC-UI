@@ -39,6 +39,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-general-family-history',
@@ -75,6 +76,7 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private masterdataService: MasterdataService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -411,5 +413,13 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(fieldName, 'Family History');
+    } catch (error) {
+      console.error(`❌ Error tracking family history ${fieldName}:`, error);
+    }
   }
 }
