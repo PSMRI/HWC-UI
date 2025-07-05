@@ -41,6 +41,7 @@ import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
 } from '@angular/material-moment-adapter';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-general-menstrual-history',
@@ -97,6 +98,7 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
     private confirmationService: ConfirmationService,
     private masterdataService: MasterdataService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -315,5 +317,16 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
     }
 
     this.disableNoneMenstrualProblem = flag;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(
+        fieldName,
+        'Menstrual History',
+      );
+    } catch (error) {
+      console.error(`❌ Error tracking menstrual history ${fieldName}:`, error);
+    }
   }
 }
