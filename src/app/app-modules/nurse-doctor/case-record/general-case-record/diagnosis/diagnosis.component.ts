@@ -23,6 +23,7 @@ import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-diagnosis',
@@ -40,7 +41,10 @@ export class DiagnosisComponent implements OnInit, DoCheck {
   caseRecordMode!: string;
   current_language_set: any;
 
-  constructor(public httpServiceService: HttpServiceService) {}
+  constructor(
+    public httpServiceService: HttpServiceService,
+    private trackingService: AmritTrackingService,
+  ) {}
 
   ngOnInit() {
     this.assignSelectedLanguage();
@@ -53,5 +57,13 @@ export class DiagnosisComponent implements OnInit, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(fieldName, 'Diagnosis');
+    } catch (error) {
+      console.error(`❌ Error tracking diagnosis ${fieldName}:`, error);
+    }
   }
 }
