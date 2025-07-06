@@ -45,6 +45,7 @@ import { Subscription } from 'rxjs';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 interface prescribe {
   id: any;
@@ -145,6 +146,7 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private dialog: MatDialog,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -660,5 +662,13 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
   get prescriptionAndCounselling() {
     return this.prescriptionCounsellingForm.controls['counsellingProvidedList']
       .value;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(fieldName, 'Prescription');
+    } catch (error) {
+      console.error(`❌ Error tracking prescription ${fieldName}:`, error);
+    }
   }
 }
