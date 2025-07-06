@@ -40,6 +40,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { environment } from 'src/environments/environment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-patient-investigations',
@@ -68,6 +69,7 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
     private doctorService: DoctorService,
     private nurseService: NurseService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -222,5 +224,13 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
 
     // Update form control value
     this.patientInvestigationsForm.controls['laboratoryList'].setValue(item);
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    try {
+      this.trackingService.trackFieldInteraction(fieldName, 'Investigations');
+    } catch (error) {
+      console.error(`❌ Error tracking investigations ${fieldName}:`, error);
+    }
   }
 }
