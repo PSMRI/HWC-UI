@@ -361,7 +361,7 @@ export class PreviousVisitDetailsComponent
     try {
       this.trackingService.trackFieldInteraction(
         fieldName,
-        'Central Nervous System',
+        'Previous Visit Details',
       );
     } catch (error) {
       console.error(
