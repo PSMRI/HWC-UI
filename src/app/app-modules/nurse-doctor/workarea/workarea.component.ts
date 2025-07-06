@@ -4425,6 +4425,12 @@ export class WorkareaComponent
               data.abdmFacilityName,
             );
             this.saveAbdmFacilityForVisit();
+          } else {
+            this.abdmFacilityId = null;
+            this.abdmFacilityName = null;
+            this.sessionstorage.setItem('abdmFacilityId', null);
+            this.sessionstorage.setItem('abdmFacilityName', null);
+            this.saveAbdmFacilityForVisit();
           }
         } else {
           this.confirmationService.confirm(res.errorMessage, 'info');

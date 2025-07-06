@@ -83,7 +83,8 @@ interface prescribe {
   encapsulation: ViewEncapsulation.None,
 })
 export class QuickConsultComponent
-  implements OnInit, OnDestroy, OnChanges, DoCheck {
+  implements OnInit, OnDestroy, OnChanges, DoCheck
+{
   utils = new QuickConsultUtils(this.fb, this.sessionstorage);
 
   @ViewChild('prescriptionForm')
@@ -167,7 +168,7 @@ export class QuickConsultComponent
   displayedColumns: any = ['chiefcomplaint', 'description'];
 
   dataSource = new MatTableDataSource<any>();
-  suggestedDiagnosisList: any= [];
+  suggestedDiagnosisList: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -181,7 +182,7 @@ export class QuickConsultComponent
     private testInVitalsService: TestInVitalsService,
     private nurseService: NurseService,
     readonly sessionstorage: SessionStorageService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.doctorService.setCapturedCaserecordDeatilsByDoctor(null);
@@ -301,8 +302,9 @@ export class QuickConsultComponent
 
   displayFn(option: any): string {
     if (option) {
-      return `${option.itemName} ${option.strength}${option.unitOfMeasurement ? option.unitOfMeasurement : ''
-        }${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`;
+      return `${option.itemName} ${option.strength}${
+        option.unitOfMeasurement ? option.unitOfMeasurement : ''
+      }${option.quantityInHand ? '(' + option.quantityInHand + ')' : ''}`;
     } else {
       return '';
     }
@@ -416,11 +418,11 @@ export class QuickConsultComponent
             .confirm(
               'info ' + typeOfDrug,
               this.currentLanguageSet.stockNotAvailableWouldYouPrescribe +
-              ' ' +
-              option.itemName +
-              ' ' +
-              (option.strength ? option.strength : '') +
-              (option.unitOfMeasurement ? option.unitOfMeasurement : ''),
+                ' ' +
+                option.itemName +
+                ' ' +
+                (option.strength ? option.strength : '') +
+                (option.unitOfMeasurement ? option.unitOfMeasurement : ''),
             )
             .subscribe((res: any) => {
               if (!res) {
@@ -517,7 +519,7 @@ export class QuickConsultComponent
             const visitCategory = this.sessionstorage.getItem('visitCategory');
             if (
               this.sessionstorage.getItem('referredVisitCode') ===
-              'undefined' ||
+                'undefined' ||
               this.sessionstorage.getItem('referredVisitCode') === undefined ||
               this.sessionstorage.getItem('referredVisitCode') === null ||
               this.sessionstorage.getItem('referredVisitCode') === ''
@@ -1323,7 +1325,7 @@ export class QuickConsultComponent
       }
     }
   }
- 
+
   checkProvisionalDiagnosisValidity(provisionalDiagnosis: any) {
     if (!provisionalDiagnosis || !provisionalDiagnosis.value) {
       return true; // Disable if form group is missing
@@ -1359,9 +1361,11 @@ export class QuickConsultComponent
 
   onDiagnosisInputKeyup(value: string, index: number) {
     if (value.length >= 3) {
-      this.masterdataService.searchDiagnosisBasedOnPageNo(value, index).subscribe((results: any) => {
-        this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
-      });
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
     } else {
       this.suggestedDiagnosisList[index] = [];
     }
@@ -1372,6 +1376,16 @@ export class QuickConsultComponent
   }
 
   onDiagnosisSelected(selected: any, index: number) {
-    this.patientQuickConsultForm.get(['provisionalDiagnosisList', index])?.setValue(selected);
+    const diagnosisFormArray = this.patientQuickConsultForm.get(
+      'provisionalDiagnosisList',
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }
