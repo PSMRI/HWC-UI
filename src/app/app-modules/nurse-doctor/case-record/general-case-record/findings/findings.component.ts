@@ -125,11 +125,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Findings');
-    } catch (error) {
-      console.error(`❌ Error tracking findings ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Findings');
   }
 
   getComplaints(): AbstractControl[] | null {

@@ -569,6 +569,6 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(fieldName, 'Visit Details');
+    this.trackingService.trackFieldInteraction(fieldName, 'Chief Complaints');
   }
 }

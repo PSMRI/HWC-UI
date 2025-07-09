@@ -1204,10 +1204,6 @@ export class GeneralPersonalHistoryComponent
     }
   }
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Personal History');
-    } catch (error) {
-      console.error(`❌ Error tracking personal history ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Personal History');
   }
 }

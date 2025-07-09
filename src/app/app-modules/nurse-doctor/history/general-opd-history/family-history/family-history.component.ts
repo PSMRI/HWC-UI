@@ -416,10 +416,6 @@ export class FamilyHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Family History');
-    } catch (error) {
-      console.error(`❌ Error tracking family history ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Family History');
   }
 }

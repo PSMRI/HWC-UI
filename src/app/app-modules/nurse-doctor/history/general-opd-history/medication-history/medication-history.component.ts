@@ -333,16 +333,6 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Medication History',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking medication history ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Medication History');
   }
 }

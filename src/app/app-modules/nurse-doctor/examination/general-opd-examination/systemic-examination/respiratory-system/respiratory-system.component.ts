@@ -104,16 +104,6 @@ export class RespiratorySystemComponent implements OnInit, DoCheck {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Respiratory System',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking respiratory system ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Respiratory System');
   }
 }

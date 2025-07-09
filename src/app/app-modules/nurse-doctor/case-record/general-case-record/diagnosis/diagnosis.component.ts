@@ -60,10 +60,6 @@ export class DiagnosisComponent implements OnInit, DoCheck {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Diagnosis');
-    } catch (error) {
-      console.error(`❌ Error tracking diagnosis ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Diagnosis');
   }
 }

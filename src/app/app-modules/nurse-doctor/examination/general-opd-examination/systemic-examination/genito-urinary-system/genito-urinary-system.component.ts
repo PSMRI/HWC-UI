@@ -54,16 +54,9 @@ export class GenitoUrinarySystemComponent implements OnInit, DoCheck {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Genitourinary System',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking genitourinary system ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Genitourinary System',
+    );
   }
 }

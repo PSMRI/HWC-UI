@@ -141,16 +141,9 @@ export class PreviousSignificiantFindingsComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Central Nervous System',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking central nervous system ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Previous Significant Findings',
+    );
   }
 }

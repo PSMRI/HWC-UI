@@ -123,16 +123,9 @@ export class HeadToToeExaminationComponent implements OnInit, DoCheck {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Head to Toe Examination',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking head to toe examination ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Head to Toe Examination',
+    );
   }
 }

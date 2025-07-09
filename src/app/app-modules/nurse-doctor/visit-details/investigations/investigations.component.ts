@@ -227,10 +227,6 @@ export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Investigations');
-    } catch (error) {
-      console.error(`❌ Error tracking investigations ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Investigations');
   }
 }

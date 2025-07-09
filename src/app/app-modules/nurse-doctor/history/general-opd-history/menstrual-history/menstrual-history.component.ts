@@ -320,13 +320,6 @@ export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Menstrual History',
-      );
-    } catch (error) {
-      console.error(`❌ Error tracking menstrual history ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Menstrual History');
   }
 }

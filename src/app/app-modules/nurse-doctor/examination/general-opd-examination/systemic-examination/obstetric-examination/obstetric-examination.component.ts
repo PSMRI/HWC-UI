@@ -506,16 +506,9 @@ export class ObstetricExaminationComponent
   /*END*/
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Obstetric Examination',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking obstetric examination ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Obstetric Examination',
+    );
   }
 }

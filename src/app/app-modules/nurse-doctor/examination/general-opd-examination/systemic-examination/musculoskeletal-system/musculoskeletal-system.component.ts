@@ -176,16 +176,9 @@ export class MusculoskeletalSystemComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Musculoskeletal System',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking musculoskeletal system ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Musculoskeletal System',
+    );
   }
 }

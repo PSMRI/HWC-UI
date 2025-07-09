@@ -821,16 +821,9 @@ export class PastObstericHistoryComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Past Obstetric History',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking past obstetric history ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Past Obstetric History',
+    );
   }
 }

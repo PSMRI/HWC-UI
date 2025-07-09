@@ -665,10 +665,6 @@ export class PrescriptionComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Prescription');
-    } catch (error) {
-      console.error(`❌ Error tracking prescription ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Prescription');
   }
 }

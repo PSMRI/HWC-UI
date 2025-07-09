@@ -180,7 +180,7 @@
             [routerLink]="[item.work[1].link]"
             routerLinkActive="active"
             [ngClass]="{ active: updateCSSToShowActiveRegistrar }"
-            (click)="trackRoleButtonClick('Registrar')"
+            (click)="trackFieldInteraction('Role_Registrar')"
           >
             {{ item.work[1].label }}
           </button>
@@ -196,7 +196,7 @@
             mat-button
             [routerLink]="[item.link]"
             routerLinkActive="active"
-            (click)="trackRoleButtonClick(item.role)"
+            (click)="trackFieldInteraction('Role_' + item.role)"
           >
             {{ item.label }}
           </button>
@@ -206,7 +206,7 @@
             class="nav-btn" 
             mat-button 
             [matMenuTriggerFor]="TCitems"
-            (click)="trackRoleButtonClick('TC Specialist')"
+            (click)="trackFieldInteraction('Role_TC Specialist')"
           >
             {{ item.label }}
             <span class="caret"></span>

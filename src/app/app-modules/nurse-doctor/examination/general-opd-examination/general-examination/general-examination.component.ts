@@ -288,16 +288,9 @@ export class GeneralExaminationComponent implements OnInit, DoCheck, OnChanges {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'General Examination',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking general examination ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'General Examination',
+    );
   }
 }

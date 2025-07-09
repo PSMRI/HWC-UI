@@ -358,16 +358,9 @@ export class PreviousVisitDetailsComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Previous Visit Details',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking central nervous system ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Previous Visit Details',
+    );
   }
 }

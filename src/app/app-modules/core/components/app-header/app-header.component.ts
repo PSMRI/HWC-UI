@@ -36,7 +36,7 @@ import { IotService } from '../../services/iot.service';
 import { MatDialog } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking'; // Add this import
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-header',
@@ -75,7 +75,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     private dialog: MatDialog,
     public service: IotService,
     readonly sessionstorage: SessionStorageService,
-    private trackingService: AmritTrackingService, // Add this injection
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -333,9 +333,7 @@ export class AppHeaderComponent implements OnInit, AfterContentChecked {
     });
   }
 
-  trackRoleButtonClick(roleName: string) {
-    this.trackingService.trackButtonClick(`Role_${roleName}`);
-    // You can also use the more generic event tracking if you prefer:
-    // this.trackingService.trackEvent('Navigation', 'RoleButtonClick', roleName);
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Roles');
   }
 }

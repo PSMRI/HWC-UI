@@ -53,16 +53,9 @@ export class CardioVascularSystemComponent implements OnInit, DoCheck {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(
-        fieldName,
-        'Cardiovascular System',
-      );
-    } catch (error) {
-      console.error(
-        `❌ Error tracking cardiovascular system ${fieldName}:`,
-        error,
-      );
-    }
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Cardiovascular System',
+    );
   }
 }

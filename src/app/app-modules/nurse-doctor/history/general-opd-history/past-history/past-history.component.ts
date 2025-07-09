@@ -758,10 +758,6 @@ export class PastHistoryComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Past History');
-    } catch (error) {
-      console.error(`❌ Error tracking past history ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Past History');
   }
 }

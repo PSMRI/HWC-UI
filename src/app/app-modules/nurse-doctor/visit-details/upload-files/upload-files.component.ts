@@ -366,6 +366,6 @@ export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
     }
   }
   trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(fieldName, 'Visit Details');
+    this.trackingService.trackFieldInteraction(fieldName, 'Upload Files');
   }
 }

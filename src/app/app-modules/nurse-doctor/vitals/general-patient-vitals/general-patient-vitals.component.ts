@@ -1187,10 +1187,6 @@ export class GeneralPatientVitalsComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Vitals');
-    } catch (error) {
-      console.error(`❌ Error tracking vitals ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Vitals');
   }
 }

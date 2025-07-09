@@ -566,10 +566,6 @@ export class ComorbidityConcurrentConditionsComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Comorbidity');
-    } catch (error) {
-      console.error(`❌ Error tracking comorbidity ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Comorbidity');
   }
 }

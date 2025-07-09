@@ -847,6 +847,6 @@ export class PatientVisitDetailsComponent
   }
 
   trackFieldInteraction(fieldName: string) {
-    this.trackingService.trackFieldInteraction(fieldName, 'Registration');
+    this.trackingService.trackFieldInteraction(fieldName, 'visit-details');
   }
 }

@@ -604,10 +604,6 @@ export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   trackFieldInteraction(fieldName: string) {
-    try {
-      this.trackingService.trackFieldInteraction(fieldName, 'Refer & Revisit');
-    } catch (error) {
-      console.error(`❌ Error tracking refer & revisit ${fieldName}:`, error);
-    }
+    this.trackingService.trackFieldInteraction(fieldName, 'Refer & Revisit');
   }
 }
