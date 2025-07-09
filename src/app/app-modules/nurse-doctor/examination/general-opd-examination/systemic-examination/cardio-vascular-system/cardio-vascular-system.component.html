@@ -8,6 +8,7 @@
     <mat-radio-group
       name="jugularVenousPulse_JVP"
       formControlName="jugularVenousPulse_JVP"
+      (change)="trackFieldInteraction('Jugular Venous Pressure')"
     >
       <mat-radio-button color="primary" value="Normal">{{
         current_language_set?.common?.normal
@@ -32,6 +33,7 @@
         name="apexbeatLocation"
         formControlName="apexbeatLocation"
         maxlength="300"
+        (focus)="trackFieldInteraction('Apex Beat Location')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -50,6 +52,7 @@
         name="apexbeatType"
         formControlName="apexbeatType"
         maxlength="300"
+        (focus)="trackFieldInteraction('Apex Beat Type')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -68,6 +71,7 @@
         name="firstHeartSound_S1"
         formControlName="firstHeartSound_S1"
         maxlength="300"
+        (focus)="trackFieldInteraction('First Heart Sound')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -86,6 +90,7 @@
         name="secondHeartSound_S2"
         formControlName="secondHeartSound_S2"
         maxlength="300"
+        (focus)="trackFieldInteraction('Second Heart Sound')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -104,6 +109,7 @@
         name="additionalHeartSounds"
         formControlName="additionalHeartSounds"
         maxlength="300"
+        (focus)="trackFieldInteraction('Additional Heart Sounds')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -114,7 +120,11 @@
         ?.cardioForANC_OPD_PNC?.murmurs
     }}</label>
     <div class="clearfix"></div>
-    <mat-radio-group name="murmurs" formControlName="murmurs">
+    <mat-radio-group
+      name="murmurs"
+      formControlName="murmurs"
+      (change)="trackFieldInteraction('Murmurs')"
+    >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
       }}</mat-radio-button>
@@ -130,7 +140,11 @@
         ?.cardioForANC_OPD_PNC?.pericardialrub
     }}</label>
     <div class="clearfix"></div>
-    <mat-radio-group name="pericardialRub" formControlName="pericardialRub">
+    <mat-radio-group
+      name="pericardialRub"
+      formControlName="pericardialRub"
+      (change)="trackFieldInteraction('Pericardial Rub')"
+    >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
       }}</mat-radio-button>

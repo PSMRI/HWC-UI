@@ -6,7 +6,7 @@
       id="previousANCMedicationHistory"
       color="primary"
       matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-      (click)="getPreviousMedicationHistory()"
+      (click)="getPreviousMedicationHistory(); trackFieldInteraction('Previous Medication History')"
       (keydown.enter)="getPreviousMedicationHistory()"
       (keydown.space)="getPreviousMedicationHistory()"
     >
@@ -44,6 +44,7 @@
               maxlength="50"
               formControlName="currentMedication"
               (input)="enableDuration(medicationHistory)"
+              (focus)="trackFieldInteraction('Current Medication')"
               name="currentMedication"
             />
           </mat-form-field>
@@ -63,6 +64,7 @@
               formControlName="timePeriodAgo"
               name="timePeriodAgo"
               (change)="validateDuration(medicationHistory)"
+              (focus)="trackFieldInteraction('Medication Duration')"
             />
           </mat-form-field>
         </div>
@@ -76,7 +78,7 @@
               class="select-full-width"
               formControlName="timePeriodUnit"
               name="timePeriodAgoUnit"
-              (selectionChange)="validateDuration(medicationHistory)"
+              (selectionChange)="validateDuration(medicationHistory); trackFieldInteraction('Medication Duration Unit')"
             >
               <mat-option value="Days">Day(s)</mat-option>
               <mat-option value="Weeks">Week(s)</mat-option>
@@ -93,10 +95,11 @@
             class="mat-add-btn"
             *ngIf="isLast"
             [disabled]="checkValidity(medicationHistory)"
-            (click)="addMedicationHistory()"
+            (click)="addMedicationHistory(); trackFieldInteraction('Add Medication')"
           >
             {{ currentLanguageSet?.common?.add }}
           </button>
+
           <button
             mat-mini-fab
             color="warn"
@@ -107,7 +110,7 @@
               (i === 0 &&
                 (medicationHistory.touched || medicationHistory.dirty))
             "
-            (click)="removeMedicationHistory(i, medicationHistory)"
+            (click)="removeMedicationHistory(i, medicationHistory); trackFieldInteraction('Remove Medication')"
           >
             {{ currentLanguageSet?.common?.remove }}
           </button>

@@ -69,6 +69,14 @@ export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
 
+  tracking: {
+    platform: 'matomo',
+    siteId: 1,
+    trackerUrl: '//127.0.0.1/',
+    trackingPlatform: 'development',
+    enabled: true,
+  },
+
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,

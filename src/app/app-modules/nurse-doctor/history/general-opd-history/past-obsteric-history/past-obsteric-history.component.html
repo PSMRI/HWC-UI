@@ -4,7 +4,7 @@
   id="previousANCPastObstetricHistory"
   color="primary"
   matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-  (click)="getPreviousObstetricHistory()"
+  (click)="getPreviousObstetricHistory(); trackFieldInteraction('Previous Past Obstetric History')"
   (keydown.enter)="getPreviousObstetricHistory()"
   (keydown.space)="getPreviousObstetricHistory()"
 >
@@ -33,6 +33,7 @@
         [readonly]="visitCategory === 'ANC' ? true : false"
         formControlName="totalNoOfPreg"
         (blur)="checkTotalPregnancy(totalNoOfPreg)"
+        (focus)="trackFieldInteraction('Total Number of Pregnancies')"
       />
     </mat-form-field>
   </div>
@@ -58,7 +59,7 @@
           formControlName="value"
           class="checkbox"
           color="primary"
-          (change)="togglePastObstericHistory($event, i + 1)"
+          (change)="togglePastObstericHistory($event, i + 1); trackFieldInteraction('Pregnancy Order ' + (i + 1))"
         >
           {{ i + 1 }}
         </mat-checkbox>
@@ -109,7 +110,7 @@
                       pastObstericHistory,
                       i,
                       true
-                    )
+                    ); trackFieldInteraction('Pregnancy Complications')
                   "
                   multiple
                 >
@@ -157,6 +158,7 @@
                   maxlength="50"
                   name="others"
                   formControlName="otherPregComplication"
+                  (focus)="trackFieldInteraction('Other Pregnancy Complication')"
                 />
               </mat-form-field>
             </div>
@@ -171,7 +173,7 @@
                   class="select-full-width"
                   name="outcomeOfPregnancy"
                   formControlName="pregOutcome"
-                  (selectionChange)="checkPregnancyOutcome(pastObstericHistory)"
+                  (selectionChange)="checkPregnancyOutcome(pastObstericHistory); trackFieldInteraction('Pregnancy Outcome')"
                 >
                   <mat-option
                     *ngFor="let outcome of masterData?.pregOutcomes"
@@ -203,6 +205,7 @@
                       pastObstericHistory.value.pregOutcome?.pregOutcome ===
                       'Abortion'
                     "
+                    (selectionChange)="trackFieldInteraction('Type of Abortion')"
                   >
                     <mat-option
                       *ngFor="let abortion of masterData?.typeOfAbortion"
@@ -235,6 +238,7 @@
                     class="select-full-width"
                     name="typeofFacility"
                     formControlName="typeofFacility"
+                    (selectionChange)="trackFieldInteraction('Type of Facility')"
                     [required]="
                       pastObstericHistory.value.pregOutcome?.pregOutcome ===
                         'Abortion' &&
@@ -264,6 +268,7 @@
                     name="durationOfType"
                     allowText="number"
                     formControlName="pregDuration"
+                    (focus)="trackFieldInteraction('Pregnancy Duration')"
                     [required]="
                       pastObstericHistory.value.pregOutcome?.pregOutcome ===
                       'Abortion'
@@ -282,7 +287,7 @@
                     name="complicationPostAbortion"
                     formControlName="postAbortionComplication"
                     (selectionChange)="
-                      resetPostComplicationType(pastObstericHistory, i)
+                      resetPostComplicationType(pastObstericHistory, i); trackFieldInteraction('Post Abortion Complication')
                     "
                     multiple
                     [required]="
@@ -329,7 +334,7 @@
                   class="select-full-width"
                   name="durationOfPregnancy"
                   formControlName="durationType"
-                  (selectionChange)="hrpPastObstetricDetails(true)"
+                  (selectionChange)="hrpPastObstetricDetails(true); trackFieldInteraction('Duration of Pregnancy')"
                 >
                   <mat-option
                     *ngFor="let duration of masterData?.pregDuration"
@@ -358,7 +363,7 @@
                     name="placeOfDelivery"
                     formControlName="deliveryPlace"
                     (selectionChange)="
-                      resetOtherDeliveryPlace(pastObstericHistory)
+                      resetOtherDeliveryPlace(pastObstericHistory); trackFieldInteraction('Place of Delivery')
                     "
                   >
                     <mat-option
@@ -391,6 +396,7 @@
                     allowText="alphaspace"
                     name="otherPlaceOfDelivery"
                     formControlName="otherDeliveryPlace"
+                    (focus)="trackFieldInteraction('Other Place of Delivery')"
                   />
                 </mat-form-field>
               </div>
@@ -413,7 +419,7 @@
                   name="typeOfDelivery"
                   formControlName="deliveryType"
                   [disabled]="!pastObstericHistory.value.deliveryPlace"
-                  (selectionChange)="hrpPastObstetricDetails(true)"
+                  (selectionChange)="hrpPastObstetricDetails(true); trackFieldInteraction('Type of Delivery')"
                 >
                   <ng-container *ngFor="let type of selectDeliveryTypes">
                     <mat-option [value]="type">
@@ -445,7 +451,7 @@
                         pastObstericHistory,
                         i,
                         true
-                      )
+                      ); trackFieldInteraction('Delivery Complications')
                     "
                     multiple
                   >
@@ -496,6 +502,7 @@
                     allowText="alphaspace"
                     name="othersDeliveryComplication"
                     formControlName="otherDeliveryComplication"
+                    (focus)="trackFieldInteraction('Other Delivery Complication')"
                   />
                 </mat-form-field>
               </div>
@@ -512,7 +519,7 @@
                   name="postpartumComplication"
                   formControlName="postpartumComplicationList"
                   (selectionChange)="
-                    resetOtherPostpartumComplicationType(pastObstericHistory, i)
+                    resetOtherPostpartumComplicationType(pastObstericHistory, i); trackFieldInteraction('Postpartum Complications')
                   "
                   multiple
                 >
@@ -563,6 +570,7 @@
                   allowText="alphaspace"
                   name="otherPostpartumComplication"
                   formControlName="otherPostpartumCompType"
+                  (focus)="trackFieldInteraction('Other Postpartum Complication')"
                 />
               </mat-form-field>
             </div>
@@ -584,7 +592,7 @@
                   name="newBornComplications"
                   formControlName="newBornComplication"
                   (selectionChange)="
-                    resetOtherNewBornComplications(pastObstericHistory)
+                    resetOtherNewBornComplications(pastObstericHistory); trackFieldInteraction('Newborn Complications')
                   "
                 >
                   <mat-option
@@ -619,6 +627,7 @@
                   allowText="alphaspace"
                   name="otherNewBornComplication"
                   formControlName="otherNewBornComplication"
+                  (focus)="trackFieldInteraction('Other Newborn Complication')"
                 />
               </mat-form-field>
             </div>
@@ -644,6 +653,7 @@
                   name="congenitalAnomalies"
                   formControlName="congenitalAnomalies"
                   (change)="setCongenitalAnomalies()"
+                  (focus)="trackFieldInteraction('Congenital Anomalies')"
                 />
               </mat-form-field>
             </div>

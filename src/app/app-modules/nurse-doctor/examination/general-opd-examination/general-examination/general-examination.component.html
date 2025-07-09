@@ -11,6 +11,7 @@
           id="consciousness"
           name="consciousness"
           formControlName="consciousness"
+          (selectionChange)="trackFieldInteraction('Consciousness')"
         >
           <mat-option
             *ngFor="let consciousness of selectConsciousness"
@@ -35,6 +36,7 @@
           id="cooperation"
           name="cooperation"
           formControlName="cooperation"
+          (selectionChange)="trackFieldInteraction('Cooperation')"
         >
           <mat-option
             *ngFor="let cooperation of selectCooperation"
@@ -59,6 +61,7 @@
           id="builtAndAppearance"
           name="builtAndAppearance"
           formControlName="builtAndAppearance"
+          (selectionChange)="trackFieldInteraction('Built and Appearance')"
         >
           <mat-option *ngFor="let built of selectBuilt" [value]="built.name">
             {{ built.name }}
@@ -80,6 +83,7 @@
         id="coherence"
         name="coherence"
         formControlName="coherence"
+        (change)="trackFieldInteraction('Coherence')"
       >
         <mat-radio-button color="primary" class="radio-btn" value="Coherent">{{
           current_language_set?.common?.yes
@@ -104,6 +108,7 @@
         id="comfortness"
         name="comfortness"
         formControlName="comfortness"
+        (change)="trackFieldInteraction('Comfortness')"
       >
         <mat-radio-button
           color="primary"
@@ -128,7 +133,12 @@
           ?.genExamination?.gait
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group id="gait" name="gait" formControlName="gait">
+      <mat-radio-group
+        id="gait"
+        name="gait"
+        formControlName="gait"
+        (change)="trackFieldInteraction('Gait')"
+      >
         <mat-radio-button color="primary" class="radio-btn" value="Normal">{{
           current_language_set?.common?.normal
         }}</mat-radio-button>
@@ -153,7 +163,7 @@
         id="dangerSigns"
         name="dangerSigns"
         formControlName="dangerSigns"
-        (change)="checkWithDangerSign()"
+        (change)="checkWithDangerSign(); trackFieldInteraction('Danger Signs')"
       >
         <mat-radio-button color="primary" class="radio-btn" value="Yes">{{
           current_language_set?.common?.yes
@@ -182,6 +192,7 @@
           name="typeOfDangerSigns"
           formControlName="typeOfDangerSigns"
           [required]="dangerSigns === 'Yes'"
+          (selectionChange)="trackFieldInteraction('Type of Danger Signs')"
         >
           <mat-option
             *ngFor="let signs of selectDangerSigns"
@@ -204,7 +215,12 @@
           ?.genExamination?.pallor
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group id="pallor" name="pallor" formControlName="pallor">
+      <mat-radio-group
+        id="pallor"
+        name="pallor"
+        formControlName="pallor"
+        (change)="trackFieldInteraction('Pallor')"
+      >
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           current_language_set?.common?.present
         }}</mat-radio-button>
@@ -225,7 +241,12 @@
           ?.genExamination?.jaundice
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group id="jaundice" name="jaundice" formControlName="jaundice">
+      <mat-radio-group
+        id="jaundice"
+        name="jaundice"
+        formControlName="jaundice"
+        (change)="trackFieldInteraction('Jaundice')"
+      >
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           current_language_set?.common?.present
         }}</mat-radio-button>
@@ -246,7 +267,12 @@
           ?.genExamination?.cyanosis
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group id="cyanosis" name="cyanosis" formControlName="cyanosis">
+      <mat-radio-group
+        id="cyanosis"
+        name="cyanosis"
+        formControlName="cyanosis"
+        (change)="trackFieldInteraction('Cyanosis')"
+      >
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           current_language_set?.common?.present
         }}</mat-radio-button>
@@ -267,7 +293,12 @@
           ?.genExamination?.clubbing
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group id="clubbing" name="clubbing" formControlName="clubbing">
+      <mat-radio-group
+        id="clubbing"
+        name="clubbing"
+        formControlName="clubbing"
+        (change)="trackFieldInteraction('Clubbing')"
+      >
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           current_language_set?.common?.present
         }}</mat-radio-button>
@@ -292,7 +323,9 @@
         id="lymphadenopathy"
         name="lymphadenopathy"
         formControlName="lymphadenopathy"
-        (change)="checkWithLymphadenopathy()"
+        (change)="
+          checkWithLymphadenopathy(); trackFieldInteraction('Lymphadenopathy')
+        "
       >
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           current_language_set?.common?.present
@@ -321,6 +354,7 @@
           name="lymphnodesInvolved"
           formControlName="lymphnodesInvolved"
           [required]="lymphadenopathy === 'Present'"
+          (selectionChange)="trackFieldInteraction('Lymph Nodes Involved')"
         >
           <mat-option
             *ngFor="let lymphNodes of selectLymphNodes"
@@ -350,6 +384,7 @@
           name="typeOfLymphadenopathy"
           formControlName="typeOfLymphadenopathy"
           [required]="lymphadenopathy === 'Present'"
+          (selectionChange)="trackFieldInteraction('Type of Lymphadenopathy')"
         >
           <mat-option
             *ngFor="let typeOfLymphadenopathy of selectTypeOfLymphadenopathy"
@@ -376,7 +411,7 @@
         id="edema"
         name="edema"
         formControlName="edema"
-        (change)="checkWithEdema()"
+        (change)="checkWithEdema(); trackFieldInteraction('Edema')"
       >
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           current_language_set?.common?.present
@@ -404,6 +439,7 @@
           name="extentOfEdema"
           formControlName="extentOfEdema"
           [required]="edema === 'Present'"
+          (selectionChange)="trackFieldInteraction('Extent of Edema')"
         >
           <mat-option
             *ngFor="let extentOfEdema of selectExtentOfEdema"
@@ -432,6 +468,7 @@
         name="edemaType"
         formControlName="edemaType"
         [required]="edema === 'Present'"
+        (change)="trackFieldInteraction('Type of Edema')"
       >
         <mat-radio-button color="primary" class="radio-btn" value="Pitting">{{
           current_language_set?.ExaminationData?.ANC_OPD_PNCExamination
@@ -464,6 +501,7 @@
         id="quickening"
         name="quickening"
         formControlName="quickening"
+        (change)="trackFieldInteraction('Quickening')"
       >
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           current_language_set?.common?.present
@@ -490,6 +528,7 @@
         id="foetalMovements"
         name="foetalMovements"
         formControlName="foetalMovements"
+        (change)="trackFieldInteraction('Foetal Movements')"
       >
         <mat-radio-button color="primary" class="radio-btn" value="Present">{{
           current_language_set?.common?.present

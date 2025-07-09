@@ -32,6 +32,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-previous-significiant-findings',
@@ -45,6 +46,7 @@ export class PreviousSignificiantFindingsComponent
     private doctorService: DoctorService,
     public httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
   rowsPerPage = 5;
   activePage = 1;
@@ -136,5 +138,12 @@ export class PreviousSignificiantFindingsComponent
         }
       });
     }
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Previous Significant Findings',
+    );
   }
 }

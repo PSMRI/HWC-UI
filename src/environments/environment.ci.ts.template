@@ -53,6 +53,16 @@ export const environment = {
   production: true,
   app: `MMU`,
   encKey: sessionStorageEncKey,
+
+  tracking: {
+    platform: 'matomo',
+    siteId: parseInt('<%= SITE_ID %>'),
+    trackerUrl: '<%= TRACKER_URL %>',
+    trackingPlatform: '<%= TRACKING_PLATFORM %>',
+    enabled: '<%= TRACKING_ENABLED %>' === 'true'
+  },
+
+
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,

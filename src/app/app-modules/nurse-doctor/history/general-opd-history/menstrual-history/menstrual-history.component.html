@@ -4,7 +4,7 @@
   id="previousANCMenstrualHistory"
   color="primary"
   matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-  (click)="getPreviousMenstrualHistory()"
+  (click)="getPreviousMenstrualHistory(); trackFieldInteraction('Previous Menstrual History')"
   (keydown.enter)="getPreviousMenstrualHistory()"
   (keydown.space)="getPreviousMenstrualHistory()"
 >
@@ -27,7 +27,7 @@
         class="select-full-width"
         name="menstrualCycleStatus"
         formControlName="menstrualCycleStatus"
-        (selectionChange)="checkMenstrualCycleStatus()"
+        (selectionChange)="checkMenstrualCycleStatus(); trackFieldInteraction('Menstrual Cycle Status')"
       >
         <mat-option
           *ngFor="let status of masterData?.menstrualCycleStatus"
@@ -45,7 +45,11 @@
           ?.regularityofMenstrualCycles
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group name="regularity" formControlName="regularity">
+      <mat-radio-group
+        name="regularity"
+        formControlName="regularity"
+        (change)="trackFieldInteraction('Menstrual Regularity')"
+      >
         <mat-radio-button color="primary" value="Regular">{{
           currentLanguageSet?.common?.regular
         }}</mat-radio-button>
@@ -65,6 +69,7 @@
           class="select-full-width"
           name="cycleLength"
           formControlName="cycleLength"
+          (selectionChange)="trackFieldInteraction('Menstrual Cycle Length')"
         >
           <mat-option
             *ngFor="let cycleLength of masterData?.menstrualCycleLengths"
@@ -85,6 +90,7 @@
           class="select-full-width"
           name="bloodFlowDuration"
           formControlName="bloodFlowDuration"
+          (selectionChange)="trackFieldInteraction('Menstrual Flow Duration')"
         >
           <mat-option
             *ngFor="
@@ -115,7 +121,7 @@
           class="select-full-width"
           name="problemName"
           formControlName="menstrualProblemList"
-          (selectionChange)="resetOtherMenstrualProblems()"
+          (selectionChange)="resetOtherMenstrualProblems(); trackFieldInteraction('Menstrual Problems')"
         >
           <mat-option
             [disabled]="
@@ -149,10 +155,12 @@
         [min]="minimumLMPDate"
         [max]="today"
         [matDatepicker]="lmpPicker"
+        (focus)="trackFieldInteraction('Last Menstrual Period Date')"
       />
       <mat-datepicker-toggle
         matSuffix
         [for]="lmpPicker"
+        (click)="trackFieldInteraction('LMP Date Picker')"
       ></mat-datepicker-toggle>
       <mat-datepicker #lmpPicker></mat-datepicker>
     </mat-form-field>
