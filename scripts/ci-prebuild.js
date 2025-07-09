@@ -59,7 +59,7 @@ const defaultEnvValues = {
   CAPTCHA_CHALLENGE_URL: '',
   ENABLE_CAPTCHA: false,
   SITE_ID: '1',
-  TRACKER_URL: '//matomo.pirmalswasthya.org/',
+  TRACKER_URL: '//matomo.piramalswasthya.org/',
   TRACKING_PLATFORM: 'matomo',
   TRACKING_ENABLED: 'true',
 };
