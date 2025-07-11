@@ -1,24 +1,23 @@
 <div class="row m-t-10" [formGroup]="medicationHistoryForm">
   <div class="col-xs-12" formArrayName="medicationHistoryList">
-    <div class="col-12" style="text-align: end">
-      <span class="font-history-label m-t-10">
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCMedicationHistory"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+      (click)="getPreviousMedicationHistory()"
+      (keydown.enter)="getPreviousMedicationHistory()"
+      (keydown.space)="getPreviousMedicationHistory()"
+    >
+      <mat-icon class="md-18 ms-2">history</mat-icon>
+      <span class="previousHistory">
         {{
           currentLanguageSet?.historyData?.ancHistory?.medicationANC_OPD_NCD_PNC
             ?.PreviousHistory
         }}
       </span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCMedicationHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousMedicationHistory()"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
+    </button>
 
     <div
       class="row multi-row-select"
@@ -87,12 +86,22 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm-2 col-md-2 box action-btn-container pull-right">
+        <div class="col-sm-2 col-md-3 box action-btn-container pull-right">
+          <button
+            mat-mini-fab
+            color="primary"
+            class="mat-add-btn"
+            *ngIf="isLast"
+            [disabled]="checkValidity(medicationHistory)"
+            (click)="addMedicationHistory()"
+          >
+            {{ currentLanguageSet?.common?.add }}
+          </button>
           <button
             mat-mini-fab
             color="warn"
-            class="mat_warn_circle"
-            style="margin-right: 5px"
+            class="mat-remove-btn"
+            style="margin-left: 3px"
             *ngIf="
               i !== 0 ||
               (i === 0 &&
@@ -100,17 +109,7 @@
             "
             (click)="removeMedicationHistory(i, medicationHistory)"
           >
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
-          <button
-            mat-mini-fab
-            color="primary"
-            class="mat_blue_circle"
-            *ngIf="isLast"
-            [disabled]="checkValidity(medicationHistory)"
-            (click)="addMedicationHistory()"
-          >
-            <mat-icon class="md-18">add</mat-icon>
+            {{ currentLanguageSet?.common?.remove }}
           </button>
         </div>
       </ng-container>

@@ -17,13 +17,15 @@
         class="footer-text"
         *ngIf="currentLanguageSet === null || currentLanguageSet === undefined"
       >
-        {{ year }} © PSMRI
+        {{ year }} © PSMRI  Version: {{ version }}
       </p>
       <p
         class="footer-text"
         *ngIf="currentLanguageSet !== null && currentLanguageSet !== undefined"
       >
-        {{ year }} © {{ currentLanguageSet?.coreComponents?.pSMRI }}
+        {{ year }} © {{ currentLanguageSet?.coreComponents?.pSMRI }} &nbsp;|&nbsp;
+        {{currentLanguageSet?.version}}:
+        {{version }}
       </p>
     </div>
     <div class="col-4 text-end">

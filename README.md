@@ -1,7 +1,7 @@
-# AMRIT - Health and Wellness Centre (HWC) 
+# AMRIT - Ayushman Arogya Mandir(AAM) 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)  ![branch parameter](https://github.com/PSMRI/HWC-UI/actions/workflows/sast-and-package.yml/badge.svg)
 
-Health and Wellness Centre (HWC) is one of the comprehensive applications of AMRIT designed to capture details of 7 Service packages as per guidelines which should be available at Health and Wellness centre.
+Ayushman Arogya Mandir (AAM) is one of the comprehensive applications of AMRIT designed to capture details of 7 Service packages as per guidelines which should be available at Ayushman Arogya Mandir.
 
 ### Primary Features
 * Provide medical advice and services to beneficiaries
@@ -102,11 +102,11 @@ C:\Users\ myFolder\AppData\Roaming\npm
 
 Note: After changing environment variables, please restart your system and check again.
 
-* Steps to clone and setup HWC-Facility-APP:
-1. Clone HWC-Facility-App from GitHub fork branch in your local system using below command:
+* Steps to clone and setup AAM-Facility-APP:
+1. Clone AAM-Facility-App from GitHub fork branch in your local system using below command:
       `git clone <repository-url>`
 
-2. Open hwc-facility-app project code in Visual Studio Code
+2. Open aam-facility-app project code in Visual Studio Code
 
 3. Navigate to your project folder and execute below command for node_modules installation:
       `npm install`
@@ -146,11 +146,11 @@ All features have been exposed as REST endpoints. Refer to the SWAGGER API speci
 To initialize the `Common-UI` submodule, follow these steps
 
 
-1. Clone the `hwc-ui` project
+1. Clone the `aam-ui` project
    ```bash
    git clone https://github.com/PSMRI/HWC-UI
 2. Navigate to the project directory and pull the latest changes from the develop branch
-   cd hwc-ui
+   cd aam-ui
    git checkout develop
    git pull origin develop
 

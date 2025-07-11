@@ -303,7 +303,9 @@
             "selectAll": "ಎಲ್ಲವನ್ನು ಆರಿಸು",
             "sNo": "ಸ.ನಂ.",
             "confirmWhetherBeneficiaryHasArrived": "ಫಲಾನುಭವಿ ಬಂದಿದ್ದಾರೆಯೇ ಎಂಬುದನ್ನು ದೃಢೀಕರಿಸಿ",
-            "startTest":"ಪರೀಕ್ಷೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ"
+            "startTest":"ಪರೀಕ್ಷೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ",
+            "remove": "ತೆಗೆದುಹಾಕಿ",
+            "poct": "POCT"
         },
         "idrs": {
                 
@@ -2127,7 +2129,9 @@
         "verify": "Verify",
         "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
         "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID",
-        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue"
+        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
+        "continueButton": "ಮುಂದುವರಿಸಿ"
+
     }  
 
     

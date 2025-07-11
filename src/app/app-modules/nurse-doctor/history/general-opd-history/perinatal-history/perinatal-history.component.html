@@ -1,23 +1,22 @@
 <div class="row m-t-10" [formGroup]="perinatalHistoryForm">
-  <div class="col-12" style="text-align: end">
-    <span class="font-history-label m-t-10">
+  <button
+    type="button"
+    class="history-label col-12 mat-icon-button mat_icon_blue"
+    id="previousPerinatalHistory"
+    color="primary"
+    matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+    (click)="getPreviousPerinatalHistory()"
+    (keydown.enter)="getPreviousPerinatalHistory()"
+    (keydown.space)="getPreviousPerinatalHistory()"
+  >
+    <mat-icon class="md-18 ms-2">history</mat-icon>
+    <span class="previousHistory">
       {{
         currentLanguageSet?.historyData?.Perinatalhistorydetails
           ?.previousperinatalhistory
       }}
     </span>
-    <button
-      type="button"
-      mat-icon-button
-      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-      id="previousPerinatalHistory"
-      class="mat_icon_blue"
-      color="primary"
-      (click)="getPreviousPerinatalHistory()"
-    >
-      <mat-icon class="md-18">history</mat-icon>
-    </button>
-  </div>
+  </button>
   <div class="row">
     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box">
       <mat-form-field [style.width]="'100%'">

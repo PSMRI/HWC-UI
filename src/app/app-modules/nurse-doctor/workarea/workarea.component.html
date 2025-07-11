@@ -40,9 +40,9 @@
                 >
                   {{ current_language_set?.common?.next }}
                 </button>
-                <!-- <button
+                <button
                   *ngIf="
-                    !showESanjeevaniBtn &&
+                    showESanjeevaniBtn === 2 &&
                     !isSpecialist &&
                     visitCategory !== null &&
                     visitCategory !== undefined
@@ -55,11 +55,11 @@
                   (click)="openScheduler()"
                 >
                   {{ schedulerButton }}
-                </button> -->
+                </button>
 
                 <button
                   *ngIf="
-                    showESanjeevaniBtn &&
+                    showESanjeevaniBtn === 1 &&
                     !isSpecialist &&
                     visitCategory !== null &&
                     visitCategory !== undefined
@@ -855,24 +855,22 @@
       </form>
     </div>
   </mat-sidenav-container>
-  <div class="col-6">
+
+  <div class="fab-bottom-left">
     <button
       mat-mini-fab
-      style="margin-left: 10px; position: relative"
-      class="mat_blue_circle"
+      class="mat_blue_circle mb-2"
       color="primary"
       (click)="sideNavModeChange(sidenav)"
     >
       <mat-icon>account_box</mat-icon>
     </button>
-
     <button
-      style="margin-left: 15px; position: relative"
       class="mat_blue_circle"
       (click)="openBenPreviousisitDetails()"
       matTooltip="{{ current_language_set?.benPreviousVisitDetails }}"
     >
-      <mat-icon> description</mat-icon>
+      <mat-icon>description</mat-icon>
     </button>
   </div>
 </div>

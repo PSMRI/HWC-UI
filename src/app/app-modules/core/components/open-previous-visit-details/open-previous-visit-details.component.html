@@ -27,9 +27,6 @@
             <th style="width: 5%" id="visitcategory">
               {{ currentLanguageSet?.previousvisit?.visitcategorymmu }}
             </th>
-            <th style="width: 5%" id="visitcode">
-              {{ currentLanguageSet?.previousvisit?.visitcodemmu }}
-            </th>
             <th style="width: 15%" id="vitalDetails">Vital Details</th>
             <th style="width: 20%" id="diagnosis">Diagnosis</th>
             <th style="width: 30%" id="investigations">Investigations</th>
@@ -76,15 +73,6 @@
                 {{ visit?.VisitCategory }}
               </td>
               <td
-                style="
-                  max-width: 150px;
-                  word-break: normal;
-                  vertical-align: middle;
-                "
-              >
-                {{ visit?.visitCode }}
-              </td>
-              <td
                 style="width: 110px; word-break: normal; vertical-align: middle"
               >
                 <ng-container *ngIf="visit.benPreviousData">
@@ -97,48 +85,73 @@
                               .benAnthropometryDetail
                           "
                         >
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benAnthropometryDetail?.height_cm
+                            "
+                          >
                             <th id="height">Height :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.height_cm || "NA"
+                                  ?.benAnthropometryDetail?.height_cm
                               }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benAnthropometryDetail?.weight_Kg
+                            "
+                          >
                             <th id="weight">Weight :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.weight_Kg || "NA"
+                                  ?.benAnthropometryDetail?.weight_Kg
                               }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benAnthropometryDetail?.bMI
+                            "
+                          >
                             <th id="bmi">BMI :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.bMI || "NA"
+                                  ?.benAnthropometryDetail?.bMI
                               }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benPhysicalVitalDetail?.temperature
+                            "
+                          >
                             <th id="temperature">Temperature (F) :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.temperature || "NA"
+                                  ?.benPhysicalVitalDetail?.temperature
                               }}
                             </td>
                           </tr>
-                          <tr>
+                          <tr
+                            *ngIf="
+                              visit.benPreviousData?.nurseData?.vitals
+                                ?.benPhysicalVitalDetail?.pulseRate
+                            "
+                          >
                             <th id="pulseRate">Pulse Rate (bpm) :</th>
                             <td>
                               {{
                                 visit.benPreviousData?.nurseData?.vitals
-                                  ?.benAnthropometryDetail?.pulseRate || "NA"
+                                  ?.benPhysicalVitalDetail?.pulseRate
                               }}
                             </td>
                           </tr>

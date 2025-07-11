@@ -21,11 +21,11 @@
           </p>
           <li tabindex="0" class="width310px">
             <div style="margin-top: 30px">
-              <ul class="list-unstyled text-center p-t-15">
+              <ul class="list-unstyled p-t-15">
                 <li class="f-s-20">
                   <div class="p-l-15 line-height-65">
                     <img
-                      style="width: 160px; height: 140px"
+                      style="width: 160px; height: 140px; cursor: default"
                       src="assets/images/AAM-Image.png"
                       alt="AAM"
                     />&nbsp;&nbsp;&nbsp; <br />
@@ -38,7 +38,7 @@
                       class="mat_blue"
                       (click)="selectService(service)"
                     >
-                      Proceed
+                      {{ currentLanguageSet?.continueButton }}
                     </button>
                   </div>
                 </li>

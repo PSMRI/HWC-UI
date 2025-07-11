@@ -1,24 +1,23 @@
 <div class="row m-t-10" [formGroup]="pastHistoryForm">
   <div>
-    <div class="col-12" style="float: right; text-align: end">
-      <span class="font-history-label m-t-10">
+    <button
+      type="button"
+      class="history-label col-12 mat-icon-button mat_icon_blue"
+      id="previousANCPastHistory"
+      color="primary"
+      matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
+      (click)="getPreviousPastHistory()"
+      (keydown.enter)="getPreviousPastHistory()"
+      (keydown.space)="getPreviousPastHistory()"
+    >
+      <mat-icon class="md-18 ms-2">history</mat-icon>
+      <span class="previousHistory">
         {{
           currentLanguageSet?.historyData?.Previousillness
             ?.previousillnessandsurgery
         }}
       </span>
-      <button
-        type="button"
-        mat-icon-button
-        matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        id="previousANCPastHistory"
-        class="mat_icon_blue"
-        color="primary"
-        (click)="getPreviousPastHistory()"
-      >
-        <mat-icon class="md-18">history</mat-icon>
-      </button>
-    </div>
+    </button>
     <div class="col-xs-12" formArrayName="pastIllness">
       <header class="description">
         <h4>
@@ -120,29 +119,31 @@
             </mat-form-field>
           </div>
 
-          <div class="col-sm-2 col-md-2 box action-btn-container pull-right">
+          <div class="col-sm-4 col-md-4 action-btn-container pull-right">
             <button
-              style="margin-right: 5px; margin-left: 10px"
               mat-mini-fab
-              color="warn"
-              class="mat_warn_circle"
+              color="primary"
+              *ngIf="isLast"
+              class="mat-add-btn"
+              [disabled]="checkIllnessValidity(pastIllness)"
+              (click)="addPastIllness()"
+            >
+              {{ currentLanguageSet?.common?.add }}
+            </button>
+
+            <button
+              type="button"
+              mat-mini-fab
+              class="mat-remove-btn"
+              style="margin-left: 3px"
               *ngIf="
                 i !== 0 ||
                 (i === 0 && (pastIllness.touched || pastIllness.dirty))
               "
               (click)="removePastIllness(i, pastIllness)"
+              color="warn"
             >
-              <mat-icon class="md-18">close</mat-icon>
-            </button>
-            <button
-              mat-mini-fab
-              color="primary"
-              *ngIf="isLast"
-              class="mat_blue_circle"
-              [disabled]="checkIllnessValidity(pastIllness)"
-              (click)="addPastIllness()"
-            >
-              <mat-icon class="md-18">add</mat-icon>
+              {{ currentLanguageSet?.common?.remove }}
             </button>
           </div>
         </ng-container>
@@ -249,30 +250,30 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm-2 col-md-2 box action-btn-container pull-right">
-          <button
-            mat-mini-fab
-            color="warn"
-            style="margin-right: 5px; margin-left: 10px"
-            class="mat_warn_circle"
-            id="removePastSurgery"
-            *ngIf="
-              i !== 0 || (i === 0 && (pastSurgery.touched || pastSurgery.dirty))
-            "
-            (click)="removePastSurgery(i, pastSurgery)"
-          >
-            <mat-icon class="md-18">close</mat-icon>
-          </button>
+        <div class="col-sm-2 col-md-4 box action-btn-container pull-right">
           <button
             mat-mini-fab
             color="primary"
-            class="mat_blue_circle"
+            class="mat-add-btn"
             *ngIf="isLast"
             [disabled]="checkSurgeryValidity(pastSurgery)"
             id="addPastSurgery"
             (click)="addPastSurgery()"
           >
-            <mat-icon class="md-18">add</mat-icon>
+            {{ currentLanguageSet?.common?.add }}
+          </button>
+
+          <button
+            type="button"
+            mat-mini-fab
+            class="mat-remove-btn"
+            style="margin-left: 3px"
+            *ngIf="
+              i !== 0 || (i === 0 && (pastSurgery.touched || pastSurgery.dirty))
+            "
+            (click)="removePastSurgery(i, pastSurgery)"
+          >
+            {{ currentLanguageSet?.common?.remove }}
           </button>
         </div>
       </ng-container>

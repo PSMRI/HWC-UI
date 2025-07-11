@@ -296,7 +296,9 @@
       "TCPending": "Tele-Consultation Pending",
       "selectAll": "सभी का चयन करे",
       "confirmWhetherBeneficiaryHasArrived": "पुष्टि करें कि क्या लाभार्थी आ गया है",
-      "startTest": "Start Test"
+      "startTest": "परीक्षण शुरू करें",
+      "remove": "हटाएं",
+      "poct": "POCT"
     },
     "idrs": {
       
@@ -2106,6 +2108,7 @@
         "verify": "Verify",
         "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
         "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID",
-        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue"
+        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
+        "continueButton": "जारी रखें"
       }
 }

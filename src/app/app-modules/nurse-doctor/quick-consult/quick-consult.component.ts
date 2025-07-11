@@ -165,9 +165,10 @@ export class QuickConsultComponent
   rbsTestResultSubscription!: Subscription;
   rbsTestResultCurrent: any;
 
-  displayedColumns: any = ['chiefcomplaint', 'ConceptID', 'description'];
+  displayedColumns: any = ['chiefcomplaint', 'description'];
 
   dataSource = new MatTableDataSource<any>();
+  suggestedDiagnosisList: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -1324,13 +1325,21 @@ export class QuickConsultComponent
       }
     }
   }
+
   checkProvisionalDiagnosisValidity(provisionalDiagnosis: any) {
-    const temp = provisionalDiagnosis.value;
-    if (temp.term && temp.conceptID) {
-      return false;
-    } else {
-      return true;
+    if (!provisionalDiagnosis || !provisionalDiagnosis.value) {
+      return true; // Disable if form group is missing
     }
+    const temp = provisionalDiagnosis.value;
+    const val = temp.viewProvisionalDiagnosisProvided;
+    // Enable Add if at least 3 chars are typed OR a valid object is selected
+    if (typeof val === 'string') {
+      return !(val && val.length >= 3);
+    }
+    if (val && typeof val === 'object' && val.term && val.conceptID) {
+      return false;
+    }
+    return true;
   }
   ngDoCheck() {
     this.assignSelectedLanguage();
@@ -1348,5 +1357,35 @@ export class QuickConsultComponent
     } else {
       return true;
     }
+  }
+
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    const diagnosisFormArray = this.patientQuickConsultForm.get(
+      'provisionalDiagnosisList',
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }

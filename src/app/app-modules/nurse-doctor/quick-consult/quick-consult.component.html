@@ -41,19 +41,6 @@
                   </td>
                 </ng-container>
 
-                <ng-container matColumnDef="ConceptID">
-                  <th
-                    mat-header-cell
-                    style="border-bottom: none"
-                    *matHeaderCellDef
-                    mat-sort-header
-                  >
-                    {{ currentLanguageSet?.common?.ConceptID }}
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.conceptID }}
-                  </td>
-                </ng-container>
 
                 <ng-container matColumnDef="description">
                   <th
@@ -154,13 +141,25 @@
               </div>
 
               <div
-                class="col-sm-2 col-md-2 box action-btn-container pull-right"
+                class="col-sm-2 col-md-4 box action-btn-container pull-right"
               >
+                <button
+                  *ngIf="isLast"
+                  class="mat-add-btn"
+                  type="button"
+                  mat-mini-fab
+                  color="primary"
+                  [id]="'addBtn' + i"
+                  [disabled]="checkComplaintFormValidity(chiefComplaint)"
+                  (click)="addChiefComplaint()"
+                >
+                  {{ currentLanguageSet?.common?.add }}
+                </button>
                 <button
                   type="button"
                   mat-mini-fab
                   color="warn"
-                  class="mat_warn_circle"
+                  class="mat-remove-btn"
                   style="margin-right: 5px"
                   [id]="'removeBtn' + i"
                   *ngIf="
@@ -180,20 +179,7 @@
                   "
                   (click)="deleteChiefComplaint(i, chiefComplaint)"
                 >
-                  <span class="material-icons"> close</span>
-                </button>
-
-                <button
-                  *ngIf="isLast"
-                  class="mat_blue_circle"
-                  type="button"
-                  mat-mini-fab
-                  color="primary"
-                  [id]="'addBtn' + i"
-                  [disabled]="checkComplaintFormValidity(chiefComplaint)"
-                  (click)="addChiefComplaint()"
-                >
-                  <span class="material-icons">add</span>
+                  {{ currentLanguageSet?.common?.remove }}
                 </button>
               </div>
             </ng-container>
@@ -518,7 +504,6 @@
             }}
           </h4>
         </header>
-        <div class="row m-t-10">
           <div class="col-sm-12 col-md-12">
             <mat-form-field class="input-full-width">
               <mat-label class="mat-label-text">{{
@@ -539,7 +524,6 @@
 
           <header
             class="mat-expansion-panel-header m-t-10 tabcolor"
-            style="margin-left: 15px"
           >
             <h4>
               {{
@@ -613,130 +597,61 @@
                 </textarea>
               </mat-form-field>
             </div>
-
-            <div class="row m-t-10">
-              <div class="col-xs-12 col-sm-6">
-                <header class="mat-expansion-panel-header tabcolor">
-                  <h4>
-                    {{
-                      currentLanguageSet?.DiagnosisDetails
-                        ?.provisionaldiagnosis
-                    }}*
-                  </h4>
-                </header>
-                <ng-container formArrayName="provisionalDiagnosisList">
-                  <div
-                    *ngFor="
-                      let diagnosis of getProvisionalDiagnosisList();
-                      let i = index;
-                      let isLast = last
-                    "
-                  >
-                    <ng-container [formGroupName]="i">
-                      <div class="col-xs-12 col-sm-9 m-t-10">
-                        <mat-form-field class="input-full-width">
-                          <input
-                            matInput
-                            allowText="inputFieldValidator"
-                            allowText="textAreaValidator"
-                            appDiagnosisSearch
-                            [diagnosisListForm]="diagnosis"
-                            required
-                            name="viewProvisionalDiagnosisProvided"
-                            formControlName="viewProvisionalDiagnosisProvided"
-                            maxlength="100"
-                            minlength="3"
-                            [previousSelected]="
-                              patientQuickConsultForm.value
-                                ?.provisionalDiagnosisList
-                            "
-                            required
-                          />
-                          <mat-icon
-                            class="search-btn cursorPointer"
-                            matSuffix
-                            appDiagnosisSearch
-                            [diagnosisListForm]="diagnosis"
-                            [previousSelected]="
-                              patientQuickConsultForm.value
-                                ?.provisionalDiagnosisList
-                            "
-                          >
-                            search</mat-icon
-                          >
-                        </mat-form-field>
-                      </div>
-                      <div
-                        class="col-xs-12 col-sm-3 col-md-3 m-t-10"
-                        style="margin-left: 15px"
-                      >
-                        <button
-                          mat-mini-fab
-                          type="button"
-                          class="pull-left"
-                          color="warn"
-                          class="mat_warn_circle"
-                          *ngIf="
-                            diagnosis.get('provisionalDiagnosisList')
-                              ?.disabled ||
-                            i !== 0 ||
-                            (i === 0 &&
-                              patientQuickConsultForm.get(
-                                'provisionalDiagnosisList'
-                              )?.value[i]?.viewProvisionalDiagnosisProvided !==
-                                null &&
-                              patientQuickConsultForm.get(
-                                'provisionalDiagnosisList'
-                              )?.value[i]?.viewProvisionalDiagnosisProvided !==
-                                '')
-                          "
-                          (click)="removeDiagnosisFromList(i, diagnosis)"
-                        >
-                          <mat-icon> close</mat-icon>
-                        </button>
-                        <button
-                          mat-mini-fab
-                          type="button"
-                          class="mat_blue_circle"
-                          style="margin-left: 5px"
-                          color="primary"
-                          *ngIf="isLast"
-                          [disabled]="
-                            checkProvisionalDiagnosisValidity(diagnosis)
-                          "
-                          (click)="addDiagnosis()"
-                        >
-                          <mat-icon> add</mat-icon>
-                        </button>
-                      </div>
-                    </ng-container>
+          </div>
+        <div class="row m-t-10">
+          <div class="col-xs-12">
+            <header class="mat-expansion-panel-header m-t-10 tabcolor">
+              <h4>
+                {{ currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis }}*
+              </h4>
+            </header>
+        
+            <ng-container formArrayName="provisionalDiagnosisList">
+              <div class="row align-items-center m-t-10"
+                *ngFor="let diagnosis of getProvisionalDiagnosisList(); let i = index; let isLast = last">
+                <ng-container [formGroupName]="i">
+                  <!-- Diagnosis Input -->
+                  <div class="col-xs-12 col-sm-8 col-md-9">
+                    <mat-form-field class="input-full-width" appearance="fill">
+                      <mat-label>{{ currentLanguageSet?.DiagnosisDetails?.provisionaldiagnosis }}</mat-label>
+                      <input matInput type="text" autocomplete="off" name="viewProvisionalDiagnosisProvided"
+                        formControlName="viewProvisionalDiagnosisProvided" minlength="3" maxlength="100" required
+                        #diagnosisInput [matAutocomplete]="autoDiagnosis"
+                        (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)" />
+                    </mat-form-field>
+        
+                    <mat-autocomplete #autoDiagnosis="matAutocomplete" autoActiveFirstOption [displayWith]="displayDiagnosis"
+                      (optionSelected)="onDiagnosisSelected($event.option.value, i)">
+                      <mat-option *ngFor="let diag of suggestedDiagnosisList[i]" [value]="diag">
+                        {{ diag.term }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </div>
+        
+                  <!-- Action Buttons (Add & Remove) -->
+                  <div class="col-xs-12 col-sm-4 col-md-3 d-flex align-items-center">
+                    <!-- Add Button -->
+                    <button mat-mini-fab color="primary" type="button" class="mat-add-btn m-r-10" *ngIf="isLast"
+                      [disabled]="checkProvisionalDiagnosisValidity(diagnosis)" (click)="addDiagnosis()">
+                      {{currentLanguageSet?.common?.add}}
+                    </button>
+        
+                    <!-- Remove Button -->
+                    <button mat-mini-fab color="warn" type="button" class="mat-remove-btn" *ngIf="
+                        diagnosis.get('provisionalDiagnosisList')?.disabled ||
+                        i !== 0 ||
+                        (i === 0 &&
+                          patientQuickConsultForm.get('provisionalDiagnosisList')?.value[i]
+                            ?.viewProvisionalDiagnosisProvided)
+                      " (click)="removeDiagnosisFromList(i, diagnosis)">
+                      {{currentLanguageSet?.common?.remove}}
+                    </button>
                   </div>
                 </ng-container>
               </div>
-
-              <!-- <div class="col-xs-12 col-sm-6">
-                <header class="mat-expansion-panel-header tabcolor">
-                  <h4>
-                    {{
-                      currentLanguageSet?.DiagnosisDetails?.specialistssdvice
-                    }}
-                  </h4>
-                </header>
-                <mat-form-field class="input-full-width m-t-10">
-                  <textarea
-                    matInput
-                    defaultNull
-                    matTextareaAutosize
-                    name="instruction"
-                    formControlName="instruction"
-                    maxlength="300"
-                    [readonly]="!specialist"
-                  >
-                  </textarea>
-                </mat-form-field>
-              </div> -->
-            </div>
-
+            </ng-container>
+          </div>
+        </div>
             <header class="mat-expansion-panel-header m-t-10 tabcolor">
               <h4>
                 {{ currentLanguageSet?.casesheet?.prescribe }}
@@ -931,8 +846,8 @@
                   class="col-md-2"
                   *ngIf="
                     currentPrescription.formID &&
-                    currentPrescription.formID !== '1' &&
-                    currentPrescription.formID !== '2'
+                    currentPrescription.formID !== 1 &&
+                    currentPrescription.formID !== 2
                   "
                 >
                   <mat-form-field [style.width]="'100%'">
@@ -960,10 +875,10 @@
                     'col-md-4':
                       !currentPrescription.formID ||
                       (currentPrescription.formID &&
-                        currentPrescription.formID <= '2'),
+                        currentPrescription.formID <= 2),
                     'col-md-3':
                       currentPrescription.formID &&
-                      currentPrescription.formID > '2'
+                      currentPrescription.formID > 2
                   }"
                 >
                   <mat-form-field [style.width]="'100%'">
@@ -1146,10 +1061,10 @@
                               id="deleteMedicine"
                               (click)="deleteMedicine(j, drug.value.id)"
                               color="warn"
-                              class="mat_warn_circle"
+                              class="mat-remove-btn"
                               style="margin-bottom: 20px"
                             >
-                              <span class="material-icons">close</span>
+                              {{ currentLanguageSet?.common?.remove }}
                             </button>
                           </div>
                         </div>
@@ -1186,9 +1101,7 @@
               </mat-form-field>
             </div>
             <!-- Counselling Provided ends -->
-          </div>
         </div>
-      </div>
     </mat-expansion-panel>
     <mat-expansion-panel class="m-t-10">
       <mat-expansion-panel-header>

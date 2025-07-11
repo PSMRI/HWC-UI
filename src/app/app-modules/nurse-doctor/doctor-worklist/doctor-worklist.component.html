@@ -181,38 +181,45 @@
                   {{ element.benVisitDate }}
                 </td>
               </ng-container>
-              <ng-container matColumnDef="beneficiaryArrived">
-                <th
-                  mat-header-cell
-                  style="border-bottom: none"
-                  *matHeaderCellDef
-                  mat-sort-header
-                >
-                  {{ currentLanguageSet?.bendetails?.beneficiaryArrived }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  (click)="loadDoctorExaminationPage(element)"
-                >
-                  <mat-checkbox
-                    class="control-label"
-                    [disabled]="
-                      element.statusCode === 1 ||
-                      element.statusCode === 2 ||
-                      element.statusCode === 3 ||
-                      element.statusCode === 9 ||
-                      element.statusCode === 4 ||
-                      element.statusCode === 10 ||
-                      element.statusCode === 11
-                    "
-                    (change)="toggleArrivalStatus($event, element.benFlowID)"
-                    [(ngModel)]="element.benArrivedFlag"
-                    placeholder="Confirm Whether Beneficiary has arrived"
-                    [value]="'true'"
+              <ng-container
+                *ngIf="
+                  teleConsultationFlag === 'ESanjeevani' ||
+                  teleConsultationFlag === 'Swymed'
+                "
+              >
+                <ng-container matColumnDef="beneficiaryArrived">
+                  <th
+                    mat-header-cell
+                    style="border-bottom: none"
+                    *matHeaderCellDef
+                    mat-sort-header
                   >
-                  </mat-checkbox>
-                </td>
+                    {{ currentLanguageSet?.bendetails?.beneficiaryArrived }}
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    (click)="loadDoctorExaminationPage(element)"
+                  >
+                    <mat-checkbox
+                      class="control-label"
+                      [disabled]="
+                        element.statusCode === 1 ||
+                        element.statusCode === 2 ||
+                        element.statusCode === 3 ||
+                        element.statusCode === 9 ||
+                        element.statusCode === 4 ||
+                        element.statusCode === 10 ||
+                        element.statusCode === 11
+                      "
+                      (change)="toggleArrivalStatus($event, element.benFlowID)"
+                      [(ngModel)]="element.benArrivedFlag"
+                      placeholder="Confirm Whether Beneficiary has arrived"
+                      [value]="'true'"
+                    >
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
               </ng-container>
               <ng-container matColumnDef="image">
                 <th
@@ -235,60 +242,66 @@
                   />
                 </td>
               </ng-container>
-
-              <ng-container matColumnDef="action">
-                <th
-                  mat-header-cell
-                  style="border-bottom: unset !important; text-align: center"
-                  *matHeaderCellDef
-                  mat-sort-header
-                  colspan="3"
-                  id="action"
-                >
-                  {{ currentLanguageSet?.bendetails?.action }}
-                </th>
-                <td
-                  mat-cell
-                  *matCellDef="let element"
-                  class="col-12"
-                  style="text-align: center; width: 22%"
-                >
-                  <div class="row">
-                    <div class="col-4">
-                      <button
-                        (click)="openScheduler(element)"
-                        matTooltip="{{ currentLanguageSet?.tc?.reschedule }}"
-                        class="full-width-login-schedule box"
-                        [disabled]="element.specialist_flag !== 4"
-                      >
-                        {{ currentLanguageSet?.tc?.schedule }}
-                      </button>
+              <ng-container
+                *ngIf="
+                  teleConsultationFlag === 'ESanjeevani' ||
+                  teleConsultationFlag === 'Swymed'
+                "
+              >
+                <ng-container matColumnDef="action">
+                  <th
+                    mat-header-cell
+                    style="border-bottom: unset !important; text-align: center"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    colspan="3"
+                    id="action"
+                  >
+                    {{ currentLanguageSet?.bendetails?.action }}
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let element"
+                    class="col-12"
+                    style="text-align: center; width: 22%"
+                  >
+                    <div class="row">
+                      <div class="col-4">
+                        <button
+                          (click)="openScheduler(element)"
+                          matTooltip="{{ currentLanguageSet?.tc?.reschedule }}"
+                          class="full-width-login-schedule box"
+                          [disabled]="element.specialist_flag !== 4"
+                        >
+                          {{ currentLanguageSet?.tc?.schedule }}
+                        </button>
+                      </div>
+                      <div class="col-4">
+                        <button
+                          (click)="cancelTCRequest(element)"
+                          matTooltip="{{ currentLanguageSet?.tc?.cancelTc }}"
+                          class="full-width-login-cancel button-reset box button-overall-disabled"
+                          [disabled]="element.specialist_flag !== 1"
+                        >
+                          {{ currentLanguageSet?.common?.cancel }}
+                        </button>
+                      </div>
+                      <div class="col-4">
+                        <button
+                          (click)="initiateTC(element)"
+                          matTooltip="{{ currentLanguageSet?.tc?.startTc }}"
+                          class="full-width-login-voice-chat box accent"
+                          [disabled]="
+                            element.specialist_flag !== 1 &&
+                            !element.benArrivedFlag
+                          "
+                        >
+                          <span class="material-icons">voice_chat</span>
+                        </button>
+                      </div>
                     </div>
-                    <div class="col-4">
-                      <button
-                        (click)="cancelTCRequest(element)"
-                        matTooltip="{{ currentLanguageSet?.tc?.cancelTc }}"
-                        class="full-width-login-cancel button-reset box button-overall-disabled"
-                        [disabled]="element.specialist_flag !== 1"
-                      >
-                        {{ currentLanguageSet?.common?.cancel }}
-                      </button>
-                    </div>
-                    <div class="col-4">
-                      <button
-                        (click)="initiateTC(element)"
-                        matTooltip="{{ currentLanguageSet?.tc?.startTc }}"
-                        class="full-width-login-voice-chat box accent"
-                        [disabled]="
-                          element.specialist_flag !== 1 &&
-                          !element.benArrivedFlag
-                        "
-                      >
-                        <span class="material-icons">voice_chat</span>
-                      </button>
-                    </div>
-                  </div>
-                </td>
+                  </td>
+                </ng-container>
               </ng-container>
               <td colspan="2">
                 <div class="totalCount" *ngIf="dataSource.data.length > 0">

@@ -50,19 +50,6 @@
         class="table table-striped"
         [dataSource]="diagnosis"
       >
-        <ng-container matColumnDef="ConceptID">
-          <th
-            mat-header-cell
-            style="border-bottom: none"
-            *matHeaderCellDef
-            mat-sort-header
-          >
-            {{ currentLanguageSet?.common?.ConceptID }}
-          </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element?.conceptID }}
-          </td>
-        </ng-container>
         <ng-container matColumnDef="term">
           <th
             mat-header-cell

@@ -45,10 +45,10 @@ jobs:
             npm run build-ci
         
     - name: Create WAR file 
-      run: jar -cvf hwc-ui.war -C dist .
+      run: jar -cvf aam-ui.war -C dist .
       
     - name: Upload WAR file as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: HWC-UI
-        path: dist/hwc-ui/hwc-ui.war
+        name: AAM-UI
+        path: dist/aam-ui/aam-ui.war
