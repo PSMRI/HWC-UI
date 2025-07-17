@@ -205,7 +205,6 @@ export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
         (<FormGroup>diagnosisArrayList.at(i)).controls[
           'viewProvisionalDiagnosisProvided'
         ].disable();
-        // if (diagnosisArrayList.length < savedDiagnosisData.length)
         this.addDiagnosis();
       }
     }
