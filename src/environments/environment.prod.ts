@@ -73,7 +73,7 @@ export const environment = {
   tracking: {
     platform: 'matomo',
     siteId: 1,
-    trackerUrl: '//matomo.piramalswasthya.org/',
+    trackerUrl: 'https://matomo.piramalswasthya.org/',
     trackingPlatform: 'production',
     enabled: true,
   },
