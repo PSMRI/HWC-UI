@@ -23,6 +23,7 @@ import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-respiratory-system',
@@ -86,6 +87,7 @@ export class RespiratorySystemComponent implements OnInit, DoCheck {
   constructor(
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -99,5 +101,9 @@ export class RespiratorySystemComponent implements OnInit, DoCheck {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Respiratory System');
   }
 }
