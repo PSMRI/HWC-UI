@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.iemr.aam-ui</groupId>
 	<artifactId>aam-ui</artifactId>
-	<version>3.1.0</version>
+	<version>3.3.0</version>
 	<name>AAM-UI</name>
 	<description>Piramal - AAM: Module ui</description>
 	<packaging>war</packaging>
@@ -95,7 +95,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<id>npm-install</id>
@@ -170,7 +170,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<id>properties-updated</id>
