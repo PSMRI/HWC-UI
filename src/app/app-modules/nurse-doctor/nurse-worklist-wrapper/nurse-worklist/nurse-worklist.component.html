@@ -62,9 +62,10 @@
                   mat-cell
                   *matCellDef="let element"
                   [ngClass]="{
-                    visitStatus: true,
-                    'first-visit': element?.benVisitNo === 1,
-                    revisit: element?.benVisitNo !== 1
+                    'visitStatus': true,
+                    'high-risk': element?.is_high_risk === true,
+                    'first-visit': !element?.is_high_risk && element?.benVisitNo === 1,
+                    'revisit': !element?.is_high_risk && element?.benVisitNo !== 1
                   }"
                 >
                   {{ element.sno }}
@@ -255,6 +256,10 @@
                 <li>
                   <div class="revisit-marker"></div>
                   <p>{{ currentLanguageSet?.common?.reVisit }}</p>
+                </li>
+                  <li>
+                  <div class="high-risk-marker"></div>
+                  <p>{{ currentLanguageSet?.highRiskPregnancy }}</p>
                 </li>
               </ul>
             </div>
