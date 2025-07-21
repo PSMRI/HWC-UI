@@ -33,6 +33,16 @@ md-input-container {
   text-align: center;
 }
 
+.visitStatus.high-risk::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 1px;
+  width: 4px;
+  background: #FF0000 !important;
+}
+
 .visitStatus.first-visit::before {
   content: "";
   position: absolute;
@@ -82,6 +92,11 @@ ul li div {
   background: #ff9900;
   margin-right: 5px !important;
 
+}
+
+.high-risk-marker {
+  background: #FF0000;
+  margin-right: 5px !important;
 }
 
 .totalCount,
