@@ -1181,6 +1181,7 @@
     },
     "alerts": {
       "info": {
+        "beneficiaryNotFound": "লাভকাৰীৰ তথ্য পোৱা নগ’ল",
         "beneficiaryNotArrived": "হিতাধিকাৰীগৰাকী টি.এম. স্পোক/ কেন্দ্ৰত উপস্থিত হোৱা নাই",
         "scheduledForConsultation": "পৰামর্শৰ বাবে সূচী (চিডিউল ফৰ কনচালটেচন্‌)",
         "marriageAge": "বিবাহৰ বয়স অতিকমেও বছৰত হ'ব লাগিব",
