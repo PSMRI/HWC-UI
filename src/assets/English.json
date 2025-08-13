@@ -1190,6 +1190,7 @@
         },
         "alerts": {
             "info": {
+                "beneficiaryNotFound": "Beneficiary data not found",
                 "beneficiaryNotArrived": "Beneficiary has not arrived at TM spoke/center",
                 "scheduledForConsultation": "Scheduled for consultation",
                 "marriageAge": "Marriage age has to be at least",
