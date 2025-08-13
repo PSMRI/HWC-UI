@@ -680,8 +680,7 @@ export class QuickConsultComponent
           (<FormGroup>diagnosisArrayList.at(i)).controls[
             'viewProvisionalDiagnosisProvided'
           ].disable();
-          if (diagnosisArrayList.length < savedDiagnosisData.length)
-            this.addDiagnosis();
+          this.addDiagnosis();
         }
       }
       this.patchPrescriptionDetails(response.prescription);
@@ -1372,7 +1371,7 @@ export class QuickConsultComponent
   }
 
   displayDiagnosis(diagnosis: any): string {
-    return diagnosis?.term || '';
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
   }
 
   onDiagnosisSelected(selected: any, index: number) {
