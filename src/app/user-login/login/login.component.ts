@@ -40,6 +40,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
+
 export class LoginComponent implements OnInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
   dynamictype = 'password';
