@@ -96,6 +96,11 @@ ul li div {
 
 }
 
+::ng-deep .marker-h-r-c,
+::ng-deep .marker-h-r-c td {
+  color: #FF0000 !important;
+}
+
 .color-rows>td {
   padding: 0;
   border: 0;
