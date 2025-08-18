@@ -6,7 +6,7 @@
       id="previousANCComorbidityHistory"
       color="primary"
       matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-      (click)="getPreviousComorbidityHistory()"
+      (click)="getPreviousComorbidityHistory(); trackFieldInteraction('Previous Comorbidity History')"
       (keydown.enter)="getPreviousComorbidityHistory()"
       (keydown.space)="getPreviousComorbidityHistory()"
     >
@@ -53,7 +53,7 @@
                   $event.value,
                   i,
                   comorbidityConcurrentConditions
-                )
+                ); trackFieldInteraction('Comorbid Conditions')
               "
               required="{{ ComorbidStatus }}"
             >
@@ -86,6 +86,7 @@
               allowText="alphaspace"
               name="otherComorbidCondition"
               formControlName="otherComorbidCondition"
+              (focus)="trackFieldInteraction('Other Comorbid Condition')"
             />
           </mat-form-field>
         </div>
@@ -103,6 +104,7 @@
               allowText="number"
               name="timePeriodAgo"
               formControlName="timePeriodAgo"
+              (focus)="trackFieldInteraction('Comorbidity Duration')"
               (change)="validateDuration(comorbidityConcurrentConditions)"
             />
           </mat-form-field>
@@ -118,6 +120,7 @@
               name="timePeriodUnit"
               formControlName="timePeriodUnit"
               (change)="validateDuration(comorbidityConcurrentConditions)"
+              (selectionChange)="trackFieldInteraction('Comorbidity Duration Unit')"
             >
               <mat-option value="Days">Day(s)</mat-option>
               <mat-option value="Weeks">Week(s)</mat-option>
@@ -138,6 +141,7 @@
             class="checkbox"
             checked="checked"
             formControlName="isForHistory"
+            (change)="trackFieldInteraction('Inactive for Future Visits')"
           >
             {{ currentLanguageSet?.inactiveForFutureVisits }}
           </mat-checkbox>
@@ -150,10 +154,11 @@
             class="mat-add-btn"
             [disabled]="checkValidity(comorbidityConcurrentConditions)"
             id="addComorbidityConcurrentConditions"
-            (click)="addComorbidityConcurrentConditions()"
+            (click)="addComorbidityConcurrentConditions(); trackFieldInteraction('Add Comorbidity')"
           >
             {{ currentLanguageSet?.common?.add }}
           </button>
+
           <button
             mat-mini-fab
             color="warn"
@@ -170,7 +175,7 @@
               removeComorbidityConcurrentConditions(
                 i,
                 comorbidityConcurrentConditions
-              )
+              ); trackFieldInteraction('Remove Comorbidity')
             "
           >
             {{ currentLanguageSet?.common?.remove }}
