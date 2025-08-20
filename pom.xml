@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.iemr.aam-ui</groupId>
 	<artifactId>aam-ui</artifactId>
-	<version>3.1.0</version>
+	<version>3.4.0</version>
 	<name>AAM-UI</name>
 	<description>Piramal - AAM: Module ui</description>
 	<packaging>war</packaging>
@@ -152,7 +152,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>3.4.0</version>
+				<version>3.1.0</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<webResources>
