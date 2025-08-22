@@ -365,7 +365,8 @@
                 </ul>
               </td>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"
+              [ngClass]="{ 'marker-h-r-c': row.is_high_risk }"></tr>
             </table>
           </div>
           <div
