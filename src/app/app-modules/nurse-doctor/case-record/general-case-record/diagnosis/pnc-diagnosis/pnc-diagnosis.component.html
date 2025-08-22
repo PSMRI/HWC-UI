@@ -8,7 +8,7 @@
         <ng-container formArrayName="provisionalDiagnosisList">
           <div
             *ngFor="
-              let diagnosis of getProvisionalDiagnosisList();
+              let diagnosis of provisionalDiagnosisControls;
               let i = index;
               let isLast = last
             "

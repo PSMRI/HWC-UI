@@ -26,7 +26,7 @@
     </header>
      <ng-container formArrayName="provisionalDiagnosisList">
               <div class="row align-items-center m-t-10"
-                *ngFor="let diagnosis of getProvisionalDiagnosisList(); let i = index; let isLast = last">
+                *ngFor="let diagnosis of provisionalDiagnosisControls; let i = index; let isLast = last">
                 <ng-container [formGroupName]="i">
                   <!-- Diagnosis Input -->
                   <div class="col-xs-12 col-sm-8 col-md-9">
