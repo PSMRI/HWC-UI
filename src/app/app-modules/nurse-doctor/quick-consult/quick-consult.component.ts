@@ -169,6 +169,15 @@ export class QuickConsultComponent
 
   dataSource = new MatTableDataSource<any>();
   suggestedDiagnosisList: any = [];
+  private readonly PAGE_BASE = 0;
+
+  private readonly BOOTSTRAP_MAX_PAGES = 3; // when first page can't scroll, prefill up to this many extra pages
+
+  loadingMore: boolean[] = [];
+  noMore: boolean[] = [];
+  wantMore: boolean[] = [];
+  pageByIndex: number[] = [];
+  lastQueryByIndex: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -1359,13 +1368,22 @@ export class QuickConsultComponent
   }
 
   onDiagnosisInputKeyup(value: string, index: number) {
-    if (value.length >= 3) {
-      this.masterdataService
-        .searchDiagnosisBasedOnPageNo(value, index)
-        .subscribe((results: any) => {
-          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
-        });
+    const term = (value || '').trim();
+
+    if (term.length >= 3) {
+      if (this.lastQueryByIndex[index] !== term) {
+        this.lastQueryByIndex[index] = term;
+        this.pageByIndex[index] = 0; // logical 0th page
+        this.noMore[index] = false;
+        this.wantMore[index] = false;
+        this.suggestedDiagnosisList[index] = [];
+      }
+      this.fetchPage(index, false);
     } else {
+      this.lastQueryByIndex[index] = '';
+      this.pageByIndex[index] = 0;
+      this.noMore[index] = false;
+      this.wantMore[index] = false;
       this.suggestedDiagnosisList[index] = [];
     }
   }
@@ -1386,5 +1404,101 @@ export class QuickConsultComponent
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });
+  }
+
+  onPanelReady(index: number, panelEl: HTMLElement) {
+    if (panelEl.scrollHeight <= panelEl.clientHeight && !this.noMore[index]) {
+      this.bootstrapUntilScrollable(index, panelEl);
+    }
+  }
+
+  onAutoNearEnd(index: number) {
+    if (!this.loadingMore[index] && !this.noMore[index]) {
+      this.fetchPage(index, true);
+    } else if (this.loadingMore[index]) {
+      this.wantMore[index] = true;
+    }
+  }
+
+  private bootstrapUntilScrollable(rowIndex: number, panelEl: HTMLElement) {
+    let fetched = 0;
+
+    const tryFill = () => {
+      const scrollable = panelEl.scrollHeight > panelEl.clientHeight;
+      if (
+        scrollable ||
+        this.noMore[rowIndex] ||
+        fetched >= this.BOOTSTRAP_MAX_PAGES
+      )
+        return;
+
+      if (this.loadingMore[rowIndex]) {
+        requestAnimationFrame(tryFill);
+        return;
+      }
+
+      fetched++;
+      this.fetchPage(rowIndex, true);
+
+      requestAnimationFrame(tryFill);
+    };
+
+    if (this.lastQueryByIndex[rowIndex]?.length >= 3) {
+      tryFill();
+    }
+  }
+
+  private fetchPage(index: number, append = false) {
+    const term = this.lastQueryByIndex[index];
+    if (!term) return;
+
+    const nextLogical = (this.pageByIndex[index] ?? 0) + (append ? 1 : 0);
+    const pageAtReq = nextLogical + this.PAGE_BASE;
+
+    if (this.loadingMore[index]) return;
+    this.loadingMore[index] = true;
+
+    const termAtReq = term;
+
+    this.masterdataService
+      .searchDiagnosisBasedOnPageNo(termAtReq, pageAtReq)
+      .subscribe({
+        next: (results: any) => {
+          if (this.lastQueryByIndex[index] !== termAtReq) return;
+
+          const list = results?.data?.sctMaster ?? [];
+
+          if (append) {
+            const existing = new Set(
+              (this.suggestedDiagnosisList[index] ?? []).map(
+                (d: any) => d.id ?? d.code ?? d.term,
+              ),
+            );
+            this.suggestedDiagnosisList[index] = [
+              ...(this.suggestedDiagnosisList[index] ?? []),
+              ...list.filter(
+                (d: any) => !existing.has(d.id ?? d.code ?? d.term),
+              ),
+            ];
+          } else {
+            this.suggestedDiagnosisList[index] = list;
+          }
+
+          this.pageByIndex[index] = nextLogical;
+          if (!list.length) {
+            this.noMore[index] = true;
+          }
+        },
+        error: () => {
+          console.error('Error fetching diagnosis data');
+        },
+        complete: () => {
+          const wantChain = this.wantMore[index] && !this.noMore[index];
+          this.loadingMore[index] = false;
+          this.wantMore[index] = false;
+
+          if (wantChain) this.fetchPage(index, true);
+        },
+      });
   }
 }

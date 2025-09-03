@@ -7,6 +7,7 @@
         </header>
         <ng-container formArrayName="provisionalDiagnosisList">
           <div
+            class="row"
             *ngFor="
               let diagnosis of provisionalDiagnosisControls;
               let i = index;
@@ -17,37 +18,55 @@
               <div class="col-xs-12 col-sm-9 box">
                 <mat-form-field class="input-full-width">
                   <input
+                    #provisionalDiagnosisInput
                     matInput
-                    allowText="inputFieldValidator"
-                    appDiagnosisSearch
-                    [diagnosisListForm]="diagnosis"
-                    name="viewProvisionalDiagnosisProvided"
+                    type="text"
                     formControlName="viewProvisionalDiagnosisProvided"
-                    maxlength="100"
                     minlength="3"
-                    [previousSelected]="
-                      generalDiagnosisForm.value.provisionalDiagnosisList
+                    maxlength="100"
+                    [matAutocomplete]="autoDiagnosis"
+                    (keyup)="
+                      onDiagnosisInputKeyup(
+                        'provisional',
+                        provisionalDiagnosisInput.value,
+                        i
+                      )
                     "
                   />
-                  <mat-icon
-                    class="search-btn"
-                    *ngIf="
-                      !diagnosis.get('viewProvisionalDiagnosisProvided')
-                        ?.disabled
-                    "
-                    matSuffix
-                    appDiagnosisSearch
-                    [diagnosisListForm]="diagnosis"
-                    [previousSelected]="
-                      generalDiagnosisForm.value.provisionalDiagnosisList
-                    "
-                    >search</mat-icon
-                  >
                 </mat-form-field>
+
+                <mat-autocomplete
+                  #autoDiagnosis="matAutocomplete"
+                  appAutocompleteScroller
+                  [threshold]="0.6"
+                  (nearEnd)="onAutoNearEnd('provisional', i)"
+                  (panelReady)="onPanelReady('provisional', i, $event)"
+                  [displayWith]="displayDiagnosis"
+                  (optionSelected)="
+                    onDiagnosisSelected('provisional', $event.option.value, i)
+                  "
+                >
+                  <mat-option
+                    *ngFor="let diag of state.provisional.suggested[i]"
+                    [value]="diag"
+                  >
+                    {{ diag.term }}
+                  </mat-option>
+                  <mat-option *ngIf="state.provisional.loadingMore[i]" disabled
+                    >Loading…</mat-option
+                  >
+                  <mat-option *ngIf="state.provisional.noMore[i]" disabled
+                    >End of results</mat-option
+                  >
+                </mat-autocomplete>
               </div>
               <div
                 class="col-xs-12 col-sm-3 box pull-right"
-                style="padding: 0px"
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
               >
                 <button
                   mat-mini-fab
@@ -91,6 +110,7 @@
         </header>
         <ng-container formArrayName="confirmatoryDiagnosisList">
           <div
+            class="row"
             *ngFor="
               let confirmatoryDiagnosis of getConfirmatoryDiagnosisList();
               let i = index;
@@ -98,46 +118,65 @@
             "
           >
             <ng-container [formGroupName]="i">
-              <div class="col-xs-12 col-sm-9 box">
+              <div class="col-xs-12 col-sm-8 col-md-9">
                 <mat-form-field class="input-full-width">
                   <input
+                    #confirmatoryDiagnosisInput
                     matInput
-                    appConfirmatoryDiagnosis
-                    [diagnosisListForm]="confirmatoryDiagnosis"
-                    name="viewConfirmatoryDiagnosisProvided"
+                    type="text"
                     formControlName="viewConfirmatoryDiagnosisProvided"
-                    maxlength="100"
                     minlength="3"
-                    [previousSelected]="
-                      generalDiagnosisForm.value.confirmatoryDiagnosisList
+                    maxlength="100"
+                    [matAutocomplete]="autoConfirmDiagnosis"
+                    (keyup)="
+                      onDiagnosisInputKeyup(
+                        'confirmatory',
+                        confirmatoryDiagnosisInput.value,
+                        i
+                      )
                     "
                   />
-                  <mat-icon
-                    class="search-btn"
-                    *ngIf="
-                      !confirmatoryDiagnosis.get(
-                        'viewProvisionalDiagnosisProvided'
-                      )?.disabled
-                    "
-                    matSuffix
-                    appConfirmatoryDiagnosis
-                    [diagnosisListForm]="confirmatoryDiagnosis"
-                    [previousSelected]="
-                      generalDiagnosisForm.value.confirmatoryDiagnosisList
-                    "
-                    >search</mat-icon
-                  >
                 </mat-form-field>
+
+                <mat-autocomplete
+                  #autoConfirmDiagnosis="matAutocomplete"
+                  appAutocompleteScroller
+                  [threshold]="0.6"
+                  (nearEnd)="onAutoNearEnd('confirmatory', i)"
+                  (panelReady)="onPanelReady('confirmatory', i, $event)"
+                  [displayWith]="displayDiagnosis"
+                  (optionSelected)="
+                    onDiagnosisSelected('confirmatory', $event.option.value, i)
+                  "
+                >
+                  <mat-option
+                    *ngFor="let diag of state.confirmatory.suggested[i]"
+                    [value]="diag"
+                  >
+                    {{ diag.term }}
+                  </mat-option>
+                  <mat-option *ngIf="state.confirmatory.loadingMore[i]" disabled
+                    >Loading…</mat-option
+                  >
+                  <mat-option *ngIf="state.confirmatory.noMore[i]" disabled
+                    >End of results</mat-option
+                  >
+                </mat-autocomplete>
               </div>
               <div
                 class="col-xs-12 col-sm-3 box pull-right"
-                style="padding: 0px"
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
               >
                 <button
                   mat-mini-fab
                   type="button"
                   color="warn"
                   class="mat_warn_circle"
+                  style="margin-right: 5px"
                   *ngIf="
                     i !== 0 ||
                     (i === 0 &&

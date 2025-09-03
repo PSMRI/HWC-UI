@@ -173,6 +173,7 @@ import { Cdss104FormComponent } from './cdss/cdss-form-104/cdss-form.component';
 import { Referred104CdssDetailsComponent } from './cdss/referred-104-cdss-details/referred-104-cdss-details.component';
 import { Referred104DetailsPopupComponent } from './cdss/referred-104-details-popup/referred-104-details-popup.component';
 import { SharedModule } from '../core/components/shared/shared.module';
+import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scroller.directive';
 
 @NgModule({
   imports: [
@@ -322,6 +323,7 @@ import { SharedModule } from '../core/components/shared/shared.module';
     ViewDiseaseSummaryDetailsComponent,
     CdssFormResultPopupComponent,
     Referred104BeneficiaryDetailsComponent,
+    AutocompleteScrollerDirective,
   ],
 
   providers: [
