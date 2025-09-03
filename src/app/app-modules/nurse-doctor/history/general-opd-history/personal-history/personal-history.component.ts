@@ -51,6 +51,7 @@ import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/pr
 import { AllergenSearchComponent } from 'src/app/app-modules/core/components/allergen-search/allergen-search.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-general-personal-history',
@@ -115,6 +116,7 @@ export class GeneralPersonalHistoryComponent
     private masterdataService: MasterdataService,
     private ncdScreeningService: NcdScreeningService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -1200,5 +1202,8 @@ export class GeneralPersonalHistoryComponent
       alcoholForm?.get('durationUnit')?.disable();
       alcoholForm?.get('durationUnit')?.reset();
     }
+  }
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Personal History');
   }
 }

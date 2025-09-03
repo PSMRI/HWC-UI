@@ -46,6 +46,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-general-medication-history',
@@ -75,6 +76,7 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
     public httpServiceService: HttpServiceService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -328,5 +330,9 @@ export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
       medicationHistory?.get('timePeriodUnit')?.disable();
       medicationHistory?.get('timePeriodUnit')?.reset();
     }
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Medication History');
   }
 }

@@ -11,6 +11,7 @@
       mat-table
       [dataSource]="dataSource"
       aria-describedby="chiefComplaintDetails"
+      (click)="trackFieldInteraction('View Chief Complaints Table')"
     >
       <ng-container matColumnDef="chiefComplaintsDetails">
         <th
@@ -18,6 +19,7 @@
           style="border-bottom: none"
           *matHeaderCellDef
           mat-sort-header
+          (click)="trackFieldInteraction('Sort Chief Complaints')"
         >
           {{
             current_language_set?.nurseData?.chiefComplaintsDetails
@@ -35,6 +37,7 @@
           style="border-bottom: none"
           *matHeaderCellDef
           mat-sort-header
+          (click)="trackFieldInteraction('Sort Duration')"
         >
           {{
             current_language_set?.nurseData?.chiefComplaintsDetails?.duration
@@ -51,6 +54,7 @@
           style="border-bottom: none"
           *matHeaderCellDef
           mat-sort-header
+          (click)="trackFieldInteraction('Sort Unit of Duration')"
         >
           {{
             current_language_set?.nurseData?.chiefComplaintsDetails
@@ -80,6 +84,7 @@
           style="border-bottom: none"
           *matHeaderCellDef
           mat-sort-header
+          (click)="trackFieldInteraction('Sort Description')"
         >
           {{
             current_language_set?.nurseData?.chiefComplaintsDetails?.description
@@ -135,6 +140,7 @@
                 #complaintType
                 (keyup)="suggestChiefComplaintList(complaint, i)"
                 [matAutocomplete]="auto"
+                (focus)="trackFieldInteraction('Chief Complaint Input')"
               />
             </mat-form-field>
 
@@ -142,7 +148,9 @@
               #auto="matAutocomplete"
               [displayWith]="displayChiefComplaint"
               (optionSelected)="
-                filterComplaints($event, i); getSCTid($event, i)
+                filterComplaints($event, i);
+                getSCTid($event, i);
+                trackFieldInteraction('Chief Complaint Selection')
               "
             >
               <mat-option
@@ -169,6 +177,7 @@
                 formControlName="duration"
                 [disabled]="!complaint.value.chiefComplaint"
                 (change)="validateDuration(complaint)"
+                (focus)="trackFieldInteraction('Duration Input')"
               />
             </mat-form-field>
           </div>
@@ -184,6 +193,9 @@
                 formControlName="unitOfDuration"
                 [disabled]="!complaint.value.duration"
                 (change)="validateDuration(complaint)"
+                (selectionChange)="
+                  trackFieldInteraction('Unit of Duration Selection')
+                "
               >
                 <mat-option value="Hours">Hour(s)</mat-option>
                 <mat-option value="Days">Day(s)</mat-option>
@@ -207,6 +219,7 @@
                 name="description"
                 [disabled]="!complaint.value.chiefComplaint"
                 formControlName="description"
+                (focus)="trackFieldInteraction('Chief Complaint Description')"
               ></textarea>
             </mat-form-field>
           </div>
@@ -219,7 +232,10 @@
               [id]="'addBtn' + i"
               *ngIf="isLast"
               [disabled]="checkComplaintFormValidity(complaint)"
-              (click)="addChiefComplaint()"
+              (click)="
+                addChiefComplaint();
+                trackFieldInteraction('Add Chief Complaint')
+              "
               color="primary"
               class="mat-add-btn"
             >
@@ -229,7 +245,10 @@
               mat-mini-fab
               [id]="'removeBtn' + i"
               *ngIf="i !== 0 || (i === 0 && complaint.touched)"
-              (click)="removeChiefComplaint(i, complaint)"
+              (click)="
+                removeChiefComplaint(i, complaint);
+                trackFieldInteraction('Remove Chief Complaint')
+              "
               color="warn"
               style="margin-right: 15px; margin-top: 25px !important"
               class="mat-remove-btn"
@@ -270,6 +289,7 @@
                   [previousSelected]="
                     generalFindingsForm.value.clinicalObservationsList
                   "
+                  (focus)="trackFieldInteraction('Clinical Observations Input')"
                 />
                 <mat-icon
                   class="search-btn cursorPointer"
@@ -278,6 +298,9 @@
                   [observationsList]="observations"
                   [previousSelected]="
                     generalFindingsForm.value.clinicalObservationsList
+                  "
+                  (click)="
+                    trackFieldInteraction('Search Clinical Observations')
                   "
                   >search</mat-icon
                 >
@@ -291,7 +314,10 @@
                 color="primary"
                 *ngIf="isLast"
                 [disabled]="validateAddedObservations(observations)"
-                (click)="addObservations()"
+                (click)="
+                  addObservations();
+                  trackFieldInteraction('Add Clinical Observation')
+                "
                 class="mat-add-btn"
               >
                 {{ current_language_set?.common?.add }}
@@ -310,7 +336,10 @@
                     generalFindingsForm.get('clinicalObservationsList')?.value
                       .clinicalObservationsProvided !== '')
                 "
-                (click)="removeObservationsFromList(i, observations)"
+                (click)="
+                  removeObservationsFromList(i, observations);
+                  trackFieldInteraction('Remove Clinical Observation')
+                "
               >
                 {{ current_language_set?.common?.remove }}
               </button>
@@ -354,6 +383,7 @@
                         .significantFindingsProvided
                     )
                   "
+                  (focus)="trackFieldInteraction('Significant Findings Input')"
                 />
 
                 <mat-icon
@@ -364,6 +394,7 @@
                   [previousSelected]="
                     generalFindingsForm.value.significantFindingsList
                   "
+                  (click)="trackFieldInteraction('Search Significant Findings')"
                   >search</mat-icon
                 >
               </mat-form-field>
@@ -376,7 +407,10 @@
                 color="primary"
                 *ngIf="isLast"
                 [disabled]="validateAddedFindings(findings)"
-                (click)="addFindings()"
+                (click)="
+                  addFindings();
+                  trackFieldInteraction('Add Significant Finding')
+                "
                 class="mat-add-btn"
               >
                 {{ current_language_set?.common?.add }}
@@ -395,7 +429,10 @@
                     generalFindingsForm.get('significantFindingsList')?.value
                       .significantFindingsProvided !== '')
                 "
-                (click)="removeFindingsFromList(i, findings)"
+                (click)="
+                  removeFindingsFromList(i, findings);
+                  trackFieldInteraction('Remove Significant Finding')
+                "
               >
                 {{ current_language_set?.common?.remove }}
               </button>
@@ -419,6 +456,7 @@
           maxlength="300"
           name="otherSymptoms"
           formControlName="otherSymptoms"
+          (focus)="trackFieldInteraction('Other Symptoms')"
         >
         </textarea>
       </mat-form-field>
@@ -432,6 +470,7 @@
         checked="checked"
         formControlName="isForHistory"
         [value]="'true'"
+        (change)="trackFieldInteraction('Show Findings on Next Visit')"
         >{{
           current_language_set?.Find?.showThisFindingsOnNextVisit
         }}</mat-checkbox

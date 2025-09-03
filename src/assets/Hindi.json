@@ -1182,6 +1182,7 @@
     },
     "alerts": {
       "info": {
+        "beneficiaryNotFound": "लाभार्थी डेटा नहीं मिला",
         "confirmtoProceedFurther": "आगे बढ़ने के लिए की पुष्टि करें",
         "beneficiaryNotArrived": "लाभार्थी  टी.एम स्पोक / केंद्र पर नहीं आया  है",
         "scheduledForConsultation": "परामर्श के लिए अनुसूचित किया ",
