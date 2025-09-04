@@ -228,8 +228,7 @@ export class LoginComponent implements OnInit {
                                     this.trackingService.setUserId(
                                       userLoggedIn.data.userID,
                                     );
-                                    this.authService.sessionExpiredHandled =
-                                      false;
+                                    this.authService.sessionExpiredHandled = false;
                                     this.sessionstorage.setItem(
                                       'loginDataResponse',
                                       JSON.stringify(userLoggedIn.data),
