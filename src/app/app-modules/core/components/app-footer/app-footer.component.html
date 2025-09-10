@@ -1,6 +1,6 @@
 <footer class="footer container-fluid">
   <div class="row">
-    <div class="col-4 text-left">
+    <div class="col-3 text-left">
       <span
         class="footer-text"
         *ngIf="currentLanguageSet === null || currentLanguageSet === undefined"
@@ -12,7 +12,7 @@
         >{{ currentLanguageSet?.coreComponents?.poweredByWipro }}</span
       >
     </div>
-    <div class="col-4 text-center">
+    <div class="col-3 text-center">
       <p
         class="footer-text"
         *ngIf="currentLanguageSet === null || currentLanguageSet === undefined"
@@ -28,7 +28,19 @@
         {{version }}
       </p>
     </div>
-    <div class="col-4 text-end">
+    <div
+      class="col-3 text-end"
+      style="cursor: pointer"
+      [routerLink]="['/feedback']"
+      [queryParams]="{ sl: 'AAM' }"
+      role="link"
+    >
+      <mat-icon style="vertical-align: top; font-size: medium; margin-right: 2%"
+        >mail</mat-icon
+      >
+      <span class="footer-text">Feedback</span>
+    </div>
+    <div class="col-3 text-end">
       <p class="footer-text">
         <span
           class="footer-text"
