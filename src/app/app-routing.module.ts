@@ -109,6 +109,13 @@ const routes: Routes = [
         (module) => module.DataSYNCModule,
       ),
   },
+  {
+    path: 'feedback',
+    loadChildren: () =>
+      import('Common-UI/src/feedback/feedback.module').then(
+        (m) => m.FeedbackModule,
+      ),
+  },
 ];
 
 @NgModule({

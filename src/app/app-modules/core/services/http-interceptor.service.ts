@@ -51,16 +51,27 @@ export class HttpInterceptorService implements HttpInterceptor {
     this.assignSelectedLanguage();
     const key: any = sessionStorage.getItem('key');
     let modifiedReq = null;
-    if (key !== undefined && key !== null) {
-      modifiedReq = req.clone({
-        headers: req.headers
-          .set('Authorization', key)
-          .set('Content-Type', 'application/json'),
-      });
+
+    const isPlatformFeedback =
+      req.url && req.url.toLowerCase().includes('/platform-feedback');
+
+    if (isPlatformFeedback) {
+      const headers = req.headers
+        .delete('Authorization')
+        .set('Content-Type', 'application/json');
+      modifiedReq = req.clone({ headers });
     } else {
-      modifiedReq = req.clone({
-        headers: req.headers.set('Authorization', ''),
-      });
+      if (key !== undefined && key !== null) {
+        modifiedReq = req.clone({
+          headers: req.headers
+            .set('Authorization', key)
+            .set('Content-Type', 'application/json'),
+        });
+      } else {
+        modifiedReq = req.clone({
+          headers: req.headers.set('Authorization', ''),
+        });
+      }
     }
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {
