@@ -24,100 +24,50 @@
         {{ current_language_set?.casesheet?.provisionalDiag }}
       </h4>
     </header>
-    <ng-container formArrayName="provisionalDiagnosisList">
-      <div
-        *ngFor="
-          let diagnosis of getProvisionalDiagnosisList();
-          let i = index;
-          let isLast = last
-        "
-      >
-        <ng-container [formGroupName]="i" class="col-12">
-          <div class="row">
-            <div class="col-9">
-              <mat-form-field class="input-full-width">
-                <input
-                  matInput
-                  allowText="inputFieldValidator"
-                  appDiagnosisSearch
-                  [diagnosisListForm]="diagnosis"
-                  required
-                  name="viewDiagnosisProvided"
-                  formControlName="viewProvisionalDiagnosisProvided"
-                  maxlength="100"
-                  minlength="3"
-                  [previousSelected]="
-                    generalDiagnosisForm.value.provisionalDiagnosisList
-                  "
-                  required
-                />
-                <mat-icon
-                  class="search-btn cursorPointer"
-                  *ngIf="
-                    !diagnosis.get('viewProvisionalDiagnosisProvided')?.disabled
-                  "
-                  matSuffix
-                  appDiagnosisSearch
-                  [diagnosisListForm]="diagnosis"
-                  [previousSelected]="
-                    generalDiagnosisForm.value.provisionalDiagnosisList
-                  "
-                  >search</mat-icon
-                >
-              </mat-form-field>
-            </div>
-            <div class="col-3 m-t-10" style="padding: 0px">
-              <button
-                mat-mini-fab
-                type="button"
-                class="mat_warn_circle"
-                style="margin-right: 5px"
-                color="warn"
-                *ngIf="
-                  diagnosis.get('provisionalDiagnosisList')?.disabled ||
-                  i !== 0 ||
-                  (i === 0 &&
-                    generalDiagnosisForm.get('provisionalDiagnosisList')?.value
-                      .viewProvisionalDiagnosisProvided !== null &&
-                    generalDiagnosisForm.get('provisionalDiagnosisList')?.value
-                      .viewProvisionalDiagnosisProvided !== '')
-                "
-                (click)="removeDiagnosisFromList(i, diagnosis)"
-              >
-                <mat-icon>close</mat-icon>
-              </button>
-              <button
-                mat-mini-fab
-                type="button"
-                style="margin-right: 3px"
-                color="primary"
-                class="mat_blue_circle"
-                *ngIf="isLast"
-                [disabled]="checkProvisionalDiagnosisValidity(diagnosis)"
-                (click)="addDiagnosis()"
-              >
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
-          </div>
-        </ng-container>
-      </div>
-    </ng-container>
+     <ng-container formArrayName="provisionalDiagnosisList">
+              <div class="row align-items-center m-t-10"
+                *ngFor="let diagnosis of provisionalDiagnosisControls; let i = index; let isLast = last">
+                <ng-container [formGroupName]="i">
+                  <!-- Diagnosis Input -->
+                  <div class="col-xs-12 col-sm-8 col-md-9">
+                    <mat-form-field class="input-full-width" appearance="fill">
+                      <mat-label>{{ current_language_set?.casesheet?.provisionalDiag }}</mat-label>
+                      <input matInput type="text" autocomplete="off" name="viewProvisionalDiagnosisProvided"
+                        formControlName="viewProvisionalDiagnosisProvided" minlength="3" maxlength="100" required
+                        #diagnosisInput [matAutocomplete]="autoDiagnosis"
+                        (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)" />
+                    </mat-form-field>
+        
+                    <mat-autocomplete #autoDiagnosis="matAutocomplete" autoActiveFirstOption [displayWith]="displayDiagnosis"
+                      (optionSelected)="onDiagnosisSelected($event.option.value, i)">
+                      <mat-option *ngFor="let diag of suggestedDiagnosisList[i]" [value]="diag">
+                        {{ diag.term }}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </div>
+        
+                  <!-- Action Buttons (Add & Remove) -->
+                  <div class="col-xs-12 col-sm-4 col-md-3 d-flex align-items-center">
+                    <!-- Add Button -->
+                    <button mat-mini-fab color="primary" type="button" class="mat-add-btn m-r-10" *ngIf="isLast"
+                      [disabled]="checkProvisionalDiagnosisValidity(diagnosis)" (click)="addDiagnosis()">
+                      {{current_language_set?.common?.add}}
+                    </button>
+        
+                    <!-- Remove Button -->
+                    <button mat-mini-fab color="warn" type="button" class="mat-remove-btn" *ngIf="
+                        diagnosis.get('provisionalDiagnosisList')?.disabled ||
+                        i !== 0 ||
+                        (i === 0 &&
+                          generalDiagnosisForm.get('provisionalDiagnosisList')?.value[i]
+                            ?.viewProvisionalDiagnosisProvided)
+                      " (click)="removeDiagnosisFromList(i, diagnosis)">
+                      {{current_language_set?.common?.remove}}
+                    </button>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+    
   </div>
-  <!-- <div class="col-xs-12 col-sm-6 m-t-6">
-    <header class="mat-expansion-panel-header tabcolor">
-      <h4>{{ current_language_set?.DiagnosisDetails?.specialistssdvice }}</h4>
-    </header>
-    <mat-form-field class="input-full-width">
-      <textarea
-        matInput
-        defaultNull
-        matTextareaAutosize
-        maxlength="300"
-        name="specialistAdvice"
-        formControlName="instruction"
-      >
-      </textarea>
-    </mat-form-field>
-  </div> -->
 </div>

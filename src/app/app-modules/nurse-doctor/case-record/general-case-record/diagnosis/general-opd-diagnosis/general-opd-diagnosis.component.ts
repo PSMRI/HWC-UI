@@ -33,7 +33,7 @@ import {
   FormArray,
   AbstractControl,
 } from '@angular/forms';
-import { DoctorService } from '../../../../shared/services';
+import { DoctorService, MasterdataService } from '../../../../shared/services';
 import { GeneralUtils } from '../../../../shared/utility';
 import { ConfirmationService } from '../../../../../core/services/confirmation.service';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
@@ -63,12 +63,14 @@ export class GeneralOpdDiagnosisComponent
   current_language_set: any;
   designation: any;
   specialist = false;
+  suggestedDiagnosisList: any = [];
   constructor(
     private fb: FormBuilder,
     public httpServiceService: HttpServiceService,
     private doctorService: DoctorService,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
+    private masterdataService: MasterdataService,
   ) {}
 
   ngOnInit() {
@@ -92,13 +94,11 @@ export class GeneralOpdDiagnosisComponent
     this.current_language_set = getLanguageJson.currentLanguageObject;
   }
 
-  getProvisionalDiagnosisList(): AbstractControl[] | null {
-    const provisionalDiagnosisListControl = this.generalDiagnosisForm.get(
-      'provisionalDiagnosisList',
+  get provisionalDiagnosisControls(): AbstractControl[] {
+    return (
+      (this.generalDiagnosisForm.get('provisionalDiagnosisList') as FormArray)
+        ?.controls || []
     );
-    return provisionalDiagnosisListControl instanceof FormArray
-      ? provisionalDiagnosisListControl.controls
-      : null;
   }
 
   get specialistDaignosis() {
@@ -201,8 +201,8 @@ export class GeneralOpdDiagnosisComponent
         (<FormGroup>diagnosisArrayList.at(i)).controls[
           'viewProvisionalDiagnosisProvided'
         ].disable();
-        if (diagnosisArrayList.length < savedDiagnosisData.length)
-          this.addDiagnosis();
+        // if (diagnosisArrayList.length < savedDiagnosisData.length)
+        this.addDiagnosis();
       }
     }
   }
@@ -263,5 +263,36 @@ export class GeneralOpdDiagnosisComponent
     if (this.diagnosisSubscription) {
       this.diagnosisSubscription.unsubscribe();
     }
+  }
+
+  onDiagnosisInputKeyup(value: string, index: number) {
+    if (value.length >= 3) {
+      this.masterdataService
+        .searchDiagnosisBasedOnPageNo(value, index)
+        .subscribe((results: any) => {
+          this.suggestedDiagnosisList[index] = results?.data?.sctMaster;
+        });
+    } else {
+      this.suggestedDiagnosisList[index] = [];
+    }
+  }
+
+  displayDiagnosis(diagnosis: any): string {
+    return typeof diagnosis === 'string' ? diagnosis : diagnosis?.term || '';
+  }
+
+  onDiagnosisSelected(selected: any, index: number) {
+    // this.patientQuickConsultForm.get(['provisionalDiagnosisList', index])?.setValue(selected);
+    const diagnosisFormArray = this.generalDiagnosisForm.get(
+      'provisionalDiagnosisList',
+    ) as FormArray;
+    const diagnosisFormGroup = diagnosisFormArray.at(index) as FormGroup;
+
+    // Set the nested and top-level fields
+    diagnosisFormGroup.patchValue({
+      viewProvisionalDiagnosisProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
   }
 }

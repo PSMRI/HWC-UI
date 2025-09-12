@@ -230,7 +230,7 @@
             "noCallDetailsFound": "No call details found",
             "load": "Load",
             "noVisitFound": "No visit found",
-            "visibility": "visibility",
+            "visibility": "Visibility",
             "viewQnA": "View Q&A",
             "id": "ID",
             "viewMore": "View More",
@@ -239,7 +239,7 @@
             "bloodGlucoseTrend": "Blood Glucose Trends",
             "resultMammogram": "Results of Mammogram",
             "otherComplication": "Other Complication of Current Pregnancy",
-            "add": "add",
+            "add": "Add",
             "confirmDiagnosis": "Confirmatory Diagnosis",
             "labTest": "Test Report",
             "annotatedimagereport": "Annotated Image Report",
@@ -304,7 +304,9 @@
             "selectAll": "Select All",
             "sNo": "S.No.",
             "confirmWhetherBeneficiaryHasArrived": "Confirm Whether Beneficiary has arrived",
-            "startTest":"Start Test"
+            "startTest":"Start Test",
+            "remove": "Remove",
+            "poct": "POCT"
         },
         "idrs": {
                 

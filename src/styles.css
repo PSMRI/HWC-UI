@@ -736,3 +736,26 @@ button.mat-button[_ngcontent-c12] {
   padding-bottom: 15px !important;
   padding-left: 10px !important;
 }
+
+.mat-add-btn {
+    background-color: #336CFB;
+  border-radius: 20px;
+  color: white;
+  border: unset;
+  line-height: 36px;
+  min-width: 88px;
+  z-index: 3;
+}
+.mat-add-btn:disabled {
+  opacity: 0.5;
+}
+.mat-remove-btn {
+  background-color: #C21F1F;
+  min-width: 88px;
+  border-radius: 20px;
+  border: unset;
+  color: white;
+  line-height: 36px;
+  z-index: 3;
+  margin-left: 3px;
+}

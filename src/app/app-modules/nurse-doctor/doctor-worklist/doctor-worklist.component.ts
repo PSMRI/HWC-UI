@@ -58,22 +58,12 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
   cbacData: any = [];
   beneficiaryMetaData: any;
   currentPage: number | undefined;
+  teleConsultationFlag: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   dataSource = new MatTableDataSource<any>();
 
-  displayedColumns: any = [
-    'sno',
-    'beneficiaryID',
-    'beneficiaryName',
-    'gender',
-    'age',
-    'visitCategory',
-    'visitDate',
-    'beneficiaryArrived',
-    'image',
-    'action',
-  ];
+  displayedColumns: any = [];
 
   constructor(
     private dialog: MatDialog,
@@ -94,6 +84,9 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
     this.removeBeneficiaryDataForDoctorVisit();
     this.beneficiaryDetailsService.reset();
     this.masterdataService.reset();
+    this.teleConsultationFlag =
+      this.confirmationService.eSanjeevaniDoctorFlagArry;
+    this.setDisplayedColumns();
   }
 
   ngDoCheck() {
@@ -120,6 +113,38 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
   ngOnDestroy() {
     this.sessionstorage.removeItem('currentRole');
   }
+
+  setDisplayedColumns() {
+    if (
+      this.teleConsultationFlag === 'ESanjeevani' ||
+      this.teleConsultationFlag === 'Swymed'
+    ) {
+      this.displayedColumns = [
+        'sno',
+        'beneficiaryID',
+        'beneficiaryName',
+        'gender',
+        'age',
+        'visitCategory',
+        'visitDate',
+        'beneficiaryArrived',
+        'image',
+        'action',
+      ];
+    } else {
+      this.displayedColumns = [
+        'sno',
+        'beneficiaryID',
+        'beneficiaryName',
+        'gender',
+        'age',
+        'visitCategory',
+        'visitDate',
+        'image',
+      ];
+    }
+  }
+
   removeBeneficiaryDataForDoctorVisit() {
     this.sessionstorage.removeItem('visitCode');
     this.sessionstorage.removeItem('beneficiaryGender');

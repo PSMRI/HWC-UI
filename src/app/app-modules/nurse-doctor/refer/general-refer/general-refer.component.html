@@ -159,37 +159,6 @@
     </div>
 
     <div
-      class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
-      style="display: flex"
-      *ngIf="visitCategory.toLowerCase() !== 'fp & contraceptive services'"
-    >
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
-        {{ currentLanguageSet?.Referdetails?.additionalservices }}
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <mat-form-field [style.width]="'50%'">
-          <mat-label class="mat-label-text">{{
-            currentLanguageSet?.Referdetails?.additionalservices
-          }}</mat-label>
-          <mat-select
-            (ngModelChange)="additionalservices($event)"
-            multiple="true"
-            name="refrredToAdditionalServiceList"
-            formControlName="refrredToAdditionalServiceList"
-          >
-            <mat-option
-              *ngFor="let service of additionalServices"
-              [value]="service.serviceName"
-              [disabled]="canDisable(service)"
-            >
-              {{ service.serviceName }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div
       class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-20"
       style="display: flex"
       *ngIf="
@@ -210,7 +179,7 @@
       </ng-template>
 
       <div
-        class="col-xs-6 col-sm-6 col-md-3 col-lg-3"
+        class="col-xs-6 col-sm-6 col-md-6 col-lg-6"
         *ngIf="selectValue > 0 || selectValueService > 0; else elseBlockText"
       >
         <mat-form-field [style.width]="'50%'">
@@ -219,7 +188,6 @@
           }}</mat-label>
           <mat-select
             multiple
-            class="inputFieldWidth"
             name="referralReasonList"
             formControlName="referralReasonList"
             (selectionChange)="
@@ -236,14 +204,13 @@
         </mat-form-field>
       </div>
       <ng-template #elseBlockText>
-        <div class="col-xs-6 col-sm-6 col-md-3 col-lg-3">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
           <mat-form-field [style.width]="'50%'">
-            <mat-label>
+            <mat-label class="mat-label-text">
               {{ currentLanguageSet?.Referdetails?.referralReason }}</mat-label
             >
             <mat-select
               multiple
-              class="inputFieldWidth"
               name="referralReasonList"
               formControlName="referralReasonList"
               (selectionChange)="
@@ -265,7 +232,7 @@
       </ng-template>
 
       <div
-        class="box col-xs-12 col-sm-6 col-md-3 col-lg-3 pull-right"
+        class="box col-xs-6 col-sm-6 col-md-3 col-lg-3 pull-right"
         *ngIf="enableOthersReferralTextField"
       >
         <mat-form-field [style.width]="'50%'">
@@ -283,6 +250,39 @@
       </div>
     </div>
 
+
+    <div
+      class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
+      style="display: flex"
+      *ngIf="visitCategory.toLowerCase() !== 'fp & contraceptive services'"
+    >
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 alignment">
+        {{ currentLanguageSet?.Referdetails?.additionalservices }}
+      </div>
+      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <mat-form-field [style.width]="'50%'">
+          <mat-label class="mat-label-text">{{
+            currentLanguageSet?.Referdetails?.additionalservices
+          }}</mat-label>
+          <mat-select
+            (selectionChange)="additionalservices($event.value)"
+            multiple
+            name="refrredToAdditionalServiceList"
+            formControlName="refrredToAdditionalServiceList"
+          >
+            <mat-option
+              *ngFor="let service of additionalServices"
+              [value]="service.serviceName"
+              [disabled]="canDisable(service)"
+            >
+              {{ service.serviceName }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    
     <div
       class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-10"
       style="display: flex"

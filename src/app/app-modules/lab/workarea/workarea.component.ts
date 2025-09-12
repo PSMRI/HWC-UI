@@ -713,7 +713,31 @@ export class WorkareaComponent
           (res: any) => {
             if (res.data.statusCode === 200) {
               const fileContent = res.data.data.response;
-              location.href = fileContent;
+
+              // window.open(fileContent, '_blank');
+              const fileWindow = window.open('', '_blank');
+
+              if (fileWindow) {
+                fileWindow.document.write(`
+                   <html>
+                   <head>
+                   <title>File Preview</title>
+                   <style>
+                     body, html { margin: 0; padding: 0; height: 100%; }
+                     iframe { width: 100%; height: 100%; border: none; }
+                   </style>
+                   </head>
+                    <body>
+                  <iframe src="${fileContent}"></iframe>
+                  </body>
+                  </html>
+            `);
+              } else {
+                this.confirmationService.alert(
+                  'Popup blocked. Please allow popups.',
+                  'err',
+                );
+              }
             }
           },
           (err) => {

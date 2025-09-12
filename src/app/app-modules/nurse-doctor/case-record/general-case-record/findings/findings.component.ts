@@ -319,7 +319,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  addCheifComplaint() {
+  addChiefComplaint() {
     const complaintFormArray = <FormArray>(
       this.generalFindingsForm.controls['complaints']
     );
@@ -338,7 +338,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     complaintFormArray.push(this.formUtils.initChiefComplaints());
   }
 
-  removeCheifComplaint(i: number, complaintForm: AbstractControl<any, any>) {
+  removeChiefComplaint(i: number, complaintForm: AbstractControl<any, any>) {
     this.confirmationService
       .confirm(`warn`, this.current_language_set.alerts.info.warn)
       .subscribe((result) => {
