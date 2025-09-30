@@ -3019,6 +3019,12 @@ export class DoctorService {
       responseType: 'blob' as 'json',
     });
   }
+
+  /* Get UserID using UserName */
+  getUserId(userName: any) {
+    return this.http.get(environment.getUserId + userName);
+  }
+
   getIDRSDetails(beneficiaryID: string, visitID: string): Observable<any> {
     const visitCategory = this.sessionstorage.getItem('visitCategory');
     const otherDetails = Object.assign({
