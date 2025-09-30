@@ -170,6 +170,7 @@ export class DoctorDiagnosisCaseSheetComponent
   }
 
   ngOnChanges() {
+    this.userName = this.casesheetData?.doctorData?.diagnosis?.createdBy;
     this.assignSelectedLanguage();
     this.ncdScreeningCondition = null;
     if (this.casesheetData !== undefined && this.casesheetData) {
@@ -225,6 +226,7 @@ export class DoctorDiagnosisCaseSheetComponent
         this.doctorDiagnosis =
           this.casesheetData.doctorData.diagnosis.doctorDiagnonsis;
         this.diagnosisFlag = true;
+        this.userName = this.casesheetData?.doctorData?.diagnosis?.createdBy;
       }
       if (temp2 !== undefined) {
         if (temp2['symptom'] !== undefined) {
@@ -580,7 +582,8 @@ export class DoctorDiagnosisCaseSheetComponent
   }
   downloadSign() {
     this.getUserId().subscribe((userId) => {
-      const userIdToUse = this.beneficiaryDetails?.tCSpecialistUserID ?? userId;
+      const tcSpecId = this.beneficiaryDetails?.tCSpecialistUserID;
+      const userIdToUse = tcSpecId && tcSpecId !== 0 ? tcSpecId : userId;
       this.doctorService.downloadSign(userIdToUse).subscribe(
         (response: any) => {
           const blob = new Blob([response], { type: response.type });
