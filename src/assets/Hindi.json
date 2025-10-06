@@ -2109,6 +2109,7 @@
         "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
         "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID",
         "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
-        "continueButton": "जारी रखें"
+        "continueButton": "जारी रखें",
+        "pleaseWaitWhileLinkingCareContext": "Please wait while linking care context"
       }
 }

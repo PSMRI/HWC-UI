@@ -2095,7 +2095,9 @@
         "verifyMobileOtp": "Verify Mobile OTP",
         "enterMobileOtp": "Enter Mobile OTP",
         "verify": "Verify",
-        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue"
+        "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
+        "continueButton": "Continue",
+        "pleaseWaitWhileLinkingCareContext": "Please wait while linking care context"
 
       }
 }
