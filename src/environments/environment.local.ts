@@ -58,7 +58,7 @@ const SCHEDULER_API = `${schedulerIP}scheduler-api/`;
 const ADMIN_API = `${adminIP}admin-api/`;
 const API104 = `${IP104}104-api/`;
 const biologicalScreeningDeviceAPI = `${ADMIN_API}diagnostics/biologicalScreeningDevice/`;
-const FHIR_API = `${FHIRIP}fhir-api/`;
+const FHIR_API = `${FHIRIP}fhir-api-abdm/`;
 const mmuUICasesheet = `${hwcUI_IP}aam/`;
 const sessionStorageEncKey = '';
 
