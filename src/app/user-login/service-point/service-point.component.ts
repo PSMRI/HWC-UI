@@ -144,13 +144,12 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   filterVanList(vanServicepointDetails: any) {
-    console.log('vanServicepointDetails', vanServicepointDetails);
     this.vansList = vanServicepointDetails.filter((van: any) => {
       if (van.vanSession === 3) {
         return van;
       }
     });
-    this.vansList = vanServicepointDetails.filter(
+    this.vansList = this.vansList.filter(
       (thing: any, i: any, arr: any) =>
         arr.findIndex((t: any) => t.vanID === thing.vanID) === i,
     );
