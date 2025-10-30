@@ -178,6 +178,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -232,6 +233,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -350,6 +352,7 @@ export class DoctorService {
     consultationData: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -372,6 +375,7 @@ export class DoctorService {
       vanID: vanID,
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
     const quickConsultation = Object.assign(
       {},
@@ -389,6 +393,7 @@ export class DoctorService {
     consultationData: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -411,6 +416,7 @@ export class DoctorService {
       vanID: vanID,
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
     const quickConsultation = Object.assign(
       {},
@@ -541,6 +547,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -593,6 +600,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -682,6 +690,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -744,6 +753,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -770,6 +780,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -824,6 +835,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -2358,6 +2370,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -2409,6 +2422,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -2655,6 +2669,7 @@ export class DoctorService {
     visitCategory: any,
     otherDetails: any,
     tcRequest: any,
+    doctorSignatureFlag: any,
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -2718,6 +2733,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -2772,6 +2788,7 @@ export class DoctorService {
     visitCategory: any,
     otherDetails: any,
     tcRequest: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -2829,6 +2846,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -3443,6 +3461,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -3503,6 +3522,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -3542,6 +3562,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -3604,6 +3625,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -3622,6 +3644,7 @@ export class DoctorService {
     otherDetails: any,
     tcRequest: any,
     isSpecialist: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -3684,6 +3707,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -3703,6 +3727,7 @@ export class DoctorService {
     visitCategory: any,
     otherDetails: any,
     tcRequest: any,
+    doctorSignatureFlag: any,
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -3765,6 +3790,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -3783,6 +3809,7 @@ export class DoctorService {
     visitCategory: any,
     otherDetails: any,
     tcRequest: any,
+    doctorSignatureFlag: any,
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
@@ -3845,6 +3872,7 @@ export class DoctorService {
       createdBy: this.sessionstorage.getItem('userName'),
       tcRequest: tcRequest,
       isSpecialist: otherDetails.isSpecialist,
+      doctorSignatureFlag: doctorSignatureFlag,
     };
 
     console.log(
@@ -3972,5 +4000,9 @@ export class DoctorService {
 
   getAssessmentDet(assessmentId: any) {
     return this.http.get(environment.getAssessmentUrl + '/' + assessmentId);
+  }
+
+  checkUsersignatureExist(userID: any) {
+    return this.http.get(environment.checkUsersignExistUrl + userID);
   }
 }
