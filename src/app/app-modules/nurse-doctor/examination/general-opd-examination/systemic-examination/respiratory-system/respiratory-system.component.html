@@ -9,6 +9,7 @@
         class="select-full-width"
         name="trachea"
         formControlName="trachea"
+        (selectionChange)="trackFieldInteraction('Trachea')"
       >
         <mat-option
           *ngFor="let trachea of selectTrachea"
@@ -34,6 +35,7 @@
         name="inspection"
         formControlName="inspection"
         maxlength="300"
+        (focus)="trackFieldInteraction('Inspection')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -47,6 +49,7 @@
     <mat-radio-group
       name="signsOfRespiratoryDistress"
       formControlName="signsOfRespiratoryDistress"
+      (change)="trackFieldInteraction('Signs of Respiratory Distress')"
     >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
@@ -71,6 +74,7 @@
         name="palpation"
         formControlName="palpation"
         maxlength="300"
+        (focus)="trackFieldInteraction('Palpation')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -85,6 +89,7 @@
         class="select-full-width"
         name="auscultation_BreathSounds"
         formControlName="auscultation_BreathSounds"
+        (selectionChange)="trackFieldInteraction('Breath Sounds')"
       >
         <mat-option
           *ngFor="let breathSound of selectBreathSounds"
@@ -105,6 +110,7 @@
     <mat-radio-group
       name="auscultation_Stridor"
       formControlName="auscultation_Stridor"
+      (change)="trackFieldInteraction('Stridor')"
     >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
@@ -124,6 +130,7 @@
     <mat-radio-group
       name="auscultation_Crepitations"
       formControlName="auscultation_Crepitations"
+      (change)="trackFieldInteraction('Crepitations')"
     >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
@@ -143,6 +150,7 @@
     <mat-radio-group
       name="auscultation_Wheezing"
       formControlName="auscultation_Wheezing"
+      (change)="trackFieldInteraction('Wheezing')"
     >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
@@ -162,6 +170,7 @@
     <mat-radio-group
       name="auscultation_PleuralRub"
       formControlName="auscultation_PleuralRub"
+      (change)="trackFieldInteraction('Pleural Rub')"
     >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
@@ -181,6 +190,7 @@
     <mat-radio-group
       name="auscultation_ConductedSounds"
       formControlName="auscultation_ConductedSounds"
+      (change)="trackFieldInteraction('Conducted Sounds')"
     >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
@@ -201,6 +211,7 @@
         class="select-full-width"
         name="percussion"
         formControlName="percussion"
+        (selectionChange)="trackFieldInteraction('Percussion')"
       >
         <mat-option
           *ngFor="let percussion of selectPercussion"
