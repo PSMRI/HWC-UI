@@ -556,6 +556,10 @@ export const environment = {
 
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
 
+  /* Abha M2 V3 APIs */
+  generateLinkTokenForCareContext: `${FHIR_API}careContext/generateCareContextToken`,
+  linkCareContext: `${FHIR_API}careContext/linkCareContext`,
+
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
