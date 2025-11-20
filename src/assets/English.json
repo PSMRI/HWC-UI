@@ -1623,6 +1623,7 @@
         "dateOfCreation":"Date of Creation",
         "healthIDMode":"HealthID Mode",
         "generateOTP":"Generate OTP",
+        "generateToken":"Generate Token",
         "enterOTP":"Enter OTP",
         "OTPSentToMobNo":"OTP sent to your mobile number :",
         "OTPSentToAadharLinkedNo":"OTP sent to your Aadhar linked mobile number",
