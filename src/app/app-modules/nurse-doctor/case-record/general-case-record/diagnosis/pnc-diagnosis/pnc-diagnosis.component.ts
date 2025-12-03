@@ -330,6 +330,7 @@ export class PncDiagnosisComponent
       (<FormGroup>provisionalDiagnosisList.at(i)).controls[
         'viewProvisionalDiagnosisProvided'
       ].disable();
+      //if (provisionalDiagnosisList.length < provisionalDiagnosisDataList.length)
       this.addProvisionalDiagnosis();
     }
   }
