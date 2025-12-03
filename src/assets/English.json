@@ -99,6 +99,7 @@
             "editLocation": "Edit Location",
             "beneficiaryID": "Beneficiary ID",
             "beneficiaryName": "Beneficiary Name",
+            "lastName": "Last Name",
             "gender": "Gender",
             "age": "Age",
             "fatherName": "Father's Name",

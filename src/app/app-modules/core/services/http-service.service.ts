@@ -25,6 +25,9 @@ export class HttpServiceService {
   ) {
     const storedLang = localStorage.getItem('appLanguage');
     this.language = storedLang ? JSON.parse(storedLang) : null;
+
+    this.appCurrentLanguge = new BehaviorSubject(this.language);
+    this.currentLangugae$ = this.appCurrentLanguge.asObservable();
   }
 
   fetchLanguageSet() {
