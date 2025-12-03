@@ -70,6 +70,14 @@ export const environment = {
   production: true,
   encKey: sessionStorageEncKey,
 
+  tracking: {
+    platform: 'matomo',
+    siteId: 1,
+    trackerUrl: 'https://matomo.piramalswasthya.org/',
+    trackingPlatform: 'production',
+    enabled: true,
+  },
+
   app: `MMU`,
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,

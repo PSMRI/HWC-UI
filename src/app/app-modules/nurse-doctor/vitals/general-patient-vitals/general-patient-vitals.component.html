@@ -25,6 +25,7 @@
               name="height_cm"
               formControlName="height_cm"
               (change)="checkHeight(height_cm)"
+              (focus)="trackFieldInteraction('Height')"
               defaultNull
               maxlength="6"
               allowMax="350"
@@ -48,6 +49,7 @@
               defaultNull
               (change)="checkWeight(weight_Kg)"
               (blur)="calculateBMI()"
+              (focus)="trackFieldInteraction('Weight')"
               allowText="decimal"
               name="weight_Kg"
               id="weight_Kg"
@@ -65,7 +67,9 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTWeightModel()"
+              (click)="
+                openIOTWeightModel(); trackFieldInteraction('IoT Weight Test')
+              "
               onkeydown="openIOTWeightModel()"
               tabindex="{0}"
             >
@@ -341,6 +345,7 @@
                 }"
                 (change)="checkIDRSForWaist(waistCircumference_cm)"
                 (blur)="hipWaistRatio()"
+                (focus)="trackFieldInteraction('Waist Circumference')"
                 id="waistCircumference_cm"
                 name="waistCircumference_cm"
                 formControlName="waistCircumference_cm"
@@ -372,6 +377,7 @@
                 allowText="decimal"
                 (change)="checkHip(hipCircumference_cm)"
                 (blur)="hipWaistRatio()"
+                (focus)="trackFieldInteraction('Hip Circumference')"
                 name="hipCircumference_cm"
                 id="hipCircumference_cm"
                 formControlName="hipCircumference_cm"
@@ -512,6 +518,7 @@
               defaultNull
               allowText="decimal"
               (change)="checkHeadCircumference(headCircumference_cm)"
+              (focus)="trackFieldInteraction('Head Circumference')"
               [ngClass]="{
                 abnormal: headCircumference_cm < 25 || headCircumference_cm > 75
               }"
@@ -546,6 +553,7 @@
               (change)="
                 checkMidUpperArmCircumference(midUpperArmCircumference_MUAC_cm)
               "
+              (focus)="trackFieldInteraction('Mid Upper Arm Circumference')"
               [ngClass]="{
                 abnormal:
                   midUpperArmCircumference_MUAC_cm < 5 ||
@@ -628,6 +636,7 @@
               id="temperature"
               formControlName="temperature"
               (change)="checkTemperature(temperature)"
+              (focus)="trackFieldInteraction('Temperature')"
               maxlength="5"
               allowMax="150"
               [required]="
@@ -642,7 +651,10 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTTempModel()"
+              (click)="
+                openIOTTempModel();
+                trackFieldInteraction('IoT Temperature Test')
+              "
               onkeydown="openIOTTempModel()"
               tabindex="{0}"
             >
@@ -671,6 +683,7 @@
               id="pulseRate"
               formControlName="pulseRate"
               (change)="checkPulseRate(pulseRate)"
+              (focus)="trackFieldInteraction('Pulse Rate')"
               [required]="
                 (visitCategory !== 'NCD screening' &&
                   visitCategory !== 'ANC' &&
@@ -687,7 +700,10 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTPulseRateModel()"
+              (click)="
+                openIOTPulseRateModel();
+                trackFieldInteraction('IoT Pulse Rate Test')
+              "
               onkeydown="openIOTPulseRateModel()"
               tabindex="{0}"
             >
@@ -711,6 +727,7 @@
               formControlName="sPO2"
               [ngClass]="{ abnormal: sPO2 < 1 || sPO2 > 100 }"
               (change)="checkSpo2()"
+              (focus)="trackFieldInteraction('SpO2')"
             />
             <svg
               class="fontawesomesvg"
@@ -718,7 +735,9 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTSPO2Model()"
+              (click)="
+                openIOTSPO2Model(); trackFieldInteraction('IoT SpO2 Test')
+              "
               onkeydown="openIOTSPO2Model()"
               tabindex="{0}"
             >
@@ -743,6 +762,7 @@
                   systolicBP_1stReading < 110 || systolicBP_1stReading > 140
               }"
               (change)="checkSystolic(systolicBP_1stReading)"
+              (focus)="trackFieldInteraction('Systolic Blood Pressure')"
               allowText="number"
               id="systolicBP_1stReading"
               name="systolicBP_1stReading"
@@ -768,7 +788,10 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTBPModel()"
+              (click)="
+                openIOTBPModel();
+                trackFieldInteraction('IoT Blood Pressure Test')
+              "
               onkeydown="openIOTBPModel()"
               tabindex="{0}"
             >
@@ -794,6 +817,7 @@
                   diastolicBP_1stReading < 60 || diastolicBP_1stReading > 90
               }"
               (change)="checkDiastolic(diastolicBP_1stReading)"
+              (focus)="trackFieldInteraction('Diastolic Blood Pressure')"
               allowText="number"
               id="diastolicBP_1stReading"
               name="diastolicBP_1stReading"
@@ -819,7 +843,10 @@
               viewBox="0 0 512 512"
               matTooltip="{{ currentLanguageSet?.common?.startTest }}"
               matSuffix
-              (click)="openIOTBPModel()"
+              (click)="
+                openIOTBPModel();
+                trackFieldInteraction('IoT Blood Pressure Test')
+              "
               onkeydown="openIOTBPModel()"
               tabindex="{0}"
             >
@@ -851,6 +878,7 @@
               id="respiratoryRate"
               formControlName="respiratoryRate"
               (change)="checkRespiratoryRate(respiratoryRate)"
+              (focus)="trackFieldInteraction('Respiratory Rate')"
               allowMax="150"
               maxlength="3"
             />
@@ -887,6 +915,7 @@
                       bloodGlucose_Fasting < 50 || bloodGlucose_Fasting > 700
                   }"
                   (change)="checkBloodSugarFasting(bloodGlucose_Fasting)"
+                  (focus)="trackFieldInteraction('Fasting Blood Glucose')"
                 />
                 <svg
                   class="fontawesomesvg"
@@ -894,7 +923,10 @@
                   viewBox="0 0 512 512"
                   matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                   matSuffix
-                  (click)="openIOTBGFastingModel()"
+                  (click)="
+                    openIOTBGFastingModel();
+                    trackFieldInteraction('IoT Fasting Blood Glucose Test')
+                  "
                   onkeydown="openIOTBGFastingModel()"
                   tabindex="{0}"
                 >
@@ -923,6 +955,7 @@
                   formControlName="bloodGlucose_Random"
                   [ngClass]="{ abnormal: bloodGlucose_Random < 140 }"
                   (change)="checkBloodSugarRandom(bloodGlucose_Random)"
+                  (focus)="trackFieldInteraction('Random Blood Glucose')"
                 />
                 <svg
                   class="fontawesomesvg"
@@ -930,7 +963,10 @@
                   viewBox="0 0 512 512"
                   matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                   matSuffix
-                  (click)="openIOTBGRandomModel()"
+                  (click)="
+                    openIOTBGRandomModel();
+                    trackFieldInteraction('IoT Random Blood Glucose Test')
+                  "
                   onkeydown="openIOTBGRandomModel()"
                   tabindex="{0}"
                 >
@@ -959,6 +995,9 @@
                   maxlength="3"
                   [ngClass]="{ abnormal: bloodGlucose_2hr_PP < 140 }"
                   (change)="checkBloodSugar2HrPostPrandial(bloodGlucose_2hr_PP)"
+                  (focus)="
+                    trackFieldInteraction('2hr Post Prandial Blood Glucose')
+                  "
                 />
                 <svg
                   class="fontawesomesvg"
@@ -966,7 +1005,12 @@
                   viewBox="0 0 512 512"
                   matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                   matSuffix
-                  (click)="openIOTBGPostPrandialModel()"
+                  (click)="
+                    openIOTBGPostPrandialModel();
+                    trackFieldInteraction(
+                      'IoT Post Prandial Blood Glucose Test'
+                    )
+                  "
                   onkeydown="openIOTBGPostPrandialModel()"
                   tabindex="{0}"
                 >
@@ -992,6 +1036,7 @@
               allowText="tempDecimal"
               [ngClass]="{ abnormal: hemoglobin < 11 || hemoglobin > 15.1 }"
               (change)="checkHemoglobin()"
+              (focus)="trackFieldInteraction('Hemoglobin')"
               name="hemoglobin"
               id="hemoglobin"
               formControlName="hemoglobin"
@@ -1023,7 +1068,9 @@
             id="PreviousRbsHistory"
             class="pull-right"
             color="primary"
-            (click)="loadMMURBS()"
+            (click)="
+              loadMMURBS(); trackFieldInteraction('Load Previous RBS History')
+            "
           >
             <mat-icon class="md-18">history</mat-icon>
           </button>
@@ -1033,7 +1080,9 @@
             <mat-checkbox
               color="accent"
               formControlName="rbsCheckBox"
-              (change)="onRbsCheckBox($event)"
+              (change)="
+                onRbsCheckBox($event); trackFieldInteraction('RBS Checkbox')
+              "
             >
             </mat-checkbox>
           </div>
@@ -1053,6 +1102,7 @@
                 maxlength="4"
                 (blur)="checkForRange()"
                 (change)="rbsResultChange()"
+                (focus)="trackFieldInteraction('RBS Test Result')"
                 [ngClass]="{
                   abnormal: rbsTestResult < 0 || rbsTestResult > 1000
                 }"
@@ -1063,7 +1113,9 @@
                 viewBox="0 0 512 512"
                 matTooltip="{{ currentLanguageSet?.common?.startTest }}"
                 matSuffix
-                (click)="openIOTRBSModel()"
+                (click)="
+                  openIOTRBSModel(); trackFieldInteraction('IoT RBS Test')
+                "
                 onkeydown="openIOTRBSModel()"
                 tabindex="{0}"
               >
@@ -1087,6 +1139,7 @@
               formControlName="rbsTestRemarks"
               maxlength="300"
               [disabled]="rbsResultChange()"
+              (focus)="trackFieldInteraction('RBS Test Remarks')"
             />
           </mat-form-field>
         </div>

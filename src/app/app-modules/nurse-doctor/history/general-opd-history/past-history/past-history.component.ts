@@ -48,6 +48,7 @@ import { HrpService } from '../../../shared/services/hrp.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-general-past-history',
@@ -91,6 +92,7 @@ export class PastHistoryComponent
     private masterdataService: MasterdataService,
     private hrpService: HrpService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -753,5 +755,9 @@ export class PastHistoryComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Past History');
   }
 }

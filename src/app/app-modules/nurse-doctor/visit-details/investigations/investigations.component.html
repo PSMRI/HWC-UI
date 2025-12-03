@@ -9,7 +9,7 @@
         multiple
         name="laboratoryList"
         formControlName="laboratoryList"
-        (selectionChange)="checkTestName($event)"
+        (selectionChange)="checkTestName($event); trackFieldInteraction('Laboratory Tests Selection')"
       >
         <mat-option
           *ngFor="let laboratary of selectLabTest"

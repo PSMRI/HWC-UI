@@ -8,6 +8,7 @@
           placeholder="{{ current_language_set?.common?.inTableSearch }}"
           #filterTerm
           (keyup)="filterPreviousSignificiantFindingsList(filterTerm.value)"
+          (focus)="trackFieldInteraction('Search Previous Findings')"
         />
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
@@ -26,6 +27,7 @@
             style="border-bottom: none"
             *matHeaderCellDef
             mat-sort-header
+            (click)="trackFieldInteraction('Sort Serial Number')"
           >
             {{ current_language_set?.coreComponents?.sno }}
           </th>
@@ -40,6 +42,7 @@
             style="border-bottom: none"
             *matHeaderCellDef
             mat-sort-header
+            (click)="trackFieldInteraction('Sort Significant Findings')"
           >
             {{
               current_language_set?.Significantfindingsdetails
@@ -57,6 +60,7 @@
             style="border-bottom: none"
             *matHeaderCellDef
             mat-sort-header
+            (click)="trackFieldInteraction('Sort Captured Date')"
           >
             {{ current_language_set?.Significantfindingsdetails?.captureddate }}
           </th>
@@ -65,7 +69,11 @@
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          (click)="trackFieldInteraction('View Previous Finding Row')"
+        ></tr>
       </table>
       <div
         *ngIf="dataSource.data.length === 0"
@@ -83,6 +91,7 @@
         [pageSize]="5"
         showFirstLastButtons
         aria-label="Select patient in previousSignificantWorklist"
+        (page)="trackFieldInteraction('Navigate Previous Findings Pages')"
       >
       </mat-paginator>
     </section>
