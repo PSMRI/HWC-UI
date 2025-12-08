@@ -87,7 +87,7 @@ export class HttpInterceptorService implements HttpInterceptor {
           );
         } else if (error.status === 500) {
           this.confirmationService.alert(
-            this.currentLanguageSet.somethingWentWrong,
+            this.currentLanguageSet.internaleServerError,
             'error',
           );
         } else {
