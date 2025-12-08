@@ -18,6 +18,15 @@
     </div>
     <div class="col-xs-4 col-sm-6 col-md-8 fit_to_content">
       <button
+        *ngIf="enableCHOReportBtn"
+        mat-raised-button
+        color="primary"
+        class="mat_blue"
+        (click)="redirectToCHOReport()"
+      >
+        {{ currentLanguageSet.choReport }}
+      </button>
+      <button
         mat-raised-button
         id="caseSheetButton"
         style="display: none"

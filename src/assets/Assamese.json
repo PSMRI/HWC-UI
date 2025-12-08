@@ -1178,7 +1178,8 @@
       "labreport": "পৰীক্ষাগাৰৰ প্ৰতিবেদন",
       "radiologyreport": "ৰেডিঅ'লজী প্ৰতিবেদন",
       "testresult": "পৰীক্ষাৰ ফল",
-      "unit": "একক"
+      "unit": "একক",
+      "choReport": "সিএইচও ৰিপোৰ্ট"
     },
     "alerts": {
       "info": {
