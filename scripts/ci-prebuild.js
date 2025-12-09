@@ -62,7 +62,8 @@ const defaultEnvValues = {
   TRACKER_URL: 'https://matomo.piramalswasthya.org/',
   TRACKING_PLATFORM: 'matomo',
   TRACKING_ENABLED: 'true',
-  ENABLE_CHO_REPORT_BUTTON:true,
+  ENABLE_CHO_REPORT_BUTTON: true,
+  DHIS_URL:'',
 };
 
 // Generate output data
