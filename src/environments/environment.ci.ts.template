@@ -49,7 +49,7 @@ const siteKey = '<%= SITE_KEY %>';
 const captchaChallengeURL = '<%= CAPTCHA_CHALLENGE_URL %>';
 const enableCaptcha = <%= ENABLE_CAPTCHA %>;
 const enableCHOReportBtn = <%= ENABLE_CHO_REPORT_BUTTON %> ;
-const dhisURL = <%= DHIS_URL %> ;
+const dhisURL = '<%= DHIS_URL %>' ;
 
 export const environment = {
   production: true,
