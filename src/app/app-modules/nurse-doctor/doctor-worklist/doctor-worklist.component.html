@@ -21,10 +21,11 @@
         *ngIf="enableCHOReportBtn"
         mat-raised-button
         color="primary"
-        class="mat_blue"
+        class="mat_blue pull-right"
+        style="margin-left: 8px"
         (click)="redirectToCHOReport()"
       >
-        {{ currentLanguageSet.choReport }}
+        {{ currentLanguageSet.Reports.choReport }}
       </button>
       <button
         mat-raised-button
