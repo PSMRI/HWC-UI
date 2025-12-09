@@ -48,8 +48,8 @@ const ABHA_MODE = '<%= ABHA_MODE %>';
 const siteKey = '<%= SITE_KEY %>';
 const captchaChallengeURL = '<%= CAPTCHA_CHALLENGE_URL %>';
 const enableCaptcha = <%= ENABLE_CAPTCHA %>;
-const enableCHOReportBtn = <%= ENABLE_CHO_REPORT_BUTTON %>;
-const dhisURL = <%= DHIS_URL %>;
+const enableCHOReportBtn = <%= ENABLE_CHO_REPORT_BUTTON %> ;
+const dhisURL = <%= DHIS_URL %> ;
 
 export const environment = {
   production: true,
@@ -559,5 +559,6 @@ export const environment = {
   getUserId: `${COMMON_API}user/userName/`,
 
   enableCHOReportBtn: enableCHOReportBtn,
+  dhisURL:dhisURL
 };
 
