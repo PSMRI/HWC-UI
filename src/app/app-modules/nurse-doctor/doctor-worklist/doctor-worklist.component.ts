@@ -39,6 +39,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { DoctorService, MasterdataService } from '../shared/services';
 import { SchedulerComponent } from '../scheduler/scheduler.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-doctor-worklist',
@@ -59,6 +60,7 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
   beneficiaryMetaData: any;
   currentPage: number | undefined;
   teleConsultationFlag: any;
+  enableCHOReportBtn = environment.enableCHOReportBtn;
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   dataSource = new MatTableDataSource<any>();
@@ -112,6 +114,10 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
 
   ngOnDestroy() {
     this.sessionstorage.removeItem('currentRole');
+  }
+
+  redirectToCHOReport() {
+    window.location.href = `${environment.dhisURL}${JSON.parse(this.sessionstorage.getItem('loginDataResponse'))?.dhistoken}`;
   }
 
   setDisplayedColumns() {

@@ -1199,7 +1199,8 @@
             "labreport": "Lab Report",
             "radiologyreport": "Radiology Report",
             "testresult": "Test Result",
-            "unit": "Unit"
+            "unit": "Unit",
+            "choReport": "CHO Report"
         },
         "alerts": {
             "info": {

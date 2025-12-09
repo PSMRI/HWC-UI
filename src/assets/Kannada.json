@@ -1185,7 +1185,8 @@
             "labreport": "ಲ್ಯಾಬ್ ವರದಿ",
             "radiologyreport": "ರೇಡಿಯಾಲಜಿ ವರದಿ",
             "testresult": "ಪರೀಕ್ಷಾ ಫಲಿತಾಂಶ",
-            "unit": "ಘಟಕ"
+            "unit": "ಘಟಕ",
+            "choReport": "ಸಿಎಚ್ಒ ವರದಿ"
         },
         "alerts": {
             "info": {

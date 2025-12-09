@@ -1191,7 +1191,8 @@
       "noarchivedreportsfound": "कोई भी संग्रहीत रिपोर्ट नहीं मिली",
       "labreport": "प्रयोगशाला की रिपोर्ट",
       "radiologyreport": "रेडियोलॉजी रिपोर्ट",
-      "testresult": "जाँच परिणामt"
+      "testresult": "जाँच परिणामt",
+      "choReport": "सीएचओ रिपोर्ट"
     },
     "alerts": {
       "info": {
