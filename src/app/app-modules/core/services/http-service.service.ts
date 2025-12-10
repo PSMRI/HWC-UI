@@ -41,7 +41,7 @@ export class HttpServiceService {
 
   getCurrentLanguage(response: any) {
     this.language = response;
-    this.appCurrentLanguge.next(response);
     localStorage.setItem('appLanguage', JSON.stringify(response));
+    this.appCurrentLanguge.next(response);
   }
 }
