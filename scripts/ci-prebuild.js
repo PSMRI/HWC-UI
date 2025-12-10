@@ -63,11 +63,7 @@ const defaultEnvValues = {
   TRACKING_PLATFORM: 'matomo',
   TRACKING_ENABLED: 'true',
   ENABLE_CHO_REPORT_BUTTON: true,
-<<<<<<< HEAD
-  DHIS_URL: '',
-=======
   DHIS_URL:'',
->>>>>>> e464f3e0cc33b0c1b85ce0e33eeaa02475db70fb
 };
 
 // Generate output data
