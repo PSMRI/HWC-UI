@@ -129,7 +129,8 @@ export class HttpInterceptorService implements HttpInterceptor {
         'Unable to fetch session object from Redis server'
     ) {
       this.handleSessionExpiry(
-        this.currentLanguageSet.sessionExpiredPleaseLogin,
+        this.currentLanguageSet.sessionExpiredPleaseLogin ||
+          'Session has expired, please login again.',
       );
     } else {
       this.startTimer();
@@ -171,7 +172,8 @@ export class HttpInterceptorService implements HttpInterceptor {
                 sessionStorage.clear();
                 this.sessionstorage.clear();
                 this.confirmationService.alert(
-                  this.currentLanguageSet.sessionExpired,
+                  this.currentLanguageSet.sessionExpired ||
+                    'Session has expired, please login again.',
                   'error',
                 );
                 this.router.navigate(['/login']);
@@ -181,7 +183,8 @@ export class HttpInterceptorService implements HttpInterceptor {
                   sessionStorage.clear();
                   this.sessionstorage.clear();
                   this.confirmationService.alert(
-                    this.currentLanguageSet.sessionExpired,
+                    this.currentLanguageSet.sessionExpired ||
+                      'Session has expired, please login again.',
                     'error',
                   );
                   this.router.navigate(['/login']);
