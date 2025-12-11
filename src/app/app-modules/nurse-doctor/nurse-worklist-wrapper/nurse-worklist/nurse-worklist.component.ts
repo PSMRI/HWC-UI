@@ -123,6 +123,9 @@ export class NurseWorklistComponent implements OnInit, DoCheck, OnDestroy {
         } else this.confirmationService.alert(res.errorMessage, 'error');
       },
       (err) => {
+        if (err?.handled) {
+          return;
+        }
         this.confirmationService.alert(err, 'error');
       },
     );
