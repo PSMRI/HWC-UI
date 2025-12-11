@@ -107,6 +107,8 @@ export class HttpInterceptorService implements HttpInterceptor {
             'error',
           );
         }
+        sessionStorage.clear();
+        this.sessionstorage.clear();
         return throwError(error.error);
       }),
     );
