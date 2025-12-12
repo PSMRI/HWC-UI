@@ -195,9 +195,18 @@ export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
             sectionCount.sno = index + 1;
           });
           this.filterTerm = null;
-        } else this.confirmationService.alert(data.errorMessage, 'error');
+        } else {
+          console.log('Error in else part', data.errorMessage);
+
+          this.confirmationService.alert(data.errorMessage, 'error');
+        }
       },
       (err) => {
+        if (err?.handled) {
+          console.log('error handled');
+
+          return;
+        }
         this.confirmationService.alert(err, 'error');
       },
     );
