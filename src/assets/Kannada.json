@@ -80,6 +80,11 @@
                 "govtIDNumber": "ಸರಕಾರ ಐಡಿ ಸಂಖ್ಯೆ",
                 "govtHealthProgramType": "ಸರಕಾರ ಆರೋಗ್ಯ ಕಾರ್ಯಕ್ರಮದ ಪ್ರಕಾರ",
                 "govtHealthProgramIDNumber": "ಸರಕಾರ ಆರೋಗ್ಯ ಕಾರ್ಯಕ್ರಮ ಐಡಿ"
+            },
+            "abhaInfo": {
+                "abhaInformation": "ABHA Information",
+                "abhaNumber": "ABHA Number",
+                "abhaAddress": "ABHA Address"
             }
         },
         "bendetails": {
@@ -1171,7 +1176,7 @@
             "Route": "ಮಾರ್ಗ",
             "instructions": "ಸೂಚನೆಗಳು",
             "quantity": "ಪ್ರಮಾಣ",
-            "isEDL": "IsEDL"
+            "isEDL": "EDL ಆಗಿದೆಯೇ"
         },
         "Reports": {
             "labtestreports": "ಲ್ಯಾಬ್ ಪರೀಕ್ಷಾ ವರದಿಗಳು",
@@ -1352,7 +1357,8 @@
             "image": "ಚಿತ್ರವನ್ನು ವೀಕ್ಷಿಸಿ",
             "reschedule": "ಟಿ ಸಿ ಅನ್ನು ಮರುಹೊಂದಿಸಿ",
             "cancel": "ರದ್ದುಮಾಡು",
-            "schedule": "ವೇಳಾಪಟ್ಟಿ"
+            "schedule": "ವೇಳಾಪಟ್ಟಿ",
+            "accept": "ಟಿ ಸಿ ಸ್ವೀಕರಿಸಿ"
         },
         "casesheet": {
             "caseComponent": "ಮುದ್ರಣಕ್ಕಾಗಿ ಕೇಸ್‌ಶೀಟ್ ಘಟಕವನ್ನು ಆಯ್ಕೆಮಾಡಿ",
@@ -2112,7 +2118,7 @@
         "treatment": "Treatment",
         "selfcare": "Self-Care",
         "investigations": "Investigations",
-        "noRecordsFound": "No Records Found",
+        "noRecordsFound": "ಯಾವುದೇ ದಾಖಲೆಗಳು ಕಂಡುಬಂದಿಲ್ಲ",
         "enterMobileNumberToBeLinkedWithAbha": "Enter Phone number to be linked with ABHA",
         "doYouWantToVerifyMobileOtpForAbha": "Your provided mobile number is not linked with Aadhaar, Do you want to verify it?",
         "abhaCardAlreadyExists": "ABHA already exists for the Aadhaar Number",
