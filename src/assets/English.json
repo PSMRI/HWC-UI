@@ -42,19 +42,19 @@
                 "personalInformation": "Personal Information",
                 "educationalQualification": "Educational Qualification",
                 "otherOccupation": "Other Occupation",
-                "martialStatus": "Marital Status",
+                "maritalStatusName": "Marital Status",
                 "ageAtMarriage": "Age at Marriage (Years)",
                 "spouseName": "Spouse Name",
                 "firstName": "First Name",
                 "lastName": "Last Name/Sur Name",
                 "fullName": "Full Name",
                 "maritalStatus": "Marital Status",
-                "contactNo": "Contact No",
+                "phoneNo": "Phone Number",
                 "alternateNumber":"Alternate Number",
                 "gender": "Gender",
                 "age": "Age",
-                "ageUnit": "Age Unit",
-                "dob": "DOB (DD/MM/YYYY)",
+                "ageUnits": "Age Unit",
+                "dOB": "DOB (DD/MM/YYYY)",
                 "incomeStatus": "Income Status",
                 "literacyStatus": "Literacy Status",
                 "occupation": "Occupation",
@@ -92,6 +92,11 @@
                 "govtIDNumber": "Govt. ID Number",
                 "govtHealthProgramType": "Govt. Health Program Type",
                 "govtHealthProgramIDNumber": "Govt. Health Program ID"
+            },
+            "abhaInfo": {
+                "abhaInformation": "ABHA Information",
+                "abhaNumber": "ABHA Number",
+                "abhaAddress": "ABHA Address"
             }
         },
         "bendetails": {
@@ -1366,7 +1371,8 @@
             "image": "View Image",
             "reschedule": "Reschedule TC",
             "cancel": "Cancel",
-            "schedule": "Schedule"
+            "schedule": "Schedule",
+            "accept": "Accept"
         },
         "casesheet": {
             "caseComponent": "Select casesheet component for print",
@@ -2078,7 +2084,7 @@
         "welcome": "Welcome",
         "clickonServiceToProceed": "Click on service to proceed",
         "done": "done",
-        "consentFormText": "To provide you with better service, we would,request your personal information. The information that you will providewill be kept confidential and will only be used for research and analysis.",
+        "consentFormText": "To provide you with better service, we would request your personal information. The information that you will provide will be kept confidential and will only be used for research and analysis.",
         "HeadOfTheFamilyAlreadyPresentRemoveExistingAndContinue": "Head of the Family is already present. Please, remove the existing head to continue",
         "HeadOfTheFamilyAlreadyPresentRemoveExisting": "Head of the Family is already present. Please, remove the existing head.",
         "backToRegistration":"Back to Registration",
