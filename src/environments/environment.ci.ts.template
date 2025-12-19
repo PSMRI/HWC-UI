@@ -559,7 +559,7 @@ export const environment = {
   getUserId: `${COMMON_API}user/userName/`,
 
   enableCHOReportBtn: enableCHOReportBtn,
-  dhisURL:dhisURL
+  dhisURL:dhisURL,
   elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
 
 };
