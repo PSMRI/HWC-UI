@@ -38,6 +38,7 @@
         "ro": {
             "registration": "Registration",
             "benIDOrPhNo": "Look for BeneficiaryID or Phone number or ABHA here...",
+            "benDetails": "Look for Beneficiary Details",
             "personalInfo": {
                 "personalInformation": "Personal Information",
                 "educationalQualification": "Educational Qualification",

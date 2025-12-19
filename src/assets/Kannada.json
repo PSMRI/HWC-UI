@@ -26,6 +26,7 @@
         "ro": {
             "registration": "ನೋಂದಣಿ",
             "benIDOrPhNo": "ಫಲಾನುಭವಿ ID ಅಥವಾ ಫೋನ್ ಸಂಖ್ಯೆ ಅಥವಾ ABHA ಗಾಗಿ ಇಲ್ಲಿ ನೋಡಿ...",
+            "benDetails": "ಫಲಾನುಭವಿ ವಿವರಗಳನ್ನು ನೋಡಿ",
             "personalInfo": {
                 "personalInformation": "ವಯಕ್ತಿಕ ಮಾಹಿತಿ",
                 "educationalQualification": "ಶೈಕ್ಷಣಿಕ ಅರ್ಹತೆ",
