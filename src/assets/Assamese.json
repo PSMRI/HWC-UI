@@ -38,7 +38,8 @@
     "ro": {
       "registration": "পঞ্জীয়ণ",
       "benIDOrPhNo": "ইয়াত লাভগ্ৰাহী ID, ফোন নম্বৰ বা ABHA সন্ধান কৰক...",
-      "personalInfo": {
+      "benDetails":  "লাভগ্ৰাহীৰ সবিশেষ তথ্য সন্ধান কৰক",
+       "personalInfo": {
         "personalInformation": "ব্যক্তিগত তথ্য",
         "educationalQualification": "শি‍ক্ষাগত অর্হতা",
         "otherOccupation": "অন্যান্য জীৱিকা",

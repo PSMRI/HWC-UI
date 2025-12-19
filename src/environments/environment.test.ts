@@ -65,11 +65,13 @@ const sessionStorageEncKey = '';
 const siteKey = '';
 const captchaChallengeURL = '';
 const enableCaptcha = false;
+const enableCHOReportBtn = true;
+const dhisURL = '';
 
 export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
-
+  isEnableES: true,
   tracking: {
     platform: 'matomo',
     siteId: 1,
@@ -567,4 +569,8 @@ export const environment = {
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
+  getUserId: `${COMMON_API}user/userName/`,
+  enableCHOReportBtn: enableCHOReportBtn,
+  dhisURL: dhisURL,
+  elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
 };

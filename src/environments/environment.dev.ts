@@ -70,7 +70,7 @@ const dhisURL = '';
 export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
-
+  isEnableES: true,
   tracking: {
     platform: 'matomo',
     siteId: 1,
@@ -570,4 +570,6 @@ export const environment = {
   enableCaptcha: enableCaptcha,
   enableCHOReportBtn: enableCHOReportBtn,
   dhisURL: dhisURL,
+  getUserId: `${COMMON_API}user/userName/`,
+  elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
 };

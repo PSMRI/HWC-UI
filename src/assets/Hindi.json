@@ -38,6 +38,7 @@
     "ro": {
       "registration": "पंजीकरण",
       "benIDOrPhNo": "यहाँ लाभार्थी ID, फ़ोन नंबर या ABHA खोजें...",
+      "benDetails": "लाभार्थी विवरण देखें",
       "personalInfo": {
         "personalInformation": "व्यक्तिगत जानकारी",
         "educationalQualification": "शैक्षिक योग्यता",
