@@ -55,7 +55,7 @@ export const environment = {
   production: true,
   app: `MMU`,
   encKey: sessionStorageEncKey,
-
+  isEnableES: true,
   tracking: {
     platform: 'matomo',
     siteId: parseInt('<%= SITE_ID %>'),
@@ -560,5 +560,7 @@ export const environment = {
 
   enableCHOReportBtn: enableCHOReportBtn,
   dhisURL:dhisURL
+  elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
+
 };
 

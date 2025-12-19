@@ -71,7 +71,7 @@ const dhisURL = 'http://abc.xyz.org/dhis2-web-public/Reports.html?auth='; //samp
 export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
-
+  isEnableES: true,
   tracking: {
     platform: 'matomo',
     siteId: 1,
@@ -568,7 +568,8 @@ export const environment = {
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
-
+  getUserId: `${COMMON_API}user/userName/`,
   enableCHOReportBtn: enableCHOReportBtn,
   dhisURL: dhisURL,
+  elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
 };
