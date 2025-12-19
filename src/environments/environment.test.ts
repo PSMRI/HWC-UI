@@ -69,6 +69,7 @@ const enableCaptcha = false;
 export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
+  isEnableES: true,
 
   tracking: {
     platform: 'matomo',
@@ -141,6 +142,7 @@ export const environment = {
   registrarMasterDataUrl: `${HWC_API}registrar/registrarMasterData`,
   quickSearchUrl: `${HWC_API}registrar/quickSearch`,
   identityQuickSearchUrl: `${HWC_API}registrar/quickSearchNew`,
+  elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
   advanceSearchUrl: `${HWC_API}registrar/advanceSearch`,
   advanceSearchIdentityUrl: `${HWC_API}registrar/advanceSearchNew`,
   externalSearchIdentityUrl: `${FHIR_API}patient/data/profile/search/demographic`,
