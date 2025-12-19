@@ -67,11 +67,12 @@ const captchaChallengeURL = '';
 const enableCaptcha = false;
 const enableCHOReportBtn = true;
 const dhisURL = 'http://abc.xyz.org/dhis2-web-public/Reports.html?auth='; //sample
+const isEnableES = true;
 
 export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
-  isEnableES: true,
+  isEnableES: isEnableES,
 
   tracking: {
     platform: 'matomo',

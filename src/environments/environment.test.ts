@@ -65,11 +65,12 @@ const sessionStorageEncKey = '';
 const siteKey = '';
 const captchaChallengeURL = '';
 const enableCaptcha = false;
+const isEnableES = true;
 
 export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
-  isEnableES: true,
+  isEnableES: isEnableES,
 
   tracking: {
     platform: 'matomo',

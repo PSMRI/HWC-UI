@@ -67,11 +67,12 @@ const captchaChallengeURL = '';
 const enableCaptcha = false;
 const enableCHOReportBtn = true;
 const dhisURL = '';
+const isEnableES = true;
 
 export const environment = {
   production: true,
   encKey: sessionStorageEncKey,
-  isEnableES: true,
+  isEnableES: isEnableES,
 
   tracking: {
     platform: 'matomo',
