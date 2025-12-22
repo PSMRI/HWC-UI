@@ -571,7 +571,7 @@ export class DoctorDiagnosisCaseSheetComponent
         ].join('/');
       }
 
-      // this.downloadSign();
+      this.downloadSign();
       this.getVaccinationTypeAndDoseMaster();
     }
   }
