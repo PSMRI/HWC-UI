@@ -2134,6 +2134,7 @@
         "continueButton": "जारी रखें",
         "accessDenied": "पहुँच अस्वीकृत",
         "internaleServerError": "आंतरिक सर्वर त्रुटि",
-        "somethingWentWrong": "कुछ गलत हो गया"
+        "somethingWentWrong": "कुछ गलत हो गया",
+        "pleaseWaitWhileLinkingCareContext": "Please wait while linking care context"
       }
 }

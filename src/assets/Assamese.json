@@ -2108,6 +2108,8 @@
   "verifyMobileOtp": "ম'বাইল OTP যাচাই কৰক",
   "enterMobileOtp": "ম'বাইল OTP প্ৰবেশ কৰক",
   "verify": "যাচাই কৰক",
-  "sessionExpiredPleaseLogin": "চেছন শেষ হৈছে। আগবঢ়াবলৈ পুনৰ লগ ইন কৰক"
+  "sessionExpiredPleaseLogin": "চেছন শেষ হৈছে। আগবঢ়াবলৈ পুনৰ লগ ইন কৰক",
+  "continueButton": "Continue",
+  "pleaseWaitWhileLinkingCareContext": "Please wait while linking care context"
   }
 }

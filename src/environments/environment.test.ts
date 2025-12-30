@@ -564,6 +564,10 @@ export const environment = {
   printPngCard: `${FHIR_API}abhaCreation/printAbhaCard`,
   printWebLoginPhrCard: `${FHIR_API}abhaLogin/printWebLoginPhrCard`,
 
+  /* Abha M2 V3 APIs */
+  generateLinkTokenForCareContext: `${FHIR_API}careContext/generateCareContextToken`,
+  linkCareContext: `${FHIR_API}careContext/linkCareContext`,
+
   getBenIdForhealthID: `${FHIR_API}healthID/getBenIdForhealthID`,
 
   siteKey: siteKey,
