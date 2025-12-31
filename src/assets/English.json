@@ -1645,6 +1645,7 @@
         "dateOfCreation":"Date of Creation",
         "healthIDMode":"HealthID Mode",
         "generateOTP":"Generate OTP",
+        "generateToken":"Generate Token",
         "enterOTP":"Enter OTP",
         "OTPSentToMobNo":"OTP sent to your mobile number :",
         "OTPSentToAadharLinkedNo":"OTP sent to your Aadhar linked mobile number",
@@ -2139,7 +2140,8 @@
         "continueButton": "Continue",
         "accessDenied": "Access Denied",
         "internaleServerError": "Internal Server Error",
-        "somethingWentWrong": "Something went wrong"
+        "somethingWentWrong": "Something went wrong",
+        "pleaseWaitWhileLinkingCareContext": "Please wait while linking care context"
     }
 
     

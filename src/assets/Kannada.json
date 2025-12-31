@@ -2142,7 +2142,8 @@
         "continueButton": "ಮುಂದುವರಿಸಿ",
         "accessDenied": "ಪ್ರವೇಶ ನಿರಾಕರಿಸಲಾಗಿದೆ",
         "internaleServerError": "ಆಂತರಿಕ ಸರ್ವರ್ ದೋಷ",
-        "somethingWentWrong": "ಏನೋ ತಪ್ಪಾಗಿದೆ"
+        "somethingWentWrong": "ಏನೋ ತಪ್ಪಾಗಿದೆ",
+        "pleaseWaitWhileLinkingCareContext": "Please wait while linking care context"
 
     }  
 
