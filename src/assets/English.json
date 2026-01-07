@@ -4,6 +4,18 @@
             "spoke": "Spoke",
             "continue": "Continue"
         },
+        "platform_feedback": {
+            "feedback": "Feedback",
+            "weValueYourFeedback": "We value your feedback",
+            "youHaveLoggedOut":"You have logged out of the session",
+            "subtitle": " We’d love to hear about your experience (optional)",
+            "category": "Category",
+            "selectCategory": "Select Category",
+            "loggedInConsent":"Submit anonymously (if unchecked, we will store your user id for follow-up)",
+            "anonymousInfo":"You are not logged in, this feedback will be submitted anonymously.",
+            "okay": "Okay",
+            "thankYou": "Thank you, your feedback is valuable to us!"
+        },
         "role_selection": {
             "Registrar": "Registrar",
             "Nurse": "Nurse",
@@ -87,6 +99,7 @@
             "editLocation": "Edit Location",
             "beneficiaryID": "Beneficiary ID",
             "beneficiaryName": "Beneficiary Name",
+            "lastName": "Last Name",
             "gender": "Gender",
             "age": "Age",
             "fatherName": "Father's Name",
@@ -1186,10 +1199,12 @@
             "labreport": "Lab Report",
             "radiologyreport": "Radiology Report",
             "testresult": "Test Result",
-            "unit": "Unit"
+            "unit": "Unit",
+            "choReport": "CHO Report"
         },
         "alerts": {
             "info": {
+                "beneficiaryNotFound": "Beneficiary data not found",
                 "beneficiaryNotArrived": "Beneficiary has not arrived at TM spoke/center",
                 "scheduledForConsultation": "Scheduled for consultation",
                 "marriageAge": "Marriage age has to be at least",
@@ -2114,7 +2129,10 @@
         "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
         "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID",
         "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
-        "continueButton": "Continue"
+        "continueButton": "Continue",
+        "accessDenied": "Access Denied",
+        "internaleServerError": "Internal Server Error",
+        "somethingWentWrong": "Something went wrong"
     }
 
     

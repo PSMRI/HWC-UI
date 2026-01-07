@@ -65,10 +65,20 @@ const sessionStorageEncKey = '';
 const siteKey = '';
 const captchaChallengeURL = '';
 const enableCaptcha = false;
+const enableCHOReportBtn = true;
+const dhisURL = '';
 
 export const environment = {
   production: false,
   encKey: sessionStorageEncKey,
+
+  tracking: {
+    platform: 'matomo',
+    siteId: 1,
+    trackerUrl: '//127.0.0.1/',
+    trackingPlatform: 'development',
+    enabled: true,
+  },
 
   app: `MMU`,
   RBSTest: `RBS Test`,
@@ -559,4 +569,7 @@ export const environment = {
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
+
+  enableCHOReportBtn: enableCHOReportBtn,
+  dhisURL: dhisURL,
 };

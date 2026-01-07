@@ -20,6 +20,36 @@
         <tr style="color: #595959; font-size: 14px">
           <td>{{ beneficiary?.benName }}</td>
         </tr>
+        <ng-container *ngIf="beneficiary?.fatherName">
+          <tr style="font-size: 14px; color: #000000">
+            <th id="fatherName">
+              {{ current_language_set?.bendetails?.fatherName }}:
+            </th>
+          </tr>
+          <tr style="color: #595959; font-size: 14px">
+            <td>{{ beneficiary?.fatherName }}</td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="beneficiary?.lastName">
+          <tr style="font-size: 14px; color: #000000">
+            <th id="lastName">
+              {{ current_language_set?.bendetails?.lastName }}:
+            </th>
+          </tr>
+          <tr style="color: #595959; font-size: 14px">
+            <td>{{ beneficiary?.lastName }}</td>
+          </tr>
+        </ng-container>
+        <ng-container *ngIf="beneficiary?.preferredPhoneNum">
+          <tr style="font-size: 14px; color: #000000">
+            <th id="phoneNo">
+              {{ current_language_set?.bendetails?.phoneNo }}:
+            </th>
+          </tr>
+          <tr style="color: #595959; font-size: 14px">
+            <td>{{ beneficiary?.preferredPhoneNum }}</td>
+          </tr>
+        </ng-container>
         <tr style="font-size: 14px; color: #000000">
           <th id="gender">
             {{ current_language_set?.bendetails?.gender }} /

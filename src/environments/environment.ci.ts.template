@@ -48,11 +48,23 @@ const ABHA_MODE = '<%= ABHA_MODE %>';
 const siteKey = '<%= SITE_KEY %>';
 const captchaChallengeURL = '<%= CAPTCHA_CHALLENGE_URL %>';
 const enableCaptcha = <%= ENABLE_CAPTCHA %>;
+const enableCHOReportBtn = <%= ENABLE_CHO_REPORT_BUTTON %> ;
+const dhisURL = '<%= DHIS_URL %>' ;
 
 export const environment = {
   production: true,
   app: `MMU`,
   encKey: sessionStorageEncKey,
+
+  tracking: {
+    platform: 'matomo',
+    siteId: parseInt('<%= SITE_ID %>'),
+    trackerUrl: '<%= TRACKER_URL %>',
+    trackingPlatform: '<%= TRACKING_PLATFORM %>',
+    enabled: '<%= TRACKING_ENABLED %>' === 'true'
+  },
+
+
   RBSTest: `RBS Test`,
   visualAcuityTest: `Visual Acuity Test`,
   haemoglobinTest: `Hemoglobin Test`,
@@ -543,4 +555,10 @@ export const environment = {
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
+
+  getUserId: `${COMMON_API}user/userName/`,
+
+  enableCHOReportBtn: enableCHOReportBtn,
+  dhisURL:dhisURL
 };
+

@@ -51,16 +51,27 @@ export class HttpInterceptorService implements HttpInterceptor {
     this.assignSelectedLanguage();
     const key: any = sessionStorage.getItem('key');
     let modifiedReq = null;
-    if (key !== undefined && key !== null) {
-      modifiedReq = req.clone({
-        headers: req.headers
-          .set('Authorization', key)
-          .set('Content-Type', 'application/json'),
-      });
+
+    const isPlatformFeedback =
+      req.url && req.url.toLowerCase().includes('/platform-feedback');
+
+    if (isPlatformFeedback) {
+      const headers = req.headers
+        .delete('Authorization')
+        .set('Content-Type', 'application/json');
+      modifiedReq = req.clone({ headers });
     } else {
-      modifiedReq = req.clone({
-        headers: req.headers.set('Authorization', ''),
-      });
+      if (key !== undefined && key !== null) {
+        modifiedReq = req.clone({
+          headers: req.headers
+            .set('Authorization', key)
+            .set('Content-Type', 'application/json'),
+        });
+      } else {
+        modifiedReq = req.clone({
+          headers: req.headers.set('Authorization', ''),
+        });
+      }
     }
     return next.handle(modifiedReq).pipe(
       tap((event: HttpEvent<any>) => {
@@ -76,6 +87,29 @@ export class HttpInterceptorService implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         console.error(error);
         this.spinnerService.setLoading(false);
+        if (error.status === 401) {
+          this.handleSessionExpiry(
+            this.currentLanguageSet.sessionExpiredPleaseLogin ||
+              'Session has expired, please login again.',
+          );
+        } else if (error.status === 403) {
+          this.handleSessionExpiry(
+            this.currentLanguageSet.accessDenied ||
+              'Access Denied. You do not have permission to access this resource.',
+          );
+        } else if (error.status === 500) {
+          this.handleSessionExpiry(
+            this.currentLanguageSet.internaleServerError,
+          );
+        } else {
+          this.handleSessionExpiry(
+            error.message ||
+              this.currentLanguageSet.somethingWentWrong ||
+              'Something went wrong. Please try again later.',
+          );
+        }
+        sessionStorage.clear();
+        this.sessionstorage.clear();
         return throwError(error.error);
       }),
     );
@@ -98,7 +132,8 @@ export class HttpInterceptorService implements HttpInterceptor {
         'Unable to fetch session object from Redis server'
     ) {
       this.handleSessionExpiry(
-        this.currentLanguageSet.sessionExpiredPleaseLogin,
+        this.currentLanguageSet.sessionExpiredPleaseLogin ||
+          'Session has expired, please login again.',
       );
     } else {
       this.startTimer();
@@ -140,7 +175,8 @@ export class HttpInterceptorService implements HttpInterceptor {
                 sessionStorage.clear();
                 this.sessionstorage.clear();
                 this.confirmationService.alert(
-                  this.currentLanguageSet.sessionExpired,
+                  this.currentLanguageSet.sessionExpired ||
+                    'Session has expired, please login again.',
                   'error',
                 );
                 this.router.navigate(['/login']);
@@ -150,7 +186,8 @@ export class HttpInterceptorService implements HttpInterceptor {
                   sessionStorage.clear();
                   this.sessionstorage.clear();
                   this.confirmationService.alert(
-                    this.currentLanguageSet.sessionExpired,
+                    this.currentLanguageSet.sessionExpired ||
+                      'Session has expired, please login again.',
                     'error',
                   );
                   this.router.navigate(['/login']);

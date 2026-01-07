@@ -65,10 +65,20 @@ const sessionStorageEncKey = '';
 const siteKey = '';
 const captchaChallengeURL = '';
 const enableCaptcha = false;
+const enableCHOReportBtn = true;
+const dhisURL = '';
 
 export const environment = {
   production: true,
   encKey: sessionStorageEncKey,
+
+  tracking: {
+    platform: 'matomo',
+    siteId: 1,
+    trackerUrl: 'https://matomo.piramalswasthya.org/',
+    trackingPlatform: 'production',
+    enabled: true,
+  },
 
   app: `MMU`,
   RBSTest: `RBS Test`,
@@ -559,4 +569,7 @@ export const environment = {
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
+
+  enableCHOReportBtn: enableCHOReportBtn,
+  dhisURL: dhisURL,
 };

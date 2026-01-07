@@ -70,9 +70,9 @@
               vertical-align: middle;
             "
           >
-            <ng-container *ngFor="let component of element.componentList">
+            <div *ngFor="let component of element.componentList">
               {{ component?.componentName }}
-            </ng-container>
+            </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="result">
@@ -84,9 +84,9 @@
             *matCellDef="let element"
             style="width: 110px; word-break: normal; vertical-align: middle"
           >
-            <ng-container *ngFor="let component of element.componentList">
+            <div *ngFor="let component of element.componentList">
               {{ component?.testResultValue }}
-            </ng-container>
+            </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="measurementUnit">
@@ -98,9 +98,9 @@
             *matCellDef="let element"
             style="width: 150px; word-break: normal; vertical-align: middle"
           >
-            <ng-container *ngFor="let component of element.componentList">
+            <div *ngFor="let component of element.componentList">
               {{ component?.testResultUnit }}
-            </ng-container>
+            </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="remarks">
@@ -112,9 +112,9 @@
             *matCellDef="let element"
             style="max-width: 150px; word-break: normal; vertical-align: middle"
           >
-            <ng-container *ngFor="let component of element.componentList">
+            <div *ngFor="let component of element.componentList">
               {{ component?.remarks }}
-            </ng-container>
+            </div>
           </td>
         </ng-container>
         <td colspan="2">

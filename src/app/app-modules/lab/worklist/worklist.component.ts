@@ -139,6 +139,9 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
         }
       },
       (err) => {
+        if (err?.handled) {
+          return;
+        }
         this.confirmationService.alert(err, 'error');
       },
     );

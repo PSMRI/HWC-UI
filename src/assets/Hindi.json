@@ -4,6 +4,18 @@
       "spoke": "स्पोक",
       "continue": "जारी रखें"
     },
+    "platform_feedback": {
+      "feedback": "प्रतिक्रिया",
+      "weValueYourFeedback": "हम आपकी प्रतिक्रिया को महत्व देते हैं",
+      "youHaveLoggedOut": "आप सत्र से लॉग आउट हो चुके हैं",
+      "subtitle": "हम आपके अनुभव के बारे में जानना चाहेंगे (वैकल्पिक)",
+      "category": "श्रेणी",
+      "selectCategory": "श्रेणी चुनें",
+      "loggedInConsent": "गुमनाम रूप से सबमिट करें (यदि अनचेक है, तो हम फॉलो-अप के लिए आपका यूज़र आईडी सहेजेंगे)",
+      "anonymousInfo": "आप लॉग इन नहीं हैं, यह प्रतिक्रिया गुमनाम रूप से सबमिट की जाएगी।",
+      "okay": "ठीक है",
+      "thankYou": "धन्यवाद, आपकी प्रतिक्रिया हमारे लिए मूल्यवान है!"
+    },
     "role_selection": {
       "Registrar": " रजिस्ट्रार",
       "Nurse": "नर्स",
@@ -84,6 +96,7 @@
       "editLocation": "स्थान संपादित करें",
       "beneficiaryID": "लाभार्थी आईडी",
       "beneficiaryName": "लाभार्थी का नाम",
+      "lastName": "उपनाम",
       "gender": "लिंग",
       "age": "उम्र",
       "fatherName": "पिता का नाम",
@@ -1178,10 +1191,12 @@
       "noarchivedreportsfound": "कोई भी संग्रहीत रिपोर्ट नहीं मिली",
       "labreport": "प्रयोगशाला की रिपोर्ट",
       "radiologyreport": "रेडियोलॉजी रिपोर्ट",
-      "testresult": "जाँच परिणामt"
+      "testresult": "जाँच परिणामt",
+      "choReport": "सीएचओ रिपोर्ट"
     },
     "alerts": {
       "info": {
+        "beneficiaryNotFound": "लाभार्थी डेटा नहीं मिला",
         "confirmtoProceedFurther": "आगे बढ़ने के लिए की पुष्टि करें",
         "beneficiaryNotArrived": "लाभार्थी  टी.एम स्पोक / केंद्र पर नहीं आया  है",
         "scheduledForConsultation": "परामर्श के लिए अनुसूचित किया ",
@@ -2109,6 +2124,9 @@
         "abhaNumberAlreadyWith": "The Abha number is already linked with beneficiary ID - ",
         "issueInFetchinglinkedBeneficiaryId": "Issue in fetching Beneficiary Id linked to ABHA ID",
         "sessionExpiredPleaseLogin": "Session expired. Please log in again to continue",
-        "continueButton": "जारी रखें"
+        "continueButton": "जारी रखें",
+        "accessDenied": "पहुँच अस्वीकृत",
+        "internaleServerError": "आंतरिक सर्वर त्रुटि",
+        "somethingWentWrong": "कुछ गलत हो गया"
       }
 }

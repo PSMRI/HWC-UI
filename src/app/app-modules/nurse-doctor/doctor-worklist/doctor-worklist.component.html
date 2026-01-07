@@ -18,6 +18,16 @@
     </div>
     <div class="col-xs-4 col-sm-6 col-md-8 fit_to_content">
       <button
+        *ngIf="enableCHOReportBtn"
+        mat-raised-button
+        color="primary"
+        class="mat_blue pull-right"
+        style="margin-left: 8px"
+        (click)="redirectToCHOReport()"
+      >
+        {{ currentLanguageSet.Reports.choReport }}
+      </button>
+      <button
         mat-raised-button
         id="caseSheetButton"
         style="display: none"
@@ -365,7 +375,8 @@
                 </ul>
               </td>
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"
+              [ngClass]="{ 'marker-h-r-c': row.is_high_risk }"></tr>
             </table>
           </div>
           <div

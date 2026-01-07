@@ -12,7 +12,7 @@
         color="primary"
         class="mat_blue"
         [disabled]="disableFileSelection"
-        (click)="triggerLog($event)"
+        (click)="triggerLog($event); trackFieldInteraction('Select Files')"
       >
         {{ currentLanguageSet?.nurseData?.visitDetailsForm?.selectFile }}
       </button>
@@ -30,7 +30,8 @@
         mat-raised-button
         color="primary"
         class="mat_blue pull-right"
-        (click)="checkForDuplicateUpload()"
+        [disabled]="!fileObj || fileObj.length === 0"
+        (click)="checkForDuplicateUpload(); trackFieldInteraction('Upload Files')"
         *ngIf="!disableFileSelection"
       >
         {{ currentLanguageSet?.nurseData?.visitDetailsForm?.uploadFiles }}

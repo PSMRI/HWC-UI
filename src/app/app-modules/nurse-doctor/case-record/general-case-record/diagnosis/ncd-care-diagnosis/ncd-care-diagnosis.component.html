@@ -113,15 +113,18 @@
               <mat-form-field class="input-full-width" appearance="fill">
                 <mat-label>{{ current_language_set?.casesheet?.provisionalDiag }}</mat-label>
                 <input matInput type="text" autocomplete="off" name="viewProvisionalDiagnosisProvided"
-                  formControlName="viewProvisionalDiagnosisProvided" minlength="3" maxlength="100" required #diagnosisInput
+                  formControlName="viewProvisionalDiagnosisProvided" minlength="3" maxlength="100"  #diagnosisInput
                   [matAutocomplete]="autoDiagnosis" (keyup)="onDiagnosisInputKeyup(diagnosisInput.value, i)" />
               </mat-form-field>
     
-              <mat-autocomplete #autoDiagnosis="matAutocomplete" autoActiveFirstOption [displayWith]="displayDiagnosis"
-                (optionSelected)="onDiagnosisSelected($event.option.value, i)">
+              <mat-autocomplete #autoDiagnosis="matAutocomplete" appAutocompleteScroller [threshold]="0.6"
+                (nearEnd)="onAutoNearEnd(i)" (panelReady)="onPanelReady(i, $event)" autoActiveFirstOption
+                [displayWith]="displayDiagnosis" (optionSelected)="onDiagnosisSelected($event.option.value, i)">
                 <mat-option *ngFor="let diag of suggestedDiagnosisList[i]" [value]="diag">
                   {{ diag.term }}
                 </mat-option>
+                <mat-option *ngIf="loadingMore[i]" disabled>Loading…</mat-option>
+                <mat-option *ngIf="noMore[i]" disabled>End of results</mat-option>
               </mat-autocomplete>
             </div>
     

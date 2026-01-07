@@ -58,6 +58,12 @@ const defaultEnvValues = {
   SITE_KEY: '',
   CAPTCHA_CHALLENGE_URL: '',
   ENABLE_CAPTCHA: false,
+  SITE_ID: '1',
+  TRACKER_URL: 'https://matomo.piramalswasthya.org/',
+  TRACKING_PLATFORM: 'matomo',
+  TRACKING_ENABLED: 'true',
+  ENABLE_CHO_REPORT_BUTTON: true,
+  DHIS_URL:'',
 };
 
 // Generate output data
