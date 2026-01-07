@@ -576,5 +576,5 @@ export const environment = {
   enableCHOReportBtn: enableCHOReportBtn,
   dhisURL: dhisURL,
   elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
-  advanceElasticSearchUrl: `${HWC_API}registrar/advanceSearchES`,
+  advanceElasticSearchUrl: `${HWC_API}registrar/advancedSearchES`,
 };

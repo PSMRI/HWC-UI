@@ -148,6 +148,7 @@ export const environment = {
   externalSearchIdentityUrl: `${FHIR_API}patient/data/profile/search/demographic`,
   patientRevisitSubmitToNurse: `${HWC_API}common/update/benDetailsAndSubmitToNurse`,
   identityPatientRevisitSubmitToNurseURL: `${HWC_API}registrar/create/BenReVisitToNurse`,
+  advanceElasticSearchUrl: `${HWC_API}registrar/advancedSearchES`,
   /**
    * Master Data Urls
    */
