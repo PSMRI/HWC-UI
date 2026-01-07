@@ -576,5 +576,5 @@ export const environment = {
   dhisURL: dhisURL,
   getUserId: `${COMMON_API}user/userName/`,
   elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
-  advanceElasticSearchUrl: `${HWC_API}registrar/advanceSearchES`,
+  advanceElasticSearchUrl: `${HWC_API}registrar/advancedSearchES`,
 };
