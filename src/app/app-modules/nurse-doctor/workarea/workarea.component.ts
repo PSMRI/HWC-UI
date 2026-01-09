@@ -202,6 +202,7 @@ export class WorkareaComponent
   patientQuickConsultForm!: FormGroup;
   abdmFacilityId: any;
   abdmFacilityName: any;
+  doctorSignatureFlag = false;
 
   constructor(
     private router: Router,
@@ -329,6 +330,13 @@ export class WorkareaComponent
     this.enableUpdateButtonOnDoctorInteraction();
     this.enableUpdateButtonFamilyPlanning();
     this.enableUpdateButtonBirthImmunizationHistory();
+    this.doctorService
+      .checkUsersignatureExist(this.sessionstorage.getItem('userID'))
+      .subscribe((res: any) => {
+        if (res.statusCode === 200 && res.data !== null) {
+          this.doctorSignatureFlag = res.data.signStatus;
+        }
+      });
   }
   setVitalsUpdateButtonValue() {
     this.enableVitalsButtonSubscription =
@@ -1718,6 +1726,7 @@ export class WorkareaComponent
           temp,
           this.schedulerData,
           this.isSpecialist,
+          this.doctorSignatureFlag,
         )
         .subscribe(
           (res: any) => {
@@ -1927,6 +1936,7 @@ export class WorkareaComponent
             visitCategory,
             otherDetails,
             this.schedulerData,
+            this.doctorSignatureFlag,
           )
           .subscribe(
             (res: any) => {
@@ -2169,6 +2179,7 @@ export class WorkareaComponent
             visitCategory,
             otherDetails,
             this.schedulerData,
+            this.doctorSignatureFlag,
           )
           .subscribe(
             (res: any) => {
@@ -3736,6 +3747,7 @@ export class WorkareaComponent
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       createdBy: this.sessionstorage.getItem('userName'),
       isSpecialist: this.isSpecialist,
+      doctorSignatureFlag: this.doctorSignatureFlag,
     };
 
     const valid = this.checkQuickConsultDoctorData(this.patientMedicalForm);
@@ -3795,6 +3807,7 @@ export class WorkareaComponent
           { quickConsultation: patientQuickConsultFormValue },
           this.schedulerData,
           this.isSpecialist,
+          this.doctorSignatureFlag,
         )
         .subscribe(
           (res: any) => {
@@ -4022,6 +4035,7 @@ export class WorkareaComponent
           temp,
           this.schedulerData,
           this.isSpecialist,
+          this.doctorSignatureFlag,
         )
         .subscribe(
           (res: any) => {
@@ -4230,6 +4244,7 @@ export class WorkareaComponent
           temp,
           this.schedulerData,
           this.isSpecialist,
+          this.doctorSignatureFlag,
         )
         .subscribe(
           (res: any) => {
@@ -4525,6 +4540,7 @@ export class WorkareaComponent
           temp,
           this.schedulerData,
           this.isSpecialist,
+          this.doctorSignatureFlag,
         )
         .subscribe(
           (res: any) => {
@@ -4567,6 +4583,7 @@ export class WorkareaComponent
           temp,
           this.schedulerData,
           this.isSpecialist,
+          this.doctorSignatureFlag,
         )
         .subscribe(
           (res: any) => {
