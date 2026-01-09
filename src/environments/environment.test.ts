@@ -578,4 +578,5 @@ export const environment = {
   enableCHOReportBtn: enableCHOReportBtn,
   dhisURL: dhisURL,
   elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
+  checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
 };
