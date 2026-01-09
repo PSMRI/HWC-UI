@@ -577,4 +577,5 @@ export const environment = {
   dhisURL: dhisURL,
   elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
   advanceElasticSearchUrl: `${HWC_API}registrar/advancedSearchES`,
+  checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
 };
