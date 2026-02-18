@@ -126,6 +126,7 @@ export const environment = {
    * Security Question and Forgot password Url
    */
   getUserSecurityQuestionsAnswerUrl: `${COMMON_API_OPEN}user/forgetPassword`,
+  getUserId: `${COMMON_API}user/userName/`,
   getSecurityQuestionUrl: `${COMMON_API_OPEN}user/getsecurityquetions`,
   saveUserSecurityQuestionsAnswerUrl: `${COMMON_API_OPEN}user/saveUserSecurityQuesAns`,
   setNewPasswordUrl: `${COMMON_API_OPEN}user/setForgetPassword`,
