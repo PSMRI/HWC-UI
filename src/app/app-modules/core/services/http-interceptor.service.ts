@@ -34,7 +34,7 @@ export class HttpInterceptorService implements HttpInterceptor {
     readonly sessionstorage: SessionStorageService,
     public httpServiceService: HttpServiceService,
     private authService: AuthService,
-  ) {}
+  ) { }
 
   assignSelectedLanguage() {
     if (!this.currentLanguageSet) {
@@ -87,30 +87,46 @@ export class HttpInterceptorService implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {
         console.error(error);
         this.spinnerService.setLoading(false);
+
+        let errorMessage = 'Something went wrong. Please try again later.';
+        if (error.error && error.error.errorMessage) {
+          errorMessage = error.error.errorMessage;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
         if (error.status === 401) {
           this.handleSessionExpiry(
             this.currentLanguageSet.sessionExpiredPleaseLogin ||
-              'Session has expired, please login again.',
+            'Session has expired, please login again.',
           );
         } else if (error.status === 403) {
           this.handleSessionExpiry(
             this.currentLanguageSet.accessDenied ||
-              'Access Denied. You do not have permission to access this resource.',
+            'Access Denied. You do not have permission to access this resource.',
           );
+        } else if (error.status === 400) {
+          this.confirmationService.alert(errorMessage, 'error');
         } else if (error.status === 500) {
-          this.handleSessionExpiry(
-            this.currentLanguageSet.internaleServerError,
+          this.confirmationService.alert(
+            this.currentLanguageSet.internaleServerError || errorMessage,
+            'error'
           );
         } else {
-          this.handleSessionExpiry(
-            error.message ||
-              this.currentLanguageSet.somethingWentWrong ||
-              'Something went wrong. Please try again later.',
+          this.confirmationService.alert(
+            errorMessage ||
+            this.currentLanguageSet.somethingWentWrong,
+            'error'
           );
         }
-        sessionStorage.clear();
-        this.sessionstorage.clear();
-        return throwError(error.error);
+
+        // Only clear session on 401/403 or specific auth failures
+        if (error.status === 401 || error.status === 403) {
+          sessionStorage.clear();
+          this.sessionstorage.clear();
+        }
+
+        return throwError(error.error || error);
       }),
     );
   }
@@ -129,11 +145,11 @@ export class HttpInterceptorService implements HttpInterceptor {
     } else if (
       response.statusCode === 5000 &&
       response.errorMessage ===
-        'Unable to fetch session object from Redis server'
+      'Unable to fetch session object from Redis server'
     ) {
       this.handleSessionExpiry(
         this.currentLanguageSet.sessionExpiredPleaseLogin ||
-          'Session has expired, please login again.',
+        'Session has expired, please login again.',
       );
     } else {
       this.startTimer();
@@ -167,8 +183,8 @@ export class HttpInterceptorService implements HttpInterceptor {
             .subscribe((result: any) => {
               if (result.action === 'continue') {
                 this.http.post(environment.extendSessionUrl, {}).subscribe(
-                  (res: any) => {},
-                  (err: any) => {},
+                  (res: any) => { },
+                  (err: any) => { },
                 );
               } else if (result.action === 'timeout') {
                 clearTimeout(this.timerRef);
@@ -176,7 +192,7 @@ export class HttpInterceptorService implements HttpInterceptor {
                 this.sessionstorage.clear();
                 this.confirmationService.alert(
                   this.currentLanguageSet.sessionExpired ||
-                    'Session has expired, please login again.',
+                  'Session has expired, please login again.',
                   'error',
                 );
                 this.router.navigate(['/login']);
@@ -187,7 +203,7 @@ export class HttpInterceptorService implements HttpInterceptor {
                   this.sessionstorage.clear();
                   this.confirmationService.alert(
                     this.currentLanguageSet.sessionExpired ||
-                      'Session has expired, please login again.',
+                    'Session has expired, please login again.',
                     'error',
                   );
                   this.router.navigate(['/login']);
