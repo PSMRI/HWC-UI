@@ -525,9 +525,12 @@ export class WorkareaComponent
         cbacForm.controls['cbacFamilyHistoryBpdiabetes'].value === null ||
         cbacForm.controls['cbacFamilyHistoryBpdiabetes'].value === '')
     ) {
-      this.confirmationService.alert(
+      const dialogRef = this.confirmationService.alert(
         this.current_language_set.pleaseCompletePartCbac,
       );
+      dialogRef.afterClosed().subscribe(() => {
+        this.stepper.previous();
+      });
     }
   }
   checkMandatory() {
