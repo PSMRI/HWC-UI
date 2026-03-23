@@ -83,6 +83,9 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
   current_language_set: any;
   enableIsHistory = false;
   enableProvisionalDiag = false;
+
+  suggestedObservationsList: any = [];
+  suggestedFindingsSearchList: any = [];
   displayedColumns: any = [
     'chiefComplaintsDetails',
     'duration',
@@ -692,6 +695,76 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
       );
     }
   }
+  // --- Clinical Observations: Autocomplete search ---
+  onObservationInputKeyup(value: string, index: number) {
+    const term = (value || '').trim();
+    if (term.length >= 3) {
+      this.masterdataService.searchDiagnosisBasedOnPageNo(term, 0).subscribe({
+        next: (results: any) => {
+          this.suggestedObservationsList[index] =
+            results?.data?.sctMaster ?? [];
+        },
+        error: () => {
+          console.error('Error fetching observation data');
+        },
+      });
+    } else {
+      this.suggestedObservationsList[index] = [];
+    }
+  }
+
+  displayObservation(obs: any): string {
+    return typeof obs === 'string' ? obs : obs?.term || '';
+  }
+
+  onObservationSelected(selected: any, index: number) {
+    const observationsFormArray = this.generalFindingsForm.get(
+      'clinicalObservationsList',
+    ) as FormArray;
+    const observationsFormGroup = observationsFormArray.at(index) as FormGroup;
+    observationsFormGroup.patchValue({
+      clinicalObservationsProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
+  }
+
+  // --- Significant Findings: Autocomplete search ---
+  onFindingsInputKeyup(value: string, index: number) {
+    const term = (value || '').trim();
+    this.resetFindingsCheckbox(term);
+    if (term.length >= 3) {
+      this.masterdataService.searchDiagnosisBasedOnPageNo(term, 0).subscribe({
+        next: (results: any) => {
+          this.suggestedFindingsSearchList[index] =
+            results?.data?.sctMaster ?? [];
+        },
+        error: () => {
+          console.error('Error fetching findings data');
+        },
+      });
+    } else {
+      this.suggestedFindingsSearchList[index] = [];
+    }
+  }
+
+  displayFindings(finding: any): string {
+    return typeof finding === 'string' ? finding : finding?.term || '';
+  }
+
+  onFindingsSelected(selected: any, index: number) {
+    const findingsFormArray = this.generalFindingsForm.get(
+      'significantFindingsList',
+    ) as FormArray;
+    const findingsFormGroup = findingsFormArray.at(index) as FormGroup;
+    findingsFormGroup.patchValue({
+      significantFindingsProvided: selected,
+      conceptID: selected?.conceptID || null,
+      term: selected?.term || null,
+    });
+    this.resetFindingsCheckbox(selected?.term);
+  }
+
   ngOnDestroy() {
     if (this.doctorMasterDataSubscription)
       this.doctorMasterDataSubscription.unsubscribe();
