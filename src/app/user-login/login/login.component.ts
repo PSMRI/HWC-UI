@@ -264,7 +264,7 @@ export class LoginComponent implements OnInit {
                       this.resetCaptcha();
                       sessionStorage.clear();
                       this.router.navigate(['/login']);
-                      this.confirmationService.alert(res.errorMessage, 'error');
+  
                     }
                   });
               } else {
@@ -275,8 +275,12 @@ export class LoginComponent implements OnInit {
           },
           (err) => {
             this.resetCaptcha();
-            this.confirmationService.alert(err, 'error');
-          },
+            const errorMessage =
+    err?.error?.errorMessage ||
+    err?.message ||
+    'Login failed. Please check your credentials and try again.';
+  this.confirmationService.alert(errorMessage, 'error');
+},
         );
     }
   }
