@@ -86,6 +86,8 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
 
   suggestedObservationsList: any = [];
   suggestedFindingsSearchList: any = [];
+  private latestObservationQuery: Map<number, string> = new Map();
+  private latestFindingsQuery: Map<number, string> = new Map();
   displayedColumns: any = [
     'chiefComplaintsDetails',
     'duration',
@@ -621,11 +623,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
               findingsList.reset();
             }
             this.generalFindingsForm.markAsDirty();
-            this.resetFindingsCheckbox(
-              this.generalFindingsForm.controls[
-                'significantFindingsList'
-              ].value.at(0).term,
-            );
+            this.resetFindingsCheckbox();
           }
         });
     } else {
@@ -634,10 +632,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
       } else {
         findingsList.reset();
       }
-      this.resetFindingsCheckbox(
-        this.generalFindingsForm.controls['significantFindingsList'].value.at(0)
-          .term,
-      );
+      this.resetFindingsCheckbox();
     }
   }
   patchCapturedClinicalObservations(clinicalObservations: any) {
@@ -689,20 +684,25 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
         ].disable();
         if (findingsList.length < savedFindings.length) this.addFindings();
       }
-      this.resetFindingsCheckbox(
-        this.generalFindingsForm.controls['significantFindingsList'].value.at(0)
-          .term,
-      );
+      this.resetFindingsCheckbox();
     }
   }
   // --- Clinical Observations: Autocomplete search ---
   onObservationInputKeyup(value: string, index: number) {
     const term = (value || '').trim();
+    this.latestObservationQuery.set(index, term);
+    const observationsFormArray = this.generalFindingsForm.get(
+      'clinicalObservationsList',
+    ) as FormArray;
+    const observationsFormGroup = observationsFormArray.at(index) as FormGroup;
+    observationsFormGroup.patchValue({ conceptID: null, term: null });
     if (term.length >= 3) {
       this.masterdataService.searchDiagnosisBasedOnPageNo(term, 0).subscribe({
         next: (results: any) => {
-          this.suggestedObservationsList[index] =
-            results?.data?.sctMaster ?? [];
+          if (this.latestObservationQuery.get(index) === term) {
+            this.suggestedObservationsList[index] =
+              results?.data?.sctMaster ?? [];
+          }
         },
         error: () => {
           console.error('Error fetching observation data');
@@ -723,7 +723,7 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     ) as FormArray;
     const observationsFormGroup = observationsFormArray.at(index) as FormGroup;
     observationsFormGroup.patchValue({
-      clinicalObservationsProvided: selected,
+      clinicalObservationsProvided: selected?.term || null,
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });
@@ -732,12 +732,20 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
   // --- Significant Findings: Autocomplete search ---
   onFindingsInputKeyup(value: string, index: number) {
     const term = (value || '').trim();
-    this.resetFindingsCheckbox(term);
+    this.latestFindingsQuery.set(index, term);
+    const findingsFormArray = this.generalFindingsForm.get(
+      'significantFindingsList',
+    ) as FormArray;
+    const findingsFormGroup = findingsFormArray.at(index) as FormGroup;
+    findingsFormGroup.patchValue({ conceptID: null, term: null });
+    this.resetFindingsCheckbox();
     if (term.length >= 3) {
       this.masterdataService.searchDiagnosisBasedOnPageNo(term, 0).subscribe({
         next: (results: any) => {
-          this.suggestedFindingsSearchList[index] =
-            results?.data?.sctMaster ?? [];
+          if (this.latestFindingsQuery.get(index) === term) {
+            this.suggestedFindingsSearchList[index] =
+              results?.data?.sctMaster ?? [];
+          }
         },
         error: () => {
           console.error('Error fetching findings data');
@@ -758,11 +766,11 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     ) as FormArray;
     const findingsFormGroup = findingsFormArray.at(index) as FormGroup;
     findingsFormGroup.patchValue({
-      significantFindingsProvided: selected,
+      significantFindingsProvided: selected?.term || null,
       conceptID: selected?.conceptID || null,
       term: selected?.term || null,
     });
-    this.resetFindingsCheckbox(selected?.term);
+    this.resetFindingsCheckbox();
   }
 
   ngOnDestroy() {
@@ -775,26 +783,18 @@ export class FindingsComponent implements OnInit, DoCheck, OnDestroy {
     }
   }
 
-  resetFindingsCheckbox(significantFindingsProvidedValue: any) {
-    if (
-      this.generalFindingsForm.controls['significantFindingsList'].value
-        .length === 1 &&
-      (significantFindingsProvidedValue === undefined ||
-        significantFindingsProvidedValue === null ||
-        significantFindingsProvidedValue === '')
-    ) {
-      this.generalFindingsForm.controls['isForHistory'].patchValue(null);
-      this.enableIsHistory = false;
-    }
-
-    if (
-      this.generalFindingsForm.controls['significantFindingsList'].value
-        .length > 0 &&
-      significantFindingsProvidedValue !== null &&
-      significantFindingsProvidedValue !== ''
-    ) {
+  resetFindingsCheckbox() {
+    const findingsList = this.generalFindingsForm.get(
+      'significantFindingsList',
+    ) as FormArray;
+    const hasAnyFinding = findingsList.controls.some((ctrl) => {
+      const val = (ctrl as FormGroup).get('significantFindingsProvided')?.value;
+      return val !== null && val !== undefined && val !== '';
+    });
+    if (hasAnyFinding) {
       this.enableIsHistory = true;
     } else {
+      this.generalFindingsForm.controls['isForHistory'].patchValue(null);
       this.enableIsHistory = false;
     }
   }

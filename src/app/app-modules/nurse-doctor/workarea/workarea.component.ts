@@ -2938,7 +2938,6 @@ export class WorkareaComponent
       }
     }
 
-
     if (required.length) {
       this.confirmationService.notify(
         this.current_language_set.alerts.info.belowFields,
@@ -4500,7 +4499,8 @@ export class WorkareaComponent
         'info',
         successResponseFromAPI +
           '. ' +
-          this.current_language_set.common.doYouWantToLinkCareContext,
+          (this.current_language_set?.common?.doYouWantToLinkCareContext ??
+            'Do you want to link care context?'),
       )
       .subscribe((res) => {
         if (res) {
