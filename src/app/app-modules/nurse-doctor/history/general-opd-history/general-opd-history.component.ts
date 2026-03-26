@@ -192,7 +192,7 @@ export class GeneralOpdHistoryComponent
   updatePatientGeneralHistory(generalOPDHistory: any) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const temp = {
@@ -204,7 +204,7 @@ export class GeneralOpdHistoryComponent
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       benFlowID: this.sessionstorage.getItem('benFlowID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
     };
@@ -314,7 +314,7 @@ export class GeneralOpdHistoryComponent
   updatePatientNCDScreeningHistory(NCDScreeningHistory: any) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const temp = {
       beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
@@ -325,7 +325,7 @@ export class GeneralOpdHistoryComponent
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       benFlowID: this.sessionstorage.getItem('benFlowID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
     };

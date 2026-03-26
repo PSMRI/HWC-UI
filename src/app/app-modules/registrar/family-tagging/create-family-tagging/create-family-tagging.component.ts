@@ -113,7 +113,7 @@ export class CreateFamilyTaggingComponent implements OnInit, DoCheck {
     });
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const reqObject = {
       beneficiaryRegId: this.beneficiaryRegID,
@@ -124,7 +124,7 @@ export class CreateFamilyTaggingComponent implements OnInit, DoCheck {
         this.isHeadOfTheFamily === 'yes' ? this.beneficiaryName : null,
       other: this.otherRelation,
       villageId: parseInt(this.benVillageId),
-      vanID: vanID,
+      facilityID: facilityID,
       parkingPlaceID: parkingPlaceID,
       createdBy: this.sessionstorage.getItem('userName'),
     };

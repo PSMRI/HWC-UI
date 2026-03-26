@@ -2976,7 +2976,7 @@ export class DoctorService {
   getSwymedMail() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const facilityID = JSON.parse(serviceLineDetails).facilityID;
+    const vanID = JSON.parse(serviceLineDetails).vanID;
     console.log('vanID', vanID);
 
     return this.http.get(environment.getSwymedMailUrl + `/${vanID}`);
@@ -3022,7 +3022,7 @@ export class DoctorService {
     const userID = this.sessionstorage.getItem('userID');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const facilityID = JSON.parse(serviceLineDetails).facilityID;
+    const vanID = JSON.parse(serviceLineDetails).vanID;
     return this.http.get(
       environment.invokeSwymedCallSpecialistUrl + userID + '/' + vanID,
     );

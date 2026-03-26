@@ -1910,7 +1910,7 @@ export class WorkareaComponent
     const visitCategory = this.sessionstorage.getItem('visitCategory');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const otherDetails = {
       beneficiaryRegID: this.beneficiaryRegID,
@@ -1920,7 +1920,7 @@ export class WorkareaComponent
       sessionID: this.sessionstorage.getItem('sessionID'),
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       visitCode: this.sessionstorage.getItem('visitCode'),
       serviceID: this.sessionstorage.getItem('serviceID'),
       benFlowID: this.sessionstorage.getItem('benFlowID'),
@@ -3922,7 +3922,7 @@ export class WorkareaComponent
   mapDoctorQuickConsultDetails() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const tempObj = {
       beneficiaryRegID: this.beneficiaryRegID,
@@ -3932,7 +3932,7 @@ export class WorkareaComponent
       sessionID: this.sessionstorage.getItem('sessionID'),
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       visitCode: this.sessionstorage.getItem('visitCode'),
       serviceID: this.sessionstorage.getItem('serviceID'),
       benFlowID: this.sessionstorage.getItem('benFlowID'),
