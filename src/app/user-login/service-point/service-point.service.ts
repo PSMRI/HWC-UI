@@ -48,17 +48,27 @@ export class ServicePointService {
   getMMUDemographics(vanId?: any) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    let vanIDJsn: any;
     let vanIDx: any;
+    let facilityIDx: any;
     if (serviceLineDetails && serviceLineDetails !== '') {
-      vanIDJsn = JSON.parse(serviceLineDetails);
-      vanIDx = vanIDJsn.vanID;
+      const parsed = JSON.parse(serviceLineDetails);
+      vanIDx = parsed.vanID;
+      facilityIDx = parsed.facilityID;
     }
     if (!vanIDx || vanIDx === '') {
       vanIDx = vanId;
     }
     const spPSMIDx = this.sessionstorage.getItem('providerServiceID');
     const userId = this.sessionstorage.getItem('userID');
+
+    // Use facilityID if vanID is not available (facility-based user)
+    if (!vanIDx && facilityIDx) {
+      return this.http.post(environment.demographicsCurrentMasterUrl, {
+        facilityID: facilityIDx,
+        spPSMID: spPSMIDx,
+        userID: userId,
+      });
+    }
 
     return this.http.post(environment.demographicsCurrentMasterUrl, {
       vanID: vanIDx,
