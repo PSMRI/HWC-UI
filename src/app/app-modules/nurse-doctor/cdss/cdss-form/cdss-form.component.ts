@@ -395,7 +395,7 @@ export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
       serviceID: this.sessionstorage.getItem('serviceID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       createdBy: this.sessionstorage.getItem('userName'),
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       benCallID: this.sessionstorage.getItem('benCallID'),
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       selecteDiagnosisID: this.sctID_psd_toSave,

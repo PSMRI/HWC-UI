@@ -102,38 +102,38 @@ export class NurseService {
 
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(newNurseWorklist + fetchUrl);
   }
 
   getNurseTMFutureWorklist() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(environment.getNurseTMFutureWorklistUrl + fetchUrl);
   }
   getNurseTMWorklist() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(environment.getNurseTMWorklistUrl + fetchUrl);
   }
   getMMUNurseWorklist() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(environment.mmuNurseWorklist + fetchUrl);
   }
 
@@ -151,7 +151,7 @@ export class NurseService {
     const createdBy = this.sessionstorage.getItem('userName');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const visitDetails = Object.assign(
       {},
@@ -187,7 +187,7 @@ export class NurseService {
         beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         serviceID: serviceID,
         createdBy: createdBy,
         tcRequest: tcRequest,
@@ -216,7 +216,7 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const serviceID = this.sessionstorage.getItem('serviceID');
     const createdBy = this.sessionstorage.getItem('userName');
@@ -249,7 +249,7 @@ export class NurseService {
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       serviceID: serviceID,
       createdBy: createdBy,
       tcRequest: tcRequest,
@@ -279,7 +279,7 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const serviceID = this.sessionstorage.getItem('serviceID');
     const createdBy = this.sessionstorage.getItem('userName');
@@ -315,7 +315,7 @@ export class NurseService {
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       serviceID: serviceID,
       createdBy: createdBy,
       tcRequest: tcRequest,
@@ -343,7 +343,7 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const serviceID = this.sessionstorage.getItem('serviceID');
     const createdBy = this.sessionstorage.getItem('userName');
@@ -380,7 +380,7 @@ export class NurseService {
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       serviceID: serviceID,
       createdBy: createdBy,
       tcRequest: tcRequest,
@@ -408,7 +408,7 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const serviceID = this.sessionstorage.getItem('serviceID');
     const createdBy = this.sessionstorage.getItem('userName');
@@ -450,7 +450,7 @@ export class NurseService {
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       serviceID: serviceID,
       createdBy: createdBy,
       tcRequest: tcRequest,
@@ -501,14 +501,14 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const immunizationHistoryDetails = Object.assign(
       {},
       immunizationHistoryDetailsForm,
       {
-        vanID: vanID,
+        facilityID: facilityID,
         parkingPlaceID: parkingPlaceID,
         beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
         benVisitID: benVisitID,
@@ -1730,7 +1730,7 @@ export class NurseService {
     // ncdScreeningVisitDetails
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     if (showIDRS === true) {
@@ -1776,7 +1776,7 @@ export class NurseService {
           parkingPlaceID: parkingPlaceID,
           createdBy: this.sessionstorage.getItem('userName'),
           tcRequest: tcRequest,
-          vanID: vanID,
+          facilityID: facilityID,
           beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
           benVisitID: null,
           providerServiceMapID:
@@ -1828,7 +1828,7 @@ export class NurseService {
           parkingPlaceID: parkingPlaceID,
           createdBy: this.sessionstorage.getItem('userName'),
           tcRequest: tcRequest,
-          vanID: vanID,
+          facilityID: facilityID,
           beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
           benVisitID: null,
           providerServiceMapID:
@@ -1877,7 +1877,7 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const serviceID = this.sessionstorage.getItem('serviceID');
     const createdBy = this.sessionstorage.getItem('userName');
@@ -1905,7 +1905,7 @@ export class NurseService {
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       serviceID: serviceID,
       createdBy: createdBy,
       tcRequest: tcRequest,
@@ -1991,7 +1991,7 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const serviceID = this.sessionstorage.getItem('serviceID');
     const createdBy = this.sessionstorage.getItem('userName');
@@ -2014,7 +2014,7 @@ export class NurseService {
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       serviceID: serviceID,
       createdBy: createdBy,
       tcRequest: tcRequest,
@@ -2041,7 +2041,7 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const serviceID = this.sessionstorage.getItem('serviceID');
     const createdBy = this.sessionstorage.getItem('userName');
@@ -2064,7 +2064,7 @@ export class NurseService {
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       serviceID: serviceID,
       createdBy: createdBy,
       tcRequest: tcRequest,
@@ -2091,7 +2091,7 @@ export class NurseService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const serviceID = this.sessionstorage.getItem('serviceID');
     const createdBy = this.sessionstorage.getItem('userName');
@@ -2124,7 +2124,7 @@ export class NurseService {
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       serviceID: serviceID,
       createdBy: createdBy,
       tcRequest: tcRequest,
@@ -2349,7 +2349,7 @@ export class NurseService {
   saveBenCovidVaccinationDetails(covidVaccineStatusForm: any) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const createdBy = this.sessionstorage.getItem('userName');
     const covidVaccineFormValues = covidVaccineStatusForm.value;
@@ -2366,7 +2366,7 @@ export class NurseService {
         doseTypeID: covidVaccineFormValues.doseTaken,
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         createdBy: createdBy,
-        vanID: vanID,
+        facilityID: facilityID,
         parkingPlaceID: parkingPlaceID,
         modifiedBy: createdBy,
       };
@@ -2379,7 +2379,7 @@ export class NurseService {
         doseTypeID: covidVaccineFormValues.doseTaken,
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         createdBy: createdBy,
-        vanID: vanID,
+        facilityID: facilityID,
         parkingPlaceID: parkingPlaceID,
       };
     }

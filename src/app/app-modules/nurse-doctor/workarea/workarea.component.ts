@@ -2241,7 +2241,7 @@ export class WorkareaComponent
     if (image1)
       imageCords.push(
         Object.assign(image1, {
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         }),
       );
@@ -2253,7 +2253,7 @@ export class WorkareaComponent
     if (image2)
       imageCords.push(
         Object.assign(image2, {
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         }),
       );
@@ -2265,7 +2265,7 @@ export class WorkareaComponent
     if (image3)
       imageCords.push(
         Object.assign(image3, {
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         }),
       );
@@ -2277,7 +2277,7 @@ export class WorkareaComponent
     if (image4)
       imageCords.push(
         Object.assign(image4, {
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         }),
       );

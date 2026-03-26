@@ -121,6 +121,14 @@ export class ServicePointComponent implements OnInit, DoCheck {
           const data = res['servicePoints'].data;
           if (data.UserVanSpDetails) {
             this.vanServicepointDetails = data.UserVanSpDetails;
+            // Check if user has facilityID — skip Van selection
+            const facilityEntry = this.vanServicepointDetails.find(
+              (item: any) => item.facilityID != null
+            );
+            if (facilityEntry && facilityEntry.facilityID) {
+              this.autoLoginWithFacility(facilityEntry);
+              return;
+            }
             this.currVanId = this.vanServicepointDetails[0].vanID;
             this.filterVanList(this.vanServicepointDetails);
           }
@@ -307,6 +315,24 @@ export class ServicePointComponent implements OnInit, DoCheck {
     // Store the JSON string in this.sessionstorage
     this.sessionstorage.setItem('locationData', locationDataJSON);
     this.goToWorkList();
+  }
+
+  autoLoginWithFacility(facilityEntry: any) {
+    // Store serviceLineDetails with facilityID — skip Van selection
+    this.sessionstorage.setItem(
+      'serviceLineDetails',
+      JSON.stringify(facilityEntry),
+    );
+    this.sessionstorage.setItem('facilityID', facilityEntry.facilityID);
+    if (facilityEntry.servicePointID)
+      this.sessionstorage.setItem('servicePointID', facilityEntry.servicePointID);
+    if (facilityEntry.servicePointName)
+      this.sessionstorage.setItem('servicePointName', facilityEntry.servicePointName);
+    if (facilityEntry.vanSession)
+      this.sessionstorage.setItem('sessionID', facilityEntry.vanSession);
+    // Get demographics and go to worklist
+    this.currVanId = facilityEntry.vanID;
+    this.getDemographics();
   }
 
   goToWorkList() {

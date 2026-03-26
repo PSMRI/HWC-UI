@@ -51,7 +51,7 @@ export class CancerUtils {
       snomedCode: null,
       snomedTerm: null,
       familyMemberList: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -88,7 +88,7 @@ export class CancerUtils {
       ssRadiationExposure: null,
       isThyroidDisorder: null,
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -118,7 +118,7 @@ export class CancerUtils {
       menopauseAge: null,
       isPostMenopauseBleeding: null,
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -160,7 +160,7 @@ export class CancerUtils {
       rbsTestResult: null,
       rbsTestRemarks: null,
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -193,7 +193,7 @@ export class CancerUtils {
       lymphNode_ParaAortic_Right: null,
       observation: null,
       image: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -216,7 +216,7 @@ export class CancerUtils {
       lumpTexture: null,
       referredToMammogram: null,
       image: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -237,7 +237,7 @@ export class CancerUtils {
       filePath: null,
       experiencedPostCoitalBleeding: null,
       observation: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -255,7 +255,7 @@ export class CancerUtils {
       chronicBurningSensation: null,
       observation: null,
       image: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -347,12 +347,12 @@ export class CancerUtils {
       lymphNode_Enlarged: null,
       breastEnlargement: null,
       observation: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       lymphNodes: this.fb.array(
         this.lymphNodesArray.map((item) => ({
           ...item,
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         })),
       ),
@@ -372,7 +372,7 @@ export class CancerUtils {
       referralReasonList: null,
       otherReferralReason: null,
       revisitDate: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -385,7 +385,7 @@ export class CancerUtils {
       provisionalDiagnosisPrimaryDoctor: null,
       provisionalDiagnosisOncologist: { value: null, disabled: true },
       remarks: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }

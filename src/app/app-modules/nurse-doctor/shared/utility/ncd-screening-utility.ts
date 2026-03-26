@@ -61,7 +61,7 @@ export class NCDScreeningUtils {
       isScreeningComplete: null,
       isBPPrescribed: null,
       isBloodGlucosePrescribed: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -80,7 +80,7 @@ export class NCDScreeningUtils {
       deleted: false,
       requiredList: null,
       isDiabetic: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }

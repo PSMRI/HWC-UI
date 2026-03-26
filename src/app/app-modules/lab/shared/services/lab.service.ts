@@ -34,10 +34,10 @@ export class LabService {
   getLabWorklist() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(environment.labWorklist + fetchUrl);
   }
 
