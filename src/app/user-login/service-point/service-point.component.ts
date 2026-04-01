@@ -325,10 +325,11 @@ export class ServicePointComponent implements OnInit, DoCheck {
       JSON.stringify(facilityEntry),
     );
     this.sessionstorage.setItem('facilityID', facilityEntry.facilityID);
-    if (facilityEntry.servicePointID)
-      this.sessionstorage.setItem('servicePointID', facilityEntry.servicePointID);
-    if (facilityEntry.servicePointName)
-      this.sessionstorage.setItem('servicePointName', facilityEntry.servicePointName);
+    // Set servicePointID/Name for registration form compatibility
+    this.sessionstorage.setItem('servicePointID',
+      facilityEntry.servicePointID || facilityEntry.facilityID);
+    this.sessionstorage.setItem('servicePointName',
+      facilityEntry.servicePointName || facilityEntry.vanNoAndType || 'Facility');
     if (facilityEntry.vanSession)
       this.sessionstorage.setItem('sessionID', facilityEntry.vanSession);
     // Get demographics and go to worklist
