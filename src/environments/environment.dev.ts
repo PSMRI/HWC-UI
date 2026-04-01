@@ -132,7 +132,7 @@ export const environment = {
   saveUserSecurityQuestionsAnswerUrl: `${COMMON_API_OPEN}user/saveUserSecurityQuesAns`,
   setNewPasswordUrl: `${COMMON_API_OPEN}user/setForgetPassword`,
 
-  servicePointUrl: `${HWC_API}user/getUserVanSpDetails`,
+  servicePointUrl: `${HWC_API}user/getUserFacilityDetails`,
   servicePointVillages: `${HWC_API}user/getServicepointVillages`,
 
   registerBeneficiaryUrl: `${HWC_API}registrar/registrarBeneficaryRegistration/`,
