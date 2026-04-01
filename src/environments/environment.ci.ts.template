@@ -519,7 +519,7 @@ export const environment = {
   getCheifComplaintsSymptomsUrl: `${API104}CDSS/Symptoms`,
   getActionMasterUrl: `${HWC_API}uptsu/get/action-master`,
   closeVisitSaveComplaintsUrl: `${HWC_API}uptsu/submit/closevisit`,
-  getnurse104referredworklisturls: `${HWC_API}uptsu/getWorklistByVanID`,
+  getnurse104referredworklisturls: `${HWC_API}uptsu/getWorklistByFacilityID`,
   getDiseaseDataUrls: `${API104}diseaseController/getDiseasesByID`,
   getDiseaseNamesUrls: `${API104}diseaseController/getAvailableDiseases`,
   getAdminCdssStatus: `${ADMIN_API}uptsu/getCdssData`,

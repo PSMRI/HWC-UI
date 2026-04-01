@@ -527,7 +527,7 @@ export const environment = {
   getResultStatusURL: `${COMMON_API}lungAssessment/startAssesment`,
   getAssessmentUrl: `${COMMON_API}lungAssessment/getAssesment`,
   getAssessmentIdUrl: `${COMMON_API}lungAssessment/getAssesmentDetails`,
-  getnurse104referredworklisturls: `${HWC_API}uptsu/getWorklistByVanID`,
+  getnurse104referredworklisturls: `${HWC_API}uptsu/getWorklistByFacilityID`,
 
   /* CDSS Urls */
   getCdssQuestionsUrl: `${API104}CDSS/getQuestions`,
