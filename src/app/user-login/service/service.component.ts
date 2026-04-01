@@ -374,8 +374,9 @@ export class ServiceComponent implements OnInit, DoCheck {
   }
 
   getDemographics() {
+    const facilityID = this.vanServicepointDetails?.[0]?.facilityID;
     this.servicePointService
-      .getMMUDemographics(this.currVanId)
+      .getMMUDemographics(this.currVanId, facilityID)
       .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.saveDemographicsToStorage(res.data);
