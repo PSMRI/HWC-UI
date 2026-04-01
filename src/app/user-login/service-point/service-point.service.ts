@@ -45,24 +45,13 @@ export class ServicePointService {
     });
   }
 
-  getMMUDemographics(vanId?: any) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-    let vanIDx: any;
-    let facilityIDx: any;
-    if (serviceLineDetails && serviceLineDetails !== '') {
-      const parsed = JSON.parse(serviceLineDetails);
-      vanIDx = parsed.vanID;
-      facilityIDx = parsed.facilityID;
-    }
-    if (!vanIDx || vanIDx === '') {
-      vanIDx = vanId;
-    }
+  getMMUDemographics(vanId?: any, facilityId?: any) {
     const spPSMIDx = this.sessionstorage.getItem('providerServiceID');
     const userId = this.sessionstorage.getItem('userID');
 
-    // Use facilityID if vanID is not available (facility-based user)
-    if (!vanIDx && facilityIDx) {
+    // Use facilityID if available (facility-based user)
+    const facilityIDx = facilityId || this.sessionstorage.getItem('facilityID');
+    if (facilityIDx) {
       return this.http.post(environment.demographicsCurrentMasterUrl, {
         facilityID: facilityIDx,
         spPSMID: spPSMIDx,
@@ -70,8 +59,9 @@ export class ServicePointService {
       });
     }
 
+    // Fallback: use vanID (old Van-based user)
     return this.http.post(environment.demographicsCurrentMasterUrl, {
-      vanID: vanIDx,
+      vanID: vanId,
       spPSMID: spPSMIDx,
       userID: userId,
     });
