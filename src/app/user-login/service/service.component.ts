@@ -77,6 +77,12 @@ export class ServiceComponent implements OnInit, DoCheck {
             if (data.UserVanSpDetails && data.UserVanSpDetails.length > 0) {
               this.vanServicepointDetails = data.UserVanSpDetails;
               this.currVanId = this.vanServicepointDetails[0].vanID;
+              // Store facilityID in session for demographics fallback
+              const facilityID = this.vanServicepointDetails[0].facilityID;
+              if (facilityID) {
+                this.sessionstorage.setItem('facilityID', facilityID);
+                this.sessionstorage.setItem('serviceLineDetails', JSON.stringify(this.vanServicepointDetails[0]));
+              }
               this.filterVanList(this.vanServicepointDetails);
               this.getDemographics();
               this.checkRoleAndDesingnationMappedForservice(
