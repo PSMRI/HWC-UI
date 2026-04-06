@@ -82,12 +82,16 @@ export class ServiceComponent implements OnInit, DoCheck {
               const facilityName = this.vanServicepointDetails[0].vanNoAndType;
               if (facilityID) {
                 this.sessionstorage.setItem('facilityID', facilityID);
-                this.sessionstorage.setItem('serviceLineDetails', JSON.stringify(this.vanServicepointDetails[0]));
+                this.sessionstorage.setItem(
+                  'serviceLineDetails',
+                  JSON.stringify(this.vanServicepointDetails[0]),
+                );
                 // Set servicePointID/Name for registration form compatibility
-                if (!this.sessionstorage.getItem('servicePointID')) {
-                  this.sessionstorage.setItem('servicePointID', facilityID);
-                  this.sessionstorage.setItem('servicePointName', facilityName || 'Facility');
-                }
+                this.sessionstorage.setItem('servicePointID', facilityID);
+                this.sessionstorage.setItem(
+                  'servicePointName',
+                  facilityName || 'Facility',
+                );
               }
               this.filterVanList(this.vanServicepointDetails);
               this.getDemographics();
