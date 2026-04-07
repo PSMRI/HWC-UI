@@ -81,6 +81,9 @@ export class ServiceComponent implements OnInit, DoCheck {
               const facilityID = this.vanServicepointDetails[0].facilityID;
               const facilityName = this.vanServicepointDetails[0].vanNoAndType;
               if (facilityID) {
+                console.log('=== Setting session: facilityID =', facilityID);
+                console.log('=== Setting session: servicePointID =', facilityID);
+                console.log('=== Setting session: servicePointName =', facilityName);
                 this.sessionstorage.setItem('facilityID', facilityID);
                 this.sessionstorage.setItem(
                   'serviceLineDetails',
@@ -210,6 +213,14 @@ export class ServiceComponent implements OnInit, DoCheck {
               if (data.UserVanSpDetails?.length > 0) {
                 this.vanServicepointDetails = data.UserVanSpDetails;
                 this.currVanId = this.vanServicepointDetails[0].vanID;
+                // Store facilityID in session (same as first path)
+                const facilityID2 = this.vanServicepointDetails[0].facilityID;
+                const facilityName2 = this.vanServicepointDetails[0].vanNoAndType;
+                if (facilityID2) {
+                  this.sessionstorage.setItem('facilityID', facilityID2);
+                  this.sessionstorage.setItem('servicePointID', facilityID2);
+                  this.sessionstorage.setItem('servicePointName', facilityName2 || 'Facility');
+                }
                 this.filterVanList(this.vanServicepointDetails);
                 this.getDemographics();
                 await this.handleRoleDesignationRouting(); // wait until navigation is done
@@ -386,7 +397,7 @@ export class ServiceComponent implements OnInit, DoCheck {
   getDemographics() {
     const facilityID = this.vanServicepointDetails?.[0]?.facilityID;
     this.servicePointService
-      .getMMUDemographics(this.currVanId, facilityID)
+      .getMMUDemographics(facilityID)
       .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.saveDemographicsToStorage(res.data);
@@ -400,6 +411,23 @@ export class ServiceComponent implements OnInit, DoCheck {
     if (data) {
       if (data.stateMaster && data.stateMaster.length >= 1) {
         this.sessionstorage.setItem('location', JSON.stringify(data));
+        // Store locationData immediately for Common-UI registration
+        if (data.otherLoc && data.otherLoc.districtList && data.otherLoc.districtList.length > 0) {
+          const dist = data.otherLoc.districtList[0];
+          const village = dist.villageList && dist.villageList.length > 0 ? dist.villageList[0] : {};
+          const stateName = data.stateMaster.find((s: any) => s.stateID === data.otherLoc.stateID);
+          const locationData = {
+            stateID: data.otherLoc.stateID,
+            stateName: stateName?.stateName || '',
+            districtID: dist.districtID,
+            districtName: dist.districtName,
+            blockID: dist.blockId,
+            blockName: dist.blockName,
+            subDistrictID: village.districtBranchID || null,
+            villageName: village.villageName || null,
+          };
+          this.sessionstorage.setItem('locationData', JSON.stringify(locationData));
+        }
       } else {
         this.locationGathetingIssues();
       }

@@ -45,23 +45,14 @@ export class ServicePointService {
     });
   }
 
-  getMMUDemographics(vanId?: any, facilityId?: any) {
+  getMMUDemographics(facilityId?: any) {
     const spPSMIDx = this.sessionstorage.getItem('providerServiceID');
     const userId = this.sessionstorage.getItem('userID');
-
-    // Use facilityID if available (facility-based user)
     const facilityIDx = facilityId || this.sessionstorage.getItem('facilityID');
-    if (facilityIDx) {
-      return this.http.post(environment.demographicsCurrentMasterUrl, {
-        facilityID: facilityIDx,
-        spPSMID: spPSMIDx,
-        userID: userId,
-      });
-    }
 
-    // Fallback: use vanID (old Van-based user)
+    // Use facilityID — facility must have location (admin links via hierarchy)
     return this.http.post(environment.demographicsCurrentMasterUrl, {
-      vanID: vanId,
+      facilityID: facilityIDx,
       spPSMID: spPSMIDx,
       userID: userId,
     });
