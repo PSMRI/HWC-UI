@@ -223,9 +223,11 @@ export class ServicePointComponent implements OnInit, DoCheck {
         this.goToWorkList();
       } else {
         this.locationGatheringIssues();
+        return;
       }
     } else {
       this.locationGatheringIssues();
+      return;
     }
     this.stateID = data.stateMaster.stateID;
   }

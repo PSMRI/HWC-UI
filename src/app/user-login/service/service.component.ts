@@ -385,9 +385,11 @@ export class ServiceComponent implements OnInit, DoCheck {
         this.sessionstorage.setItem('location', JSON.stringify(data));
       } else {
         this.locationGatheringIssues();
+        return;
       }
     } else {
       this.locationGatheringIssues();
+      return;
     }
 
     this.stateID = data.stateMaster.stateID;
