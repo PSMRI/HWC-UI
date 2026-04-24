@@ -573,7 +573,6 @@ export const environment = {
   siteKey: siteKey,
   captchaChallengeURL: captchaChallengeURL,
   enableCaptcha: enableCaptcha,
-  getUserId: `${COMMON_API}user/userName/`,
   enableCHOReportBtn: enableCHOReportBtn,
   dhisURL: dhisURL,
   elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,

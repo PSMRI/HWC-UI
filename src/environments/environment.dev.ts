@@ -575,7 +575,6 @@ export const environment = {
   enableCaptcha: enableCaptcha,
   enableCHOReportBtn: enableCHOReportBtn,
   dhisURL: dhisURL,
-  getUserId: `${COMMON_API}user/userName/`,
   checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
   elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
   advanceElasticSearchUrl: `${HWC_API}registrar/advancedSearchES`,
