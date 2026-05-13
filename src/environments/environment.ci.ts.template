@@ -451,12 +451,13 @@ export const environment = {
   getCervicalLymphNodeUrl: `${COMMON_API}getCervicalLymph`,
   /*Family Tagging Urls */
   relationShipUrl: `${HWC_API}registrar/registrarMasterData`,
-  saveFamilyTaggingUrl: `${IDENTITY_API}family/addTag`,
-  editFamilyTaggingUrl: `${IDENTITY_API}family/editFamilyTagging`,
-  untagFamilyUrl: `${IDENTITY_API}family/untag`,
-  familySearchUrl: `${IDENTITY_API}family/searchFamily`,
-  createFamilyUrl: `${IDENTITY_API}family/createFamily`,
-  getFamilyMemberUrl: `${IDENTITY_API}family/getFamilyDetails`,
+  saveFamilyTaggingUrl: `${IDENTITY_API}/family/addTag`,
+  editFamilyTaggingUrl: `${IDENTITY_API}/family/editFamilyTagging`,
+  untagFamilyUrl: `${IDENTITY_API}/family/untag`,
+  familySearchUrl: `${IDENTITY_API}/family/searchFamily`,
+  createFamilyUrl: `${IDENTITY_API}/family/createFamily`,
+  getFamilyMemberUrl: `${IDENTITY_API}/family/getFamilyDetails`,
+  getBenFamilyDetailsUrl: `${IDENTITY_API}/family/getBenFamilyDetails`,
   /*Hypertension Screening Url */
   bloodPressureStatusUrl: `${HWC_API}screeningOutcome/hypertension`,
 
