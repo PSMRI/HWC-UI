@@ -41,6 +41,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-travel-history',
   templateUrl: './travel-history.component.html',
   styleUrls: ['./travel-history.component.css'],
+  standalone: false,
 })
 export class TravelHistoryComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

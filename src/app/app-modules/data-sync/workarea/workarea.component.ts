@@ -41,6 +41,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
   styleUrls: ['./workarea.component.css'],
+  standalone: false,
 })
 export class WorkareaComponent
   implements OnInit, CanComponentDeactivate, DoCheck, OnDestroy

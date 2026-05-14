@@ -37,6 +37,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
   selector: 'app-treatments-on-side-effects',
   templateUrl: './treatments-on-side-effects.component.html',
   styleUrls: ['./treatments-on-side-effects.component.css'],
+  standalone: false,
 })
 export class TreatmentsOnSideEffectsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

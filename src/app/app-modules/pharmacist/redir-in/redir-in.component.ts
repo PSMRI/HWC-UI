@@ -29,6 +29,7 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
   selector: 'app-redir-in',
   templateUrl: './redir-in.component.html',
   styleUrls: ['./redir-in.component.css'],
+  standalone: false,
 })
 export class RedirInComponent implements OnInit, DoCheck {
   current_language_set: any;

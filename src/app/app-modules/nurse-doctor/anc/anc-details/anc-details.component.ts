@@ -66,6 +66,7 @@ import {
       },
     },
   ],
+  standalone: false,
 })
 export class AncDetailsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

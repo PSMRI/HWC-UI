@@ -28,6 +28,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
   selector: 'app-tc-specialist-worklist-wrapper',
   templateUrl: './tc-specialist-worklist-wrapper.component.html',
   styleUrls: ['./tc-specialist-worklist-wrapper.component.css'],
+  standalone: false,
 })
 export class TcSpecialistWorklistWrapperComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

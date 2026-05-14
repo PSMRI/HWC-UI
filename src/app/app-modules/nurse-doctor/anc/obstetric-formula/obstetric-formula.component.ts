@@ -40,6 +40,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
   selector: 'app-nurse-obstetric-formula',
   templateUrl: './obstetric-formula.component.html',
   styleUrls: ['./obstetric-formula.component.css'],
+  standalone: false,
 })
 export class ObstetricFormulaComponent implements OnChanges, OnInit, DoCheck {
   @Input()

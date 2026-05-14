@@ -43,6 +43,7 @@ import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-la
   selector: 'app-cervical-cancer-screening',
   templateUrl: './cervical-cancer-screening.component.html',
   styleUrls: ['./cervical-cancer-screening.component.css'],
+  standalone: false,
 })
 export class CervicalCancerScreeningComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

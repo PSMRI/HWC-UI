@@ -37,6 +37,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   templateUrl:
     './child-and-adolescent-oral-vitamin-a-case-sheet.component.html',
   styleUrls: ['./child-and-adolescent-oral-vitamin-a-case-sheet.component.css'],
+  standalone: false,
 })
 export class ChildAndAdolescentOralVitaminACaseSheetComponent
   implements OnChanges, OnInit, DoCheck

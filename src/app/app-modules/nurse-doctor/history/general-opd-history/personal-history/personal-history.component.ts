@@ -57,6 +57,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-general-personal-history',
   templateUrl: './personal-history.component.html',
   styleUrls: ['./personal-history.component.css'],
+  standalone: false,
 })
 export class GeneralPersonalHistoryComponent
   implements OnInit, DoCheck, OnDestroy

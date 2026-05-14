@@ -49,6 +49,7 @@ import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotco
   selector: 'app-diabetes-screening',
   templateUrl: './diabetes-screening.component.html',
   styleUrls: ['./diabetes-screening.component.css'],
+  standalone: false,
 })
 export class DiabetesScreeningComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

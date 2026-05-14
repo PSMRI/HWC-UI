@@ -45,6 +45,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-tm-future-worklist',
   templateUrl: './nurse-tm-future-worklist.component.html',
   styleUrls: ['./nurse-tm-future-worklist.component.css'],
+  standalone: false,
 })
 export class NurseTmFutureWorklistComponent
   implements OnInit, DoCheck, OnDestroy

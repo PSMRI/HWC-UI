@@ -54,6 +54,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-general-past-obsteric-history',
   templateUrl: './past-obsteric-history.component.html',
   styleUrls: ['./past-obsteric-history.component.css'],
+  standalone: false,
 })
 export class PastObstericHistoryComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

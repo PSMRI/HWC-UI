@@ -70,6 +70,7 @@ import { RegistrarService } from 'Common-UI/src/registrar/services/registrar.ser
   selector: 'app-workarea',
   templateUrl: './workarea.component.html',
   styleUrls: ['./workarea.component.css'],
+  standalone: false,
 })
 export class WorkareaComponent
   implements

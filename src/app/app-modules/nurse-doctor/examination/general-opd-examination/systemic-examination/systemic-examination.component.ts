@@ -30,6 +30,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-systemic-examination',
   templateUrl: './systemic-examination.component.html',
   styleUrls: ['./systemic-examination.component.css'],
+  standalone: false,
 })
 export class SystemicExaminationComponent
   implements OnInit, OnChanges, DoCheck

@@ -45,6 +45,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-neonatal-patient-vitals',
   templateUrl: './neonatal-patient-vitals.component.html',
   styleUrls: ['./neonatal-patient-vitals.component.css'],
+  standalone: false,
 })
 export class NeonatalPatientVitalsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

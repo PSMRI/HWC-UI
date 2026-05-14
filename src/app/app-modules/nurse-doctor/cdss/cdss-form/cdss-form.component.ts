@@ -47,6 +47,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-cdss-form',
   templateUrl: './cdss-form.component.html',
   styleUrls: ['./cdss-form.component.css'],
+  standalone: false,
 })
 export class CdssFormComponent implements OnChanges, OnInit, DoCheck {
   currentLanguageSet: any;

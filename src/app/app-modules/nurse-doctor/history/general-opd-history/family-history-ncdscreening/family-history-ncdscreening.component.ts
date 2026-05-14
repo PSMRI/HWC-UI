@@ -44,6 +44,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-family-history-ncdscreening',
   templateUrl: './family-history-ncdscreening.component.html',
   styleUrls: ['./family-history-ncdscreening.component.css'],
+  standalone: false,
 })
 export class FamilyHistoryNcdscreeningComponent
   implements OnInit, DoCheck, OnDestroy

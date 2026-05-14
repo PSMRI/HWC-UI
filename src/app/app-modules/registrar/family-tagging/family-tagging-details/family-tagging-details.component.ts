@@ -43,6 +43,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-family-tagging-details',
   templateUrl: './family-tagging-details.component.html',
   styleUrls: ['./family-tagging-details.component.css'],
+  standalone: false,
 })
 export class FamilyTaggingDetailsComponent
   implements OnInit, DoCheck, OnDestroy

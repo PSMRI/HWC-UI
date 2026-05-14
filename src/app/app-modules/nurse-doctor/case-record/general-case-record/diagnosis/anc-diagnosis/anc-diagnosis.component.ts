@@ -32,6 +32,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-anc-diagnosis',
   templateUrl: './anc-diagnosis.component.html',
   styleUrls: ['./anc-diagnosis.component.css'],
+  standalone: false,
 })
 export class AncDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   masterData: any;

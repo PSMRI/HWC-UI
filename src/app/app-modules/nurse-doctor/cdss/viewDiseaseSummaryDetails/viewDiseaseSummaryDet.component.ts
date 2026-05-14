@@ -7,6 +7,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-view-disease-summary-form',
   templateUrl: './viewDiseaseSummaryDet.component.html',
   styleUrls: ['./viewDiseaseSummaryDet.component.css'],
+  standalone: false,
 })
 export class ViewDiseaseSummaryDetailsComponent implements OnInit, DoCheck {
   diseaseName: any;

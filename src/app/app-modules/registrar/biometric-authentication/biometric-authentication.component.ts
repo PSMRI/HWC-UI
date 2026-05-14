@@ -5,6 +5,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   selector: 'app-biometric-authentication',
   templateUrl: './biometric-authentication.component.html',
   styleUrls: ['./biometric-authentication.component.css'],
+  standalone: false,
 })
 export class BiometricAuthenticationComponent implements OnInit {
   enableImage = false;

@@ -27,6 +27,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-referred-104-workarea',
   templateUrl: './referred-104-workarea.component.html',
   styleUrls: ['./referred-104-workarea.component.css'],
+  standalone: false,
 })
 export class Referred104WorkareaComponent implements OnInit, DoCheck {
   @ViewChild('sidenav')

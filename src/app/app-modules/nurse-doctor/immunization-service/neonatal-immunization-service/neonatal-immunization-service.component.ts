@@ -80,6 +80,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
       },
     },
   ],
+  standalone: false,
 })
 export class NeonatalImmunizationServiceComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

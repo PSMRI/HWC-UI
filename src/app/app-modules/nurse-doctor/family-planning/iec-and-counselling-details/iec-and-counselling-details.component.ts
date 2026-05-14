@@ -40,6 +40,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-iec-and-counselling-details',
   templateUrl: './iec-and-counselling-details.component.html',
   styleUrls: ['./iec-and-counselling-details.component.css'],
+  standalone: false,
 })
 export class IecAndCounsellingComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

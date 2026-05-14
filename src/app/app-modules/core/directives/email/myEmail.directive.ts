@@ -32,6 +32,7 @@ import { NG_VALIDATORS, Validator, AbstractControl } from '@angular/forms';
       multi: true,
     },
   ],
+  standalone: false,
 })
 export class MyEmailDirective implements Validator {
   pattern =
@@ -50,15 +51,15 @@ export class MyEmailDirective implements Validator {
           valid: false,
         };
   }
-  @HostListener('paste', ['$event']) blockPaste(event: KeyboardEvent) {
+  @HostListener('paste', ['$event']) blockPaste(event: ClipboardEvent) {
     event.preventDefault();
   }
 
-  @HostListener('copy', ['$event']) blockCopy(event: KeyboardEvent) {
+  @HostListener('copy', ['$event']) blockCopy(event: ClipboardEvent) {
     event.preventDefault();
   }
 
-  @HostListener('cut', ['$event']) blockCut(event: KeyboardEvent) {
+  @HostListener('cut', ['$event']) blockCut(event: ClipboardEvent) {
     event.preventDefault();
   }
 }

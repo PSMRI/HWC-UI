@@ -67,6 +67,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
       },
     },
   ],
+  standalone: false,
 })
 export class SchedulerComponent implements OnInit, DoCheck {
   schedulerForm!: FormGroup;

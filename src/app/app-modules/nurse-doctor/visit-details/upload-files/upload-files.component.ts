@@ -45,6 +45,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-patient-upload-files',
   templateUrl: './upload-files.component.html',
   styleUrls: ['./upload-files.component.css'],
+  standalone: false,
 })
 export class UploadFilesComponent implements OnChanges, OnInit, DoCheck {
   fileList!: FileList;

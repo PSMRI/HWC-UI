@@ -35,6 +35,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-anc-case-sheet',
   templateUrl: './anc-case-sheet.component.html',
   styleUrls: ['./anc-case-sheet.component.css'],
+  standalone: false,
 })
 export class AncCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   @Input()

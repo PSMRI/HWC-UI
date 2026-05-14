@@ -31,6 +31,7 @@ import { ConfirmationService } from 'src/app/app-modules/core/services';
   selector: 'app-set-security-questions',
   templateUrl: './set-security-questions.component.html',
   styleUrls: ['./set-security-questions.component.css'],
+  standalone: false,
 })
 export class SetSecurityQuestionsComponent implements OnInit {
   passwordPattern =

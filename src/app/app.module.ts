@@ -33,8 +33,9 @@ import { SetSecurityQuestionsComponent } from './user-login/set-security-questio
 import { TmLogoutComponent } from './user-login/tm-logout/tm-logout.component';
 import {
   HttpClient,
-  HttpClientModule,
   HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { MaterialModule } from './app-modules/core/material.module';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
@@ -70,13 +71,14 @@ import { TrackingModule } from 'Common-UI/src/tracking';
     TmLogoutComponent,
     CaptchaComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     FormsModule,
     MatIconModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    HttpClientModule,
     MaterialModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -88,7 +90,6 @@ import { TrackingModule } from 'Common-UI/src/tracking';
     RegistrationModule,
     TrackingModule.forRoot(),
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     HttpClient,
     ServicePointResolve,
@@ -103,7 +104,7 @@ import { TrackingModule } from 'Common-UI/src/tracking';
       useClass: HttpInterceptorService,
       multi: true,
     },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -31,6 +31,7 @@ import { MasterdataService } from 'src/app/app-modules/nurse-doctor/shared/servi
   selector: 'app-allergen-search',
   templateUrl: './allergen-search.component.html',
   styleUrls: ['./allergen-search.component.css'],
+  standalone: false,
 })
 export class AllergenSearchComponent implements OnInit, DoCheck {
   searchTerm: any;

@@ -53,6 +53,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-register-demographic-details',
   templateUrl: './register-demographic-details.component.html',
   styleUrls: ['./register-demographic-details.component.css'],
+  standalone: false,
 })
 export class RegisterDemographicDetailsComponent
   implements OnInit, DoCheck, OnDestroy

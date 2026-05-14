@@ -35,6 +35,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-pnc-case-sheet',
   templateUrl: './pnc-case-sheet.component.html',
   styleUrls: ['./pnc-case-sheet.component.css'],
+  standalone: false,
 })
 export class PncCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   @Input()

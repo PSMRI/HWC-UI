@@ -44,6 +44,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-general-development-history',
   templateUrl: './development-history.component.html',
   styleUrls: ['./development-history.component.css'],
+  standalone: false,
 })
 export class DevelopmentHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

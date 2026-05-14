@@ -42,6 +42,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-cbac',
   templateUrl: './cbac.component.html',
   styleUrls: ['./cbac.component.css'],
+  standalone: false,
 })
 export class CbacComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   currentLanguageSet: any;

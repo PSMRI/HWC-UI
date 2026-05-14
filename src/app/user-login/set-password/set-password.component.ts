@@ -33,6 +33,7 @@ import {
   selector: 'app-set-password',
   templateUrl: './set-password.component.html',
   styleUrls: ['./set-password.component.css'],
+  standalone: false,
 })
 export class SetPasswordComponent implements OnInit {
   newpwd: any;

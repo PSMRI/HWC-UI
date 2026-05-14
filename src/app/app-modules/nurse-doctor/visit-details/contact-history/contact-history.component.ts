@@ -39,6 +39,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-contact-history',
   templateUrl: './contact-history.component.html',
   styleUrls: ['./contact-history.component.css'],
+  standalone: false,
 })
 export class ContactHistoryComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

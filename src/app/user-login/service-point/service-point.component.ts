@@ -32,6 +32,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-service-point',
   templateUrl: './service-point.component.html',
   styleUrls: ['./service-point.component.css'],
+  standalone: false,
 })
 export class ServicePointComponent implements OnInit, DoCheck {
   current_language_set: any;

@@ -30,6 +30,7 @@ import { environment } from 'src/environments/environment';
   selector: 'app-quick-search',
   templateUrl: './quick-search.component.html',
   styleUrls: ['./quick-search.component.css'],
+  standalone: false,
 })
 export class QuickSearchComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

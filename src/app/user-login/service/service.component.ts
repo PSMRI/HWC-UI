@@ -10,6 +10,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.css'],
+  standalone: false,
 })
 export class ServiceComponent implements OnInit, DoCheck {
   servicesList: any;

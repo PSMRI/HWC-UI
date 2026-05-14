@@ -72,6 +72,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
       },
     },
   ],
+  standalone: false,
 })
 export class MenstrualHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

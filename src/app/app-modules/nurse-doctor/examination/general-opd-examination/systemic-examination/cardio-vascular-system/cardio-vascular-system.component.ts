@@ -28,6 +28,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-nurse-cardio-vascular-system',
   templateUrl: './cardio-vascular-system.component.html',
   styleUrls: ['./cardio-vascular-system.component.css'],
+  standalone: false,
 })
 export class CardioVascularSystemComponent implements OnInit, DoCheck {
   @Input()

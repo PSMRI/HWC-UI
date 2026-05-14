@@ -43,6 +43,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-oncologist-worklist',
   templateUrl: './oncologist-worklist.component.html',
   styleUrls: ['./oncologist-worklist.component.css'],
+  standalone: false,
 })
 export class OncologistWorklistComponent implements OnInit, DoCheck {
   rowsPerPage = 5;

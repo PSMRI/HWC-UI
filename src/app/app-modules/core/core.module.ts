@@ -28,7 +28,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { TelemedicineService } from './services/telemedicine.service';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { CommonDialogComponent } from './components/common-dialog/common-dialog.component';
 import { HttpServiceService } from './services/http-service.service';
 import { AllergenSearchComponent } from './components/allergen-search/allergen-search.component';
@@ -75,7 +78,11 @@ import { MyHealthIdDirective } from './directives/myHealthId/myHealthId.directiv
 import { DisableFormControlDirective } from './directives/disableFormControl.directive';
 import { DiagnosisSearchDirective } from './directives/provisionalDiagnosis.directive';
 import { MatTableModule } from '@angular/material/table';
-import { NgChartsModule } from 'ng2-charts';
+import {
+  BaseChartDirective,
+  provideCharts,
+  withDefaultRegisterables,
+} from 'ng2-charts';
 import { WebcamModule } from 'ngx-webcam';
 import { MasterdataService } from '../nurse-doctor/shared/services';
 import { RegistrarService } from '../registrar/shared/services/registrar.service';
@@ -86,20 +93,6 @@ import { ViewRadiologyUploadedFilesComponent } from '../lab/view-radiology-uploa
 import { SharedModule } from './components/shared/shared.module';
 
 @NgModule({
-  imports: [
-    HttpClientModule,
-    CommonModule,
-    MaterialModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
-    UserLoginModule,
-    MatGridListModule,
-    NgChartsModule,
-    WebcamModule,
-    MatTableModule,
-    SharedModule,
-  ],
   declarations: [
     CommonDialogComponent,
     CameraDialogComponent,
@@ -166,7 +159,24 @@ import { SharedModule } from './components/shared/shared.module';
     HealthIdDisplayModalComponent,
     OpenPreviousVisitDetailsComponent,
     WebcamModule,
-    NgChartsModule,
+    BaseChartDirective,
+  ],
+  imports: [
+    CommonModule,
+    MaterialModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    UserLoginModule,
+    MatGridListModule,
+    BaseChartDirective,
+    WebcamModule,
+    MatTableModule,
+    SharedModule,
+  ],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+    provideCharts(withDefaultRegisterables()),
   ],
 })
 export class CoreModule {

@@ -56,6 +56,7 @@ export interface Consent {
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
+  standalone: false,
 })
 export class SearchComponent
   implements OnInit, DoCheck, AfterViewInit, AfterViewChecked

@@ -41,6 +41,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-family-planning',
   templateUrl: './family-planning.component.html',
   styleUrls: ['./family-planning.component.css'],
+  standalone: false,
 })
 export class FamilyPlanningComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

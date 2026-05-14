@@ -79,6 +79,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
       },
     },
   ],
+  standalone: false,
 })
 export class GeneralReferComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

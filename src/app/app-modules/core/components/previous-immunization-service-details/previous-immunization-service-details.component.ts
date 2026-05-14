@@ -30,6 +30,7 @@ import { MatPaginator } from '@angular/material/paginator';
   selector: 'app-previous-immunization-service-details',
   templateUrl: './previous-immunization-service-details.component.html',
   styleUrls: ['./previous-immunization-service-details.component.css'],
+  standalone: false,
 })
 export class PreviousImmunizationServiceDetailsComponent implements OnInit {
   currentLanguageSet: any;

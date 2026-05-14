@@ -81,6 +81,7 @@ interface prescribe {
   templateUrl: './quick-consult.component.html',
   styleUrls: ['./quick-consult.component.css'],
   encapsulation: ViewEncapsulation.None,
+  standalone: false,
 })
 export class QuickConsultComponent
   implements OnInit, OnDestroy, OnChanges, DoCheck

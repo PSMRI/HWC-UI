@@ -29,6 +29,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-diagnosis',
   templateUrl: './diagnosis.component.html',
   styleUrls: ['./diagnosis.component.css'],
+  standalone: false,
 })
 export class DiagnosisComponent implements OnInit, DoCheck {
   @Input()

@@ -43,6 +43,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-birth-immunization-history',
   templateUrl: './birth-immunization-history.component.html',
   styleUrls: ['./birth-immunization-history.component.css'],
+  standalone: false,
 })
 export class BirthImmunizationHistoryComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

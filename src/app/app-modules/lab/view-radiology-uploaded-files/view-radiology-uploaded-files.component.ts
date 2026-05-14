@@ -28,6 +28,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
   selector: 'app-view-radiology-uploaded-files',
   templateUrl: './view-radiology-uploaded-files.component.html',
   styleUrls: ['./view-radiology-uploaded-files.component.css'],
+  standalone: false,
 })
 export class ViewRadiologyUploadedFilesComponent implements OnInit, DoCheck {
   fileIds: any[] = [];

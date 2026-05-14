@@ -28,6 +28,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-screening-case-sheet',
   templateUrl: './screening-case-sheet.component.html',
   styleUrls: ['./screening-case-sheet.component.css'],
+  standalone: false,
 })
 export class ScreeningCaseSheetComponent implements OnChanges, OnInit, DoCheck {
   @Input()

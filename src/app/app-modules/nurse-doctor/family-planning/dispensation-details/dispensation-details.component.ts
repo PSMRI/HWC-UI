@@ -73,6 +73,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
       },
     },
   ],
+  standalone: false,
 })
 export class DispensationDetailsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

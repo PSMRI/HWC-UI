@@ -25,6 +25,7 @@ import { NgControl } from '@angular/forms';
 
 @Directive({
   selector: '[appDefaultNull]',
+  standalone: false,
 })
 export class NullDefaultValueDirective {
   constructor(
@@ -33,19 +34,20 @@ export class NullDefaultValueDirective {
   ) {}
 
   @HostListener('input', ['$event.target'])
-  onEvent(target: HTMLInputElement) {
-    if (this.control.control)
-      this.control.control.setValue(target.value === '' ? null : target.value);
+  onEvent(target: EventTarget | null) {
+    const input = target as HTMLInputElement | null;
+    if (this.control.control && input)
+      this.control.control.setValue(input.value === '' ? null : input.value);
   }
-  @HostListener('paste', ['$event']) blockPaste(event: KeyboardEvent) {
+  @HostListener('paste', ['$event']) blockPaste(event: ClipboardEvent) {
     event.preventDefault();
   }
 
-  @HostListener('copy', ['$event']) blockCopy(event: KeyboardEvent) {
+  @HostListener('copy', ['$event']) blockCopy(event: ClipboardEvent) {
     event.preventDefault();
   }
 
-  @HostListener('cut', ['$event']) blockCut(event: KeyboardEvent) {
+  @HostListener('cut', ['$event']) blockCut(event: ClipboardEvent) {
     event.preventDefault();
   }
 }

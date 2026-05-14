@@ -36,6 +36,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-visit-details-case-sheet',
   templateUrl: './visit-details-case-sheet.component.html',
   styleUrls: ['./visit-details-case-sheet.component.css'],
+  standalone: false,
 })
 export class VisitDeatilsCaseSheetComponent
   implements OnChanges, OnInit, DoCheck
