@@ -11,22 +11,36 @@ Thank you for contributing to the Health and Wellness Centre Angular project!
 ## Local Setup
 
 1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
+```bash
+   git clone https://github.com/PSMRI/HWC-UI.git
    cd HWC-UI
-   ```
+   git submodule update --init --recursive
+```
 
 2. **Install dependencies**
    ```bash
    npm install
    ```
 
-3. **Start the development server**
-   ```bash
+3. **Configure environment**
+```bash
+   cp src/environments/environment.example.ts src/environments/environment.ts
+```
+   Update `environment.ts` with your local API URLs:
+```typescript
+   export const environment = {
+     production: false,
+     apiUrl: 'http://localhost:8080/api'
+   };
+```
+
+4. **Start the development server**
+```bash
    npm start
-   ```
+```
    Navigate to `http://localhost:4200/`
 
+   
 ## Branch Naming Conventions
 
 Follow these naming patterns:
