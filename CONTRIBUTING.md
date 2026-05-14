@@ -60,7 +60,7 @@ Follow these naming patterns:
 
 Use conventional commits (enforced by Husky):
 
-```
+```text
 <type>(<scope>): <description>
 
 <body>
@@ -68,7 +68,7 @@ Use conventional commits (enforced by Husky):
 
 Example:
 
-```
+```text
 feat(auth): add login validation
 
 Added email and password validation on the login form.
