@@ -61,6 +61,7 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
 import { SpecialistLoginComponent } from '../../core/components/specialist-login/specialist-login.component';
 import { HttpServiceService } from '../../core/services/http-service.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { HealthIdDisplayModalComponent } from 'Common-UI/src/registrar/abha-components/health-id-display-modal/health-id-display-modal.component';
 import { RegistrarService } from 'Common-UI/src/registrar/services/registrar.service';
@@ -80,6 +81,9 @@ export class WorkareaComponent
 {
   @ViewChild('sidenav')
   sidenav: any;
+
+  @ViewChild('stepper')
+  stepper!: MatStepper;
 
   visitMode: any;
   ancMode: any;
@@ -521,9 +525,12 @@ export class WorkareaComponent
         cbacForm.controls['cbacFamilyHistoryBpdiabetes'].value === null ||
         cbacForm.controls['cbacFamilyHistoryBpdiabetes'].value === '')
     ) {
-      this.confirmationService.alert(
+      const dialogRef = this.confirmationService.alert(
         this.current_language_set.pleaseCompletePartCbac,
       );
+      dialogRef.afterClosed().subscribe(() => {
+        this.stepper.previous();
+      });
     }
   }
   checkMandatory() {
@@ -2374,7 +2381,7 @@ export class WorkareaComponent
       const diagForm3 = <FormGroup>diagForm2.controls[0];
       if (diagForm3.controls['viewProvisionalDiagnosisProvided'].errors) {
         required.push(
-          this.current_language_set.DiagnosisDetails.provisionaldiagnosis,
+          `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.DiagnosisDetails.provisionaldiagnosis}`,
         );
       }
 
@@ -2387,8 +2394,7 @@ export class WorkareaComponent
               item.conceptID === '')
           )
             required.push(
-              this.current_language_set
-                .pleaseSelectprovisionalDiagnosisWithSnomedCode,
+              `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.pleaseSelectprovisionalDiagnosisWithSnomedCode}`,
             );
         });
       }
@@ -2498,7 +2504,7 @@ export class WorkareaComponent
 
       if (diagForm3.controls['viewProvisionalDiagnosisProvided'].errors) {
         required.push(
-          this.current_language_set.DiagnosisDetails.provisionaldiagnosis,
+          `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.DiagnosisDetails.provisionaldiagnosis}`,
         );
       }
 
@@ -2511,8 +2517,7 @@ export class WorkareaComponent
               item.conceptID === '')
           )
             required.push(
-              this.current_language_set
-                .pleaseSelectprovisionalDiagnosisWithSnomedCode,
+              `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.pleaseSelectprovisionalDiagnosisWithSnomedCode}`,
             );
         });
       }
@@ -2536,8 +2541,7 @@ export class WorkareaComponent
               item.conceptID === '')
           )
             required.push(
-              this.current_language_set
-                .pleaseSelectprovisionalDiagnosisWithSnomedCode,
+              `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.pleaseSelectprovisionalDiagnosisWithSnomedCode}`,
             );
         });
       }
@@ -2553,7 +2557,7 @@ export class WorkareaComponent
       const diagForm3 = <FormGroup>diagForm2.controls[0];
       if (diagForm3.controls['viewProvisionalDiagnosisProvided'].errors) {
         required.push(
-          this.current_language_set.DiagnosisDetails.provisionaldiagnosis,
+          `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.DiagnosisDetails.provisionaldiagnosis}`,
         );
       }
 
@@ -2566,8 +2570,7 @@ export class WorkareaComponent
               item.conceptID === '')
           )
             required.push(
-              this.current_language_set
-                .pleaseSelectprovisionalDiagnosisWithSnomedCode,
+              `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.pleaseSelectprovisionalDiagnosisWithSnomedCode}`,
             );
         });
       }
@@ -2582,7 +2585,7 @@ export class WorkareaComponent
       const diagForm1 = <FormGroup>diagForm.controls['diagnosisForm'];
       if (diagForm1.controls['provisionalDiagnosisPrimaryDoctor'].errors) {
         required.push(
-          this.current_language_set.DiagnosisDetails.provisionaldiagnosis,
+          `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.DiagnosisDetails.provisionaldiagnosis}`,
         );
       }
     }
@@ -2596,7 +2599,7 @@ export class WorkareaComponent
       const diagForm1 = <FormGroup>diagForm.controls['diagnosisForm'];
       if (diagForm1.controls['provisionalDiagnosisPrimaryDoctor'].errors) {
         required.push(
-          this.current_language_set.DiagnosisDetails.provisionaldiagnosis,
+          `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.DiagnosisDetails.provisionaldiagnosis}`,
         );
       }
     }
@@ -2913,7 +2916,9 @@ export class WorkareaComponent
           const temp =
             diagnosisForm1.controls['ncdScreeningConditionArray'].value;
           if (diagnosisForm1.controls['ncdScreeningConditionArray'].errors) {
-            required.push(this.current_language_set.casesheet.ncdCondition);
+            required.push(
+              `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.casesheet.ncdCondition}`,
+            );
           }
           let flag = false;
 
@@ -2926,7 +2931,9 @@ export class WorkareaComponent
             flag &&
             diagnosisForm1.controls['ncdScreeningConditionOther'].value === null
           )
-            required.push(this.current_language_set.nCDConditionOther);
+            required.push(
+              `${this.current_language_set?.common?.caseRecord ?? 'Case Record'}: ${this.current_language_set.nCDConditionOther}`,
+            );
         }
       }
     }
@@ -2937,9 +2944,52 @@ export class WorkareaComponent
         required,
       );
       this.resetSpinnerandEnableTheSubmitButton();
+      // Navigate back to the case record step if there are errors from that section,
+      // so the doctor can locate and fix the missing fields easily.
+      if (
+        (this.attendant === 'doctor' || this.designation === 'TC Specialist') &&
+        this.stepper
+      ) {
+        const hasCaseRecordErrors = required.some((msg: string) =>
+          msg
+            .toLowerCase()
+            .includes(
+              (
+                this.current_language_set?.common?.caseRecord ?? 'case record'
+              ).toLowerCase(),
+            ),
+        );
+        if (hasCaseRecordErrors) {
+          this.navigateToCaseRecordStep();
+        }
+      }
       return 0;
     } else {
       return 1;
+    }
+  }
+
+  navigateToCaseRecordStep(): void {
+    if (!this.stepper) return;
+    const steps = this.stepper.steps.toArray();
+    const idx = steps.findIndex((s: any) => {
+      const label = (s.label || '').toLowerCase();
+      return label.includes('case') || label.includes('record');
+    });
+    if (idx >= 0) {
+      this.stepper.selectedIndex = idx;
+    }
+  }
+
+  navigateToQuickConsultStep(): void {
+    if (!this.stepper) return;
+    const steps = this.stepper.steps.toArray();
+    const idx = steps.findIndex((s: any) => {
+      const label = (s.label || '').toLowerCase();
+      return label.includes('quick') || label.includes('consult');
+    });
+    if (idx >= 0) {
+      this.stepper.selectedIndex = idx;
     }
   }
   checkForSnomedCTCode(caseRecordForm: any) {
@@ -3624,7 +3674,9 @@ export class WorkareaComponent
       );
     }
     if (form.controls['clinicalObservation'].errors) {
-      required.push(this.current_language_set.casesheet.clinicalObs);
+      required.push(
+        `${this.current_language_set?.historyData?.QuickConsultDetails?.quickconsult ?? 'Quick Consult'}: ${this.current_language_set.casesheet.clinicalObs}`,
+      );
     }
     if (
       this.visitCategory === 'General OPD (QC)' &&
@@ -3641,7 +3693,7 @@ export class WorkareaComponent
       const diagForm3 = <FormGroup>diagForm2.controls[0];
       if (diagForm3.controls['viewProvisionalDiagnosisProvided'].errors) {
         required.push(
-          this.current_language_set.DiagnosisDetails.provisionaldiagnosis,
+          `${this.current_language_set?.historyData?.QuickConsultDetails?.quickconsult ?? 'Quick Consult'}: ${this.current_language_set.DiagnosisDetails.provisionaldiagnosis}`,
         );
       }
 
@@ -3654,8 +3706,7 @@ export class WorkareaComponent
               item.conceptID === '')
           )
             required.push(
-              this.current_language_set
-                .pleaseSelectprovisionalDiagnosisWithSnomedCode,
+              `${this.current_language_set?.historyData?.QuickConsultDetails?.quickconsult ?? 'Quick Consult'}: ${this.current_language_set.pleaseSelectprovisionalDiagnosisWithSnomedCode}`,
             );
         });
       }
@@ -3673,7 +3724,7 @@ export class WorkareaComponent
       const diagForm3 = <FormGroup>diagForm2.controls[0];
       if (diagForm3.controls['viewProvisionalDiagnosisProvided'].errors) {
         required.push(
-          this.current_language_set.DiagnosisDetails.provisionaldiagnosis,
+          `${this.current_language_set?.historyData?.QuickConsultDetails?.quickconsult ?? 'Quick Consult'}: ${this.current_language_set.DiagnosisDetails.provisionaldiagnosis}`,
         );
       }
 
@@ -3686,8 +3737,7 @@ export class WorkareaComponent
               item.conceptID === '')
           )
             required.push(
-              this.current_language_set
-                .pleaseSelectprovisionalDiagnosisWithSnomedCode,
+              `${this.current_language_set?.historyData?.QuickConsultDetails?.quickconsult ?? 'Quick Consult'}: ${this.current_language_set.pleaseSelectprovisionalDiagnosisWithSnomedCode}`,
             );
         });
       }
@@ -3698,7 +3748,7 @@ export class WorkareaComponent
 
     if (form.controls['provisionalDiagnosisList'].errors) {
       required.push(
-        this.current_language_set.DiagnosisDetails.provisionaldiagnosis,
+        `${this.current_language_set?.historyData?.QuickConsultDetails?.quickconsult ?? 'Quick Consult'}: ${this.current_language_set.DiagnosisDetails.provisionaldiagnosis}`,
       );
     }
 
@@ -3725,6 +3775,31 @@ export class WorkareaComponent
         }
       }
     }
+    // For quick consult doctor flow, ensure at least one prescription exists
+    if (this.attendant === 'doctor') {
+      try {
+        const prescription =
+          form && form.controls ? form.controls['prescription'] : null;
+        if (prescription) {
+          let prescribedDrugs =
+            prescription.value && prescription.value.prescribedDrugs
+              ? prescription.value.prescribedDrugs
+              : [];
+          prescribedDrugs = prescribedDrugs.filter((d: any) => !!d.createdBy);
+          if (!prescribedDrugs || prescribedDrugs.length === 0) {
+            required.push(
+              this.current_language_set?.Prescription?.prescriptionRequired ||
+                'Please add at least one prescription',
+            );
+          }
+        }
+      } catch (err) {
+        console.warn(
+          'Error validating quick consult prescription presence',
+          err,
+        );
+      }
+    }
 
     if (required.length) {
       this.confirmationService.notify(
@@ -3732,6 +3807,9 @@ export class WorkareaComponent
         required,
       );
       this.resetSpinnerandEnableTheSubmitButton();
+      if (this.stepper) {
+        this.navigateToQuickConsultStep();
+      }
       return 0;
     } else {
       return 1;
@@ -4421,7 +4499,8 @@ export class WorkareaComponent
         'info',
         successResponseFromAPI +
           '. ' +
-          this.current_language_set.common.doYouWantToLinkCareContext,
+          (this.current_language_set?.common?.doYouWantToLinkCareContext ??
+            'Do you want to link care context?'),
       )
       .subscribe((res) => {
         if (res) {
