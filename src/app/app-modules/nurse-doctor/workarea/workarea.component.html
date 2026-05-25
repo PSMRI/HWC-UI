@@ -13,6 +13,7 @@
         (keyup.enter)="preventSubmitOnEnter($event)"
       >
         <mat-horizontal-stepper
+          #stepper
           linear="false"
           (selectionChange)="updatePending($event)"
         >

@@ -263,87 +263,84 @@
 
   <div class="row m-t-20">
     <ng-container formArrayName="clinicalObservationsList">
-      <div
+      <div class="row align-items-center m-t-10"
         *ngFor="
           let observations of getClinicalObservationsList();
           let i = index;
           let isLast = last
         "
       >
-        <ng-container [formGroupName]="i" class="col-12">
-          <div class="row">
-            <div class="col-8">
-              <mat-form-field class="input-full-width">
-                <mat-label>{{
-                  current_language_set?.casesheet?.clinicalObs
-                }}</mat-label>
-                <input
-                  matInput
-                  allowText="inputFieldValidator"
-                  appClinicalObservations
-                  [observationsList]="observations"
-                  name="viewObservationsProvided"
-                  formControlName="clinicalObservationsProvided"
-                  maxlength="100"
-                  minlength="3"
-                  [previousSelected]="
-                    generalFindingsForm.value.clinicalObservationsList
-                  "
-                  (focus)="trackFieldInteraction('Clinical Observations Input')"
-                />
-                <mat-icon
-                  class="search-btn cursorPointer"
-                  matSuffix
-                  appClinicalObservations
-                  [observationsList]="observations"
-                  [previousSelected]="
-                    generalFindingsForm.value.clinicalObservationsList
-                  "
-                  (click)="
-                    trackFieldInteraction('Search Clinical Observations')
-                  "
-                  >search</mat-icon
-                >
-              </mat-form-field>
-            </div>
+        <ng-container [formGroupName]="i">
+          <div class="col-xs-12 col-sm-8 col-md-9">
+            <mat-form-field class="input-full-width" appearance="fill">
+              <mat-label>{{
+                current_language_set?.casesheet?.clinicalObs
+              }}</mat-label>
+              <input
+                matInput
+                type="text"
+                autocomplete="off"
+                name="viewObservationsProvided"
+                formControlName="clinicalObservationsProvided"
+                minlength="3"
+                maxlength="100"
+                #observationInput
+                [matAutocomplete]="autoObservation"
+                (keyup)="onObservationInputKeyup(observationInput.value, i)"
+                (focus)="trackFieldInteraction('Clinical Observations Input')"
+              />
+            </mat-form-field>
 
-            <div class="col-4" style="margin-top: 10px">
-              <button
-                mat-mini-fab
-                type="button"
-                color="primary"
-                *ngIf="isLast"
-                [disabled]="validateAddedObservations(observations)"
-                (click)="
-                  addObservations();
-                  trackFieldInteraction('Add Clinical Observation')
-                "
-                class="mat-add-btn"
+            <mat-autocomplete
+              #autoObservation="matAutocomplete"
+              autoActiveFirstOption
+              [displayWith]="displayObservation"
+              (optionSelected)="onObservationSelected($event.option.value, i)"
+            >
+              <mat-option
+                *ngFor="let obs of suggestedObservationsList[i]"
+                [value]="obs"
               >
-                {{ current_language_set?.common?.add }}
-              </button>
+                {{ obs.term }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
 
-              <button
-                mat-mini-fab
-                type="button"
-                class="mat-remove-btn"
-                color="warn"
-                *ngIf="
-                  i !== 0 ||
-                  (i === 0 &&
-                    generalFindingsForm.get('clinicalObservationsList')?.value
-                      .clinicalObservationsProvided !== null &&
-                    generalFindingsForm.get('clinicalObservationsList')?.value
-                      .clinicalObservationsProvided !== '')
-                "
-                (click)="
-                  removeObservationsFromList(i, observations);
-                  trackFieldInteraction('Remove Clinical Observation')
-                "
-              >
-                {{ current_language_set?.common?.remove }}
-              </button>
-            </div>
+          <div class="col-xs-12 col-sm-4 col-md-3 d-flex align-items-center">
+            <button
+              mat-mini-fab
+              type="button"
+              color="primary"
+              *ngIf="isLast"
+              [disabled]="validateAddedObservations(observations)"
+              (click)="
+                addObservations();
+                trackFieldInteraction('Add Clinical Observation')
+              "
+              class="mat-add-btn m-r-10"
+            >
+              {{ current_language_set?.common?.add }}
+            </button>
+
+            <button
+              mat-mini-fab
+              type="button"
+              class="mat-remove-btn"
+              color="warn"
+              *ngIf="
+                observations.get('clinicalObservationsProvided')?.disabled ||
+                i !== 0 ||
+                (i === 0 &&
+                  generalFindingsForm.get('clinicalObservationsList')?.value[i]
+                    ?.clinicalObservationsProvided)
+              "
+              (click)="
+                removeObservationsFromList(i, observations);
+                trackFieldInteraction('Remove Clinical Observation')
+              "
+            >
+              {{ current_language_set?.common?.remove }}
+            </button>
           </div>
         </ng-container>
       </div>
@@ -351,92 +348,84 @@
   </div>
   <div class="row m-t-5">
     <ng-container formArrayName="significantFindingsList">
-      <div
+      <div class="row align-items-center m-t-10"
         *ngFor="
           let findings of getSignificantFindingsList();
           let i = index;
           let isLast = last
         "
       >
-        <ng-container [formGroupName]="i" class="col-12">
-          <div class="row">
-            <div class="col-8">
-              <mat-form-field class="input-full-width">
-                <mat-label>{{
-                  current_language_set?.casesheet?.significantFind
-                }}</mat-label>
-                <input
-                  matInput
-                  allowText="inputFieldValidator"
-                  appSignificantFindings
-                  [findingsList]="findings"
-                  name="viewFindingsProvided"
-                  formControlName="significantFindingsProvided"
-                  maxlength="100"
-                  minlength="3"
-                  [previousSelected]="
-                    generalFindingsForm.value.significantFindingsList
-                  "
-                  (keyup)="
-                    resetFindingsCheckbox(
-                      generalFindingsForm.get('significantFindingsList')?.value
-                        .significantFindingsProvided
-                    )
-                  "
-                  (focus)="trackFieldInteraction('Significant Findings Input')"
-                />
+        <ng-container [formGroupName]="i">
+          <div class="col-xs-12 col-sm-8 col-md-9">
+            <mat-form-field class="input-full-width" appearance="fill">
+              <mat-label>{{
+                current_language_set?.casesheet?.significantFind
+              }}</mat-label>
+              <input
+                matInput
+                type="text"
+                autocomplete="off"
+                name="viewFindingsProvided"
+                formControlName="significantFindingsProvided"
+                minlength="3"
+                maxlength="100"
+                #findingsInput
+                [matAutocomplete]="autoFindings"
+                (keyup)="onFindingsInputKeyup(findingsInput.value, i)"
+                (focus)="trackFieldInteraction('Significant Findings Input')"
+              />
+            </mat-form-field>
 
-                <mat-icon
-                  class="search-btn cursorPointer"
-                  matSuffix
-                  appSignificantFindings
-                  [findingsList]="findings"
-                  [previousSelected]="
-                    generalFindingsForm.value.significantFindingsList
-                  "
-                  (click)="trackFieldInteraction('Search Significant Findings')"
-                  >search</mat-icon
-                >
-              </mat-form-field>
-            </div>
-
-            <div class="col-4" style="margin-top: 10px">
-              <button
-                mat-mini-fab
-                type="button"
-                color="primary"
-                *ngIf="isLast"
-                [disabled]="validateAddedFindings(findings)"
-                (click)="
-                  addFindings();
-                  trackFieldInteraction('Add Significant Finding')
-                "
-                class="mat-add-btn"
+            <mat-autocomplete
+              #autoFindings="matAutocomplete"
+              autoActiveFirstOption
+              [displayWith]="displayFindings"
+              (optionSelected)="onFindingsSelected($event.option.value, i)"
+            >
+              <mat-option
+                *ngFor="let finding of suggestedFindingsSearchList[i]"
+                [value]="finding"
               >
-                {{ current_language_set?.common?.add }}
-              </button>
+                {{ finding.term }}
+              </mat-option>
+            </mat-autocomplete>
+          </div>
 
-              <button
-                mat-mini-fab
-                type="button"
-                color="warn"
-                class="mat-remove-btn"
-                *ngIf="
-                  i !== 0 ||
-                  (i === 0 &&
-                    generalFindingsForm.get('significantFindingsList')?.value
-                      .significantFindingsProvided !== null &&
-                    generalFindingsForm.get('significantFindingsList')?.value
-                      .significantFindingsProvided !== '')
-                "
-                (click)="
-                  removeFindingsFromList(i, findings);
-                  trackFieldInteraction('Remove Significant Finding')
-                "
-              >
-                {{ current_language_set?.common?.remove }}
-              </button>
-            </div>
+          <div class="col-xs-12 col-sm-4 col-md-3 d-flex align-items-center">
+            <button
+              mat-mini-fab
+              type="button"
+              color="primary"
+              *ngIf="isLast"
+              [disabled]="validateAddedFindings(findings)"
+              (click)="
+                addFindings();
+                trackFieldInteraction('Add Significant Finding')
+              "
+              class="mat-add-btn m-r-10"
+            >
+              {{ current_language_set?.common?.add }}
+            </button>
+
+            <button
+              mat-mini-fab
+              type="button"
+              color="warn"
+              class="mat-remove-btn"
+              *ngIf="
+                findings.get('significantFindingsProvided')?.disabled ||
+                i !== 0 ||
+                (i === 0 &&
+                  generalFindingsForm.get('significantFindingsList')?.value[i]
+                    ?.significantFindingsProvided)
+              "
+              (click)="
+                removeFindingsFromList(i, findings);
+                trackFieldInteraction('Remove Significant Finding')
+              "
+            >
+              {{ current_language_set?.common?.remove }}
+            </button>
           </div>
         </ng-container>
       </div>
