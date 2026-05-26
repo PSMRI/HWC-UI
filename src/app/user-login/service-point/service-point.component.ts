@@ -119,11 +119,20 @@ export class ServicePointComponent implements OnInit, DoCheck {
           res['servicePoints'].data !== null
         ) {
           const data = res['servicePoints'].data;
+          console.log('[DEBUG getServicePoint] data:', data);
           if (data.UserVanSpDetails) {
             this.vanServicepointDetails = data.UserVanSpDetails;
+            console.log(
+              '[DEBUG getServicePoint] UserVanSpDetails:',
+              this.vanServicepointDetails,
+            );
             // Check if user has facilityID — skip Van selection
             const facilityEntry = this.vanServicepointDetails.find(
-              (item: any) => item.facilityID != null
+              (item: any) => item.facilityID != null,
+            );
+            console.log(
+              '[DEBUG getServicePoint] facilityEntry:',
+              facilityEntry,
             );
             if (facilityEntry && facilityEntry.facilityID) {
               this.autoLoginWithFacility(facilityEntry);
@@ -238,9 +247,16 @@ export class ServicePointComponent implements OnInit, DoCheck {
       if (data.stateMaster && data.stateMaster.length >= 1) {
         this.sessionstorage.setItem('location', JSON.stringify(data));
         // Store locationData for Common-UI registration component
-        if (data.otherLoc && data.otherLoc.districtList && data.otherLoc.districtList.length > 0) {
+        if (
+          data.otherLoc &&
+          data.otherLoc.districtList &&
+          data.otherLoc.districtList.length > 0
+        ) {
           const dist = data.otherLoc.districtList[0];
-          const village = dist.villageList && dist.villageList.length > 0 ? dist.villageList[0] : {};
+          const village =
+            dist.villageList && dist.villageList.length > 0
+              ? dist.villageList[0]
+              : {};
           const locationData = {
             stateID: data.otherLoc.stateID,
             districtID: dist.districtID,
@@ -250,7 +266,10 @@ export class ServicePointComponent implements OnInit, DoCheck {
             subDistrictID: village.districtBranchID || null,
             villageName: village.villageName || null,
           };
-          this.sessionstorage.setItem('locationData', JSON.stringify(locationData));
+          this.sessionstorage.setItem(
+            'locationData',
+            JSON.stringify(locationData),
+          );
         }
         this.goToWorkList();
       } else {
@@ -341,8 +360,14 @@ export class ServicePointComponent implements OnInit, DoCheck {
   autoLoginWithFacility(facilityEntry: any) {
     console.log('=== autoLoginWithFacility ===');
     console.log('facilityEntry:', facilityEntry);
-    console.log('Setting servicePointID =', facilityEntry.servicePointID || facilityEntry.facilityID);
-    console.log('Setting servicePointName =', facilityEntry.servicePointName || facilityEntry.vanNoAndType);
+    console.log(
+      'Setting servicePointID =',
+      facilityEntry.servicePointID || facilityEntry.facilityID,
+    );
+    console.log(
+      'Setting servicePointName =',
+      facilityEntry.servicePointName || facilityEntry.vanNoAndType,
+    );
     // Store serviceLineDetails with facilityID — skip Van selection
     this.sessionstorage.setItem(
       'serviceLineDetails',
@@ -350,10 +375,16 @@ export class ServicePointComponent implements OnInit, DoCheck {
     );
     this.sessionstorage.setItem('facilityID', facilityEntry.facilityID);
     // Set servicePointID/Name for registration form compatibility
-    this.sessionstorage.setItem('servicePointID',
-      facilityEntry.servicePointID || facilityEntry.facilityID);
-    this.sessionstorage.setItem('servicePointName',
-      facilityEntry.servicePointName || facilityEntry.vanNoAndType || 'Facility');
+    this.sessionstorage.setItem(
+      'servicePointID',
+      facilityEntry.servicePointID || facilityEntry.facilityID,
+    );
+    this.sessionstorage.setItem(
+      'servicePointName',
+      facilityEntry.servicePointName ||
+        facilityEntry.vanNoAndType ||
+        'Facility',
+    );
     if (facilityEntry.vanSession)
       this.sessionstorage.setItem('sessionID', facilityEntry.vanSession);
     // Get demographics and go to worklist

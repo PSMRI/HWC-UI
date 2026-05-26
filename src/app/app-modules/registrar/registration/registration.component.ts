@@ -856,8 +856,11 @@ export class RegistrationComponent
 
     const servicePointObject: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const servicePointDetails = JSON.parse(servicePointObject);
-    iEMRForm['facilityID'] = servicePointDetails.facilityID;
+    const servicePointDetails =
+      typeof servicePointObject === 'string'
+        ? JSON.parse(servicePointObject)
+        : servicePointObject;
+    iEMRForm['facilityID'] = servicePointDetails?.facilityID;
     iEMRForm['createdBy'] = this.sessionstorage.getItem('userName');
     phoneMaps[0]['facilityID'] = servicePointDetails.facilityID;
     phoneMaps[0]['createdBy'] = this.sessionstorage.getItem('userName');
@@ -1204,11 +1207,11 @@ export class RegistrationComponent
     const iEMRForm: any = this.iEMRFormUpdate();
     const phoneMaps = iEMRForm.benPhoneMaps;
 
-    const servicePointDetails: any = JSON.parse(
-      this.sessionstorage.getItem('serviceLineDetails'),
-    );
+    const spRaw: any = this.sessionstorage.getItem('serviceLineDetails');
+    const servicePointDetails: any =
+      typeof spRaw === 'string' ? JSON.parse(spRaw) : spRaw;
 
-    iEMRForm['facilityID'] = servicePointDetails.facilityID;
+    iEMRForm['facilityID'] = servicePointDetails?.facilityID;
     iEMRForm['createdBy'] = this.sessionstorage.getItem('userName');
     phoneMaps[0]['facilityID'] = servicePointDetails.facilityID;
     phoneMaps[0]['modifiedBy'] = this.sessionstorage.getItem('userName');
