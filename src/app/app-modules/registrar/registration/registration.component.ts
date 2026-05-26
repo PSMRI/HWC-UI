@@ -857,11 +857,9 @@ export class RegistrationComponent
     const servicePointObject: any =
       this.sessionstorage.getItem('serviceLineDetails');
     const servicePointDetails = JSON.parse(servicePointObject);
-    iEMRForm['vanID'] = servicePointDetails.vanID;
-    iEMRForm['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
+    iEMRForm['facilityID'] = servicePointDetails.facilityID;
     iEMRForm['createdBy'] = this.sessionstorage.getItem('userName');
-    phoneMaps[0]['vanID'] = servicePointDetails.vanID;
-    phoneMaps[0]['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
+    phoneMaps[0]['facilityID'] = servicePointDetails.facilityID;
     phoneMaps[0]['createdBy'] = this.sessionstorage.getItem('userName');
     this.registrarService.submitBeneficiary(iEMRForm).subscribe((res: any) => {
       if (res.statusCode === 200) {
@@ -1206,14 +1204,13 @@ export class RegistrationComponent
     const iEMRForm: any = this.iEMRFormUpdate();
     const phoneMaps = iEMRForm.benPhoneMaps;
 
-    const servicePointDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const servicePointDetails: any = JSON.parse(
+      this.sessionstorage.getItem('serviceLineDetails'),
+    );
 
-    iEMRForm['vanID'] = servicePointDetails.vanID;
-    iEMRForm['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
+    iEMRForm['facilityID'] = servicePointDetails.facilityID;
     iEMRForm['createdBy'] = this.sessionstorage.getItem('userName');
-    phoneMaps[0]['vanID'] = servicePointDetails.vanID;
-    phoneMaps[0]['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
+    phoneMaps[0]['facilityID'] = servicePointDetails.facilityID;
     phoneMaps[0]['modifiedBy'] = this.sessionstorage.getItem('userName');
     return iEMRForm;
   }
