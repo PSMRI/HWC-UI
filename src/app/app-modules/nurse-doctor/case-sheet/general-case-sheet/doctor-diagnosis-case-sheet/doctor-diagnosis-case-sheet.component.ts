@@ -581,6 +581,20 @@ export class DoctorDiagnosisCaseSheetComponent
     return len > 0 ? new Array(len).join('0') + this : this;
   }
   downloadSign() {
+    const userId =
+      this.beneficiaryDetails?.tCSpecialistUserID ??
+      this.sessionstorage.getItem('userID');
+
+    this.doctorService.downloadSign(userId).subscribe(
+      (response: any) => {
+        const blob = new Blob([response], { type: response.type });
+        this.showSign(blob);
+      },
+      (err: any) => {
+        console.error('Error downloading signature:', err);
+      },
+    );
+
     this.getUserId().subscribe((userId) => {
       const tcSpecId = this.beneficiaryDetails?.tCSpecialistUserID;
       const userIdToUse = tcSpecId && tcSpecId !== 0 ? tcSpecId : userId;
@@ -600,6 +614,7 @@ export class DoctorDiagnosisCaseSheetComponent
     return this.doctorService
       .getUserId(this.userName)
       .pipe(map((res: any) => res?.userId || null));
+
   }
   showSign(blob: any) {
     const reader = new FileReader();
