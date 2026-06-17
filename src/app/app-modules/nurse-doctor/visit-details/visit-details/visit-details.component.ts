@@ -40,6 +40,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { environment } from 'src/environments/environment';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-patient-visit-details',
@@ -94,6 +95,7 @@ export class PatientVisitDetailsComponent
     private nurseService: NurseService,
     private route: ActivatedRoute,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -842,5 +844,9 @@ export class PatientVisitDetailsComponent
     this.enableOtherFpTextField = false;
     this.disableAllFpOptions = false;
     this.enableOtherSideEffectTextField = false;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'visit-details');
   }
 }

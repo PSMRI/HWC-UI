@@ -24,6 +24,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-nurse-general-examination',
@@ -209,6 +210,7 @@ export class GeneralExaminationComponent implements OnInit, DoCheck, OnChanges {
   constructor(
     public httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
   hideForANCAndQC = false;
   ngOnInit() {
@@ -283,5 +285,12 @@ export class GeneralExaminationComponent implements OnInit, DoCheck, OnChanges {
 
   get FoetalMovements() {
     return this.generalExaminationForm.controls['foetalMovements'].value;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'General Examination',
+    );
   }
 }

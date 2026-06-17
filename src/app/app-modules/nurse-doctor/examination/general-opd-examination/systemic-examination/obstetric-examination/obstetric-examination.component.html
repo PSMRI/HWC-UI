@@ -9,6 +9,7 @@
         class="select-full-width"
         name="fundalHeight"
         formControlName="fundalHeight"
+        (selectionChange)="trackFieldInteraction('Fundal Height')"
       >
         <mat-option
           *ngFor="let fundalHeight of selectFundalHeight"
@@ -30,6 +31,7 @@
         class="select-full-width"
         name="fHAndPOA_Status"
         formControlName="fHAndPOA_Status"
+        (selectionChange)="trackFieldInteraction('FH and POA Status')"
       >
         <mat-option
           *ngFor="let FHPOAStatus of selectFHPOAStatus"
@@ -50,6 +52,7 @@
         class="select-full-width"
         name="fHAndPOA_Interpretation"
         formControlName="fHAndPOA_Interpretation"
+        (selectionChange)="trackFieldInteraction('FH and POA Interpretation')"
       >
         <mat-option
           *ngFor="let interpretationFHAndPOA of selectInterpretationFHAndPOA"
@@ -71,6 +74,7 @@
       name="fetalMovements"
       formControlName="fetalMovements"
       required
+      (change)="trackFieldInteraction('Fetal Movements')"
     >
       <mat-radio-button color="primary" class="radio-btn" value="Present">{{
         current_language_set?.common?.present
@@ -90,7 +94,9 @@
     <mat-radio-group
       name="fetalHeartSounds"
       formControlName="fetalHeartSounds"
-      (selectionChange)="resetFetalHeartRate($event)"
+      (selectionChange)="
+        resetFetalHeartRate($event); trackFieldInteraction('Fetal Heart Sounds')
+      "
     >
       <mat-radio-button color="primary" class="radio-btn" value="Audible">{{
         current_language_set?.common?.audible
@@ -114,6 +120,7 @@
         class="select-full-width"
         name="fetalHeartRate_BeatsPerMinute"
         formControlName="fetalHeartRate_BeatsPerMinute"
+        (selectionChange)="trackFieldInteraction('Fetal Heart Rate')"
       >
         <mat-option
           *ngFor="let fetalHeartRate of selectFetalHeartRate"
@@ -135,6 +142,7 @@
         class="select-full-width"
         name="fetalPositionOrLie"
         formControlName="fetalPositionOrLie"
+        (selectionChange)="trackFieldInteraction('Fetal Position')"
       >
         <mat-option
           *ngFor="let fetalPositionOrLie of selectFetalPositionOrLie"
@@ -156,6 +164,7 @@
         class="select-full-width"
         name="fetalPresentation"
         formControlName="fetalPresentation"
+        (selectionChange)="trackFieldInteraction('Fetal Presentation')"
       >
         <mat-option
           *ngFor="let fetalPresentation of selectFetalPresentation"
@@ -177,6 +186,7 @@
         class="select-full-width"
         name="abdominalScars"
         formControlName="abdominalScars"
+        (selectionChange)="trackFieldInteraction('Abdominal Scars')"
       >
         <mat-option
           *ngFor="let abdominalScars of selectAbdominalScars"
@@ -201,6 +211,7 @@
         formControlName="sfh"
         allowText="decimal"
         allowMax="100.0"
+        (focus)="trackFieldInteraction('SFH')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -213,7 +224,9 @@
     <mat-radio-group
       name="malPresentation"
       formControlName="malPresentation"
-      (selectionChange)="checkForHRP()"
+      (selectionChange)="
+        checkForHRP(); trackFieldInteraction('Mal Presentation')
+      "
       required
     >
       <mat-radio-button color="primary" class="radio-btn" value="true"
@@ -233,7 +246,9 @@
     <mat-radio-group
       name="lowLyingPlacenta"
       formControlName="lowLyingPlacenta"
-      (selectionChange)="checkForHRP()"
+      (selectionChange)="
+        checkForHRP(); trackFieldInteraction('Low Lying Placenta')
+      "
       required
     >
       <mat-radio-button color="primary" class="radio-btn" value="true"
@@ -253,7 +268,9 @@
     <mat-radio-group
       name="vertebralDeformity"
       formControlName="vertebralDeformity"
-      (selectionChange)="checkForHRP()"
+      (selectionChange)="
+        checkForHRP(); trackFieldInteraction('Vertebral Deformity')
+      "
       required
     >
       <mat-radio-button color="primary" class="radio-btn" value="true"
@@ -271,7 +288,7 @@
         mat-raised-button
         color="primary"
         class="mat_blue"
-        (click)="getHRPStatus()"
+        (click)="getHRPStatus(); trackFieldInteraction('Check HRP Status')"
       >
         {{ current_language_set?.checkHrpStatus }}
       </button>
@@ -282,7 +299,10 @@
           [id]="value.foetalMonitorTestId"
           class="button-overall-disabled mat_blue"
           [disabled]="checkTestPrescribed(value.foetalMonitorTestId)"
-          (click)="sendTestDetails(value.foetalMonitorTestId, value.testName)"
+          (click)="
+            sendTestDetails(value.foetalMonitorTestId, value.testName);
+            trackFieldInteraction('Fetosense Test')
+          "
         >
           {{ value.testName }}
         </button>

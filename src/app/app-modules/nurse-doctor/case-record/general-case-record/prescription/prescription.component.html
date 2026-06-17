@@ -13,7 +13,10 @@
           mat-raised-button
           color="primary"
           class="pull-right"
-          (click)="loadMMUPrescription()"
+          (click)="
+            loadMMUPrescription();
+            trackFieldInteraction('Load MMU Prescription')
+          "
         >
           {{ current_language_set?.loadMMUPrescription }}
         </button>
@@ -63,7 +66,10 @@
           class="input-full-width"
           name="form"
           [(ngModel)]="currentPrescription.formName"
-          (selectionChange)="getFormValueChanged()"
+          (selectionChange)="
+            getFormValueChanged();
+            trackFieldInteraction('Medicine Form Selection')
+          "
           required
         >
           <mat-option
@@ -91,6 +97,7 @@
           [(ngModel)]="tempDrugName"
           (keyup)="filterMedicine(tempDrugName)"
           (blur)="reEnterMedicine()"
+          (focus)="trackFieldInteraction('Medicine Name Input')"
           required
           [matAutocomplete]="autoGroup"
         />
@@ -101,7 +108,10 @@
           <mat-option
             *ngFor="let item of subFilteredDrugMaster"
             [value]="item"
-            (onSelectionChange)="selectMedicineObject($event)"
+            (onSelectionChange)="
+              selectMedicineObject($event);
+              trackFieldInteraction('Medicine Selection')
+            "
           >
             {{ item.itemName }} {{ item.strength }}{{ item.unitOfMeasurement }}
             {{ item.quantityInHand ? "(" + item.quantityInHand + ")" : "" }}
@@ -118,6 +128,7 @@
           name="dose"
           [(ngModel)]="currentPrescription.dose"
           [disabled]="!currentPrescription.drugID"
+          (selectionChange)="trackFieldInteraction('Dosage Selection')"
           required
         >
           <mat-option
@@ -140,6 +151,7 @@
           name="frequency"
           [(ngModel)]="currentPrescription.frequency"
           [disabled]="!currentPrescription.drugID"
+          (selectionChange)="trackFieldInteraction('Frequency Selection')"
           required
         >
           <mat-option
@@ -164,6 +176,7 @@
           name="duration"
           [(ngModel)]="currentPrescription.duration"
           [disabled]="!currentPrescription.drugID"
+          (selectionChange)="trackFieldInteraction('Duration Selection')"
           [required]="prescriptionForm.value.frequency !== 'SOS'"
         >
           <mat-option *ngFor="let item of drugDurationMaster" [value]="item">
@@ -181,6 +194,7 @@
           name="unit"
           [(ngModel)]="currentPrescription.unit"
           [disabled]="!currentPrescription.drugID"
+          (selectionChange)="trackFieldInteraction('Unit Selection')"
           [required]="prescriptionForm.value.frequency !== 'SOS'"
         >
           <mat-option
@@ -210,6 +224,7 @@
           name="quantity"
           [(ngModel)]="currentPrescription.qtyPrescribed"
           [disabled]="!currentPrescription.drugID"
+          (selectionChange)="trackFieldInteraction('Quantity Selection')"
           required
         >
           <mat-option
@@ -239,6 +254,7 @@
           name="route"
           [(ngModel)]="currentPrescription.route"
           [disabled]="!currentPrescription.drugID"
+          (selectionChange)="trackFieldInteraction('Route Selection')"
         >
           <mat-option
             *ngFor="let item of drugRouteMaster"
@@ -270,6 +286,7 @@
           name="instructions"
           [disabled]="!currentPrescription.drugID"
           [(ngModel)]="currentPrescription.instructions"
+          (focus)="trackFieldInteraction('Instructions Input')"
         >
         </textarea>
       </mat-form-field>
@@ -282,7 +299,7 @@
         class="mat_green"
         color="primary"
         type="button"
-        (click)="submitForUpload()"
+        (click)="submitForUpload(); trackFieldInteraction('Add Medicine')"
       >
         {{ current_language_set?.common?.add }}
       </button>
@@ -400,7 +417,10 @@
                 <button
                   mat-mini-fab
                   id="editMedicine"
-                  (click)="editMedicine(j, drug.value.id)"
+                  (click)="
+                    editMedicine(j, drug.value.id);
+                    trackFieldInteraction('Edit Medicine')
+                  "
                   color="primary"
                   class="mat-add-btn"
                 >
@@ -410,7 +430,10 @@
                   style="margin-left: 10px; margin-top: 25px"
                   mat-mini-fab
                   id="deleteMedicine"
-                  (click)="deleteMedicine(j, drug.value.id)"
+                  (click)="
+                    deleteMedicine(j, drug.value.id);
+                    trackFieldInteraction('Remove Medicine')
+                  "
                   color="warn"
                   class="mat-remove-btn"
                 >
@@ -428,7 +451,10 @@
     [pageSizeOptions]="[5, 10, 20]"
     [pageSize]="pageSize"
     hidePageSize="true"
-    (page)="setLimits($event.pageIndex)"
+    (page)="
+      setLimits($event.pageIndex);
+      trackFieldInteraction('Navigate Prescription Pages')
+    "
     showFirstLastButtons
     aria-label="Select patient in prescriptionWorklist"
   >
@@ -454,7 +480,8 @@
           id="prescriptionAndCounselling"
           name="prescriptionAndCounselling"
           (selectionChange)="
-            counsellingProvidedoneOptionValidation(prescriptionAndCounselling)
+            counsellingProvidedoneOptionValidation(prescriptionAndCounselling);
+            trackFieldInteraction('Counselling Provided Selection')
           "
         >
           <mat-option
@@ -493,6 +520,7 @@
         formControlName="counsellingProvidedList"
         id="prescriptionAndCounselling"
         name="prescriptionAndCounselling"
+        (focus)="trackFieldInteraction('Counselling Text Input')"
       ></textarea>
     </mat-form-field>
   </div>

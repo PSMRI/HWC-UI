@@ -47,6 +47,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-patient-chief-complaints',
@@ -94,6 +95,7 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     private nurseService: NurseService,
     private confirmationService: ConfirmationService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {
     this.formUtility = new VisitDetailUtils(this.fb, this.sessionstorage);
   }
@@ -564,5 +566,9 @@ export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
     } else {
       return true;
     }
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(fieldName, 'Chief Complaints');
   }
 }

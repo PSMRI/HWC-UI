@@ -30,7 +30,10 @@
           mat-raised-button
           color="primary"
           class="pull-right"
-          (click)="loadMMUReferDeatils()"
+          (click)="
+            loadMMUReferDeatils();
+            trackFieldInteraction('Load MMU Referral Details')
+          "
         >
           {{ currentLanguageSet?.Referdetails?.mMUReferralDetails }}
         </button>
@@ -49,7 +52,10 @@
           id="PreviousReferralHistory"
           class="mat_icon_blue"
           color="primary"
-          (click)="getPreviousReferralHistory()"
+          (click)="
+            getPreviousReferralHistory();
+            trackFieldInteraction('Previous Referral History')
+          "
         >
           <mat-icon class="md-18">history</mat-icon>
         </button>
@@ -69,10 +75,18 @@
           }}</mat-label>
           <mat-select
             (ngModelChange)="higherhealthcarecenter($event)"
+            (selectionChange)="
+              trackFieldInteraction('Higher Healthcare Center Selection')
+            "
             name="referredToInstituteName"
             formControlName="referredToInstituteName"
           >
-            <mat-option (click)="setInstituteNameValue()" value="select none"
+            <mat-option
+              (click)="
+                setInstituteNameValue();
+                trackFieldInteraction('Select None Healthcare Center')
+              "
+              value="select none"
               >Select None</mat-option
             >
             <mat-option
@@ -102,6 +116,7 @@
             allowText="alphaspace"
             formControlName="otherReferredToInstituteName"
             name="otherReferredToInstituteName"
+            (focus)="trackFieldInteraction('Other Healthcare Center Input')"
           />
         </mat-form-field>
       </div>
@@ -138,6 +153,7 @@
             formControlName="referralReason"
             name="Remarks"
             maxLength="300"
+            (focus)="trackFieldInteraction('Referral Reason Text')"
           ></textarea>
         </mat-form-field>
       </div>
@@ -152,6 +168,7 @@
               formControlName="referralReason"
               name="Remarks"
               maxLength="300"
+              (focus)="trackFieldInteraction('Referral Reason Text')"
             ></textarea>
           </mat-form-field>
         </div>
@@ -193,7 +210,8 @@
             (selectionChange)="
               checkForOthersOption(
                 referForm.controls['referralReasonList'].value
-              )
+              );
+              trackFieldInteraction('Referral Reason Selection')
             "
             required
           >
@@ -216,7 +234,8 @@
               (selectionChange)="
                 checkForOthersOption(
                   referForm.controls['referralReasonList'].value
-                )
+                );
+                trackFieldInteraction('Referral Reason Selection')
               "
             >
               <mat-option
@@ -245,11 +264,11 @@
             allowText="alphaspace"
             formControlName="otherReferralReason"
             name="otherReferralReason"
+            (focus)="trackFieldInteraction('Other Referral Reason Input')"
           />
         </mat-form-field>
       </div>
     </div>
-
 
     <div
       class="col-xs-12 col-sm-12 col-md-12 col-lg-12"
@@ -265,7 +284,10 @@
             currentLanguageSet?.Referdetails?.additionalservices
           }}</mat-label>
           <mat-select
-            (selectionChange)="additionalservices($event.value)"
+            (selectionChange)="
+              additionalservices($event.value);
+              trackFieldInteraction('Additional Services Selection')
+            "
             multiple
             name="refrredToAdditionalServiceList"
             formControlName="refrredToAdditionalServiceList"
@@ -282,7 +304,6 @@
       </div>
     </div>
 
-    
     <div
       class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-t-10"
       style="display: flex"
@@ -302,10 +323,12 @@
             formControlName="revisitDate"
             [min]="tomorrow"
             (dateChange)="checkdate($event.value)"
+            (focus)="trackFieldInteraction('Revisit Date')"
           />
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"
+            (click)="trackFieldInteraction('Revisit Date Picker')"
           ></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>

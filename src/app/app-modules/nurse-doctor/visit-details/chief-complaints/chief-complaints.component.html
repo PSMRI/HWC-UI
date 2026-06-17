@@ -32,6 +32,7 @@
                 (keyup)="suggestChiefComplaintList(complaint, i)"
                 (blur)="reEnterChiefComplaint(complaint)"
                 [matAutocomplete]="auto"
+                (focus)="trackFieldInteraction('Chief Complaints')"
               />
             </mat-form-field>
 
@@ -81,6 +82,7 @@
                 formControlName="duration"
                 (input)="onInputDuration(complaint)"
                 (selectionChange)="validateDuration(complaint)"
+                (focus)="trackFieldInteraction('Duration')"
               />
             </mat-form-field>
           </div>
@@ -97,6 +99,7 @@
                 formControlName="unitOfDuration"
                 [disabled]="!complaint.value.duration"
                 (selectionChange)="validateDuration(complaint)"
+                (click)="trackFieldInteraction('Unit of Duration')"
               >
                 <mat-option value="Hours">Hour(s)</mat-option>
                 <mat-option value="Days">Day(s)</mat-option>
@@ -125,6 +128,7 @@
                 formControlName="description"
                 maxlength="300"
                 [disabled]="!complaint.value.chiefComplaint"
+                (focus)="trackFieldInteraction('Description')"
               ></textarea>
             </mat-form-field>
           </div>

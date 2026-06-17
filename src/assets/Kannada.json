@@ -1189,6 +1189,7 @@
         },
         "alerts": {
             "info": {
+                "beneficiaryNotFound": "ಫಲಾನುಭವಿಯು ಡೇಟಾ ಕಂಡುಬಂದಿಲ್ಲ",
                 "beneficiaryNotArrived": "ಫಲಾನುಭವಿಯು ಟಿಎಂ ಸ್ಪೋಕ್/ಕೇಂದ್ರಕ್ಕೆ ಬಂದಿಲ್ಲ",
                 "scheduledForConsultation": "ಸಮಾಲೋಚನೆಗಾಗಿ ನಿಗದಿಪಡಿಸಲಾಗಿದೆ",
                 "marriageAge": "ಮದುವೆಯ ವಯಸ್ಸು ಕನಿಷ್ಠವಾಗಿರಬೇಕು",

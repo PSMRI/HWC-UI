@@ -9,6 +9,7 @@
         class="select-full-width"
         name="handedness"
         formControlName="handedness"
+        (selectionChange)="trackFieldInteraction('Handedness')"
       >
         <mat-option
           *ngFor="let handedness of selectHandedness"
@@ -34,6 +35,7 @@
         name="cranialNervesExamination"
         formControlName="cranialNervesExamination"
         maxlength="300"
+        (focus)="trackFieldInteraction('Cranial Nerves Examination')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -52,6 +54,7 @@
         name="motorSystem"
         formControlName="motorSystem"
         maxlength="300"
+        (focus)="trackFieldInteraction('Motor System')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -70,6 +73,7 @@
         name="sensorySystem"
         formControlName="sensorySystem"
         maxlength="300"
+        (focus)="trackFieldInteraction('Sensory System')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -88,6 +92,7 @@
         name="autonomicSystem"
         formControlName="autonomicSystem"
         maxlength="300"
+        (focus)="trackFieldInteraction('Autonomic System')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -106,6 +111,7 @@
         name="cerebellarSigns"
         formControlName="cerebellarSigns"
         maxlength="300"
+        (focus)="trackFieldInteraction('Cerebellar Signs')"
       ></textarea>
     </mat-form-field>
   </div>
@@ -119,6 +125,7 @@
     <mat-radio-group
       name="signsOfMeningealIrritation"
       formControlName="signsOfMeningealIrritation"
+      (change)="trackFieldInteraction('Signs of Meningeal Irritation')"
     >
       <mat-radio-button color="primary" value="Present">{{
         current_language_set?.common?.present
@@ -143,6 +150,7 @@
         name="skull"
         formControlName="skull"
         maxlength="300"
+        (focus)="trackFieldInteraction('Skull')"
       ></textarea>
     </mat-form-field>
   </div>

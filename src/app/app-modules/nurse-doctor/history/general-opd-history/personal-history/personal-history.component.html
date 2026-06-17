@@ -7,7 +7,7 @@
         id="previousTobaccoHistory"
         color="primary"
         matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        (click)="getPreviousTobaccoHistory()"
+        (click)="getPreviousTobaccoHistory(); trackFieldInteraction('Previous Tobacco History')"
         (keydown.enter)="getPreviousTobaccoHistory()"
         (keydown.space)="getPreviousTobaccoHistory()"
       >
@@ -26,7 +26,7 @@
         id="previousAlcoholHistory"
         color="primary"
         matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        (click)="getPreviousAlcoholHistory()"
+        (click)="getPreviousAlcoholHistory(); trackFieldInteraction('Previous Alcohol History')"
         (keydown.enter)="getPreviousAlcoholHistory()"
         (keydown.space)="getPreviousAlcoholHistory()"
       >
@@ -45,7 +45,7 @@
         id="previousAllergyHistory"
         color="primary"
         matTooltip="{{ currentLanguageSet?.DurationData?.previousDetails }}"
-        (click)="getPreviousAllergyHistory()"
+        (click)="getPreviousAllergyHistory(); trackFieldInteraction('Previous Allergy History')"
         (keydown.enter)="getPreviousAllergyHistory()"
         (keydown.space)="getPreviousAllergyHistory()"
       >
@@ -66,7 +66,7 @@
           ?.personalHistoryANC_OPD_NCD_PNC?.dietaryType
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group formControlName="dietaryType">
+      <mat-radio-group formControlName="dietaryType" (change)="trackFieldInteraction('Dietary Type')">
         <mat-radio-button color="primary" value="Vegetarian">{{
           currentLanguageSet?.historyData?.ancHistory
             ?.personalHistoryANC_OPD_NCD_PNC?.vegetarian
@@ -89,7 +89,7 @@
           ?.personalHistoryANC_OPD_NCD_PNC?.physicalActivityType
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group formControlName="physicalActivityType">
+      <mat-radio-group formControlName="physicalActivityType" (change)="trackFieldInteraction('Physical Activity Type')">
         <mat-radio-button color="primary" value="Sedentary">{{
           currentLanguageSet?.historyData?.ancHistory
             ?.personalHistoryANC_OPD_NCD_PNC?.sedentary
@@ -110,7 +110,7 @@
           ?.personalHistoryANC_OPD_NCD_PNC?.riskySexualPracticesStatus
       }}</label>
       <div class="clearfix"></div>
-      <mat-radio-group formControlName="riskySexualPracticesStatus">
+      <mat-radio-group formControlName="riskySexualPracticesStatus" (change)="trackFieldInteraction('Risky Sexual Practices Status')">
         <mat-radio-button color="primary" value="true">
           {{ currentLanguageSet?.common?.yes }}
         </mat-radio-button>
@@ -133,7 +133,7 @@
         <mat-select
           class="select-full-width"
           formControlName="tobaccoUseStatus"
-          (selectionChange)="checkTobaccoStatus()"
+          (selectionChange)="checkTobaccoStatus(); trackFieldInteraction('Tobacco Use Status')"
         >
           <mat-option value="Yes">Yes</mat-option>
           <mat-option value="No">No</mat-option>
@@ -155,7 +155,7 @@
         <mat-select
           class="select-full-width"
           formControlName="alcoholIntakeStatus"
-          (selectionChange)="checkAlcoholStatus()"
+          (selectionChange)="checkAlcoholStatus(); trackFieldInteraction('Alcohol Use Status')"
         >
           <mat-option value="Yes">Yes</mat-option>
           <mat-option value="No">No</mat-option>
@@ -176,7 +176,7 @@
         <mat-select
           class="select-full-width"
           formControlName="allergyStatus"
-          (selectionChange)="checkAllergicStatus()"
+          (selectionChange)="checkAllergicStatus(); trackFieldInteraction('Allergic Status')"
         >
           <mat-option value="Yes">Yes</mat-option>
           <mat-option value="No">No</mat-option>
@@ -225,7 +225,7 @@
               <mat-select
                 class="select-full-width"
                 formControlName="tobaccoUseType"
-                (selectionChange)="filterTobaccoList($event, i, tobacco)"
+                (selectionChange)="filterTobaccoList($event, i, tobacco); trackFieldInteraction('Tobacco Type')"
               >
                 <mat-option
                   *ngFor="let tobacco of tobaccoSelectList[i]"
@@ -253,6 +253,7 @@
                 maxlength="50"
                 allowText="alphabet"
                 formControlName="otherTobaccoUseType"
+                (focus)="trackFieldInteraction('Other Tobacco Type')"
               />
             </mat-form-field>
           </div>
@@ -272,12 +273,13 @@
                 formControlName="number"
                 (blur)="perDayChange()"
                 (input)="enableFields(tobacco)"
+                (focus)="trackFieldInteraction('Tobacco Number')"
               />
             </mat-form-field>
           </div>
 
           <div class="col-xs-8 col-sm-4 col-md-2 box">
-            <mat-radio-group formControlName="perDay" (change)="perDayChange()">
+            <mat-radio-group formControlName="perDay" (change)="perDayChange(); trackFieldInteraction('Tobacco Frequency')">
               <mat-radio-button
                 color="primary"
                 class="radio-button"
@@ -308,6 +310,7 @@
                 allowText="number"
                 formControlName="duration"
                 (change)="validateDuration(tobacco)"
+                (focus)="trackFieldInteraction('Tobacco Duration')"
               />
             </mat-form-field>
           </div>
@@ -320,7 +323,7 @@
               <mat-select
                 class="select-full-width lineheight"
                 formControlName="durationUnit"
-                (selectionChange)="validateDuration(tobacco)"
+                (selectionChange)="validateDuration(tobacco); trackFieldInteraction('Tobacco Duration Unit')"
               >
                 <mat-option value="Days">Day(s)</mat-option>
                 <mat-option value="Weeks">Week(s)</mat-option>
@@ -340,7 +343,7 @@
               *ngIf="isLast"
               class="mat-add-btn"
               [disabled]="checkTobaccoValidity(tobacco)"
-              (click)="addTobacco()"
+              (click)="addTobacco(); trackFieldInteraction('Add Tobacco')"
             >
               {{ currentLanguageSet?.common?.add }}
             </button>
@@ -350,7 +353,7 @@
               class="mat-remove-btn"
               style="margin-left: 3px"
               *ngIf="i !== 0 || (i === 0 && (tobacco.touched || tobacco.dirty))"
-              (click)="removeTobacco(i, tobacco)"
+              (click)="removeTobacco(i, tobacco); trackFieldInteraction('Remove Tobacco')"
             >
               {{ currentLanguageSet?.common?.remove }}
             </button>
@@ -395,7 +398,7 @@
               <mat-select
                 class="select-full-width"
                 formControlName="typeOfAlcohol"
-                (selectionChange)="filterAlcoholList($event, i, alcohol)"
+                (selectionChange)="filterAlcoholList($event, i, alcohol); trackFieldInteraction('Alcohol Type')"
               >
                 <mat-option
                   *ngFor="let alcohol of alcoholSelectList[i]"
@@ -422,6 +425,7 @@
                 maxlength="50"
                 allowText="alphabet"
                 formControlName="otherAlcoholType"
+                (focus)="trackFieldInteraction('Other Alcohol Type')"
               />
             </mat-form-field>
           </div>
@@ -436,7 +440,7 @@
                 id="frequencyIntake"
                 class="select-full-width lineheight"
                 formControlName="alcoholIntakeFrequency"
-                (selectionChange)="onChangeAlcIntakFreq(alcohol)"
+                (selectionChange)="onChangeAlcIntakFreq(alcohol); trackFieldInteraction('Alcohol Frequency')"
               >
                 <mat-option
                   *ngFor="let frequency of masterData?.frequencyOfAlcoholIntake"
@@ -458,7 +462,7 @@
               <mat-select
                 class="select-full-width lineheight"
                 formControlName="avgAlcoholConsumption"
-                (selectionChange)="onChangeAvgAlcoholConsumption(alcohol)"
+                (selectionChange)="onChangeAvgAlcoholConsumption(alcohol); trackFieldInteraction('Average Alcohol Consumption')"
               >
                 <mat-option
                   *ngFor="let quantity of masterData?.quantityOfAlcoholIntake"
@@ -483,6 +487,7 @@
                 allowText="number"
                 formControlName="duration"
                 (change)="validateDuration(alcohol)"
+                (focus)="trackFieldInteraction('Alcohol Duration')"
               />
             </mat-form-field>
           </div>
@@ -495,7 +500,7 @@
               <mat-select
                 class="select-full-width"
                 formControlName="durationUnit"
-                (selectionChange)="validateDuration(alcohol)"
+                (selectionChange)="validateDuration(alcohol); trackFieldInteraction('Alcohol Duration Unit')"
               >
                 <mat-option value="Days">Day(s)</mat-option>
                 <mat-option value="Weeks">Week(s)</mat-option>
@@ -515,7 +520,7 @@
               class="mat-add-btn"
               *ngIf="isLast"
               [disabled]="checkAlcoholValidity(alcohol)"
-              (click)="addAlcohol()"
+              (click)="addAlcohol(); trackFieldInteraction('Add Alcohol')"
             >
               {{ currentLanguageSet?.common?.add }}
             </button>
@@ -525,7 +530,7 @@
               class="mat-remove-btn"
               style="margin-left: 3px"
               *ngIf="i !== 0 || (i === 0 && (alcohol.touched || alcohol.dirty))"
-              (click)="removeAlcohol(i, alcohol)"
+              (click)="removeAlcohol(i, alcohol); trackFieldInteraction('Remove Alcohol')"
             >
               {{ currentLanguageSet?.common?.remove }}
             </button>
@@ -567,7 +572,7 @@
               <mat-select
                 class="select-full-width"
                 formControlName="allergyType"
-                (selectionChange)="filterAlleryList($event, i, allergy)"
+                (selectionChange)="filterAlleryList($event, i, allergy); trackFieldInteraction('Allergy Type')"
               >
                 <mat-option
                   *ngFor="let allergy of allerySelectList[i]"
@@ -592,14 +597,13 @@
                 maxlength="50"
                 formControlName="snomedTerm"
                 (change)="removeSnomedCode(allergy, i)"
-                (keyup.enter)="
-                  searchComponents(allergy.value.snomedTerm, i, allergy)
-                "
+                (keyup.enter)="searchComponents(allergy.value.snomedTerm, i, allergy)"
+                (focus)="trackFieldInteraction('Allergen Name')"
               />
               <mat-icon
                 class="search-btn cursorPointer"
                 matSuffix
-                (click)="searchComponents(allergy.value.snomedTerm, i, allergy)"
+                (click)="searchComponents(allergy.value.snomedTerm, i, allergy); trackFieldInteraction('Search Allergen')"
                 [class.toolbar-icon-disabled]="componentFlag"
                 >search</mat-icon
               >
@@ -632,7 +636,7 @@
                 class="select-full-width lineheight"
                 multiple
                 formControlName="typeOfAllergicReactions"
-                (change)="canEnableOtherAllergy(allergy)"
+                (change)="canEnableOtherAllergy(allergy); trackFieldInteraction('Type of Allergic Reactions')"
               >
                 <mat-option
                   *ngFor="
@@ -659,6 +663,7 @@
                 maxlength="50"
                 allowText="alphaspace"
                 formControlName="otherAllergicReaction"
+                (focus)="trackFieldInteraction('Other Allergic Reaction')"
               />
             </mat-form-field>
           </div>
@@ -677,7 +682,7 @@
                   allergyMasterData.length
               "
               [disabled]="checkAllergyValidity(allergy)"
-              (click)="addAllergy()"
+              (click)="addAllergy(); trackFieldInteraction('Add Allergy')"
             >
               {{ currentLanguageSet?.common?.add }}
             </button>
@@ -687,7 +692,7 @@
               class="mat-remove-btn"
               style="margin-left: 3px; margin-right: 3px"
               *ngIf="i !== 0 || (i === 0 && (allergy.touched || allergy.dirty))"
-              (click)="removeAllergy(i, allergy)"
+              (click)="removeAllergy(i, allergy); trackFieldInteraction('Remove Allergy')"
             >
               {{ currentLanguageSet?.common?.remove }}
             </button>

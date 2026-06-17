@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SpinnerService } from './app-modules/core/services/spinner.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private spinnerService: SpinnerService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {

@@ -48,6 +48,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
 import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-general-past-obsteric-history',
@@ -86,6 +87,7 @@ export class PastObstericHistoryComponent
     private masterdataService: MasterdataService,
     private beneficiaryDetailsService: BeneficiaryDetailsService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {
     this.formUtility = new GeneralUtils(this.fb, this.sessionstorage);
   }
@@ -816,5 +818,12 @@ export class PastObstericHistoryComponent
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.currentLanguageSet = getLanguageJson.currentLanguageObject;
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Past Obstetric History',
+    );
   }
 }

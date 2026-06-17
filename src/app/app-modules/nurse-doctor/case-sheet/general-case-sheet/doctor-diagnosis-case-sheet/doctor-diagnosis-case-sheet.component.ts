@@ -29,6 +29,7 @@ import { DoctorService, MasterdataService } from '../../../shared/services';
 import { CDSSService } from '../../../shared/services/cdss-service';
 import * as moment from 'moment';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-doctor-diagnosis-case-sheet',
@@ -132,6 +133,7 @@ export class DoctorDiagnosisCaseSheetComponent
   serviceList = '';
   referralReasonList = '';
   isCovidVaccinationStatusVisible = false;
+  userName: any;
 
   constructor(
     private doctorService: DoctorService,
@@ -168,6 +170,7 @@ export class DoctorDiagnosisCaseSheetComponent
   }
 
   ngOnChanges() {
+    this.userName = this.casesheetData?.doctorData?.diagnosis?.createdBy;
     this.assignSelectedLanguage();
     this.ncdScreeningCondition = null;
     if (this.casesheetData !== undefined && this.casesheetData) {
@@ -223,6 +226,7 @@ export class DoctorDiagnosisCaseSheetComponent
         this.doctorDiagnosis =
           this.casesheetData.doctorData.diagnosis.doctorDiagnonsis;
         this.diagnosisFlag = true;
+        this.userName = this.casesheetData?.doctorData?.diagnosis?.createdBy;
       }
       if (temp2 !== undefined) {
         if (temp2['symptom'] !== undefined) {
@@ -590,6 +594,27 @@ export class DoctorDiagnosisCaseSheetComponent
         console.error('Error downloading signature:', err);
       },
     );
+
+    this.getUserId().subscribe((userId) => {
+      const tcSpecId = this.beneficiaryDetails?.tCSpecialistUserID;
+      const userIdToUse = tcSpecId && tcSpecId !== 0 ? tcSpecId : userId;
+      this.doctorService.downloadSign(userIdToUse).subscribe(
+        (response: any) => {
+          const blob = new Blob([response], { type: response.type });
+          this.showSign(blob);
+        },
+        (err: any) => {
+          console.error('Error downloading signature:', err);
+        },
+      );
+    });
+  }
+
+  getUserId(): Observable<any> {
+    return this.doctorService
+      .getUserId(this.userName)
+      .pipe(map((res: any) => res?.userId || null));
+
   }
   showSign(blob: any) {
     const reader = new FileReader();

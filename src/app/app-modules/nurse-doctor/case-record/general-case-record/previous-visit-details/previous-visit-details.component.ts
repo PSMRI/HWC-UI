@@ -35,6 +35,7 @@ import { Subscription } from 'rxjs';
 import { HttpServiceService } from 'src/app/app-modules/core/services/http-service.service';
 import { SetLanguageComponent } from 'src/app/app-modules/core/components/set-language.component';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 @Component({
   selector: 'app-previous-visit-details',
@@ -145,6 +146,7 @@ export class PreviousVisitDetailsComponent
     private router: Router,
     public httpServiceService: HttpServiceService,
     readonly sessionstorage: SessionStorageService,
+    private trackingService: AmritTrackingService,
   ) {}
 
   ngOnInit() {
@@ -353,5 +355,12 @@ export class PreviousVisitDetailsComponent
     if (this.previousVisitDetailsSubscription) {
       this.previousVisitDetailsSubscription.unsubscribe();
     }
+  }
+
+  trackFieldInteraction(fieldName: string) {
+    this.trackingService.trackFieldInteraction(
+      fieldName,
+      'Previous Visit Details',
+    );
   }
 }
