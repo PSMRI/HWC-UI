@@ -118,13 +118,6 @@ export class MasterdataService {
     ) {
       facilityID = JSON.parse(serviceLineDetails).facilityID;
     }
-    let vanID = 0;
-    if (
-      JSON.parse(serviceLineDetails).vanID !== undefined &&
-      JSON.parse(serviceLineDetails).vanID !== null
-    ) {
-      vanID = JSON.parse(serviceLineDetails).vanID;
-    }
     const gender = this.sessionstorage.getItem('beneficiaryGender');
     console.log('facility', facilityID);
 
@@ -137,9 +130,7 @@ export class MasterdataService {
           '/' +
           gender +
           '/' +
-          facilityID +
-          '/' +
-          vanID,
+          facilityID,
       )
       .subscribe((res: any) => {
         console.log('res.json().data', res.data);
