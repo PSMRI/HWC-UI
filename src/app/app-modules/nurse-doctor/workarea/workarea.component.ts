@@ -4492,13 +4492,23 @@ export class WorkareaComponent
     let workLocationId: any;
     if (jsonLoccationData?.previlegeObj[0]?.roles) {
       const roles = jsonLoccationData?.previlegeObj[0]?.roles;
-      roles.forEach((item: any) => {
-        if (item.RoleName.toLowerCase() === 'doctor') {
-          workLocationId = item.workingLocationID;
-        }
-      });
+      // Prefer doctor role, fall back to first available role with a workingLocationID
+      const doctorRole = roles.find(
+        (item: any) => item.RoleName?.toLowerCase() === 'doctor',
+      );
+      const fallbackRole = roles.find((item: any) => item.workingLocationID);
+      workLocationId =
+        doctorRole?.workingLocationID ?? fallbackRole?.workingLocationID;
     }
     console.log('workLocationId', workLocationId);
+    if (!workLocationId) {
+      this.abdmFacilityId = null;
+      this.abdmFacilityName = null;
+      this.sessionstorage.setItem('abdmFacilityId', null);
+      this.sessionstorage.setItem('abdmFacilityName', null);
+      this.saveAbdmFacilityForVisit();
+      return;
+    }
     this.registrarService.getMappedFacility(workLocationId).subscribe(
       (res: any) => {
         if (res.statusCode === 200 && res.data !== null) {
