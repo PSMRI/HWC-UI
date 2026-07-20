@@ -1969,7 +1969,11 @@ export class WorkareaComponent
                     );
                     this.navigateToSpecialistWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 } else {
                   if (
@@ -1985,7 +1989,11 @@ export class WorkareaComponent
                     );
                     this.navigateToDoctorWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 }
               } else {
@@ -2024,7 +2032,11 @@ export class WorkareaComponent
                     );
                     this.navigateToSpecialistWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 } else {
                   if (
@@ -2040,7 +2052,11 @@ export class WorkareaComponent
                     );
                     this.navigateToDoctorWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 }
               } else {
@@ -2082,7 +2098,11 @@ export class WorkareaComponent
                     );
                     this.navigateToSpecialistWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 } else {
                   if (
@@ -2098,7 +2118,11 @@ export class WorkareaComponent
                     );
                     this.navigateToDoctorWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 }
               } else {
@@ -2140,7 +2164,11 @@ export class WorkareaComponent
                     );
                     this.navigateToSpecialistWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 } else {
                   if (
@@ -2156,7 +2184,11 @@ export class WorkareaComponent
                     );
                     this.navigateToDoctorWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 }
               } else {
@@ -2196,7 +2228,11 @@ export class WorkareaComponent
                     );
                     this.navigateToSpecialistWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 } else {
                   if (
@@ -2212,7 +2248,11 @@ export class WorkareaComponent
                     );
                     this.navigateToDoctorWorklist();
                   } else {
-                    this.getHealthIDDetails(res.data.response);
+                    this.getHealthIDDetails(
+                      res.data.response ??
+                        (this.current_language_set?.alerts?.info
+                          ?.datafillSuccessfully ?? 'Data saved successfully'),
+                    );
                   }
                 }
               } else {
@@ -3890,7 +3930,11 @@ export class WorkareaComponent
                   this.confirmationService.alert(res.data.response, 'success');
                   this.navigateToSpecialistWorklist();
                 } else {
-                  this.getHealthIDDetails(res.data.response);
+                  this.getHealthIDDetails(
+                    res.data.response ??
+                      (this.current_language_set?.alerts?.info
+                        ?.datafillSuccessfully ?? 'Data saved successfully'),
+                  );
                 }
               } else {
                 if (
@@ -3903,7 +3947,11 @@ export class WorkareaComponent
                   this.confirmationService.alert(res.data.response, 'success');
                   this.navigateToDoctorWorklist();
                 } else {
-                  this.getHealthIDDetails(res.data.response);
+                  this.getHealthIDDetails(
+                    res.data.response ??
+                      (this.current_language_set?.alerts?.info
+                        ?.datafillSuccessfully ?? 'Data saved successfully'),
+                  );
                 }
               }
             } else {
