@@ -85,11 +85,10 @@ export class ServicePointComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.assignSelectedLanguage();
-    this.serviceProviderId !== this.sessionstorage.getItem('providerServiceID');
-    this.userId !== this.sessionstorage.getItem('userID');
+    this.serviceProviderId = this.sessionstorage.getItem('providerServiceID');
+    this.userId = this.sessionstorage.getItem('userID');
     this.getServicePoint();
     this.getCdssAdminStatus();
-    console.log('here at three', this.current_language_set);
   }
 
   ngDoCheck() {
@@ -144,7 +143,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   filterVanList(vanServicepointDetails: any) {
-    console.log('vanServicepointDetails', vanServicepointDetails);
     this.vansList = vanServicepointDetails.filter((van: any) => {
       if (van.vanSession === 3) {
         return van;
@@ -180,7 +178,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   routeToDesignation(designation: any) {
-    console.log('designation', designation);
     switch (designation) {
       case 'Registrar':
         this.router.navigate(['/registrar/registration']);
@@ -214,7 +211,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
         if (res && res.statusCode === 200) {
           this.saveDemographicsToStorage(res.data);
         } else {
-          this.locationGathetingIssues();
+          this.locationGatheringIssues();
         }
       });
   }
@@ -225,12 +222,13 @@ export class ServicePointComponent implements OnInit, DoCheck {
         this.sessionstorage.setItem('location', JSON.stringify(data));
         this.goToWorkList();
       } else {
-        this.locationGathetingIssues();
+        this.locationGatheringIssues();
+        return;
       }
     } else {
-      this.locationGathetingIssues();
+      this.locationGatheringIssues();
+      return;
     }
-    console.log('statesList', this.statesList);
     this.stateID = data.stateMaster.stateID;
   }
 
@@ -239,7 +237,6 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   fetchDistrictsOnStateSelection(stateID: any) {
-    console.log('stateID', stateID); // Add this log statement
     this.registrarService
       .getDistrictList(this.stateID)
       .subscribe((res: any) => {
@@ -314,7 +311,7 @@ export class ServicePointComponent implements OnInit, DoCheck {
     this.routeToDesignation(this.designation);
   }
 
-  locationGathetingIssues() {
+  locationGatheringIssues() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;

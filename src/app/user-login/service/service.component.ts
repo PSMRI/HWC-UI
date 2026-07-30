@@ -374,7 +374,7 @@ export class ServiceComponent implements OnInit, DoCheck {
         if (res && res.statusCode === 200) {
           this.saveDemographicsToStorage(res.data);
         } else {
-          this.locationGathetingIssues();
+          this.locationGatheringIssues();
         }
       });
   }
@@ -384,18 +384,19 @@ export class ServiceComponent implements OnInit, DoCheck {
       if (data.stateMaster && data.stateMaster.length >= 1) {
         this.sessionstorage.setItem('location', JSON.stringify(data));
       } else {
-        this.locationGathetingIssues();
+        this.locationGatheringIssues();
+        return;
       }
     } else {
-      this.locationGathetingIssues();
+      this.locationGatheringIssues();
+      return;
     }
 
-    console.log('statesList', this.statesList);
     this.stateID = data.stateMaster.stateID;
     this.saveLocationDataToStorage();
   }
 
-  locationGathetingIssues() {
+  locationGatheringIssues() {
     const getLanguageJson = new SetLanguageComponent(this.httpServiceService);
     getLanguageJson.setLanguage();
     this.current_language_set = getLanguageJson.currentLanguageObject;

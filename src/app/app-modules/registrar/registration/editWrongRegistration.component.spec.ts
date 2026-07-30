@@ -63,7 +63,7 @@ class RegistrarServiceMock {
       { maritalStatusID: 3, status: 'Divorced' },
       { maritalStatusID: 2, status: 'Married' },
       { maritalStatusID: 7, status: 'Not Applicable' },
-      { maritalStatusID: 4, status: 'Seperated' },
+      { maritalStatusID: 4, status: 'Separated' },
       { maritalStatusID: 1, status: 'Unmarried' },
       { maritalStatusID: 5, status: 'Widow' },
       { maritalStatusID: 6, status: 'Widower' },
