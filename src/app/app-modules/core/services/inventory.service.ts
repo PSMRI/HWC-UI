@@ -3,6 +3,7 @@ import { Injectable, Inject } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { HttpServiceService } from './http-service.service';
 @Injectable()
 export class InventoryService {
   inventoryUrl: any;
@@ -12,7 +13,12 @@ export class InventoryService {
     @Inject(DOCUMENT) private document: any,
     readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService,
-  ) {}
+    private httpServiceService: HttpServiceService,
+  ) {
+    this.httpServiceService.currentLangugae$.subscribe(
+      (response) => (this.current_language_set = response),
+    );
+  }
 
   moveToInventory(
     benID: any,
@@ -78,6 +84,7 @@ export class InventoryService {
   getppID() {
     const serviceLineDetailsData: any =
       this.sessionstorage.getItem('serviceLineDetails');
+    if (!serviceLineDetailsData) return undefined;
     const serviceLineDetails = JSON.parse(serviceLineDetailsData);
     return serviceLineDetails.parkingPlaceID;
   }
