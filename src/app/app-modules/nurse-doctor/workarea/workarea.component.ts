@@ -4469,10 +4469,14 @@ export class WorkareaComponent
   /* Fetch health ID detaiuls to link the visit */
   getHealthIDDetails(successResponseFromAPI: any) {
     this.getMappedAbdmFacility();
+    const successMessage =
+      successResponseFromAPI ??
+      this.current_language_set?.alerts?.info?.datafillSuccessfully ??
+      'Data saved successfully';
     this.confirmationService
       .confirmCareContext(
         'info',
-        successResponseFromAPI +
+        successMessage +
           '. ' +
           (this.current_language_set?.common?.doYouWantToLinkCareContext ??
             'Do you want to link care context?'),
