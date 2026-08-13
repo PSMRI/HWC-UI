@@ -436,7 +436,6 @@ export class PncDiagnosisComponent
   }
 
   private readonly PAGE_BASE = 0;
-  private readonly BOOTSTRAP_MAX_PAGES = 3;
 
   state: any = {
     provisional: {
@@ -504,17 +503,6 @@ export class PncDiagnosisComponent
     });
   }
 
-  onPanelReady(
-    type: 'provisional' | 'confirmatory',
-    index: number,
-    panelEl: HTMLElement,
-  ) {
-    const s = this.state[type];
-    if (panelEl.scrollHeight <= panelEl.clientHeight && !s.noMore[index]) {
-      this.bootstrapUntilScrollable(type, index, panelEl);
-    }
-  }
-
   onAutoNearEnd(type: 'provisional' | 'confirmatory', index: number) {
     const s = this.state[type];
     if (!s.loadingMore[index] && !s.noMore[index]) {
@@ -522,32 +510,6 @@ export class PncDiagnosisComponent
     } else if (s.loadingMore[index]) {
       s.wantMore[index] = true;
     }
-  }
-
-  private bootstrapUntilScrollable(
-    type: 'provisional' | 'confirmatory',
-    rowIndex: number,
-    panelEl: HTMLElement,
-  ) {
-    const s = this.state[type];
-    let fetched = 0;
-    const tryFill = () => {
-      const scrollable = panelEl.scrollHeight > panelEl.clientHeight;
-      if (
-        scrollable ||
-        s.noMore[rowIndex] ||
-        fetched >= this.BOOTSTRAP_MAX_PAGES
-      )
-        return;
-      if (s.loadingMore[rowIndex]) {
-        requestAnimationFrame(tryFill);
-        return;
-      }
-      fetched++;
-      this.fetchPage(type, rowIndex, true);
-      requestAnimationFrame(tryFill);
-    };
-    if (s.lastQueryByIndex[rowIndex]?.length >= 3) tryFill();
   }
 
   private fetchPage(
