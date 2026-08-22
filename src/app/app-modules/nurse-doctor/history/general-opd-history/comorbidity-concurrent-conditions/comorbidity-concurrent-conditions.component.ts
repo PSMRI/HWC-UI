@@ -53,6 +53,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-general-comorbidity-concurrent-conditions',
   templateUrl: './comorbidity-concurrent-conditions.component.html',
   styleUrls: ['./comorbidity-concurrent-conditions.component.css'],
+  standalone: false,
 })
 export class ComorbidityConcurrentConditionsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

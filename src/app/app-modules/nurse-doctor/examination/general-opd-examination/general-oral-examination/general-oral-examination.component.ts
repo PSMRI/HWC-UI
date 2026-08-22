@@ -36,6 +36,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-general-oral-examination',
   templateUrl: './general-oral-examination.component.html',
   styleUrls: ['./general-oral-examination.component.css'],
+  standalone: false,
 })
 export class GeneralOralExaminationComponent implements OnInit, DoCheck {
   @Input()

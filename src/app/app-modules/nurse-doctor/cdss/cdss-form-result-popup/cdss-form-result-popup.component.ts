@@ -35,6 +35,7 @@ import { LocalDataSource } from 'angular2-smart-table';
   selector: 'app-cdss-form-result-popup',
   templateUrl: './cdss-form-result-popup.component.html',
   styleUrls: ['./cdss-form-result-popup.component.css'],
+  standalone: false,
 })
 export class CdssFormResultPopupComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

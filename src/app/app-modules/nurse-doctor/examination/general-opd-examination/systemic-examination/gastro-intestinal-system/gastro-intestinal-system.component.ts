@@ -28,6 +28,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-nurse-gastro-intestinal-system',
   templateUrl: './gastro-intestinal-system.component.html',
   styleUrls: ['./gastro-intestinal-system.component.css'],
+  standalone: false,
 })
 export class GastroIntestinalSystemComponent implements OnInit, DoCheck {
   @Input()

@@ -52,6 +52,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-general-medication-history',
   templateUrl: './medication-history.component.html',
   styleUrls: ['./medication-history.component.css'],
+  standalone: false,
 })
 export class MedicationHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

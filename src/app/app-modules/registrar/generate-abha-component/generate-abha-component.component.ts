@@ -13,6 +13,7 @@ import { RegistrarService } from '../shared/services/registrar.service';
   selector: 'app-generate-abha-component',
   templateUrl: './generate-abha-component.component.html',
   styleUrls: ['./generate-abha-component.component.css'],
+  standalone: false,
 })
 export class GenerateAbhaComponentComponent implements OnInit {
   utils = new RegistrationUtils(this.fb);

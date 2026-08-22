@@ -38,6 +38,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-neonatal-and-infant-service-case-sheet',
   templateUrl: './neonatal-and-infant-service-case-sheet.component.html',
   styleUrls: ['./neonatal-and-infant-service-case-sheet.component.css'],
+  standalone: false,
 })
 export class NeonatalAndInfantServiceCaseSheetComponent
   implements OnChanges, OnInit, DoCheck

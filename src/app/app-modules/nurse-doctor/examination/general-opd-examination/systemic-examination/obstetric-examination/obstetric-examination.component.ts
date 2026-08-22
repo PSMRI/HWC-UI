@@ -41,6 +41,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   templateUrl: './obstetric-examination.component.html',
   styleUrls: ['./obstetric-examination.component.css'],
   providers: [DatePipe],
+  standalone: false,
 })
 export class ObstetricExaminationComponent
   implements OnInit, DoCheck, OnDestroy
@@ -310,7 +311,7 @@ export class ObstetricExaminationComponent
   }
 
   checkForHRP() {
-    (this.malPresentation =
+    ((this.malPresentation =
       this.obstetricExaminationForANCForm.controls['malPresentation'].value),
       (this.lowLyingPlacenta =
         this.obstetricExaminationForANCForm.controls['lowLyingPlacenta'].value),
@@ -318,7 +319,7 @@ export class ObstetricExaminationComponent
         this.obstetricExaminationForANCForm.controls[
           'vertebralDeformity'
         ].value),
-      (this.hrpService.checkHrpStatus = true);
+      (this.hrpService.checkHrpStatus = true));
   }
 
   getHRPStatus() {

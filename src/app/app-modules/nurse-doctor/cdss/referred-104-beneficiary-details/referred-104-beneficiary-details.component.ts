@@ -36,6 +36,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-referred-104-beneficiary-details',
   templateUrl: './referred-104-beneficiary-details.component.html',
   styleUrls: ['./referred-104-beneficiary-details.component.css'],
+  standalone: false,
 })
 export class Referred104BeneficiaryDetailsComponent implements OnInit, DoCheck {
   beneficiary: any;

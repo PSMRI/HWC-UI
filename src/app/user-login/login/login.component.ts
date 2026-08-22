@@ -40,6 +40,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-login-cmp',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
+  standalone: false,
 })
 export class LoginComponent implements OnInit {
   @ViewChild('captchaCmp') captchaCmp: CaptchaComponent | undefined;
@@ -228,8 +229,7 @@ export class LoginComponent implements OnInit {
                                     this.trackingService.setUserId(
                                       userLoggedIn.data.userID,
                                     );
-                                    this.authService.sessionExpiredHandled =
-                                      false;
+                                    this.authService.sessionExpiredHandled = false;
                                     this.sessionstorage.setItem(
                                       'loginDataResponse',
                                       JSON.stringify(userLoggedIn.data),

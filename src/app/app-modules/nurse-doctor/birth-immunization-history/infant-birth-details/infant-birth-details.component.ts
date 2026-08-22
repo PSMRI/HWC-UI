@@ -76,6 +76,7 @@ import {
       },
     },
   ],
+  standalone: false,
 })
 export class InfantBirthDetailsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

@@ -13,6 +13,7 @@ import { HttpServiceService } from '../../services/http-service.service';
   selector: 'app-common-dialog',
   templateUrl: './common-dialog.component.html',
   styleUrls: ['./common-dialog.component.css'],
+  standalone: false,
 })
 export class CommonDialogComponent implements OnInit, DoCheck {
   @Output() cancelEvent = new EventEmitter();

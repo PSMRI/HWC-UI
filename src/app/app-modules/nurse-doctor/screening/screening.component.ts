@@ -44,6 +44,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-screening',
   templateUrl: './screening.component.html',
   styleUrls: ['./screening.component.css'],
+  standalone: false,
 })
 export class ScreeningComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

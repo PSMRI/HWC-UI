@@ -33,6 +33,7 @@ import { Subscription } from 'rxjs';
 
 @Directive({
   selector: '[appAutocompleteScroller]',
+  standalone: false,
 })
 export class AutocompleteScrollerDirective implements AfterViewInit, OnDestroy {
   @Input() threshold = 0.6; // 60% down

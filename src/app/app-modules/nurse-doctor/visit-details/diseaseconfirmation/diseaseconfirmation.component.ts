@@ -45,6 +45,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-diseaseconfirmation',
   templateUrl: './diseaseconfirmation.component.html',
   styleUrls: ['./diseaseconfirmation.component.css'],
+  standalone: false,
 })
 export class DiseaseconfirmationComponent
   implements OnChanges, OnInit, OnDestroy

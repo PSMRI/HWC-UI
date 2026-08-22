@@ -50,6 +50,7 @@ import { environment } from 'src/environments/environment';
   selector: 'app-ncd-screening-diagnosis',
   templateUrl: './ncd-screening-diagnosis.component.html',
   styleUrls: ['./ncd-screening-diagnosis.component.css'],
+  standalone: false,
 })
 export class NcdScreeningDiagnosisComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

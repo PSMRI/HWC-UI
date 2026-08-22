@@ -46,6 +46,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-form-immunization-history',
   templateUrl: './form-immunization-history.component.html',
   styleUrls: ['./form-immunization-history.component.css'],
+  standalone: false,
 })
 export class FormImmunizationHistoryComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

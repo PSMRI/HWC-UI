@@ -42,6 +42,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-general-case-sheet',
   templateUrl: './general-case-sheet.component.html',
   styleUrls: ['./general-case-sheet.component.css'],
+  standalone: false,
 })
 export class GeneralCaseSheetComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

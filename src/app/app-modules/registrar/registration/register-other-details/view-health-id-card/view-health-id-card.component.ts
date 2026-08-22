@@ -29,6 +29,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-view-health-id-card',
   templateUrl: './view-health-id-card.component.html',
   styleUrls: ['./view-health-id-card.component.css'],
+  standalone: false,
 })
 export class ViewHealthIdCardComponent implements OnInit, DoCheck {
   imgUrl: any;

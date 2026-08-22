@@ -28,6 +28,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-view-test-report',
   templateUrl: './view-test-report.component.html',
   styleUrls: ['./view-test-report.component.css'],
+  standalone: false,
 })
 export class ViewTestReportComponent implements OnInit, DoCheck {
   currentLanguageSet: any;

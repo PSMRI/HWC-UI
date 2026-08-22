@@ -29,6 +29,7 @@ import { HttpServiceService } from '../../core/services/http-service.service';
   selector: 'app-redir-fallback',
   templateUrl: './redir-fallback.component.html',
   styleUrls: ['./redir-fallback.component.css'],
+  standalone: false,
 })
 export class RedirFallbackComponent implements OnInit, AfterViewInit, DoCheck {
   current_language_set: any;

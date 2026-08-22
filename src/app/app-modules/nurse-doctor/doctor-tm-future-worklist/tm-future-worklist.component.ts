@@ -43,6 +43,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-tm-future-worklist',
   templateUrl: './tm-future-worklist.component.html',
   styleUrls: ['./tm-future-worklist.component.css'],
+  standalone: false,
 })
 export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
   rowsPerPage = 5;
@@ -147,7 +148,7 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
       element.villageName = element.villageName || 'Not Available';
       element.arrival = false;
       element.preferredPhoneNum = element.preferredPhoneNum || 'Not Available';
-      (element.visitDate =
+      ((element.visitDate =
         moment(element.visitDate).format('DD-MM-YYYY HH:mm A') ||
         'Not Available'),
         (element.benVisitDate =
@@ -155,7 +156,7 @@ export class TmFutureWorklistComponent implements OnInit, DoCheck, OnDestroy {
           'Not Available'),
         (element.tCRequestDate =
           moment(element.tCRequestDate).format('DD-MM-YYYY HH:mm A ') ||
-          'Not Available');
+          'Not Available'));
     });
     return data;
   }

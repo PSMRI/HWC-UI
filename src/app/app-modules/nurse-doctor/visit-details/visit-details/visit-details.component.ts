@@ -46,6 +46,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-patient-visit-details',
   templateUrl: './visit-details.component.html',
   styleUrls: ['./visit-details.component.css'],
+  standalone: false,
 })
 export class PatientVisitDetailsComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

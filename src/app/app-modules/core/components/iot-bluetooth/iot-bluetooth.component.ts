@@ -28,6 +28,7 @@ import { IotService } from '../../services/iot.service';
   selector: 'app-iot-bluetooth',
   templateUrl: './iot-bluetooth.component.html',
   styleUrls: ['./iot-bluetooth.component.css'],
+  standalone: false,
 })
 export class IotBluetoothComponent implements OnInit, DoCheck {
   current_language_set: any;

@@ -38,6 +38,7 @@ import { DoctorService } from '../shared/services/doctor.service';
   selector: 'app-immunization-service',
   templateUrl: './immunization-service.component.html',
   styleUrls: ['./immunization-service.component.css'],
+  standalone: false,
 })
 export class ImmunizationServiceComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

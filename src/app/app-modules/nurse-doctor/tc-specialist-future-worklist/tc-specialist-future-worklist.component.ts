@@ -40,6 +40,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-tc-specialist-future-worklist',
   templateUrl: './tc-specialist-future-worklist.component.html',
   styleUrls: ['./tc-specialist-future-worklist.component.css'],
+  standalone: false,
 })
 export class TcSpecialistFutureWorklistComponent
   implements OnInit, DoCheck, OnDestroy

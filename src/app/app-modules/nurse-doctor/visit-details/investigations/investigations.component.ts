@@ -46,6 +46,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-patient-investigations',
   templateUrl: './investigations.component.html',
   styleUrls: ['./investigations.component.css'],
+  standalone: false,
 })
 export class InvestigationsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

@@ -26,6 +26,7 @@ import { FormGroup } from '@angular/forms';
   selector: 'app-nurse-examination',
   templateUrl: './examination.component.html',
   styleUrls: ['./examination.component.css'],
+  standalone: false,
 })
 export class ExaminationComponent implements OnChanges {
   @Input()

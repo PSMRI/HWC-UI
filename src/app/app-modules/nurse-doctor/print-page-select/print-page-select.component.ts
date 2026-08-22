@@ -28,6 +28,7 @@ import { SetLanguageComponent } from '../../core/components/set-language.compone
   selector: 'app-case-sheet-print-page-select',
   templateUrl: './print-page-select.component.html',
   styleUrls: ['./print-page-select.component.css'],
+  standalone: false,
 })
 export class PrintPageSelectComponent implements OnInit, DoCheck {
   printPagePreviewSelect = {

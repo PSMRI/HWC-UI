@@ -30,6 +30,7 @@ import { Consent, SearchComponent } from '../search/search.component';
   selector: 'app-consent-form',
   templateUrl: './consent-form.component.html',
   styleUrls: ['./consent-form.component.css'],
+  standalone: false,
 })
 export class ConsentFormComponent implements OnInit {
   currentLanguageSet: any;

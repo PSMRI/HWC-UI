@@ -58,6 +58,7 @@ import { BiometricAuthenticationComponent } from '../../biometric-authentication
   selector: 'app-register-other-details',
   templateUrl: './register-other-details.component.html',
   styleUrls: ['./register-other-details.component.css'],
+  standalone: false,
 })
 export class RegisterOtherDetailsComponent
   implements OnInit, DoCheck, OnDestroy
@@ -1059,6 +1060,7 @@ export class RegisterOtherDetailsComponent
   selector: 'app-health-id-validatepopup',
   templateUrl: './health-id-validatepopup.html',
   styleUrls: ['./register-other-details.component.css'],
+  standalone: false,
 })
 export class HealthIdValidateComponent implements OnInit, DoCheck {
   healthIdValidateForm!: FormGroup;

@@ -81,6 +81,7 @@ import {
       },
     },
   ],
+  standalone: false,
 })
 export class RegisterPersonalDetailsComponent
   implements OnInit, AfterViewChecked, DoCheck, OnDestroy

@@ -45,6 +45,7 @@ import { environment } from 'src/environments/environment';
   selector: 'app-doctor-worklist',
   templateUrl: './doctor-worklist.component.html',
   styleUrls: ['./doctor-worklist.component.css'],
+  standalone: false,
 })
 export class DoctorWorklistComponent implements OnInit, DoCheck, OnDestroy {
   rowsPerPage = 5;

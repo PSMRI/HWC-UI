@@ -28,6 +28,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-general-case-record',
   templateUrl: './general-case-record.component.html',
   styleUrls: ['./general-case-record.component.css'],
+  standalone: false,
 })
 export class GeneralCaseRecordComponent implements OnInit, DoCheck {
   @Input()

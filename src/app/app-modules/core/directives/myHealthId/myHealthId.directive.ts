@@ -24,6 +24,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
 @Directive({
   selector: '[appMyHealthId]',
+  standalone: false,
 })
 export class MyHealthIdDirective {
   constructor(element: ElementRef) {}
@@ -35,15 +36,15 @@ export class MyHealthIdDirective {
       ev.preventDefault();
     }
   }
-  @HostListener('paste', ['$event']) blockPaste(event: KeyboardEvent) {
+  @HostListener('paste', ['$event']) blockPaste(event: ClipboardEvent) {
     event.preventDefault();
   }
 
-  @HostListener('copy', ['$event']) blockCopy(event: KeyboardEvent) {
+  @HostListener('copy', ['$event']) blockCopy(event: ClipboardEvent) {
     event.preventDefault();
   }
 
-  @HostListener('cut', ['$event']) blockCut(event: KeyboardEvent) {
+  @HostListener('cut', ['$event']) blockCut(event: ClipboardEvent) {
     event.preventDefault();
   }
 }

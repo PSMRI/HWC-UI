@@ -45,6 +45,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-general-feeding-history',
   templateUrl: './feeding-history.component.html',
   styleUrls: ['./feeding-history.component.css'],
+  standalone: false,
 })
 export class FeedingHistoryComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

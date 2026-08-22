@@ -29,7 +29,10 @@ import { WorklistComponent } from './worklist/worklist.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LabService, MasterDataService } from './shared/services';
 import { ViewFileComponent } from './view-file/view-file.component';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -42,6 +45,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { SharedModule } from '../core/components/shared/shared.module';
 
 @NgModule({
+  declarations: [
+    WorkareaComponent,
+    WorklistComponent,
+    DashboardComponent,
+    ViewFileComponent,
+  ],
   imports: [
     CommonModule,
     LabRoutingModule,
@@ -51,7 +60,6 @@ import { SharedModule } from '../core/components/shared/shared.module';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    HttpClientModule,
     MaterialModule,
     MatTableModule,
     MatChipsModule,
@@ -60,12 +68,10 @@ import { SharedModule } from '../core/components/shared/shared.module';
     MatIconModule,
     SharedModule,
   ],
-  declarations: [
-    WorkareaComponent,
-    WorklistComponent,
-    DashboardComponent,
-    ViewFileComponent,
+  providers: [
+    LabService,
+    MasterDataService,
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  providers: [LabService, MasterDataService],
 })
 export class LabModule {}

@@ -40,6 +40,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-doctor-investigations',
   templateUrl: './doctor-investigations.component.html',
   styleUrls: ['./doctor-investigations.component.css'],
+  standalone: false,
 })
 export class DoctorInvestigationsComponent
   implements OnInit, DoCheck, OnDestroy

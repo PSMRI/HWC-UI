@@ -43,6 +43,7 @@ import { NcdScreeningService } from '../../shared/services/ncd-screening.service
   selector: 'app-breast-cancer-screening',
   templateUrl: './breast-cancer-screening.component.html',
   styleUrls: ['./breast-cancer-screening.component.css'],
+  standalone: false,
 })
 export class BreastCancerScreeningComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

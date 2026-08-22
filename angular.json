@@ -107,10 +107,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "AAM-Facility-App:build:production"
+              "buildTarget": "AAM-Facility-App:build:production"
             },
             "development": {
-              "browserTarget": "AAM-Facility-App:build:development"
+              "buildTarget": "AAM-Facility-App:build:development"
             }
           },
           "defaultConfiguration": "development",
@@ -121,7 +121,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "AAM-Facility-App:build"
+            "buildTarget": "AAM-Facility-App:build"
           }
         },
         "test": {

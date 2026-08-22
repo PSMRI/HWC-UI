@@ -43,6 +43,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-general-opd-history',
   templateUrl: './general-opd-history.component.html',
   styleUrls: ['./general-opd-history.component.css'],
+  standalone: false,
 })
 export class GeneralOpdHistoryComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

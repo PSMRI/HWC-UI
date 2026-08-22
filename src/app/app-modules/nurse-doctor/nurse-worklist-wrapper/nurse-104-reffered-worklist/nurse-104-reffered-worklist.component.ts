@@ -42,6 +42,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-104-reffered-worklist',
   templateUrl: './nurse-104-reffered-worklist.component.html',
   styleUrls: ['./nurse-104-reffered-worklist.component.css'],
+  standalone: false,
 })
 export class Nurse104RefferedWorklistComponent
   implements OnInit, DoCheck, OnDestroy

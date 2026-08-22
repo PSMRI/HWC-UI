@@ -39,6 +39,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-covid-diagnosis',
   templateUrl: './covid-diagnosis.component.html',
   styleUrls: ['./covid-diagnosis.component.css'],
+  standalone: false,
 })
 export class CovidDiagnosisComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

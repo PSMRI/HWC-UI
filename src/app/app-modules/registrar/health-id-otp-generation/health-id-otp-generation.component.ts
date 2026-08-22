@@ -40,6 +40,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-health-id-otp-generation',
   templateUrl: './health-id-otp-generation.component.html',
   styleUrls: ['./health-id-otp-generation.component.css'],
+  standalone: false,
 })
 export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
   healthIdOTPForm!: FormGroup;
@@ -480,6 +481,7 @@ export class HealthIdOtpGenerationComponent implements OnInit, DoCheck {
   selector: 'app-health-id-otp-succespopup',
   templateUrl: './health-id-otp-succespopup.html',
   styleUrls: ['./health-id-otp-generation.component.css'],
+  standalone: false,
 })
 export class HealthIdOtpSuccessComponent implements OnInit, DoCheck {
   verify = false;

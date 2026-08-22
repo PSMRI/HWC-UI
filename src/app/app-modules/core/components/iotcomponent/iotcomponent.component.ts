@@ -36,6 +36,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-iotcomponent',
   templateUrl: './iotcomponent.component.html',
   styleUrls: ['./iotcomponent.component.css'],
+  standalone: false,
 })
 export class IotcomponentComponent implements OnInit, DoCheck {
   errorMsg: any;

@@ -35,6 +35,7 @@ import { HttpServiceService } from 'src/app/app-modules/core/services/http-servi
   selector: 'app-family-planning-case-sheet',
   templateUrl: './family-planning-case-sheet.component.html',
   styleUrls: ['./family-planning-case-sheet.component.css'],
+  standalone: false,
 })
 export class FamilyPlanningCaseSheetComponent
   implements OnChanges, OnInit, DoCheck

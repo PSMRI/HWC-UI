@@ -27,6 +27,7 @@ import { FormGroup } from '@angular/forms';
   selector: 'app-refer',
   templateUrl: './refer.component.html',
   styleUrls: ['./refer.component.css'],
+  standalone: false,
 })
 export class ReferComponent implements OnInit {
   @Input()

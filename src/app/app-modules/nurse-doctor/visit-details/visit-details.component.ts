@@ -41,6 +41,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-visit-details',
   templateUrl: './visit-details.component.html',
   styleUrls: ['./visit-details.component.css'],
+  standalone: false,
 })
 export class VisitDetailsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()

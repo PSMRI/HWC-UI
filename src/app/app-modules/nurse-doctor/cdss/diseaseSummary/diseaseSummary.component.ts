@@ -15,6 +15,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-disease-summary-form',
   templateUrl: './diseaseSummary.component.html',
   styleUrls: ['./diseaseSummary.component.css'],
+  standalone: false,
 })
 export class DiseaseFormComponent implements OnChanges, OnInit, DoCheck {
   currentLanguageSet: any;

@@ -27,6 +27,7 @@ import { AuthService } from 'src/app/app-modules/core/services';
   selector: 'app-tm-logout',
   templateUrl: './tm-logout.component.html',
   styleUrls: ['./tm-logout.component.css'],
+  standalone: false,
 })
 export class TmLogoutComponent implements OnInit {
   constructor(

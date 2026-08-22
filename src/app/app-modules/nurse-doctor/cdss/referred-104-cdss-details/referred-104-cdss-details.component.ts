@@ -25,6 +25,7 @@ import { Component } from '@angular/core';
   selector: 'app-referred-104-cdss-details',
   templateUrl: './referred-104-cdss-details.component.html',
   styleUrls: ['./referred-104-cdss-details.component.css'],
+  standalone: false,
 })
 export class Referred104CdssDetailsComponent {
   currentLanguageSet: any;

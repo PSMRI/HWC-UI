@@ -44,6 +44,7 @@ import { IotcomponentComponent } from 'src/app/app-modules/core/components/iotco
   selector: 'app-hypertension-screening',
   templateUrl: './hypertension-screening.component.html',
   styleUrls: ['./hypertension-screening.component.css'],
+  standalone: false,
 })
 export class HypertensionScreeningComponent
   implements OnInit, DoCheck, OnDestroy

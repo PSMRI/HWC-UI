@@ -39,6 +39,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-ncd-care-diagnosis',
   templateUrl: './ncd-care-diagnosis.component.html',
   styleUrls: ['./ncd-care-diagnosis.component.css'],
+  standalone: false,
 })
 export class NcdCareDiagnosisComponent implements OnInit, DoCheck, OnDestroy {
   utils = new GeneralUtils(this.fb, this.sessionstorage);

@@ -43,6 +43,7 @@ import { environment } from 'src/environments/environment';
   selector: 'app-oral-cancer-screening',
   templateUrl: './oral-cancer-screening.component.html',
   styleUrls: ['./oral-cancer-screening.component.css'],
+  standalone: false,
 })
 export class OralCancerScreeningComponent
   implements OnChanges, OnInit, DoCheck, OnDestroy

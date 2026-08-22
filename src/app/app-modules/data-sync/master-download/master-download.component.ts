@@ -31,6 +31,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-master-download',
   templateUrl: './master-download.component.html',
   styleUrls: ['./master-download.component.css'],
+  standalone: false,
 })
 export class MasterDownloadComponent implements OnInit {
   constructor(

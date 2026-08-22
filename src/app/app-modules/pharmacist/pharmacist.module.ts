@@ -31,7 +31,10 @@ import { WorklistComponent } from './worklist/worklist.component';
 import { PharmacistService } from './shared/services/pharmacist.service';
 import { RedirInComponent } from './redir-in/redir-in.component';
 import { RedirFallbackComponent } from './redir-fallback/redir-fallback.component';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -43,6 +46,12 @@ import { MaterialModule } from '../core/material.module';
 import { SharedModule } from '../core/components/shared/shared.module';
 
 @NgModule({
+  declarations: [
+    DashboardComponent,
+    WorklistComponent,
+    RedirInComponent,
+    RedirFallbackComponent,
+  ],
   imports: [
     CommonModule,
     PharmacistRoutingModule,
@@ -52,7 +61,6 @@ import { SharedModule } from '../core/components/shared/shared.module';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    HttpClientModule,
     MaterialModule,
     MatTableModule,
     MatChipsModule,
@@ -60,12 +68,6 @@ import { SharedModule } from '../core/components/shared/shared.module';
     MatTooltipModule,
     SharedModule,
   ],
-  declarations: [
-    DashboardComponent,
-    WorklistComponent,
-    RedirInComponent,
-    RedirFallbackComponent,
-  ],
-  providers: [PharmacistService],
+  providers: [PharmacistService, provideHttpClient(withInterceptorsFromDi())],
 })
 export class PharmacistModule {}

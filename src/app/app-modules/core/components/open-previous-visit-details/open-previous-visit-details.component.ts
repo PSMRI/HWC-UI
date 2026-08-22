@@ -31,6 +31,7 @@ import { DoctorService } from 'src/app/app-modules/nurse-doctor/shared/services'
   selector: 'app-open-previous-visit-details',
   templateUrl: './open-previous-visit-details.component.html',
   styleUrls: ['./open-previous-visit-details.component.css'],
+  standalone: false,
 })
 export class OpenPreviousVisitDetailsComponent implements OnInit {
   currentLanguageSet: any;

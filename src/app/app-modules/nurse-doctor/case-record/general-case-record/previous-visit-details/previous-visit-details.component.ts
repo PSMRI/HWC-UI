@@ -41,6 +41,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-previous-visit-details',
   templateUrl: './previous-visit-details.component.html',
   styleUrls: ['./previous-visit-details.component.css'],
+  standalone: false,
 })
 export class PreviousVisitDetailsComponent
   implements OnInit, DoCheck, OnDestroy

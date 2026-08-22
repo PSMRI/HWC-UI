@@ -25,6 +25,7 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-referred-104-details-popup',
   templateUrl: './referred-104-details-popup.component.html',
   styleUrls: ['./referred-104-details-popup.component.css'],
+  standalone: false,
 })
 export class Referred104DetailsPopupComponent {
   constructor() {}

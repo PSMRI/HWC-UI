@@ -41,6 +41,7 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
   selector: 'app-nurse-mmu-tm-referred-worklist',
   templateUrl: './nurse-mmu-tm-referred-worklist.component.html',
   styleUrls: ['./nurse-mmu-tm-referred-worklist.component.css'],
+  standalone: false,
 })
 export class NurseMmuTmReferredWorklistComponent
   implements OnInit, DoCheck, OnDestroy

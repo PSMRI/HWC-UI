@@ -53,6 +53,7 @@ import { AmritTrackingService } from 'Common-UI/src/tracking';
   selector: 'app-patient-chief-complaints',
   templateUrl: './chief-complaints.component.html',
   styleUrls: ['./chief-complaints.component.css'],
+  standalone: false,
 })
 export class ChiefComplaintsComponent implements OnInit, DoCheck, OnDestroy {
   @Input()
