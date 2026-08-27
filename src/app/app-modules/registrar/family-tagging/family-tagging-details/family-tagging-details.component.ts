@@ -372,27 +372,15 @@ export class FamilyTaggingDetailsComponent
   }
 
   getBeneficiaryDetailsAfterFamilyTag() {
-    const benReqObj = {
-      beneficiaryRegID: null,
-      beneficiaryID: this.beneficiaryId,
-      phoneNo: null,
-      HealthID: null,
-      HealthIDNumber: null,
-      familyId: null,
-      identity: null,
-    };
-
-    this.registrarService.identityQuickSearch(benReqObj).subscribe(
-      (beneficiaryDetails: any) => {
-        if (beneficiaryDetails && beneficiaryDetails.data.length === 1) {
-          this.benFamilyId =
-            beneficiaryDetails.data[0].familyId !== undefined &&
-            beneficiaryDetails.data[0].familyId !== null
-              ? beneficiaryDetails.data[0].familyId
-              : null;
+    const reqObj = { beneficiaryRegId: this.beneficiaryRegID };
+    this.familyTaggingService.getBenFamilyDetailsByBenRegId(reqObj).subscribe(
+      (res: any) => {
+        if (res && res.statusCode === 200 && res.data && res.data.familyId) {
+          this.benFamilyId = res.data.familyId;
           this.registrarService.getBenFamilyDetails(this.benFamilyId);
         } else {
           this.benFamilyId = null;
+          this.registrarService.getBenFamilyDetails(null);
         }
       },
       (error: string) => {

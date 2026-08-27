@@ -40,7 +40,7 @@ export class QuickConsultUtils {
       drugForm: null,
       drugDuration: null,
       drugDurationUnit: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       qih: { value: null, disabled: true },
     });
@@ -54,7 +54,7 @@ export class QuickConsultUtils {
       chiefComplaint: [null],
       conceptID: [null],
       description: [null],
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -92,7 +92,7 @@ export class QuickConsultUtils {
       sctCode: prescription.sctCode,
       sctTerm: prescription.sctTerm,
       createdBy: prescription.createdBy || undefined,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       isEDL: prescription.isEDL,
     });
@@ -132,7 +132,7 @@ export class QuickConsultUtils {
       prescription: this.createDrugPrescriptionForm(),
       counsellingProvided: { value: null, disabled: false },
       prescriptionID: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       provisionalDiagnosisList: this.fb.array([
         this.initProvisionalDiagnosisList(),

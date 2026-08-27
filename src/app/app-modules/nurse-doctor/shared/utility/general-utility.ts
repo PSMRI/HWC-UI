@@ -66,7 +66,7 @@ export class GeneralUtils {
       wheezingChecked: null,
       painInChestChecked: null,
       shortnessOfBreathChecked: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -110,7 +110,7 @@ export class GeneralUtils {
       edema: null,
       extentOfEdema: null,
       edemaType: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -138,7 +138,7 @@ export class GeneralUtils {
       skin: null,
       hair: null,
       nails: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -158,7 +158,7 @@ export class GeneralUtils {
       prolongedIrritation: null,
       chronicBurningSensation: null,
       observation: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -194,7 +194,7 @@ export class GeneralUtils {
       percussion: null,
       auscultation: null,
       analRegion: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -215,7 +215,7 @@ export class GeneralUtils {
       additionalHeartSounds: null,
       murmurs: null,
       pericardialRub: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -239,7 +239,7 @@ export class GeneralUtils {
       auscultation_PleuralRub: null,
       auscultation_ConductedSounds: null,
       percussion: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -260,7 +260,7 @@ export class GeneralUtils {
       cerebellarSigns: null,
       signsOfMeningealIrritation: null,
       skull: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -282,7 +282,7 @@ export class GeneralUtils {
       lowerLimb_Abnormality: null,
       chestWall: null,
       spine: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -298,7 +298,7 @@ export class GeneralUtils {
       renalAngle: null,
       suprapubicRegion: null,
       externalGenitalia: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -327,7 +327,7 @@ export class GeneralUtils {
       vertebralDeformity: null,
       isHRP: null,
       reasonsForHRP: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -351,7 +351,7 @@ export class GeneralUtils {
       duration: null,
       trimesterNumber: null,
       bloodGroup: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -374,7 +374,7 @@ export class GeneralUtils {
       benVisitID: null,
       providerServiceMapID: null,
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -394,7 +394,7 @@ export class GeneralUtils {
       benVisitID: null,
       providerServiceMapID: null,
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -432,7 +432,7 @@ export class GeneralUtils {
       this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       comorbidityConcurrentConditionsList: new FormArray([]),
     });
@@ -452,7 +452,7 @@ export class GeneralUtils {
       isFineMotorMilestones: null,
       isLanguageMilestones: null,
       isSocialMilestones: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -466,7 +466,7 @@ export class GeneralUtils {
       isGeneticDisorder: null,
       geneticDisorder: null,
       isConsanguineousMarrige: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -482,7 +482,7 @@ export class GeneralUtils {
       foodIntoleranceStatus: null,
       typeOfFoodIntolerances: null,
       otherFoodIntolerance: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -492,7 +492,7 @@ export class GeneralUtils {
       this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       medicationHistoryList: new FormArray([]),
     });
@@ -520,7 +520,7 @@ export class GeneralUtils {
       bloodFlowDuration: null,
       menstrualProblemList: null,
       lMPDate: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -530,7 +530,7 @@ export class GeneralUtils {
       this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       otherVaccines: this.fb.array([]),
     });
@@ -541,7 +541,7 @@ export class GeneralUtils {
       this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       pastIllness: new FormArray([]),
       pastSurgery: new FormArray([]),
@@ -554,7 +554,7 @@ export class GeneralUtils {
 
     return this.fb.group({
       totalNoOfPreg: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       complicationPregList: new FormArray([]),
       pastObstericHistoryList: new FormArray([]),
@@ -611,7 +611,7 @@ export class GeneralUtils {
       otherComplicationAtBirth: null,
       gestation: null,
       birthWeightG: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -627,7 +627,7 @@ export class GeneralUtils {
       tobaccoUseStatus: null,
       alcoholIntakeStatus: null,
       allergyStatus: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       tobaccoList: new FormArray([]),
       alcoholList: new FormArray([]),
@@ -652,7 +652,7 @@ export class GeneralUtils {
       isForHistory: null,
       complaints: this.fb.array([this.initChiefComplaints()]),
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       clinicalObservationsList: this.fb.array([
         this.initClinicalObservationsList(),
@@ -674,7 +674,7 @@ export class GeneralUtils {
       conceptID: null,
       unitOfDuration: null,
       description: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -699,7 +699,7 @@ export class GeneralUtils {
     return this.fb.group({
       instruction: null,
       prescriptionID: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       provisionalDiagnosisList: this.fb.array([
         this.initProvisionalDiagnosisList(),
@@ -735,7 +735,7 @@ export class GeneralUtils {
       otherCurrPregComplication: null,
       prescriptionID: null,
       specialistDiagnosis: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -752,7 +752,7 @@ export class GeneralUtils {
       ncdComplication: null,
       prescriptionID: null,
       specialistDiagnosis: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       provisionalDiagnosisList: this.fb.array([
         this.initProvisionalDiagnosisList(),
@@ -768,7 +768,7 @@ export class GeneralUtils {
       prescriptionID: null,
       specialistDiagnosis: null,
       doctorDiagnosis: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -790,7 +790,7 @@ export class GeneralUtils {
       causeOfDeath: null,
       prescriptionID: null,
       specialistDiagnosis: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -803,7 +803,7 @@ export class GeneralUtils {
       labTest: null,
       radiologyTest: null,
       externalInvestigations: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -813,7 +813,7 @@ export class GeneralUtils {
       this.sessionstorage.getItem('serviceLineDetails');
 
     return this.fb.group({
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       prescribedDrugs: this.fb.array([]),
     });
@@ -847,7 +847,7 @@ export class GeneralUtils {
       sctCode: prescription.sctCode,
       sctTerm: prescription.sctTerm,
       createdBy: prescription.createdBy || undefined,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       isEDL: prescription.isEDL,
     });
@@ -896,7 +896,7 @@ export class GeneralUtils {
     return this.fb.group({
       instruction: null,
       prescriptionID: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       provisionalDiagnosisList: this.fb.array([
         this.initProvisionalDiagnosisList(),
@@ -969,7 +969,7 @@ export class GeneralUtils {
       birthWeightOfNewborn: null,
       newBornHealthStatus: null,
       deliveryConductedBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -994,7 +994,7 @@ export class GeneralUtils {
       activityType: null,
       pAID: null,
       score: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -1008,7 +1008,7 @@ export class GeneralUtils {
       isGeneticDisorder: null,
       geneticDisorder: null,
       isConsanguineousMarrige: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -1064,7 +1064,7 @@ export class GeneralUtils {
       wheezingChecked: null,
       painInChestChecked: null,
       shortnessOfBreathChecked: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       processed: null,
       deleted: null,
@@ -1094,7 +1094,7 @@ export class GeneralUtils {
       benVisitID: null,
       providerServiceMapID: null,
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       processed: null,
       deleted: null,
@@ -1122,7 +1122,7 @@ export class GeneralUtils {
       nextDueVaccinesID: null,
       locationOfNextImmunization: null,
       locationOfNextImmunizationID: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       processed: null,
       deleted: null,
@@ -1152,7 +1152,7 @@ export class GeneralUtils {
       benVisitID: null,
       providerServiceMapID: null,
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       processed: null,
       deleted: null,

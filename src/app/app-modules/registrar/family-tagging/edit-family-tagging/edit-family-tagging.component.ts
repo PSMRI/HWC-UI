@@ -236,7 +236,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
       if (this.data.isEdit) {
         const serviceLineDetails: any =
           this.sessionstorage.getItem('serviceLineDetails');
-        const vanID = JSON.parse(serviceLineDetails).vanID;
+        const facilityID = JSON.parse(serviceLineDetails).facilityID;
         const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
         const requestObjEdit = {
@@ -250,7 +250,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
           headofFamily_RelationID: this.relationWithHead,
           headofFamily_Relation: typeOfRelation[0].benRelationshipType,
           other: this.other,
-          vanID: vanID,
+          facilityID: facilityID,
           parkingPlaceID: parkingPlaceID,
           modifiedBy: this.sessionstorage.getItem('userName'),
         };
@@ -270,7 +270,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
       } else {
         const serviceLineDetails: any =
           this.sessionstorage.getItem('serviceLineDetails');
-        const vanID = JSON.parse(serviceLineDetails).vanID;
+        const facilityID = JSON.parse(serviceLineDetails).facilityID;
         const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
         const requestObj = {
           familyId: this.memberFamilyId,
@@ -283,7 +283,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
           headofFamily_RelationID: this.relationWithHead,
           headofFamily_Relation: typeOfRelation[0].benRelationshipType,
           other: this.other,
-          vanID: vanID,
+          facilityID: facilityID,
           parkingPlaceID: parkingPlaceID,
           createdBy: this.sessionstorage.getItem('userName'),
         };
@@ -309,7 +309,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
 
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     this.selectedMembersList.filter((item) => {
@@ -318,7 +318,7 @@ export class EditFamilyTaggingComponent implements OnInit, DoCheck {
         beneficiaryRegId: item.memberId,
         isHeadOfTheFamily:
           item.relationWithHead.toLowerCase() === 'self' ? true : false,
-        vanID: vanID,
+        facilityID: facilityID,
         parkingPlaceID: parkingPlaceID,
         modifiedBy: this.sessionstorage.getItem('userName'),
       });

@@ -1917,7 +1917,7 @@ export class WorkareaComponent
     const visitCategory = this.sessionstorage.getItem('visitCategory');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const otherDetails = {
       beneficiaryRegID: this.beneficiaryRegID,
@@ -1927,7 +1927,7 @@ export class WorkareaComponent
       sessionID: this.sessionstorage.getItem('sessionID'),
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       visitCode: this.sessionstorage.getItem('visitCode'),
       serviceID: this.sessionstorage.getItem('serviceID'),
       benFlowID: this.sessionstorage.getItem('benFlowID'),
@@ -2248,7 +2248,7 @@ export class WorkareaComponent
     if (image1)
       imageCords.push(
         Object.assign(image1, {
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         }),
       );
@@ -2260,7 +2260,7 @@ export class WorkareaComponent
     if (image2)
       imageCords.push(
         Object.assign(image2, {
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         }),
       );
@@ -2272,7 +2272,7 @@ export class WorkareaComponent
     if (image3)
       imageCords.push(
         Object.assign(image3, {
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         }),
       );
@@ -2284,7 +2284,7 @@ export class WorkareaComponent
     if (image4)
       imageCords.push(
         Object.assign(image4, {
-          vanID: JSON.parse(serviceLineDetails).vanID,
+          facilityID: JSON.parse(serviceLineDetails).facilityID,
           parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
         }),
       );
@@ -3975,7 +3975,7 @@ export class WorkareaComponent
   mapDoctorQuickConsultDetails() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const tempObj = {
       beneficiaryRegID: this.beneficiaryRegID,
@@ -3985,7 +3985,7 @@ export class WorkareaComponent
       sessionID: this.sessionstorage.getItem('sessionID'),
       beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       visitCode: this.sessionstorage.getItem('visitCode'),
       serviceID: this.sessionstorage.getItem('serviceID'),
       benFlowID: this.sessionstorage.getItem('benFlowID'),
@@ -4469,10 +4469,14 @@ export class WorkareaComponent
   /* Fetch health ID detaiuls to link the visit */
   getHealthIDDetails(successResponseFromAPI: any) {
     this.getMappedAbdmFacility();
+    const successMessage =
+      successResponseFromAPI ??
+      this.current_language_set?.alerts?.info?.datafillSuccessfully ??
+      'Data saved successfully';
     this.confirmationService
       .confirmCareContext(
         'info',
-        successResponseFromAPI +
+        successMessage +
           '. ' +
           (this.current_language_set?.common?.doYouWantToLinkCareContext ??
             'Do you want to link care context?'),
@@ -4492,13 +4496,23 @@ export class WorkareaComponent
     let workLocationId: any;
     if (jsonLoccationData?.previlegeObj[0]?.roles) {
       const roles = jsonLoccationData?.previlegeObj[0]?.roles;
-      roles.forEach((item: any) => {
-        if (item.RoleName.toLowerCase() === 'doctor') {
-          workLocationId = item.workingLocationID;
-        }
-      });
+      // Prefer doctor role, fall back to first available role with a workingLocationID
+      const doctorRole = roles.find(
+        (item: any) => item.RoleName?.toLowerCase() === 'doctor',
+      );
+      const fallbackRole = roles.find((item: any) => item.workingLocationID);
+      workLocationId =
+        doctorRole?.workingLocationID ?? fallbackRole?.workingLocationID;
     }
     console.log('workLocationId', workLocationId);
+    if (!workLocationId) {
+      this.abdmFacilityId = null;
+      this.abdmFacilityName = null;
+      this.sessionstorage.setItem('abdmFacilityId', null);
+      this.sessionstorage.setItem('abdmFacilityName', null);
+      this.saveAbdmFacilityForVisit();
+      return;
+    }
     this.registrarService.getMappedFacility(workLocationId).subscribe(
       (res: any) => {
         if (res.statusCode === 200 && res.data !== null) {

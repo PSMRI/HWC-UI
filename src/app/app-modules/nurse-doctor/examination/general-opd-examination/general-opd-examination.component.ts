@@ -164,7 +164,7 @@ export class GeneralOpdExaminationComponent
     if (this.checkRequired(patientExaminationForm)) {
       const serviceLineDetails: any =
         this.sessionstorage.getItem('serviceLineDetails');
-      const vanID = JSON.parse(serviceLineDetails).vanID;
+      const facilityID = JSON.parse(serviceLineDetails).facilityID;
       const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
       const updateDetails = {
         beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
@@ -174,7 +174,7 @@ export class GeneralOpdExaminationComponent
         beneficiaryID: this.sessionstorage.getItem('beneficiaryID'),
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         benFlowID: this.sessionstorage.getItem('benFlowID'),
         visitCode: this.sessionstorage.getItem('visitCode'),
       };

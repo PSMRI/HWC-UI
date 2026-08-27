@@ -118,8 +118,25 @@ export class ServicePointComponent implements OnInit, DoCheck {
           res['servicePoints'].data !== null
         ) {
           const data = res['servicePoints'].data;
+          console.log('[DEBUG getServicePoint] data:', data);
           if (data.UserVanSpDetails) {
             this.vanServicepointDetails = data.UserVanSpDetails;
+            console.log(
+              '[DEBUG getServicePoint] UserVanSpDetails:',
+              this.vanServicepointDetails,
+            );
+            // Check if user has facilityID — skip Van selection
+            const facilityEntry = this.vanServicepointDetails.find(
+              (item: any) => item.facilityID != null,
+            );
+            console.log(
+              '[DEBUG getServicePoint] facilityEntry:',
+              facilityEntry,
+            );
+            if (facilityEntry && facilityEntry.facilityID) {
+              this.autoLoginWithFacility(facilityEntry);
+              return;
+            }
             this.currVanId = this.vanServicepointDetails[0].vanID;
             this.filterVanList(this.vanServicepointDetails);
           }
@@ -205,8 +222,9 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   getDemographics() {
+    const facilityID = this.sessionstorage.getItem('facilityID');
     this.servicePointService
-      .getMMUDemographics(this.currVanId)
+      .getMMUDemographics(facilityID)
       .subscribe((res: any) => {
         if (res && res.statusCode === 200) {
           this.saveDemographicsToStorage(res.data);
@@ -217,9 +235,39 @@ export class ServicePointComponent implements OnInit, DoCheck {
   }
 
   saveDemographicsToStorage(data: any) {
+    console.log('=== saveDemographicsToStorage ===');
+    console.log('data:', data);
+    console.log('otherLoc:', data?.otherLoc);
+    console.log('districtList:', data?.otherLoc?.districtList);
+    console.log('villageList:', data?.otherLoc?.districtList?.[0]?.villageList);
     if (data) {
       if (data.stateMaster && data.stateMaster.length >= 1) {
         this.sessionstorage.setItem('location', JSON.stringify(data));
+        // Store locationData for Common-UI registration component
+        if (
+          data.otherLoc &&
+          data.otherLoc.districtList &&
+          data.otherLoc.districtList.length > 0
+        ) {
+          const dist = data.otherLoc.districtList[0];
+          const village =
+            dist.villageList && dist.villageList.length > 0
+              ? dist.villageList[0]
+              : {};
+          const locationData = {
+            stateID: data.otherLoc.stateID,
+            districtID: dist.districtID,
+            districtName: dist.districtName,
+            blockID: dist.blockId,
+            blockName: dist.blockName,
+            subDistrictID: village.districtBranchID || null,
+            villageName: village.villageName || null,
+          };
+          this.sessionstorage.setItem(
+            'locationData',
+            JSON.stringify(locationData),
+          );
+        }
         this.goToWorkList();
       } else {
         this.locationGatheringIssues();
@@ -304,6 +352,41 @@ export class ServicePointComponent implements OnInit, DoCheck {
     // Store the JSON string in this.sessionstorage
     this.sessionstorage.setItem('locationData', locationDataJSON);
     this.goToWorkList();
+  }
+
+  autoLoginWithFacility(facilityEntry: any) {
+    console.log('=== autoLoginWithFacility ===');
+    console.log('facilityEntry:', facilityEntry);
+    console.log(
+      'Setting servicePointID =',
+      facilityEntry.servicePointID || facilityEntry.facilityID,
+    );
+    console.log(
+      'Setting servicePointName =',
+      facilityEntry.servicePointName || facilityEntry.vanNoAndType,
+    );
+    // Store serviceLineDetails with facilityID — skip Van selection
+    this.sessionstorage.setItem(
+      'serviceLineDetails',
+      JSON.stringify(facilityEntry),
+    );
+    this.sessionstorage.setItem('facilityID', facilityEntry.facilityID);
+    // Set servicePointID/Name for registration form compatibility
+    this.sessionstorage.setItem(
+      'servicePointID',
+      facilityEntry.servicePointID || facilityEntry.facilityID,
+    );
+    this.sessionstorage.setItem(
+      'servicePointName',
+      facilityEntry.servicePointName ||
+        facilityEntry.vanNoAndType ||
+        'Facility',
+    );
+    if (facilityEntry.vanSession)
+      this.sessionstorage.setItem('sessionID', facilityEntry.vanSession);
+    // Get demographics and go to worklist
+    this.currVanId = facilityEntry.vanID;
+    this.getDemographics();
   }
 
   goToWorkList() {

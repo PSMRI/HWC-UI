@@ -179,8 +179,8 @@ export class Nurse104RefferedWorklistComponent
   nurse104ReferredWorklistResponce() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanId = JSON.parse(serviceLineDetails).vanID;
-    this.nurseService.loadNursePatientDetails(vanId).subscribe(
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
+    this.nurseService.loadNursePatientDetails(facilityID).subscribe(
       (res: any) => {
         if (res !== null) {
           const benlist = this.loadDataToNurse104ReferredWorklist(res);
