@@ -570,5 +570,42 @@ export const environment = {
   advanceElasticSearchUrl: `${HWC_API}registrar/advancedSearchES`,
   checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
 
+
+  /**
+   * ONHS (Open Network for Health Services) — Beckn 2.0 seeker (BAP).
+   *
+   * onhsSeekerBase is the origin the browser calls directly.
+   *
+   * NOTE: the seeker currently returns no Access-Control-Allow-Origin header,
+   * so calls from a browser on a different origin are blocked by CORS. Enable
+   * CORS on the seeker (or reverse-proxy /bap and /seeker from the AMRIT host)
+   * for this to work. Setting this to '' falls back to same-origin relative
+   * calls, which `ng serve` forwards via proxy.conf.json.
+   *
+   * onhsBapUri is network identity (where the network posts /on_* callbacks back
+   * to). It must stay the absolute public URL regardless of onhsSeekerBase.
+   */
+  onhsSeekerBase: `https://amritonhsseeker.piramalswasthya.org`,
+  onhsBapId: `amritonhsseeker.piramalswasthya.org`,
+  onhsBapUri: `https://amritonhsseeker.piramalswasthya.org/bap/receiver`,
+  onhsDomain: `onhs:health`,
+  onhsNetworkId: `onhs.in/sandbox_onhs_reference_registry`,
+  onhsVersion: `2.0.0`,
+  onhsTtl: `PT30S`,
+
+  /** Provider node (PN/BPP) targeted from /select onward. */
+  onhsBppId: `vksprovider.onhs.in`,
+  onhsBppUri: `https://doornail-reprimand-lumping.ngrok-free.dev/bpp/receiver`,
+
+  /**
+   * The PN currently accepts only this resource/offer pair. Every other id from
+   * the published catalog is rejected as unknown, i.e. the catalog is stale.
+   */
+  onhsResourceId: `vks-resources-01`,
+  onhsOfferId: `offer-vks-single-01`,
+  onhsConsiderationId: `cons-standard-cat-001`,
+
+  /** Seconds the seeker sandbox long-polls before returning a callback timeout. */
+  onhsCallbackTimeout: 20,
 };
 

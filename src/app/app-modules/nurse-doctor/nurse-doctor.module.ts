@@ -42,6 +42,8 @@ import { NurseTmFutureWorklistComponent } from './nurse-worklist-wrapper/nurse-t
 import { NurseTmWorklistComponent } from './nurse-worklist-wrapper/nurse-tm-worklist/nurse-tm-worklist.component';
 import { NurseWorklistWrapperComponent } from './nurse-worklist-wrapper/nurse-worklist-wrapper.component';
 import { NurseWorklistComponent } from './nurse-worklist-wrapper/nurse-worklist/nurse-worklist.component';
+import { OnhsComponent } from './onhs/onhs.component';
+import { OnhsService } from './onhs/onhs.service';
 import { NcdScreeningService } from './shared/services/ncd-screening.service';
 import { Referred104WorkareaComponent } from './workarea/referred-104-workarea/referred-104-workarea.component';
 import { WorkareaComponent } from './workarea/workarea.component';
@@ -194,6 +196,7 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
     SharedModule,
   ],
   declarations: [
+    OnhsComponent,
     NurseWorklistComponent,
     PatientVisitDetailsComponent,
     PrintPageSelectComponent,
@@ -327,6 +330,7 @@ import { AutocompleteScrollerDirective } from './shared/utility/autocomplete-scr
   ],
 
   providers: [
+    OnhsService,
     NurseService,
     DoctorService,
     MasterdataService,

@@ -92,7 +92,7 @@
                 }
               ]
             },
-            "test":{
+            "test": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -115,7 +115,8 @@
           },
           "defaultConfiguration": "development",
           "options": {
-            "port": 4204
+            "port": 4204,
+            "proxyConfig": "proxy.conf.json"
           }
         },
         "extract-i18n": {

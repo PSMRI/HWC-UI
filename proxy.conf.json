@@ -1,0 +1,14 @@
+{
+  "/bap": {
+    "target": "https://amritonhsseeker.piramalswasthya.org",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/seeker": {
+    "target": "https://amritonhsseeker.piramalswasthya.org",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

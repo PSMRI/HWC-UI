@@ -29,7 +29,8 @@
             "visit": "Visit",
             "current": "Current TC",
             "future": "Future TC",
-            "referred":"MMU Referred"
+            "referred":"MMU Referred",
+            "onhs": "ONHS"
         },
         "tabs": {
             "current": "Current",

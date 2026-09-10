@@ -8,5 +8,9 @@
       <app-nurse-mmu-tm-referred-worklist></app-nurse-mmu-tm-referred-worklist>
     </mat-tab>
 
+    <mat-tab label="{{ currentLanguageSet?.nurse_tabs?.onhs || 'ONHS' }}">
+      <app-onhs></app-onhs>
+    </mat-tab>
+
   </mat-tab-group>
 </div>

@@ -16,7 +16,8 @@
         "nurse_tabs": {
             "visit": "Visit",
             "current": "Current TC",
-            "future": "Future TC"
+            "future": "Future TC",
+            "onhs": "ONHS"
         },
         "tabs": {
             "current": "Current",
@@ -1345,7 +1346,8 @@
         "nurse_tabs": {
             "visit": "आगमन",
             "current": "वर्तमान टीसी",
-            "future": "भविष्य टीसी"
+            "future": "भविष्य टीसी",
+            "onhs": "ONHS"
         },
         "ro": {
             "registration": "पंजीकरण",
@@ -2669,7 +2671,8 @@
         "nurse_tabs": {
           "visit": "Visit",
           "current": "বর্তমান টি চি",
-          "future": "ভবিষ্যত টি চি"
+          "future": "ভবিষ্যত টি চি",
+          "onhs": "ONHS"
         },
         "tabs": {
           "current": "Current",

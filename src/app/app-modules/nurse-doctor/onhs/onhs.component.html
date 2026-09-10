@@ -1,0 +1,481 @@
+<div class="onhs-wrap">
+  <div class="onhs-header">
+    <div>
+      <h2 class="onhs-title">Book a health service</h2>
+      <p class="onhs-sub">
+        Find, book and track services offered on the Open Network for Health
+        Services.
+      </p>
+    </div>
+    <div class="onhs-ref" *ngIf="activeStep > 0">
+      <span class="ref-k">Reference</span>
+      <span class="ref-v">{{ reference }}</span>
+    </div>
+  </div>
+
+  <mat-horizontal-stepper
+    [linear]="false"
+    [selectedIndex]="activeStep"
+    (selectionChange)="activeStep = $event.selectedIndex"
+  >
+    <!-- ==================== 1. Find a service ==================== -->
+    <mat-step label="Find a service">
+      <div class="pane">
+        <div class="search-row">
+          <mat-form-field appearance="outline" class="grow">
+            <mat-label>What do you need?</mat-label>
+            <input
+              matInput
+              [(ngModel)]="searchText"
+              name="onhsSearch"
+              placeholder="e.g. teleconsultation, cough analysis"
+              (keyup.enter)="searchServices()"
+            />
+          </mat-form-field>
+          <button
+            mat-raised-button
+            class="mat_blue search-btn"
+            type="button"
+            [disabled]="searchPhase === 'busy' || !searchText.trim()"
+            (click)="searchServices()"
+          >
+            Search
+          </button>
+        </div>
+
+        <div class="status busy" *ngIf="searchPhase === 'busy'">
+          <mat-spinner diameter="18"></mat-spinner>
+          <span>{{ searchMessage }}</span>
+        </div>
+        <div class="status warn" *ngIf="searchPhase === 'pending'">
+          <i class="fa fa-clock-o" aria-hidden="true"></i>
+          <span>{{ searchMessage }}</span>
+        </div>
+        <div class="status err" *ngIf="searchPhase === 'error'">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+          <span>{{ searchMessage }}</span>
+        </div>
+
+        <div class="empty" *ngIf="searchPhase === 'idle'">
+          Search to see what providers on the network are offering.
+        </div>
+        <div class="empty" *ngIf="searchPhase === 'done' && !services.length">
+          {{ searchMessage }}
+        </div>
+
+        <div class="service-grid" *ngIf="services.length">
+          <div
+            class="service-card"
+            *ngFor="let s of services; trackBy: trackByOffer"
+          >
+            <div class="service-name">{{ s.name }}</div>
+            <div class="service-provider">{{ s.providerName }}</div>
+            <div class="service-tags">
+              <span class="tag" *ngIf="s.serviceType">{{ s.serviceType }}</span>
+              <span class="tag alt" *ngIf="s.packaging">{{ s.packaging }}</span>
+            </div>
+            <div class="service-note" *ngIf="s.bulk">
+              Drawn from pre-purchased capacity
+            </div>
+            <div class="service-foot">
+              <span class="price" *ngIf="s.price !== null">
+                {{ s.currency }} {{ s.price }}
+              </span>
+              <span class="price muted" *ngIf="s.price === null">
+                Price on quote
+              </span>
+              <button
+                mat-raised-button
+                class="mat_blue"
+                type="button"
+                (click)="chooseService(s)"
+              >
+                Select
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-step>
+
+    <!-- ==================== 2. Patient details ==================== -->
+    <mat-step label="Patient details">
+      <div class="pane" *ngIf="selected">
+        <div class="chosen">
+          <div>
+            <div class="chosen-name">{{ selected.name }}</div>
+            <div class="chosen-provider">{{ selected.providerName }}</div>
+          </div>
+          <div class="chosen-price" *ngIf="amount !== null">
+            {{ currency }} {{ amount }}
+          </div>
+        </div>
+
+        <div class="status busy" *ngIf="detailsPhase === 'busy'">
+          <mat-spinner diameter="18"></mat-spinner>
+          <span>{{ detailsMessage }}</span>
+        </div>
+        <div class="status warn" *ngIf="detailsPhase === 'pending'">
+          <i class="fa fa-clock-o" aria-hidden="true"></i>
+          <span>{{ detailsMessage }}</span>
+        </div>
+        <div class="status err" *ngIf="detailsPhase === 'error'">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+          <span>{{ detailsMessage }}</span>
+        </div>
+
+        <h3 class="section-h">Who is this for?</h3>
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Patient name</mat-label>
+            <input
+              matInput
+              [(ngModel)]="patient.patientName"
+              name="onhsPatientName"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>ABHA number</mat-label>
+            <input matInput [(ngModel)]="patient.abhaId" name="onhsAbha" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Date of birth</mat-label>
+            <input
+              matInput
+              [(ngModel)]="patient.dateOfBirth"
+              name="onhsDob"
+              placeholder="YYYY-MM-DD"
+            />
+            <mat-hint *ngIf="dobInvalid" class="dob-invalid">
+              Use YYYY-MM-DD, or leave blank.
+            </mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select [(ngModel)]="patient.gender" name="onhsGender" required>
+              <mat-option *ngFor="let g of genders" [value]="g">{{
+                g
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Field worker name</mat-label>
+            <input
+              matInput
+              [(ngModel)]="patient.flwName"
+              name="onhsFlwName"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Field worker ID</mat-label>
+            <input matInput [(ngModel)]="patient.chwId" name="onhsChwId" />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="span-2">
+            <mat-label>Notes</mat-label>
+            <input
+              matInput
+              [(ngModel)]="patient.clientNotes"
+              name="onhsNotes"
+              placeholder="Reason for the visit"
+            />
+          </mat-form-field>
+        </div>
+
+        <h3 class="section-h">Consent</h3>
+        <div class="consent">
+          <mat-checkbox [(ngModel)]="consentGiven" name="onhsConsent">
+            The patient consents to their samples and health details being
+            shared with this provider for diagnosis and quality assurance.
+          </mat-checkbox>
+          <p class="consent-note">
+            Data is retained by the provider for 90 days. Files stay as secure
+            links — nothing clinical is sent over the network itself.
+          </p>
+        </div>
+
+        <div class="pane-actions">
+          <button
+            mat-raised-button
+            class="mat_gray"
+            type="button"
+            (click)="activeStep = 0"
+          >
+            Back
+          </button>
+          <button
+            mat-raised-button
+            class="mat_blue"
+            type="button"
+            [disabled]="!detailsComplete || detailsPhase === 'busy'"
+            (click)="submitDetails()"
+          >
+            Continue to payment
+          </button>
+        </div>
+      </div>
+    </mat-step>
+
+    <!-- ==================== 3. Payment ==================== -->
+    <mat-step label="Payment">
+      <div class="pane" *ngIf="selected">
+        <h3 class="section-h">Summary</h3>
+        <div class="summary">
+          <div class="summary-row">
+            <span class="k">Service</span
+            ><span class="v">{{ selected.name }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="k">Provider</span>
+            <span class="v">{{ selected.providerName }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="k">Patient</span>
+            <span class="v">{{ patient.patientName }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="k">Field worker</span>
+            <span class="v">{{ patient.flwName }}</span>
+          </div>
+          <div class="summary-row total" *ngIf="amount !== null">
+            <span class="k">Amount payable</span>
+            <span class="v">{{ currency }} {{ amount }}</span>
+          </div>
+        </div>
+
+        <div
+          class="test-banner"
+          *ngIf="testPaymentMode && !payingByEntitlement"
+        >
+          <i class="fa fa-flask" aria-hidden="true"></i>
+          <span>
+            <strong>Test payment.</strong> No gateway is contacted and no money
+            moves. A test authorisation reference is generated so the booking
+            carries valid payment proof.
+          </span>
+        </div>
+
+        <h3 class="section-h">How is this being paid?</h3>
+        <mat-radio-group
+          class="pay-group"
+          [(ngModel)]="paymentMethod"
+          name="onhsPayMethod"
+        >
+          <mat-radio-button
+            *ngFor="let p of paymentOptions"
+            [value]="p.value"
+            class="pay-option"
+          >
+            {{ p.label }}
+          </mat-radio-button>
+        </mat-radio-group>
+
+        <div class="entitlement-box" *ngIf="payingByEntitlement">
+          <mat-form-field appearance="outline" class="grow">
+            <mat-label>Entitlement reference</mat-label>
+            <input
+              matInput
+              [(ngModel)]="entitlementRef"
+              name="onhsEntitlementRef"
+              placeholder="Reference from the capacity purchase"
+            />
+          </mat-form-field>
+          <p class="hint-left">
+            Bulk packages are drawn from capacity bought earlier, so no payment
+            is taken now. The provider checks this reference has units left.
+          </p>
+        </div>
+
+        <div class="status busy" *ngIf="paymentPhase === 'busy'">
+          <mat-spinner diameter="18"></mat-spinner>
+          <span>{{ paymentMessage }}</span>
+        </div>
+        <div class="status err" *ngIf="paymentPhase === 'error'">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+          <span>{{ paymentMessage }}</span>
+        </div>
+
+        <div class="pane-actions">
+          <button
+            mat-raised-button
+            class="mat_gray"
+            type="button"
+            (click)="activeStep = 1"
+          >
+            Back
+          </button>
+          <button
+            mat-raised-button
+            class="mat_blue"
+            type="button"
+            [disabled]="!canPay"
+            (click)="payAndConfirm()"
+          >
+            <span *ngIf="payingByEntitlement">Confirm using entitlement</span>
+            <span *ngIf="!payingByEntitlement && amount !== null">
+              Pay {{ currency }} {{ amount }} and confirm
+            </span>
+            <span *ngIf="!payingByEntitlement && amount === null">
+              Confirm booking
+            </span>
+          </button>
+        </div>
+      </div>
+    </mat-step>
+
+    <!-- ==================== 4. Result ==================== -->
+    <mat-step label="Result">
+      <div class="pane">
+        <div class="outcome ok" *ngIf="bookingConfirmed">
+          <i class="fa fa-check-circle" aria-hidden="true"></i>
+          <div>
+            <div class="outcome-title">Booking confirmed</div>
+            <div class="outcome-sub">
+              Reference {{ reference }} · {{ selected?.name }}
+            </div>
+          </div>
+        </div>
+
+        <div class="outcome wait" *ngIf="!bookingConfirmed">
+          <i class="fa fa-clock-o" aria-hidden="true"></i>
+          <div>
+            <div class="outcome-title">Awaiting provider confirmation</div>
+            <div class="outcome-sub">
+              {{ paymentMessage || "Your request reached the provider." }}
+              Reference {{ reference }} — keep this to follow up.
+            </div>
+          </div>
+        </div>
+
+        <div class="pay-receipt" *ngIf="paymentRef">
+          <div class="summary-row">
+            <span class="k">
+              {{ payingByEntitlement ? "Entitlement" : "Payment reference" }}
+            </span>
+            <span class="v">{{ paymentRef }}</span>
+          </div>
+          <div class="summary-row" *ngIf="authCode">
+            <span class="k">Authorisation</span>
+            <span class="v">{{ authCode }}</span>
+          </div>
+          <div
+            class="summary-row"
+            *ngIf="testPaymentMode && !payingByEntitlement"
+          >
+            <span class="k">Mode</span>
+            <span class="v test-flag">Test — no real payment</span>
+          </div>
+        </div>
+
+        <h3 class="section-h">Booking progress</h3>
+        <div class="progress-track" *ngIf="progress.length">
+          <div
+            class="progress-stage"
+            *ngFor="let stage of progress"
+            [class.done]="stage.done"
+          >
+            <span class="dot">
+              <i
+                class="fa"
+                [ngClass]="stage.done ? 'fa-check' : 'fa-circle-o'"
+                aria-hidden="true"
+              ></i>
+            </span>
+            <span class="stage-label">{{ stage.label }}</span>
+            <span class="stage-at" *ngIf="stage.at">{{ stage.at }}</span>
+          </div>
+        </div>
+        <div class="empty" *ngIf="!progress.length && !progressLoading">
+          Progress will appear once the booking reaches the provider.
+        </div>
+
+        <div class="activity" *ngIf="activity.length">
+          <div class="activity-h">Provider responses</div>
+          <div class="activity-row" *ngFor="let a of activity">
+            <span>{{ a.label }}</span>
+            <span class="activity-at">{{ a.at }}</span>
+          </div>
+        </div>
+
+        <h3 class="section-h">Result</h3>
+
+        <div class="status busy" *ngIf="resultPhase === 'busy'">
+          <mat-spinner diameter="18"></mat-spinner>
+          <span>{{ resultMessage }}</span>
+        </div>
+        <div class="status warn" *ngIf="resultPhase === 'pending'">
+          <i class="fa fa-clock-o" aria-hidden="true"></i>
+          <span>{{ resultMessage }}</span>
+        </div>
+        <div class="status err" *ngIf="resultPhase === 'error'">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+          <span>{{ resultMessage }}</span>
+        </div>
+
+        <div class="empty" *ngIf="!clinical && resultPhase === 'idle'">
+          No result published yet.
+        </div>
+
+        <div class="result-card" *ngIf="clinical">
+          <div class="summary-row" *ngIf="clinical.attendanceStatus">
+            <span class="k">Attendance</span>
+            <span class="v">{{ clinical.attendanceStatus }}</span>
+          </div>
+          <div class="summary-row" *ngIf="clinical.provisionalDiagnosis">
+            <span class="k">Provisional diagnosis</span>
+            <span class="v">{{ clinical.provisionalDiagnosis }}</span>
+          </div>
+          <div class="summary-row" *ngIf="clinical.followupRecommendationCode">
+            <span class="k">Follow-up</span>
+            <span class="v">{{ clinical.followupRecommendationCode }}</span>
+          </div>
+          <div class="summary-row" *ngIf="confidence !== null">
+            <span class="k">Model confidence</span>
+            <span class="v">{{ confidence }}</span>
+          </div>
+          <div class="summary-row" *ngIf="findings.length">
+            <span class="k">Findings</span>
+            <span class="v">{{ findings.join(", ") }}</span>
+          </div>
+          <div class="summary-row" *ngIf="reportLabels.length">
+            <span class="k">Reports</span>
+            <span class="v">{{ reportLabels.join(", ") }}</span>
+          </div>
+        </div>
+
+        <div class="pane-actions">
+          <button
+            mat-raised-button
+            class="mat_gray"
+            type="button"
+            [disabled]="progressLoading"
+            (click)="loadProgress()"
+          >
+            Refresh progress
+          </button>
+          <button
+            mat-raised-button
+            class="mat_gray"
+            type="button"
+            [disabled]="!canCheckResult || resultPhase === 'busy'"
+            (click)="checkResult()"
+          >
+            Check for result
+          </button>
+          <button
+            mat-raised-button
+            class="mat_blue"
+            type="button"
+            (click)="startOver()"
+          >
+            New booking
+          </button>
+        </div>
+        <p class="hint" *ngIf="!canCheckResult">
+          The result can be checked once the provider has confirmed the booking.
+        </p>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

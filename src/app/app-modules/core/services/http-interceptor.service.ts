@@ -24,6 +24,21 @@ import { AuthService } from 'src/app/app-modules/core/services';
   providedIn: 'root',
 })
 export class HttpInterceptorService implements HttpInterceptor {
+  /**
+   * Matches ONHS/Beckn seeker traffic: the BAP caller endpoints and the seeker
+   * sandbox callback store. Covers both same-origin (dev proxy) and absolute
+   * seeker URLs.
+   */
+  static isOnhsUrl(url: string): boolean {
+    if (!url) return false;
+    const u = url.toLowerCase();
+    return (
+      u.includes('/bap/caller/') ||
+      u.includes('/seeker/api/') ||
+      u.includes('amritonhsseeker')
+    );
+  }
+
   private sessionTimeoutRef: any;
   private pendingRequests = 0;
   private isHandlingSessionExpiry = false;
@@ -71,7 +86,12 @@ export class HttpInterceptorService implements HttpInterceptor {
     const isPlatformFeedback =
       req.url && req.url.toLowerCase().includes('/platform-feedback');
 
-    if (isPlatformFeedback) {
+    // ONHS (Beckn) calls go to the seeker node, not to an AMRIT API. They must
+    // not carry the AMRIT session key, and their auth failures must not expire
+    // the AMRIT session.
+    const isOnhsRequest = HttpInterceptorService.isOnhsUrl(req.url);
+
+    if (isPlatformFeedback || isOnhsRequest) {
       const headers = req.headers
         .delete('Authorization')
         .set('Content-Type', 'application/json');
@@ -111,7 +131,7 @@ export class HttpInterceptorService implements HttpInterceptor {
 
         let sessionExpired = false;
 
-        if (!this.isHandlingSessionExpiry) {
+        if (!this.isHandlingSessionExpiry && !isOnhsRequest) {
           if (error.status === 401) {
             this.isHandlingSessionExpiry = true;
             sessionExpired = true;
