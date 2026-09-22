@@ -40,7 +40,6 @@
                   appAutocompleteScroller
                   [threshold]="0.6"
                   (nearEnd)="onAutoNearEnd('provisional', i)"
-                  (panelReady)="onPanelReady('provisional', i, $event)"
                   [displayWith]="displayDiagnosis"
                   (optionSelected)="
                     onDiagnosisSelected('provisional', $event.option.value, i)
@@ -143,7 +142,6 @@
                   appAutocompleteScroller
                   [threshold]="0.6"
                   (nearEnd)="onAutoNearEnd('confirmatory', i)"
-                  (panelReady)="onPanelReady('confirmatory', i, $event)"
                   [displayWith]="displayDiagnosis"
                   (optionSelected)="
                     onDiagnosisSelected('confirmatory', $event.option.value, i)

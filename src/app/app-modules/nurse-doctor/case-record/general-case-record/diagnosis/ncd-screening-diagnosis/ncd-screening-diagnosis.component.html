@@ -22,7 +22,7 @@
             </mat-form-field>
     
               <mat-autocomplete #autoDiagnosis="matAutocomplete" appAutocompleteScroller [threshold]="0.6"
-                (nearEnd)="onAutoNearEnd(i)" (panelReady)="onPanelReady(i, $event)" autoActiveFirstOption
+                (nearEnd)="onAutoNearEnd(i)" autoActiveFirstOption
                 [displayWith]="displayDiagnosis" (optionSelected)="onDiagnosisSelected($event.option.value, i)">
                 <mat-option *ngFor="let diag of suggestedDiagnosisList[i]" [value]="diag">
                   {{ diag.term }}

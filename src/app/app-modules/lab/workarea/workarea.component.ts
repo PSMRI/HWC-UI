@@ -923,7 +923,7 @@ export class WorkareaComponent
               this.sessionstorage.getItem('serviceLineDetails');
             const servicePointDetails = JSON.parse(serviceLineDetails);
 
-            techForm['vanID'] = servicePointDetails.vanID;
+            techForm['facilityID'] = servicePointDetails.facilityID;
             techForm['parkingPlaceID'] = servicePointDetails.parkingPlaceID;
             if (!techForm.labTestResults) {
               techForm['labTestResults'] = [];

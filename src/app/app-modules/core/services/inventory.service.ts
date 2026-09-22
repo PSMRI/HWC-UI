@@ -3,6 +3,7 @@ import { Injectable, Inject } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { HttpServiceService } from './http-service.service';
 @Injectable()
 export class InventoryService {
   inventoryUrl: any;
@@ -12,7 +13,12 @@ export class InventoryService {
     @Inject(DOCUMENT) private document: any,
     readonly sessionstorage: SessionStorageService,
     private confirmationService: ConfirmationService,
-  ) {}
+    private httpServiceService: HttpServiceService,
+  ) {
+    this.httpServiceService.currentLangugae$.subscribe(
+      (response) => (this.current_language_set = response),
+    );
+  }
 
   moveToInventory(
     benID: any,
@@ -26,13 +32,13 @@ export class InventoryService {
     const facility = this.getFacilityID();
     const protocol = this.getProtocol();
     const host = this.getHost();
-    const vanID = this.getVanID();
+    const facilityID = this.getFacilityID();
     const ppID = this.getppID();
     const serviceName = this.getServiceDetails();
     const parentAPI = this.getParentAPI();
 
     if (authKey && protocol && host && facility) {
-      this.inventoryUrl = `${environment.INVENTORY_URL}protocol=${protocol}&host=${host}&user=${authKey}&app=${environment.app}&fallback=${environment.fallbackUrl}&back=${environment.redirInUrl}&facility=${facility}&ben=${benID}&visit=${visit}&flow=${flowID}&reg=${regID}&vanID=${vanID}&ppID=${ppID}&serviceName=${serviceName}&parentAPI=${parentAPI}&currentLanguage=${language}&healthID=${healthID}`;
+      this.inventoryUrl = `${environment.INVENTORY_URL}protocol=${protocol}&host=${host}&user=${authKey}&app=${environment.app}&fallback=${environment.fallbackUrl}&back=${environment.redirInUrl}&facility=${facility}&ben=${benID}&visit=${visit}&flow=${flowID}&reg=${regID}&facilityID=${facilityID}&ppID=${ppID}&serviceName=${serviceName}&parentAPI=${parentAPI}&currentLanguage=${language}&healthID=${healthID}`;
       console.log(this.inventoryUrl);
       window.location.href = this.inventoryUrl;
     } else {
@@ -72,14 +78,13 @@ export class InventoryService {
   }
 
   getVanID() {
-    const serviceLineDetailsData: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-    const serviceLineDetails = JSON.parse(serviceLineDetailsData);
-    return serviceLineDetails.vanID;
+    // Kept for backward compatibility — returns facilityID
+    return this.getFacilityID();
   }
   getppID() {
     const serviceLineDetailsData: any =
       this.sessionstorage.getItem('serviceLineDetails');
+    if (!serviceLineDetailsData) return undefined;
     const serviceLineDetails = JSON.parse(serviceLineDetailsData);
     return serviceLineDetails.parkingPlaceID;
   }

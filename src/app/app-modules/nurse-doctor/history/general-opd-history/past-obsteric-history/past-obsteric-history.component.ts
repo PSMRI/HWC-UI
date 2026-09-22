@@ -153,11 +153,11 @@ export class PastObstericHistoryComponent
     if (this.sessionstorage.getItem('serviceLineDetails')) {
       const serviceLineDetails: any =
         this.sessionstorage.getItem('serviceLineDetails');
-      const vanID = JSON.parse(serviceLineDetails).vanID;
+      const facilityID = JSON.parse(serviceLineDetails).facilityID;
       const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
       this.pastObstericHistoryForm.reset({
-        vanID,
+        facilityID,
         parkingPlaceID,
       });
     }

@@ -130,7 +130,7 @@ export class AncImmunizationComponent
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
     this.patientANCImmunizationForm.reset({
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }

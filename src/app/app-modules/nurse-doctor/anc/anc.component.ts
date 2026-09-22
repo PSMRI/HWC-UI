@@ -133,7 +133,7 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
   updatePatientANC(patientANCForm: any) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const temp = {
@@ -144,7 +144,7 @@ export class AncComponent implements OnChanges, OnInit, DoCheck, OnDestroy {
       modifiedBy: this.sessionstorage.getItem('userName'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       benFlowID: this.sessionstorage.getItem('benFlowID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
     };

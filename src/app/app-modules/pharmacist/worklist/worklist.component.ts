@@ -318,7 +318,7 @@ export class WorklistComponent implements OnInit, OnDestroy, DoCheck {
             beneficiary.visitCode,
             beneficiary.benFlowID,
             beneficiary.beneficiaryRegID,
-            sessionStorage.getItem('setLanguage') !== undefined
+            sessionStorage.getItem('setLanguage') !== null
               ? sessionStorage.getItem('setLanguage')
               : 'English',
             this.healthIDValue,

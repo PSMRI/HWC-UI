@@ -476,6 +476,22 @@ export class RegisterDemographicDetailsComponent
       servicePointID: this.sessionstorage.getItem('servicePointID'),
       servicePointName: this.sessionstorage.getItem('servicePointName'),
     });
+    console.log(
+      '[DEBUG loadLocationFromStorage] otherLoc:',
+      this.demographicsMaster.otherLoc,
+    );
+    console.log(
+      '[DEBUG loadLocationFromStorage] stateMaster length:',
+      this.demographicsMaster.stateMaster?.length,
+    );
+    console.log(
+      '[DEBUG loadLocationFromStorage] servicePointID:',
+      this.demographicsMaster.servicePointID,
+    );
+    console.log(
+      '[DEBUG loadLocationFromStorage] servicePointName:',
+      this.demographicsMaster.servicePointName,
+    );
 
     if (
       this.demographicsMaster.otherLoc &&
@@ -484,6 +500,9 @@ export class RegisterDemographicDetailsComponent
       this.demographicsMaster.servicePointID &&
       this.demographicsMaster.servicePointName
     ) {
+      console.log(
+        '[DEBUG] condition PASSED — calling loadLocalMasterForDemographic',
+      );
       this.loadLocalMasterForDemographic();
       this.districtList = this.demographicsMaster.otherLoc.districtList;
 

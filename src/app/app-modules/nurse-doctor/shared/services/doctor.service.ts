@@ -142,10 +142,10 @@ export class DoctorService {
   getDoctorWorklist() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(environment.doctorWorkList + fetchUrl);
   }
 
@@ -182,7 +182,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -224,7 +224,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -273,10 +273,10 @@ export class DoctorService {
   getDoctorFutureWorklist() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(environment.doctorFutureWorkList + fetchUrl);
   }
 
@@ -293,20 +293,20 @@ export class DoctorService {
   getRadiologistWorklist() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(environment.radiologistWorklist + fetchUrl);
   }
 
   getOncologistWorklist() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const fetchUrl =
       this.sessionstorage.getItem('providerServiceID') +
-      `/${this.sessionstorage.getItem('serviceID')}/${vanID}`;
+      `/${this.sessionstorage.getItem('serviceID')}/${facilityID}`;
     return this.http.get(environment.oncologistWorklist + fetchUrl);
   }
 
@@ -356,7 +356,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const temp = {
       beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
@@ -372,7 +372,7 @@ export class DoctorService {
       visitCode: this.sessionstorage.getItem('visitCode'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -396,7 +396,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const temp = {
       beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
@@ -412,7 +412,7 @@ export class DoctorService {
       visitCode: this.sessionstorage.getItem('visitCode'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       tcRequest: tcRequest,
       isSpecialist: isSpecialist,
     };
@@ -549,7 +549,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const findingForm = (<FormGroup>(
@@ -589,7 +589,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -692,7 +692,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     console.log('message', patientMedicalForm);
     const patientVisitDetailForm = <FormGroup>(
@@ -742,7 +742,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionID,
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -782,7 +782,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -824,7 +824,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -858,7 +858,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -897,7 +897,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -1236,7 +1236,7 @@ export class DoctorService {
     const visitCategory = this.sessionstorage.getItem('visitCategory');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const updatedHistoryDetails = {
       pastHistory: this.updateGeneralPastHistory(
@@ -1289,7 +1289,7 @@ export class DoctorService {
       ),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -1669,7 +1669,7 @@ export class DoctorService {
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const patientVitalData = Object.assign(
       {},
@@ -1680,7 +1680,7 @@ export class DoctorService {
         modifiedBy: this.sessionstorage.getItem('userName'),
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
         visitCode: this.sessionstorage.getItem('visitCode'),
         benVisitID: this.sessionstorage.getItem('visitID'),
@@ -1745,7 +1745,7 @@ export class DoctorService {
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const patientVitalData = Object.assign(
       {},
@@ -1756,7 +1756,7 @@ export class DoctorService {
         modifiedBy: this.sessionstorage.getItem('userName'),
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
         visitCode: this.sessionstorage.getItem('visitCode'),
         benVisitID: this.sessionstorage.getItem('visitID'),
@@ -1795,7 +1795,7 @@ export class DoctorService {
     let updatedExaminationDetails;
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     if (visitCategory === 'ANC') {
       updatedExaminationDetails = {
@@ -1838,7 +1838,7 @@ export class DoctorService {
         ),
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         visitCode: this.sessionstorage.getItem('visitCode'),
@@ -1897,7 +1897,7 @@ export class DoctorService {
         ),
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         visitCode: this.sessionstorage.getItem('visitCode'),
@@ -1956,7 +1956,7 @@ export class DoctorService {
         ),
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         visitCode: this.sessionstorage.getItem('visitCode'),
@@ -2372,7 +2372,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -2411,7 +2411,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -2671,7 +2671,7 @@ export class DoctorService {
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     console.log('message', patientMedicalForm);
     const patientVisitDetailForm = <FormGroup>(
@@ -2722,7 +2722,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -2789,7 +2789,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -2834,7 +2834,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3065,14 +3065,14 @@ export class DoctorService {
   ): Observable<object> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const patientIDRSData = Object.assign({}, idrsScreeningForm.value, {
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       modifiedBy: this.sessionstorage.getItem('userName'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       createdBy: this.sessionstorage.getItem('userName'),
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3102,7 +3102,7 @@ export class DoctorService {
     const visitCategory = this.sessionstorage.getItem('visitCategory');
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const updatedHistoryDetails = {
       familyHistory: this.updateGeneralFamilyHistory(
@@ -3119,7 +3119,7 @@ export class DoctorService {
       ),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3179,11 +3179,11 @@ export class DoctorService {
   setCommonDataForFP() {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const data = {
-      vanID: vanID,
+      facilityID: facilityID,
       parkingPlaceID: parkingPlaceID,
       beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       benVisitID: this.sessionstorage.getItem('visitID'),
@@ -3199,11 +3199,11 @@ export class DoctorService {
   updateFamilyPlanning(medicalForm: any, visitCategory: any): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
 
     const commonData = {
-      vanID: vanID,
+      facilityID: facilityID,
       parkingPlaceID: parkingPlaceID,
       beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
       benVisitID: this.sessionstorage.getItem('visitID'),
@@ -3247,7 +3247,7 @@ export class DoctorService {
       {
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: this.sessionstorage.getItem('beneficiaryID'),
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3274,10 +3274,10 @@ export class DoctorService {
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const commonData = {
-      vanID: vanID,
+      facilityID: facilityID,
       parkingPlaceID: parkingPlaceID,
       modifiedBy: this.sessionstorage.getItem('username'),
       sessionID: this.sessionstorage.getItem('sessionID'),
@@ -3303,7 +3303,7 @@ export class DoctorService {
       {
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: this.sessionstorage.getItem('beneficiaryID'),
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3340,7 +3340,7 @@ export class DoctorService {
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const patientNCDScreeningData = Object.assign(
       {},
@@ -3355,7 +3355,7 @@ export class DoctorService {
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
         modifiedBy: this.sessionstorage.getItem('userName'),
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: this.sessionstorage.getItem('beneficiaryRegID'),
         benVisitID: this.sessionstorage.getItem('visitID'),
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
@@ -3460,7 +3460,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -3508,7 +3508,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3559,7 +3559,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -3609,7 +3609,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3639,7 +3639,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -3689,7 +3689,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3720,7 +3720,7 @@ export class DoctorService {
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -3770,7 +3770,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3800,7 +3800,7 @@ export class DoctorService {
   ) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const findingForm = (<FormGroup>(
       patientMedicalForm.controls['patientCaseRecordForm']
@@ -3850,7 +3850,7 @@ export class DoctorService {
       pharmacist_flag: this.sessionstorage.getItem('pharmacist_flag'),
       sessionID: this.sessionstorage.getItem('sessionID'),
       parkingPlaceID: parkingPlaceID,
-      vanID: vanID,
+      facilityID: facilityID,
       beneficiaryRegID: '' + this.sessionstorage.getItem('beneficiaryRegID'),
       providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
       visitCode: this.sessionstorage.getItem('visitCode'),
@@ -3892,10 +3892,10 @@ export class DoctorService {
   updateImmunizationServices(immunizationServiceForm: any) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const commonData = {
-      vanID: vanID,
+      facilityID: facilityID,
       parkingPlaceID: parkingPlaceID,
       modifiedBy: this.sessionstorage.getItem('username'),
       sessionID: this.sessionstorage.getItem('sessionID'),
@@ -3928,10 +3928,10 @@ export class DoctorService {
   ): Observable<any> {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const facilityID = JSON.parse(serviceLineDetails).facilityID;
     const parkingPlaceID = JSON.parse(serviceLineDetails).parkingPlaceID;
     const commonData = {
-      vanID: vanID,
+      facilityID: facilityID,
       parkingPlaceID: parkingPlaceID,
       modifiedBy: this.sessionstorage.getItem('username'),
       sessionID: this.sessionstorage.getItem('sessionID'),
@@ -3957,7 +3957,7 @@ export class DoctorService {
       {
         sessionID: this.sessionstorage.getItem('sessionID'),
         parkingPlaceID: parkingPlaceID,
-        vanID: vanID,
+        facilityID: facilityID,
         beneficiaryRegID: this.sessionstorage.getItem('beneficiaryID'),
         providerServiceMapID: this.sessionstorage.getItem('providerServiceID'),
         visitCode: this.sessionstorage.getItem('visitCode'),

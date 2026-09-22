@@ -171,8 +171,6 @@ export class QuickConsultComponent
   suggestedDiagnosisList: any = [];
   private readonly PAGE_BASE = 0;
 
-  private readonly BOOTSTRAP_MAX_PAGES = 3; // when first page can't scroll, prefill up to this many extra pages
-
   loadingMore: boolean[] = [];
   noMore: boolean[] = [];
   wantMore: boolean[] = [];
@@ -1406,45 +1404,11 @@ export class QuickConsultComponent
     });
   }
 
-  onPanelReady(index: number, panelEl: HTMLElement) {
-    if (panelEl.scrollHeight <= panelEl.clientHeight && !this.noMore[index]) {
-      this.bootstrapUntilScrollable(index, panelEl);
-    }
-  }
-
   onAutoNearEnd(index: number) {
     if (!this.loadingMore[index] && !this.noMore[index]) {
       this.fetchPage(index, true);
     } else if (this.loadingMore[index]) {
       this.wantMore[index] = true;
-    }
-  }
-
-  private bootstrapUntilScrollable(rowIndex: number, panelEl: HTMLElement) {
-    let fetched = 0;
-
-    const tryFill = () => {
-      const scrollable = panelEl.scrollHeight > panelEl.clientHeight;
-      if (
-        scrollable ||
-        this.noMore[rowIndex] ||
-        fetched >= this.BOOTSTRAP_MAX_PAGES
-      )
-        return;
-
-      if (this.loadingMore[rowIndex]) {
-        requestAnimationFrame(tryFill);
-        return;
-      }
-
-      fetched++;
-      this.fetchPage(rowIndex, true);
-
-      requestAnimationFrame(tryFill);
-    };
-
-    if (this.lastQueryByIndex[rowIndex]?.length >= 3) {
-      tryFill();
     }
   }
 

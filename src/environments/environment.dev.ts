@@ -132,7 +132,7 @@ export const environment = {
   saveUserSecurityQuestionsAnswerUrl: `${COMMON_API_OPEN}user/saveUserSecurityQuesAns`,
   setNewPasswordUrl: `${COMMON_API_OPEN}user/setForgetPassword`,
 
-  servicePointUrl: `${HWC_API}user/getUserVanSpDetails`,
+  servicePointUrl: `${HWC_API}user/getUserFacilityDetails`,
   servicePointVillages: `${HWC_API}user/getServicepointVillages`,
 
   registerBeneficiaryUrl: `${HWC_API}registrar/registrarBeneficaryRegistration/`,
@@ -471,6 +471,7 @@ export const environment = {
   familySearchUrl: `${IDENTITY_API}family/searchFamily`,
   createFamilyUrl: `${IDENTITY_API}family/createFamily`,
   getFamilyMemberUrl: `${IDENTITY_API}family/getFamilyDetails`,
+  getBenFamilyDetailsUrl: `${IDENTITY_API}family/getBenFamilyDetails`,
   /*Hypertension Screening Url */
   bloodPressureStatusUrl: `${HWC_API}screeningOutcome/hypertension`,
 
@@ -526,7 +527,7 @@ export const environment = {
   getResultStatusURL: `${COMMON_API}lungAssessment/startAssesment`,
   getAssessmentUrl: `${COMMON_API}lungAssessment/getAssesment`,
   getAssessmentIdUrl: `${COMMON_API}lungAssessment/getAssesmentDetails`,
-  getnurse104referredworklisturls: `${HWC_API}uptsu/getWorklistByVanID`,
+  getnurse104referredworklisturls: `${HWC_API}uptsu/getWorklistByFacilityID`,
 
   /* CDSS Urls */
   getCdssQuestionsUrl: `${API104}CDSS/getQuestions`,
@@ -576,6 +577,7 @@ export const environment = {
   enableCHOReportBtn: enableCHOReportBtn,
   dhisURL: dhisURL,
   getUserId: `${COMMON_API}user/userName/`,
+
   checkUsersignExistUrl: `${ADMIN_API}signature1/signexist/`,
   elasticSearchUrl: `${HWC_API}registrar/quickSearchES`,
   advanceElasticSearchUrl: `${HWC_API}registrar/advancedSearchES`,

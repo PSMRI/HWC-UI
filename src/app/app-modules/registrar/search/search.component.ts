@@ -641,10 +641,13 @@ export class SearchComponent
       console.log(JSON.stringify(benObject, null, 4), 'benObject');
       const serviceLineDetails: any =
         this.sessionstorage.getItem('serviceLineDetails');
-      const vanID = JSON.parse(serviceLineDetails).vanID;
+      const parsedServiceLineDetails = JSON.parse(serviceLineDetails);
+      const vanID = parsedServiceLineDetails.vanID;
+      const facilityID = parsedServiceLineDetails.facilityID;
       benObject['providerServiceMapId'] =
         this.sessionstorage.getItem('providerServiceID');
       benObject['vanID'] = vanID;
+      benObject['facilityID'] = facilityID;
       this.confirmationService
         .confirm(`info`, this.currentLanguageSet.confirmSubmitBeneficiary)
         .subscribe((result) => {
@@ -937,8 +940,9 @@ export class SearchComponent
     });
   }
   sendBenToAmrit(benDetails: any) {
-    const servicePointDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
+    const servicePointDetails: any = JSON.parse(
+      this.sessionstorage.getItem('serviceLineDetails'),
+    );
 
     const date = new Date(
       benDetails.profile.patient.yearOfBirth +
@@ -974,6 +978,7 @@ export class SearchComponent
       providerServiceMapId: this.sessionstorage.getItem('providerServiceID'),
       vanID: servicePointDetails.vanID,
       parkingPlaceID: servicePointDetails.parkingPlaceID,
+      facilityID: servicePointDetails.facilityID,
       createdBy: this.sessionstorage.getItem('userName'),
     };
 
@@ -1019,10 +1024,13 @@ export class SearchComponent
     ) {
       const serviceLineDetails: any =
         this.sessionstorage.getItem('serviceLineDetails');
-      const vanID = JSON.parse(serviceLineDetails).vanID;
+      const parsedServiceLineDetails = JSON.parse(serviceLineDetails);
+      const vanID = parsedServiceLineDetails.vanID;
+      const facilityID = parsedServiceLineDetails.facilityID;
       benObject['providerServiceMapId'] =
         this.sessionstorage.getItem('providerServiceID');
       benObject['vanID'] = vanID;
+      benObject['facilityID'] = facilityID;
       this.confirmationService
         .confirm(`info`, this.currentLanguageSet.confirmSubmitBeneficiary)
         .subscribe((result) => {
@@ -1136,10 +1144,13 @@ export class SearchComponent
   transferMigratedBeneficiaryToNurse(benObject: any) {
     const serviceLineDetails: any =
       this.sessionstorage.getItem('serviceLineDetails');
-    const vanID = JSON.parse(serviceLineDetails).vanID;
+    const parsedServiceLineDetails = JSON.parse(serviceLineDetails);
+    const vanID = parsedServiceLineDetails.vanID;
+    const facilityID = parsedServiceLineDetails.facilityID;
     benObject['providerServiceMapId'] =
       this.sessionstorage.getItem('providerServiceID');
     benObject['vanID'] = vanID;
+    benObject['facilityID'] = facilityID;
     this.confirmationService
       .confirm(`info`, this.currentLanguageSet.confirmSubmitBeneficiary)
       .subscribe((result) => {

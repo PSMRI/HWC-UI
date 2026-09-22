@@ -46,7 +46,7 @@ export class VisitDetailUtils {
       patientDiseaseForm: this.createPatientDiseaseForm(diasableFlag),
       covidVaccineStatusForm: this.createCovidVaccineStatusForm(diasableFlag),
       cbacScreeningForm: this.createCBACForm(diasableFlag),
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
       createdBy: this.sessionstorage.getItem('userName'),
     });
@@ -66,7 +66,7 @@ export class VisitDetailUtils {
       toReferral: { value: null, disabled: disableFlag },
       referralReason: { value: null, disabled: disableFlag },
       progress: { value: null, disabled: disableFlag },
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -81,7 +81,7 @@ export class VisitDetailUtils {
       providerServiceMapID: null,
       createdBy: null,
       laboratoryList: { value: [], disabled: disableFlag },
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -109,7 +109,7 @@ export class VisitDetailUtils {
       unitOfDuration: { value: null, disabled: true },
       description: { value: null, disabled: true },
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -137,7 +137,7 @@ export class VisitDetailUtils {
       healthFacilityLocation: null,
       reportFilePath: null,
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -180,7 +180,7 @@ export class VisitDetailUtils {
       conceptID: null,
       symptoms: { value: null, disabled: disableFlag },
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -212,7 +212,7 @@ export class VisitDetailUtils {
       suspectedStatusUI: { value: null, disabled: disableFlag },
       recommendation: this.fb.array([]),
       createdBy: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }
@@ -301,7 +301,7 @@ export class VisitDetailUtils {
       presentChiefComplaintDb: this.createPresentCheifComplaint(),
       diseaseSummaryDb: this.createDiseaseSummary(),
       providerServiceMapID: null,
-      vanID: JSON.parse(serviceLineDetails).vanID,
+      facilityID: JSON.parse(serviceLineDetails).facilityID,
       parkingPlaceID: JSON.parse(serviceLineDetails).parkingPlaceID,
     });
   }

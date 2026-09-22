@@ -448,7 +448,7 @@ export class ObstetricExaminationComponent
         motherName: this.beneficiary.beneficiaryName,
         foetalMonitorTestId: testId,
         testName: testName,
-        vanID: JSON.parse(serviceLineDetails).vanID,
+        facilityID: JSON.parse(serviceLineDetails).facilityID,
         ProviderServiceMapID: JSON.parse(providerServiceID),
         createdBy: this.sessionstorage.getItem('userName'),
       };

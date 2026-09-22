@@ -45,23 +45,14 @@ export class ServicePointService {
     });
   }
 
-  getMMUDemographics(vanId?: any) {
-    const serviceLineDetails: any =
-      this.sessionstorage.getItem('serviceLineDetails');
-    let vanIDJsn: any;
-    let vanIDx: any;
-    if (serviceLineDetails && serviceLineDetails !== '') {
-      vanIDJsn = JSON.parse(serviceLineDetails);
-      vanIDx = vanIDJsn.vanID;
-    }
-    if (!vanIDx || vanIDx === '') {
-      vanIDx = vanId;
-    }
+  getMMUDemographics(facilityId?: any) {
     const spPSMIDx = this.sessionstorage.getItem('providerServiceID');
     const userId = this.sessionstorage.getItem('userID');
+    const facilityIDx = facilityId || this.sessionstorage.getItem('facilityID');
 
+    // Use facilityID — facility must have location (admin links via hierarchy)
     return this.http.post(environment.demographicsCurrentMasterUrl, {
-      vanID: vanIDx,
+      facilityID: facilityIDx,
       spPSMID: spPSMIDx,
       userID: userId,
     });
