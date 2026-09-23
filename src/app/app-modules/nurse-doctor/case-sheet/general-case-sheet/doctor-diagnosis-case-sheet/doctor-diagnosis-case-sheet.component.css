@@ -1,112 +1,428 @@
+/* ==========================================================================
+   Piramal Swasthya - Doctor Diagnosis Case Sheet Styles
+   ========================================================================== */
+
+/* Typography & Base Variables:
+   Primary Brand: #F05A44 (Coral Orange)
+   Secondary Brand: #36454F (Dark Slate Gray)
+   Text Secondary: #6B7A88
+   Borders/Dividers: #E1E8EE
+   Background: #F8F9FA
+*/
+
 .container {
-    background: white;
-    padding-bottom: 50px;
+    background: #FFFFFF;
+    padding: 24px 32px 40px;
+    font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    color: #36454F;
+    max-width: 100%;
 }
-#covid-19{
-    width: 100%;
+
+/* Typography Hierarchy */
+h2,
+h3,
+h4,
+h5 {
+    color: #36454F;
+    margin-top: 0;
+    font-family: inherit;
 }
-#heading
-{
-    text-align:center;
+
+h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
+
+h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+h5 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #6B7A88;
+}
+
+p {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #505F6D;
+    line-height: 1.5;
+}
+
+strong {
+    font-weight: 700;
+    color: #36454F;
+}
+
+/* Header & Branding */
 #logo {
-    width: 90px;
-}
-.full-card {
-    width: 100%;
-}
-.textarea {
-    min-height: 100px;
-    border: 1px solid black;
-    padding: 5px;
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 8px;
 }
 
-.col-xs-12{
-padding: 30px;
+.m-t-10 {
+    margin-top: 12px !important;
 }
 
-
-.table {
-    margin-bottom: 0px;
-}
-
-.table-no-border tr, th, .table-no-border tr td, .table-no-border thead tr th, .table-no-border tbody tr th, .table-no-border tbody tr td {
-    border: none;
-}
-
-.casesheet-table tr th, .casesheet-table tr td, .casesheet-table thead tr th, .casesheet-table tbody tr th, .casesheet-table tbody tr td {
-    width: 25%;
+.m-t-20 {
+    margin-top: 24px !important;
 }
 
 .m-t-50 {
-    margin-top: 50px;
+    margin-top: 48px !important;
 }
 
-h4, h5 {
-    font-weight: bold;
+.m-b-10 {
+    margin-bottom: 12px !important;
 }
 
-@media print {
-    th, strong {
-        font-weight: bold;
-        font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif
-    }
-    h4, h5 {
-        font-weight: bold;
-        font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif
-    }
-    .page-break:last-child {
-        page-break-after: auto;
-      }
-    small {
-        font-weight: normal;
-    }
-}
-
+/* Section Cards (Fieldsets) */
 fieldset {
     display: block;
-    -webkit-margin-start: 2px;
-    -webkit-margin-end: 2px;
-    -webkit-padding-before: 0.35em;
-    -webkit-padding-start: 0.75em;
-    -webkit-padding-end: 0.75em;
-    -webkit-padding-after: 0.625em;
-    min-width: -webkit-min-content;
-    border-width: 2px;
-    border-style: groove;
-    border-color: threedface;
-    border-image: initial;
+    margin: 0 0 28px 0;
+    padding: 24px;
+    border: 1px solid #E1E8EE;
+    border-radius: 8px;
+    background: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(54, 69, 79, 0.04);
 }
 
+/* Unique Legend Styling with Coral underline accent */
 legend {
     display: block;
-    width: unset;
-    -webkit-padding-start: 2px;
-    -webkit-padding-end: 2px;
-    border: unset;
+    width: max-content;
+    padding: 0 8px 0 0;
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #36454F;
+    border: none;
+    background: transparent;
+    position: relative;
+    text-transform: capitalize;
+    letter-spacing: 0.3px;
+}
+
+legend::after {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 3px;
+    background-color: #F05A44;
+    margin-top: 6px;
+    border-radius: 2px;
+}
+
+/* Data Tables */
+.table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+}
+
+.table th {
+    font-weight: 700;
+    color: #36454F;
+    background-color: #F8F9FA;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid #E1E8EE;
+    vertical-align: middle;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #F0F4F8;
+    vertical-align: top;
+    color: #505F6D;
+}
+
+.table tbody tr:hover td {
+    background-color: #FAFBFC;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Bordered Detailed Tables (e.g., Complaints, Medicines) */
+.table-bordered {
+    border: 1px solid #E1E8EE;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #E1E8EE;
+}
+
+.table-bordered thead th {
+    background-color: #F8F9FA;
+    border-bottom-width: 2px;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #FAFBFC;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #FFFFFF;
+}
+
+/* Case Sheet Specific Definition Tables */
+.table-no-border tr,
+.table-no-border th,
+.table-no-border td {
+    border: none;
+    padding: 8px 12px;
+}
+
+.casesheet-table tr th,
+.casesheet-table tr td {
+    width: 25%;
+    padding: 10px 12px;
+}
+
+.casesheet-table tr th {
+    font-weight: 600;
+    color: #6B7A88;
+    background-color: transparent;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.casesheet-table tr td {
+    color: #36454F;
+    font-weight: 600;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+/* Textareas and Inputs inside Case Sheet */
+.textarea {
+    min-height: 80px;
+    border: 1px solid #E1E8EE;
+    border-radius: 6px;
+    padding: 12px;
+    background: #FFFFFF;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #36454F;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.textarea:empty::before {
+    content: '\00a0';
+}
+
+/* Alignment Utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-field-color {
+    color: #8C9BAB;
+    font-style: italic;
+}
+
+/* Vitals Highlighting Badges */
+.vital-abnormal {
+    background-color: #FFF4E5 !important;
+    color: #E65100 !important;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #FFE0B2;
+    display: inline-block;
+}
+
+.vital-critical {
+    background-color: #FDE0DC !important;
+    color: #D32F2F !important;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #F9BDBB;
+    display: inline-block;
+}
+
+/* Small UI Elements */
+.btn-group,
+.btn-group1 {
+    display: inline-block;
+    margin: 4px 6px 4px 0;
 }
 
 .btn-group button {
-     background-color: #C21F1F;
-    margin:5px;
-    color: white;
-    float: left;
-  }
+    background-color: #F05A44;
+    color: #FFFFFF;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
 
-  .btn-group1 button {
-    background-color: #10df3d;
-    margin:5px;
-    color: white;
-    float: left;
-  }
-
-  .btn-group:after {
-    content: "";
-    clear: both;
-    display: table;
-  }
+.btn-group1 button {
+    background-color: #3CB371;
+    /* Softer Green */
+    color: #FFFFFF;
+    padding: 6px 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+}
 
 small {
-    font-size: medium;
-    color: black;
+    font-size: 12px;
+    color: #8C9BAB;
+}
+
+.row {
+    margin-bottom: 0;
+}
+
+/* Print Optimization */
+@media print {
+    @page {
+        margin: 1.5cm;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body {
+        background: #FFFFFF;
+        font-size: 12px;
+        color: #000000;
+    }
+
+    .container {
+        padding: 0;
+        max-width: 100%;
+        color: #000000;
+    }
+
+    h2,
+    h3,
+    h4,
+    h5 {
+        color: #000000;
+        page-break-after: avoid;
+    }
+
+    /* Keep strong layout, remove shadows for print */
+    fieldset {
+        page-break-inside: avoid;
+        margin-bottom: 20px;
+        padding: 16px;
+        border: 1px solid #D1D5DB;
+        box-shadow: none;
+    }
+
+    legend {
+        color: #000000;
+        font-size: 14px;
+    }
+
+    legend::after {
+        background-color: #000000;
+        height: 2px;
+    }
+
+    .table th {
+        background-color: #F3F4F6 !important;
+        color: #000000;
+        border-bottom: 2px solid #D1D5DB;
+    }
+
+    .table td,
+    .casesheet-table tr th {
+        color: #000000;
+    }
+
+    .casesheet-table tr td {
+        font-weight: normal;
+        /* lighter for print readability */
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border: 1px solid #D1D5DB;
+    }
+
+    .textarea {
+        border: 1px solid #D1D5DB;
+        padding: 8px;
+    }
+
+    .vital-abnormal {
+        background-color: transparent !important;
+        color: #000000 !important;
+        border: 1px solid #000000;
+    }
+
+    .vital-critical {
+        background-color: transparent !important;
+        color: #000000 !important;
+        border: 2px solid #000000;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+
+    .table tr {
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive Table Breakpoints */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    fieldset {
+        padding: 16px;
+    }
+
+    .casesheet-table tr th,
+    .casesheet-table tr td {
+        width: 50%;
+        display: block;
+    }
 }

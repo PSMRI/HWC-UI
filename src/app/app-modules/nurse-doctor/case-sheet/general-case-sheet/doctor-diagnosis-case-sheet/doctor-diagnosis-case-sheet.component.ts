@@ -757,4 +757,51 @@ export class DoctorDiagnosisCaseSheetComponent
         },
       );
   }
+
+  /* Vitals Abnormal Detection Methods */
+  isAbnormalTemp(temp: any): boolean {
+    if (!temp || temp === null || temp === undefined) return false;
+    const tempValue = parseFloat(temp);
+    return tempValue < 36.1 || tempValue > 37.2; // Normal: 36.1-37.2°C
+  }
+
+  isAbnormalPulse(pulse: any): boolean {
+    if (!pulse || pulse === null || pulse === undefined) return false;
+    const pulseValue = parseFloat(pulse);
+    return pulseValue < 60 || pulseValue > 100; // Normal: 60-100 bpm
+  }
+
+  isAbnormalSPO2(spo2: any): boolean {
+    if (!spo2 || spo2 === null || spo2 === undefined) return false;
+    const spo2Value = parseFloat(spo2);
+    return spo2Value < 95 && spo2Value >= 90; // Abnormal: 90-95%
+  }
+
+  isCriticalSPO2(spo2: any): boolean {
+    if (!spo2 || spo2 === null || spo2 === undefined) return false;
+    const spo2Value = parseFloat(spo2);
+    return spo2Value < 90; // Critical: <90%
+  }
+
+  isAbnormalBP(systolic: any, diastolic: any): boolean {
+    if (
+      !systolic ||
+      systolic === null ||
+      systolic === undefined ||
+      !diastolic ||
+      diastolic === null ||
+      diastolic === undefined
+    )
+      return false;
+    const sysValue = parseFloat(systolic);
+    const diaValue = parseFloat(diastolic);
+    // Abnormal: Systolic >140 or <90, Diastolic >90 or <60
+    return sysValue > 140 || sysValue < 90 || diaValue > 90 || diaValue < 60;
+  }
+
+  isAbnormalRespiratoryRate(rr: any): boolean {
+    if (!rr || rr === null || rr === undefined) return false;
+    const rrValue = parseFloat(rr);
+    return rrValue < 12 || rrValue > 20; // Normal: 12-20 breaths/min
+  }
 }
