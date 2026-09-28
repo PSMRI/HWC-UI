@@ -19,27 +19,63 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormGroup } from '@angular/forms';
 
+import {
+  COMMON_TEST_IMPORTS,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 import { ReferComponent } from './refer.component';
 
 describe('ReferComponent', () => {
   let component: ReferComponent;
   let fixture: ComponentFixture<ReferComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [ReferComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ReferComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.patientReferForm = new FormGroup({});
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+  });
+
+  it('leaves showGeneralOPD false when no visit category is set', () => {
+    component.ngOnInit();
+    expect(component.showGeneralOPD).toBeFalse();
+  });
+
+  [
+    'General OPD',
+    'ANC',
+    'NCD care',
+    'PNC',
+    'COVID-19 Screening',
+    'NCD screening',
+    'FP & Contraceptive Services',
+    'General OPD (QC)',
+  ].forEach((category) => {
+    it(`shows general OPD referral for "${category}"`, () => {
+      component.visitCategory = category;
+      component.ngOnInit();
+      expect(component.showGeneralOPD).toBeTrue();
+    });
+  });
+
+  it('hides general OPD referral for other categories', () => {
+    component.visitCategory = 'Cancer Screening';
+    component.ngOnInit();
+    expect(component.showGeneralOPD).toBeFalse();
   });
 });
