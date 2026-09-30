@@ -19,71 +19,73 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+
 import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { GeneralUtils } from '../../../../shared/utility';
-
-import * as data from '../../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+  createSessionStorageMock,
+} from 'src/testing/test-utils';
+import { MaterialModule } from 'src/app/app-modules/core/material.module';
+import { GeneralUtils } from '../../../../shared/utility/general-utility';
 import { RespiratorySystemComponent } from './respiratory-system.component';
 
 describe('RespiratorySystemComponent', () => {
   let component: RespiratorySystemComponent;
   let fixture: ComponentFixture<RespiratorySystemComponent>;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [RespiratorySystemComponent],
+      providers: [...commonTestProviders()],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(RespiratorySystemComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.respiratorySystemForm = new GeneralUtils(
-      fb,
-    ).createRespiratorySystemForm();
+    const utils = new GeneralUtils(
+      new FormBuilder(),
+      createSessionStorageMock({
+        serviceLineDetails: JSON.stringify({
+          facilityID: 1,
+          parkingPlaceID: 2,
+        }),
+      }) as any,
+    );
+    component.respiratorySystemForm = utils.createRespiratorySystemForm();
     fixture.detectChanges();
   });
 
-  it('should create RespiratorySystemComponent', () => {
+  it('should create and load the language set', () => {
     expect(component).toBeTruthy();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
   });
 
-  it('Should initialize the component', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('re-assigns the language set on ngDoCheck', () => {
+    component.current_language_set = undefined;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+  });
+
+  it('tracks field interactions under "Respiratory System"', () => {
+    const tracking = TestBed.inject(AmritTrackingService) as any;
+    component.trackFieldInteraction('Some Field');
+    expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+      'Some Field',
+      'Respiratory System',
+    );
+  });
+
+  it('exposes trachea, breath sound and percussion options', () => {
+    expect(component.selectTrachea.length).toBe(3);
+    expect(component.selectBreathSounds.length).toBe(3);
+    expect(component.selectPercussion.map((p) => p.name)).toContain(
+      'Hyper Resonant',
+    );
   });
 });

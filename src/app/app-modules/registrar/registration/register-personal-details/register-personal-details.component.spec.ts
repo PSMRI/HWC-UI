@@ -19,402 +19,755 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RegistrationComponent } from './../registration.component';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { CameraService } from '../../../core/services/camera.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { BehaviorSubject, of } from 'rxjs';
+import * as moment from 'moment';
+
+import { RegisterPersonalDetailsComponent } from './register-personal-details.component';
 import { RegistrarService } from '../../shared/services/registrar.service';
 import { RegistrationUtils } from '../../shared/utility/registration-utility';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/throw';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { getDOM } from '@angular/platform-browser/src/dom/dom_adapter';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ConfirmationService } from '../../../core/services/confirmation.service';
+import { CameraService } from '../../../core/services/camera.service';
+import { BeneficiaryDetailsService } from '../../../core/services/beneficiary-details.service';
 import { MaterialModule } from '../../../core/material.module';
-import { RegisterPersonalDetailsComponent } from './register-personal-details.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+  throwingObs,
+} from 'src/testing/test-utils';
 
-class RouterStub {
-  navigateByUrl(url: string) {
-    return url;
-  }
-}
-class MockActivatedRoute {
-  snapshot = {
-    params: [null],
-  };
-}
-class RegistrarServiceMock {
-  registrationMaster = {
-    occupationMaster: [
-      { occupationID: 2, occupationType: 'Agricultural labour' },
-      { occupationID: 3, occupationType: 'Business' },
-      { occupationID: 1, occupationType: 'Cultivation(Agriculture)' },
-      { occupationID: 5, occupationType: 'Govt employee' },
-      { occupationID: 9, occupationType: 'Housewife or Homemaker' },
-      { occupationID: 8, occupationType: 'Not Applicable' },
-      { occupationID: 7, occupationType: 'Other' },
-      { occupationID: 6, occupationType: 'Private employee' },
-      { occupationID: 4, occupationType: 'Student' },
-    ],
-    incomeMaster: [
-      { incomeStatusID: 1, incomeStatus: 'APL' },
-      { incomeStatusID: 2, incomeStatus: 'BPL' },
-      { incomeStatusID: 3, incomeStatus: "Don't Know" },
-    ],
-    maritalStatusMaster: [
-      { maritalStatusID: 3, status: 'Divorced' },
-      { maritalStatusID: 2, status: 'Married' },
-      { maritalStatusID: 7, status: 'Not Applicable' },
-      { maritalStatusID: 4, status: 'Separated' },
-      { maritalStatusID: 1, status: 'Unmarried' },
-      { maritalStatusID: 5, status: 'Widow' },
-      { maritalStatusID: 6, status: 'Widower' },
-    ],
-    religionMaster: [
-      { religionID: 5, religionType: 'Buddhism' },
-      { religionID: 1, religionType: 'Hinduism' },
-      { religionID: 2, religionType: 'Islam' },
-      { religionID: 6, religionType: 'Jainism' },
-      { religionID: 3, religionType: 'Judaism' },
-      { religionID: 7, religionType: 'Other' },
-      { religionID: 4, religionType: 'Sikhism' },
-    ],
-    communityMaster: [
-      { communityID: 4, communityType: 'BC' },
-      { communityID: 7, communityType: "Dont' Know" },
-      { communityID: 5, communityType: 'OBC' },
-      { communityID: 6, communityType: 'OC' },
-      { communityID: 2, communityType: 'SC' },
-      { communityID: 3, communityType: 'ST' },
-    ],
-    qualificationMaster: [
-      { educationID: 6, educationType: 'Diploma / Under Graduate' },
-      { educationID: 7, educationType: 'Graduate' },
-      { educationID: 8, educationType: 'Post Graduate & Above' },
-      { educationID: 2, educationType: 'Primary (1st to 5th Std)' },
-      { educationID: 4, educationType: 'Secondary (9th to 10th)' },
+const MASTER = {
+  genderMaster: [
+    { genderID: 1, genderName: 'Male' },
+    { genderID: 2, genderName: 'Female' },
+    { genderID: 3, genderName: 'Transgender' },
+  ],
+  maritalStatusMaster: [
+    { maritalStatusID: 1, status: 'Unmarried' },
+    { maritalStatusID: 2, status: 'Married' },
+    { maritalStatusID: 5, status: 'Widow' },
+    { maritalStatusID: 6, status: 'Widower' },
+    { maritalStatusID: 7, status: 'NotApplicable' },
+  ],
+  incomeMaster: [
+    { incomeStatusID: 1, incomeStatus: 'BPL' },
+    { incomeStatusID: 2, incomeStatus: 'APL' },
+  ],
+  literacyStatus: [
+    { literacystatusID: 1, literacystatus: 'Literate' },
+    { literacystatusID: 2, literacystatus: 'Illiterate' },
+  ],
+  qualificationMaster: [
+    { educationID: 1, educationType: 'Primary' },
+    { educationID: 2, educationType: 'Graduate' },
+  ],
+  occupationMaster: [
+    { occupationID: 1, occupationType: 'Farmer' },
+    { occupationID: 7, occupationType: 'Other' },
+  ],
+  ageUnit: [
+    { id: 'Years', name: 'Years' },
+    { id: 'Months', name: 'Months' },
+  ],
+};
+
+function editData(overrides: any = {}) {
+  return {
+    beneficiaryID: 11,
+    beneficiaryRegID: 22,
+    firstName: 'Ravi',
+    lastName: 'Kumar',
+    benAccountID: 33,
+    dOB: '1990-01-01T00:00:00.000Z',
+    name: 'Years',
+    m_gender: { genderID: 1, genderName: 'Male' },
+    maritalStatus: { maritalStatusID: 2, status: 'Married' },
+    spouseName: 'Sita',
+    ageAtMarriage: 25,
+    literacyStatus: 'Literate',
+    benPhoneMaps: [
       {
-        educationID: 5,
-        educationType: 'Senior Secondary (11th to 12th/Intermediate)',
+        phoneNo: '9999999999',
+        alternateContactNumber: '8888888888',
+        parentBenRegID: 44,
+        benRelationshipID: 1,
+        benPhMapID: 55,
+        benRelationshipType: { benRelationshipType: 'Self' },
       },
-      { educationID: 3, educationType: 'Upper Primary (6th to 8th Std)' },
     ],
-    govIdEntityMaster: [
-      { govtIdentityTypeID: 1, identityType: 'Aadhar' },
-      { govtIdentityTypeID: 3, identityType: 'Driving License' },
-      { govtIdentityTypeID: 4, identityType: 'PAN' },
-      { govtIdentityTypeID: 5, identityType: 'Passport' },
-      { govtIdentityTypeID: 6, identityType: 'Ration Card' },
-      { govtIdentityTypeID: 2, identityType: 'Voter ID' },
-    ],
-    genderMaster: [
-      { genderID: 2, genderName: 'Female' },
-      { genderID: 1, genderName: 'Male' },
-      { genderID: 3, genderName: 'Transgender' },
-    ],
-    otherGovIdEntityMaster: [
-      { govtIdentityTypeID: 7, identityType: 'Assam Arogya Nidhi (AAN)' },
-      { govtIdentityTypeID: 8, identityType: 'Atal Amrit Abhiyan' },
-      {
-        govtIdentityTypeID: 9,
-        identityType: 'Janani Shishu Suraksha Karyakram (JSSK)',
-      },
-      { govtIdentityTypeID: 10, identityType: 'Janani Suraksha Yojana (JSY)' },
-      { govtIdentityTypeID: 11, identityType: 'KAYAKALP' },
-      { govtIdentityTypeID: 12, identityType: 'RMNCH+A' },
-      {
-        govtIdentityTypeID: 13,
-        identityType: 'Sanjeevani - Village Health Outreach Programme',
-      },
-      { govtIdentityTypeID: 14, identityType: 'Sneha Sparsha' },
-    ],
+    i_bendemographics: {
+      incomeStatus: 'APL',
+      i_beneficiaryeducation: { educationID: 2, educationType: 'Graduate' },
+      occupationID: 1,
+      occupationName: 'Farmer',
+    },
+    ...overrides,
   };
-  benDetails = {
-    beneficiaryRegID: 7878,
-    firstName: 'neeraj',
-    lastName: 'baba',
-    gender: 1,
-    dob: 'Jan 7, 1995',
-    maritalStatus: 3,
-    income: 1,
-    occupation: 2,
-    blockID: 4209,
-    blockName: 'North Guwahati (Pt)',
-    stateID: 5,
-    stateName: 'Assam',
-    community: 4,
-    religion: 5,
-    fatherName: 'father ji',
-    districtID: 54,
-    districtName: 'KAMRUP',
-    villageID: 43132,
-    villageName: 'Nalgaon',
-    phoneNo: '9876543567',
-    literacyStatus: 'Illiterate',
-    motherName: 'mother ji',
-    govID: [],
-    otherGovID: [],
-    age: 0,
-  };
-
-  registrationMasterDetails = new BehaviorSubject<any>(null);
-  registrationMasterDetails$ = this.registrationMasterDetails.asObservable();
-  beneficiaryDetails = new BehaviorSubject<any>(null);
-  beneficiaryDetails$ = this.beneficiaryDetails.asObservable();
-
-  getRegistrationMaster(spID: any) {
-    this.registrationMasterDetails.next(this.registrationMaster);
-  }
-
-  getPatientDataAsObservable(benRegID: any) {
-    this.beneficiaryDetails.next(this.benDetails);
-  }
-
-  submitBeneficiary() {
-    return Observable.of(true);
-  }
-  updateBeneficiary() {
-    return Observable.of(false);
-  }
 }
 
 describe('RegisterPersonalDetailsComponent', () => {
-  let component: RegisterPersonalDetailsComponent;
   let fixture: ComponentFixture<RegisterPersonalDetailsComponent>;
-  let registrarService;
-  let cameraService: CameraService;
-  const fb = new FormBuilder();
-  let confirmationService: ConfirmationService;
-  let spy: any;
+  let component: RegisterPersonalDetailsComponent;
+  let registrar: any;
+  let confirmation: any;
+  let camera: any;
+  let benDetails: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
+  async function setup(
+    opts: {
+      revisit?: boolean;
+      master?: any;
+      edit?: any;
+      marital?: any;
+      dialog?: any;
+      render?: boolean;
+    } = {},
+  ) {
+    registrar = autoSpy(RegistrarService, {
+      registrationMasterDetails$: new BehaviorSubject<any>(
+        opts.master === undefined ? MASTER : opts.master,
+      ),
+      beneficiaryEditDetails$: new BehaviorSubject<any>(opts.edit ?? null),
+      maritalStatus$: new BehaviorSubject<any>(opts.marital ?? null),
+      dialogResult$: new BehaviorSubject<any>(opts.dialog ?? null),
+    });
+    registrar.changePersonalDetailsData.and.returnValue(undefined);
+    registrar.clearMaritalDetails.and.returnValue(undefined);
+    camera = autoSpy(CameraService);
+    benDetails = autoSpy(BeneficiaryDetailsService);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [RegisterPersonalDetailsComponent],
       providers: [
-        { provide: RegistrarService, useClass: RegistrarServiceMock },
-        CameraService,
-        ConfirmationService,
-        { provide: Router, useClass: RouterStub },
-        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        ...commonTestProviders(),
+        { provide: RegistrarService, useValue: registrar },
+        { provide: CameraService, useValue: camera },
+        { provide: BeneficiaryDetailsService, useValue: benDetails },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(RegisterPersonalDetailsComponent);
     component = fixture.componentInstance;
-    registrarService = TestBed.get(RegistrarService);
-    cameraService = TestBed.get(CameraService);
-    confirmationService = TestBed.get(ConfirmationService);
-    component.personalDetailsForm = fb.group({
-      firstName: null,
-      lastName: null,
-      gender: null,
-      dob: null,
-      maritalStatus: null,
-      image: null,
-      spouseName: null,
-      aadharNo: null,
-      income: null,
-      literacyStatus: null,
-      educationQualification: null,
-      occupation: null,
-      occupationOther: null,
-      phoneNo: null,
-      age: null,
-      ageUnit: null,
-      ageAtMarriage: null,
-      fingerprint: null,
+    form = new RegistrationUtils(new FormBuilder()).createPersonalDetailsForm();
+    component.personalDetailsForm = form;
+    component.patientRevisit = !!opts.revisit;
+    confirmation = TestBed.inject(ConfirmationService);
+    if (opts.render === false) {
+      component.ngOnInit();
+    } else {
+      fixture.detectChanges();
+    }
+  }
+
+  afterEach(() => {
+    fixture?.destroy();
+  });
+
+  describe('new registration', () => {
+    beforeEach(async () => setup());
+
+    it('initialises defaults, language and calendar config', () => {
+      expect(component.current_language_set).toEqual(LANGUAGE_EN);
+      expect(component.masterData).toEqual(MASTER);
+      expect(form.value.ageUnit).toBe('Years');
+      expect(form.value.checked).toBeTrue();
+      expect(form.value.imageChangeFlag).toBeFalse();
+      expect(component.isMobileNoRequired).toBeTrue();
+      expect(component.bsConfig).toEqual({
+        containerClass: 'theme-dark-blue',
+        dateInputFormat: 'DD/MM/YYYY',
+        showWeekNumbers: false,
+      });
+      expect(component.minDate.getFullYear()).toBe(
+        component.today.getFullYear() - 121,
+      );
+      expect(registrar.changePersonalDetailsData).toHaveBeenCalledWith(null);
+      expect(component.MaritalStatus).toBeFalse();
     });
-    component.patientRevisit = false;
-    registrarService.getRegistrationMaster();
-  });
 
-  it('should create personal details component for new beneficiary', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
-  });
-
-  it("should show patientRevisit as 'false' because its a new patient", () => {
-    component.patientRevisit = false;
-    component.ngOnInit();
-    expect(component.patientRevisit).toBe(false);
-  });
-
-  it("should show patientRevisit as 'true' because its a Revisiting patient", () => {
-    component.patientRevisit = true;
-    component.ngOnInit();
-    expect(component.patientRevisit).toBe(true);
-  });
-
-  it('should load the personal Details Form', () => {
-    component.ngOnInit();
-    expect(component.personalDetailsForm).toBeTruthy();
-  });
-
-  it('should give error as Firstname is supposed to be more than 2 characters', () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ firstName: 'A' });
-    fixture.detectChanges();
-    const firstName = component.personalDetailsForm.controls['firstName'];
-    expect(firstName.valid).toBeFalsy();
-  });
-
-  it('should show as valid Firstname is supposed to be more than 2 characters and we have given 3 characters', () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ firstName: 'ABC' });
-    fixture.detectChanges();
-    const firstName = component.personalDetailsForm.controls['firstName'];
-    expect(firstName.valid).toBeTruthy();
-  });
-
-  it('should set Contact Number as Required by Default', () => {
-    component.ngOnInit();
-    expect(component.isMobileNoRequired).toBeTruthy();
-  });
-
-  it('should show PhoneNo as invalid as we have given string', () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ phoneNo: 'ABC' });
-    const phoneNo = component.personalDetailsForm.controls['phoneNo'];
-    fixture.detectChanges();
-    expect(phoneNo.status).toBe('INVALID');
-  });
-
-  it('should show PhoneNo as valid as we have given chars as required', () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ phoneNo: 9876543210 });
-    fixture.detectChanges();
-    const phoneNo = component.personalDetailsForm.controls['phoneNo'];
-    expect(phoneNo.valid).toBeTruthy();
-  });
-
-  it("should by default set the Age Unit to 'Years' ", () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    expect(form.value.ageUnit).toBe('Years');
-  });
-
-  it('should call Camera Service to Capture Image', () => {
-    spyOn(cameraService, 'capture').and.callFake(function () {
-      return Observable.of(1);
+    it('patches name and gender from health-id dialog result', () => {
+      registrar.dialogResult$.next({
+        firstName: 'A',
+        lastName: 'B',
+        gender: 2,
+      });
+      expect(form.value.firstName).toBe('A');
+      expect(form.value.lastName).toBe('B');
+      expect(form.value.genderName).toBe('Female');
+      expect(
+        component.maritalStatusMaster.map((m: any) => m.maritalStatusID),
+      ).toEqual([1, 2, 5, 7]);
     });
-    component.ngOnInit();
-    component.captureImage();
-    const form = component.personalDetailsForm;
-    fixture.detectChanges();
-    expect(cameraService.capture).toHaveBeenCalled();
-  });
 
-  it('should set ageLimit for beneficiary to be 120 years', () => {
-    component.ngOnInit();
-    const limit = component.ageLimit;
-    fixture.detectChanges();
-    expect(limit).toBe(120);
-  });
-
-  it('should set Minimum AgeLimit for Marriage 12 years', () => {
-    component.ngOnInit();
-    const limit = component.ageforMarriage;
-    fixture.detectChanges();
-    expect(limit).toBe(12);
-  });
-
-  it('should call for Confirmation if Gender is selected as Type 3, Transgender', () => {
-    spy = spyOn(confirmationService, 'confirm').and.callFake(function () {
-      return Observable.of(1);
+    it('ngDoCheck re-reads language', () => {
+      component.current_language_set = null;
+      component.ngDoCheck();
+      expect(component.current_language_set).toEqual(LANGUAGE_EN);
     });
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ gender: 3 });
-    fixture.detectChanges();
-    component.onGenderSelected();
-    expect(spy).toHaveBeenCalledWith(
-      'Gender Confirmation',
-      'You have selected Transgender, Please Confirm.',
-    );
+
+    it('hides datepicker on window scroll', () => {
+      const hide = jasmine.createSpy('hide');
+      component.datepicker = { hide } as any;
+      component.onScrollEvent();
+      expect(hide).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy unsubscribes and clears marital details', () => {
+      const m = spyOn(component.masterDataSubscription, 'unsubscribe');
+      const p = spyOn(
+        component.personalDataOnHealthIDSubscription,
+        'unsubscribe',
+      );
+      component.ngOnDestroy();
+      expect(m).toHaveBeenCalled();
+      expect(p).toHaveBeenCalled();
+      expect(registrar.clearMaritalDetails).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy tolerates missing subscriptions', () => {
+      component.masterDataSubscription = null;
+      component.personalDataOnHealthIDSubscription = null as any;
+      component.ngOnDestroy();
+      expect(registrar.clearMaritalDetails).toHaveBeenCalled();
+    });
+
+    it('marital status stream toggles flags', () => {
+      form.patchValue({ gender: 1 });
+      registrar.maritalStatus$.next(true);
+      expect(component.MaritalStatus).toBeTrue();
+      expect(component.enableMaritalStatus).toBeTrue();
+      expect(form.value.genderName).toBe('Male');
+      registrar.maritalStatus$.next(false);
+      expect(component.MaritalStatus).toBeFalse();
+      expect(component.enableMaritalStatus).toBeFalse();
+    });
+
+    it('phone map helpers return first entry or null', () => {
+      const maps = editData().benPhoneMaps;
+      expect(component.getPhoneMaps(maps)).toBe('9999999999');
+      expect(component.getAlternatePhoneMaps(maps)).toBe('8888888888');
+      expect(component.getPhoneMaps([])).toBeNull();
+      expect(component.getAlternatePhoneMaps(null as any)).toBeNull();
+    });
+
+    it('checkMobileNoIsRequired / checkFingerPrintIsRequired follow the checkbox', () => {
+      component.checkMobileNoIsRequired({ checked: false });
+      expect(component.isMobileNoRequired).toBeFalse();
+      component.checkMobileNoIsRequired({ checked: true });
+      expect(component.isMobileNoRequired).toBeTrue();
+      component.checkFingerPrintIsRequired({ checked: false });
+      expect(component.isFingerPrintRequired).toBeFalse();
+      component.checkFingerPrintIsRequired({ checked: true });
+      expect(component.isFingerPrintRequired).toBeTrue();
+    });
+
+    describe('captureImage', () => {
+      it('patches captured image without change flag for new ben', () => {
+        camera.capture.and.returnValue(of('img64'));
+        component.captureImage();
+        expect(form.value.image).toBe('img64');
+        expect(form.value.imageChangeFlag).toBeFalse();
+      });
+
+      it('sets imageChangeFlag on revisit', () => {
+        component.patientRevisit = true;
+        camera.capture.and.returnValue(of('img64'));
+        component.captureImage();
+        expect(form.value.imageChangeFlag).toBeTrue();
+      });
+
+      it('ignores empty result', () => {
+        camera.capture.and.returnValue(of(null));
+        component.captureImage();
+        expect(form.value.image).toBeNull();
+      });
+    });
+
+    describe('onGenderSelected', () => {
+      it('male filters out widow (5)', () => {
+        form.patchValue({ gender: 1 });
+        component.onGenderSelected();
+        expect(form.value.genderName).toBe('Male');
+        expect(
+          component.maritalStatusMaster.map((m: any) => m.maritalStatusID),
+        ).toEqual([1, 2, 6, 7]);
+      });
+
+      it('transgender confirmed keeps full master', () => {
+        form.patchValue({ gender: 3 });
+        component.onGenderSelected();
+        expect(confirmation.confirm).toHaveBeenCalledWith(
+          'info',
+          LANGUAGE_EN.alerts.info.transGender,
+        );
+        expect(component.maritalStatusMaster).toEqual(
+          MASTER.maritalStatusMaster,
+        );
+      });
+
+      it('transgender rejected clears gender', () => {
+        confirmation.confirm.and.returnValue(of(false));
+        form.patchValue({ gender: 3 });
+        component.onGenderSelected();
+        expect(form.value.gender).toBeNull();
+        expect(form.value.genderName).toBeNull();
+      });
+
+      it('transgender confirm error is swallowed', () => {
+        confirmation.confirm.and.returnValue(throwingObs());
+        form.patchValue({ gender: 3, genderName: 'X' });
+        component.onGenderSelected();
+        expect(form.value.gender).toBe(3);
+      });
+    });
+
+    describe('validateMaritalStatusMaster', () => {
+      it('uses full list for transgender', () => {
+        component.validateMaritalStatusMaster({ m_gender: { genderID: 3 } });
+        expect(component.maritalStatusMaster).toEqual(
+          MASTER.maritalStatusMaster,
+        );
+      });
+      it('filters for male and female', () => {
+        component.validateMaritalStatusMaster({ m_gender: { genderID: 1 } });
+        expect(
+          component.maritalStatusMaster.map((m: any) => m.maritalStatusID),
+        ).toEqual([1, 2, 6, 7]);
+        component.validateMaritalStatusMaster({ m_gender: { genderID: 2 } });
+        expect(
+          component.maritalStatusMaster.map((m: any) => m.maritalStatusID),
+        ).toEqual([1, 2, 5, 7]);
+      });
+    });
+
+    describe('getParentDetails', () => {
+      it('sets parent from quick search result', () => {
+        registrar.identityQuickSearch.and.returnValue(
+          of([{ benPhoneMaps: [{ parentBenRegID: 99 }] }]),
+        );
+        form.patchValue({ phoneNo: '9876543210' });
+        component.getParentDetails();
+        expect(registrar.identityQuickSearch).toHaveBeenCalledWith({
+          beneficiaryRegID: null,
+          beneficiaryID: null,
+          phoneNo: '9876543210',
+        });
+        expect(form.value.parentRegID).toBe(99);
+        expect(form.value.parentRelation).toBe(11);
+      });
+
+      it('self relation when no match (new ben)', () => {
+        registrar.identityQuickSearch.and.returnValue(of([]));
+        form.patchValue({ phoneNo: '9876543210' });
+        component.getParentDetails();
+        expect(form.value.parentRegID).toBeNull();
+        expect(form.value.parentRelation).toBe(1);
+      });
+
+      it('self relation uses own regID on revisit', () => {
+        component.patientRevisit = true;
+        registrar.identityQuickSearch.and.returnValue(
+          of([{ benPhoneMaps: [] }]),
+        );
+        form.patchValue({ phoneNo: '9876543210', beneficiaryRegID: 5 });
+        component.getParentDetails();
+        expect(form.value.parentRegID).toBe(5);
+        expect(form.value.parentRelation).toBe(1);
+      });
+
+      it('alerts and resets on search error', () => {
+        registrar.identityQuickSearch.and.returnValue(throwingObs('bad'));
+        form.patchValue({ phoneNo: '9876543210' });
+        component.getParentDetails();
+        expect(confirmation.alert).toHaveBeenCalledWith('bad', 'error');
+        expect(form.value.phoneNo).toBeNull();
+        expect(form.value.parentRelation).toBe(1);
+      });
+
+      it('clears fields for invalid number (new ben)', () => {
+        form.patchValue({ phoneNo: '123', parentRegID: 3 });
+        component.getParentDetails();
+        expect(registrar.identityQuickSearch).not.toHaveBeenCalled();
+        expect(form.value.parentRegID).toBeNull();
+        expect(form.value.phoneNo).toBeNull();
+      });
+
+      it('restores stored parent for invalid number on revisit', () => {
+        component.patientRevisit = true;
+        component._parentBenRegID = '77';
+        form.patchValue({ phoneNo: null });
+        component.getParentDetails();
+        expect(form.value.parentRegID).toBe('77');
+        expect(form.value.parentRelation).toBeNull();
+      });
+    });
+
+    describe('age handling', () => {
+      it('rejects age above limit in years', () => {
+        form.patchValue({ age: 130, ageUnit: 'Years' });
+        component.onAgeEntered();
+        expect(confirmation.alert).toHaveBeenCalledWith(
+          LANGUAGE_EN.alerts.info.ageRestriction,
+          'info',
+        );
+        expect(form.value.age).toBeNull();
+      });
+
+      it('derives dob from age and enables marital status when adult', () => {
+        form.patchValue({ age: 30, ageUnit: 'Years' });
+        component.onAgeEntered();
+        const years = moment().diff(moment(form.value.dob), 'years');
+        expect(years).toBe(30);
+        expect(component.enableMaritalStatus).toBeTrue();
+        expect(component.MaritalStatus).toBeTrue();
+      });
+
+      it('minor clears marital status and marriage details', () => {
+        form.patchValue({
+          age: 5,
+          ageUnit: 'Years',
+          maritalStatus: 2,
+          maritalStatusName: 'Married',
+          spouseName: 'S',
+        });
+        component.onAgeEntered();
+        expect(component.enableMaritalStatus).toBeFalse();
+        expect(form.value.maritalStatus).toBeNull();
+        expect(form.value.spouseName).toBeNull();
+        expect(component.enableMarriageDetails).toBeFalse();
+      });
+
+      it('no age just re-evaluates eligibility', () => {
+        form.patchValue({ age: null });
+        const patch = spyOn(form, 'patchValue').and.callThrough();
+        component.onAgeEntered();
+        expect(patch).not.toHaveBeenCalledWith(
+          jasmine.objectContaining({ dob: jasmine.anything() }),
+        );
+        expect(component.enableMaritalStatus).toBeFalse();
+      });
+
+      it('onAgeUnitEntered sets unit name and recalculates when age present', () => {
+        form.patchValue({ ageUnit: 'Months', age: 3 });
+        component.onAgeUnitEntered();
+        expect(form.value.name).toBe('Months');
+        expect(moment().diff(moment(form.value.dob), 'months')).toBe(3);
+      });
+
+      it('onAgeUnitEntered without age skips recalculation', () => {
+        const spy = spyOn(component, 'onAgeEntered');
+        form.patchValue({ ageUnit: 'Years', age: null });
+        component.onAgeUnitEntered();
+        expect(spy).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('dobChangeByCalender', () => {
+      it('computes age in years', () => {
+        component.dateForCalendar = moment().subtract(20, 'years').toDate();
+        component.dobChangeByCalender('01/01/2000');
+        expect([19, 20]).toContain(form.value.age);
+        expect(form.value.ageUnit).toBe('Years');
+        expect(component.enableMaritalStatus).toBeTrue();
+      });
+
+      it('computes age in months', () => {
+        component.dateForCalendar = moment()
+          .subtract(3, 'months')
+          .subtract(2, 'days')
+          .toDate();
+        component.dobChangeByCalender('x');
+        expect(form.value.ageUnit).toBe('Months');
+        expect(form.value.age).toBeGreaterThanOrEqual(2);
+      });
+
+      it('computes age in days', () => {
+        component.dateForCalendar = moment().subtract(5, 'days').toDate();
+        component.dobChangeByCalender('x');
+        expect(form.value.ageUnit).toBe('Days');
+        expect(form.value.age).toBeGreaterThan(0);
+      });
+
+      it('today yields 1 Day', () => {
+        component.dateForCalendar = new Date();
+        component.dobChangeByCalender('x');
+        expect(form.value.age).toBe(1);
+        expect(form.value.ageUnit).toBe('Day');
+      });
+
+      it('alerts on invalid date', () => {
+        form.patchValue({ dob: new Date() });
+        component.dateForCalendar = null;
+        const patch = spyOn(form, 'patchValue').and.callThrough();
+        component.dobChangeByCalender('Invalid date');
+        expect(patch).toHaveBeenCalledWith({ dob: null });
+        expect(component.dateForCalendar).toBeNull();
+        expect(confirmation.alert).toHaveBeenCalledWith(
+          LANGUAGE_EN.alerts.info.invalidData,
+          'info',
+        );
+      });
+
+      it('clears age otherwise', () => {
+        component.dateForCalendar = null;
+        form.patchValue({ age: 4 });
+        component.dobChangeByCalender('');
+        expect(form.value.age).toBeNull();
+      });
+
+      it('throws when called with undefined and a date is set (production bug)', () => {
+        component.dateForCalendar = new Date();
+        expect(() => component.dobChangeByCalender(undefined)).toThrowError(
+          TypeError,
+        );
+      });
+    });
+
+    describe('checkAgeAtMarriage', () => {
+      const msg =
+        LANGUAGE_EN.alerts.info.marriageAge +
+        ' 12 ' +
+        LANGUAGE_EN.alerts.info.years;
+
+      it('does nothing when ageAtMarriage empty', () => {
+        component.checkAgeAtMarriage();
+        expect(confirmation.alert).not.toHaveBeenCalled();
+      });
+
+      it('requires age first', () => {
+        form.patchValue({ ageAtMarriage: 20, age: null });
+        component.checkAgeAtMarriage();
+        expect(confirmation.alert).toHaveBeenCalledWith(
+          LANGUAGE_EN.common.PleaseenterBeneficiaryagefirst,
+          'info',
+        );
+        expect(form.value.ageAtMarriage).toBeNull();
+      });
+
+      it('requires age unit years', () => {
+        form.patchValue({ ageAtMarriage: 20, age: 5, ageUnit: 'Months' });
+        component.checkAgeAtMarriage();
+        expect(confirmation.alert).toHaveBeenCalledWith(msg, 'info');
+        expect(form.value.ageAtMarriage).toBeNull();
+      });
+
+      it('requires age above marriage limit', () => {
+        form.patchValue({ ageAtMarriage: 20, age: 10, ageUnit: 'Years' });
+        component.checkAgeAtMarriage();
+        expect(confirmation.alert).toHaveBeenCalledWith(msg, 'info');
+      });
+
+      it('requires ageAtMarriage above limit', () => {
+        form.patchValue({ ageAtMarriage: 10, age: 30, ageUnit: 'Years' });
+        component.checkAgeAtMarriage();
+        expect(confirmation.alert).toHaveBeenCalledWith(msg, 'info');
+        expect(form.value.ageAtMarriage).toBeNull();
+      });
+
+      it('rejects ageAtMarriage greater than age', () => {
+        form.patchValue({ ageAtMarriage: 40, age: 30, ageUnit: 'Years' });
+        component.checkAgeAtMarriage();
+        expect(confirmation.alert).toHaveBeenCalledWith(
+          LANGUAGE_EN.common.Marriageatageismorethantheactualage,
+          'info',
+        );
+        expect(form.value.ageAtMarriage).toBeNull();
+      });
+
+      it('accepts valid ageAtMarriage', () => {
+        form.patchValue({ ageAtMarriage: 20, age: 30, ageUnit: 'Years' });
+        component.checkAgeAtMarriage();
+        expect(confirmation.alert).not.toHaveBeenCalled();
+        expect(form.value.ageAtMarriage).toBe(20);
+      });
+    });
+
+    describe('master lookups', () => {
+      it('onIncomeChanged sets income name', () => {
+        form.patchValue({ income: 2 });
+        component.onIncomeChanged();
+        expect(form.value.incomeName).toBe('APL');
+      });
+
+      it('changeLiteracyStatus sets literacystatus', () => {
+        form.patchValue({ literacyStatus: 2 });
+        component.changeLiteracyStatus();
+        expect(form.value.literacystatus).toBe('Illiterate');
+      });
+
+      it('onEducationQualificationChanged sets education name', () => {
+        form.patchValue({ educationQualification: 1 });
+        component.onEducationQualificationChanged();
+        expect(form.value.educationQualificationName).toBe('Primary');
+      });
+
+      it('getOccupationName sets occupation name', () => {
+        form.patchValue({ occupation: 1 });
+        component.getOccupationName();
+        expect(form.value.occupationOther).toBe('Farmer');
+      });
+
+      it('getOccupationName clears for "other" (7)', () => {
+        form.patchValue({ occupation: 7, occupationOther: 'prev' });
+        component.getOccupationName();
+        expect(form.value.occupationOther).toBeNull();
+      });
+    });
+
+    describe('onMaritalStatusChanged', () => {
+      it('unmarried disables marriage details and clears them', () => {
+        form.patchValue({
+          maritalStatus: 1,
+          spouseName: 'x',
+          ageAtMarriage: 20,
+        });
+        component.onMaritalStatusChanged();
+        expect(component.enableMarriageDetails).toBeFalse();
+        expect(component.enableSpouseMandatory).toBeFalse();
+        expect(form.value.spouseName).toBeNull();
+        expect(form.value.ageAtMarriage).toBeNull();
+        expect(form.value.maritalStatusName).toBe('Unmarried');
+      });
+
+      it('married enables marriage details and spouse mandatory', () => {
+        form.patchValue({ maritalStatus: 2 });
+        component.onMaritalStatusChanged();
+        expect(component.enableMarriageDetails).toBeTrue();
+        expect(component.enableSpouseMandatory).toBeTrue();
+        expect(form.value.maritalStatusName).toBe('Married');
+      });
+
+      it('widow enables details without spouse mandatory', () => {
+        form.patchValue({ maritalStatus: 5 });
+        component.onMaritalStatusChanged();
+        expect(component.enableMarriageDetails).toBeTrue();
+        expect(component.enableSpouseMandatory).toBeFalse();
+      });
+    });
+
+    describe('setFullName', () => {
+      it('first name only', () => {
+        form.patchValue({ firstName: 'A', lastName: null });
+        component.setFullName();
+        expect(form.value.fullName).toBe('A');
+      });
+      it('first and last', () => {
+        form.patchValue({ firstName: 'A', lastName: 'B' });
+        component.setFullName();
+        expect(form.value.fullName).toBe('A B');
+      });
+      it('last name only', () => {
+        form.patchValue({ firstName: null, lastName: 'B' });
+        component.setFullName();
+        expect(form.value.fullName).toBe('B');
+      });
+      it('empty first name with last name concatenates', () => {
+        form.patchValue({ firstName: '', lastName: 'B' });
+        component.setFullName();
+        expect(form.value.fullName).toBe(' B');
+      });
+    });
   });
 
-  it('should enable Marital Status if Age entered is greater than 12', () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ age: 13 });
-    fixture.detectChanges();
-    component.onAgeEntered();
+  describe('master data not yet loaded', () => {
+    beforeEach(async () => setup({ master: null }));
 
-    expect(component.enableMaritalStatus).toBe(true);
+    it('leaves masterData undefined', () => {
+      expect(component.masterData).toBeUndefined();
+    });
   });
 
-  it('should disable Marital Status if Age entered is lesser than 12', () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ age: 11 });
-    fixture.detectChanges();
-    component.onAgeEntered();
+  describe('revisit (editing)', () => {
+    beforeEach(async () => setup({ revisit: true, edit: null, render: false }));
 
-    expect(component.enableMaritalStatus).toBe(false);
-  });
+    it('loads edit data, image and validates marital master', () => {
+      const push = spyOn(component, 'pushEditingDatatoForm');
+      benDetails.getBeneficiaryImage.and.returnValue(of({ benImage: 'IMG' }));
+      registrar.beneficiaryEditDetails$.next(editData());
+      expect(component.revisitData.beneficiaryID).toBe(11);
+      expect(push).toHaveBeenCalledWith(
+        jasmine.objectContaining({ beneficiaryID: 11 }),
+      );
+      expect(benDetails.getBeneficiaryImage).toHaveBeenCalledWith(22);
+      expect(form.value.image).toBe('IMG');
+      expect(
+        component.maritalStatusMaster.map((m: any) => m.maritalStatusID),
+      ).toEqual([1, 2, 6, 7]);
+    });
 
-  it('should disable marriage details if Beneficiary is UnMarried', () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ age: 15, maritalStatus: 1 });
-    fixture.detectChanges();
-    component.onMaritalStatusChanged();
+    it('ignores edit data without beneficiaryID and empty image', () => {
+      const push = spyOn(component, 'pushEditingDatatoForm');
+      registrar.beneficiaryEditDetails$.next({ x: 1 });
+      expect(push).not.toHaveBeenCalled();
+      component.revisitData = { beneficiaryRegID: 1 };
+      benDetails.getBeneficiaryImage.and.returnValue(of({}));
+      component.getBenImage();
+      expect(form.value.image).toBeNull();
+    });
 
-    expect(component.enableMarriageDetails).toBe(false);
-  });
+    it('ngOnDestroy unsubscribes revisit subscription', () => {
+      spyOn(component, 'pushEditingDatatoForm');
+      registrar.beneficiaryEditDetails$.next(editData());
+      const r = spyOn(component.revisitDataSubscription, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(r).toHaveBeenCalled();
+    });
 
-  it("should disable marriage details if Beneficiary Marriage status is 'Not Applicable' ", () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ age: 15, maritalStatus: 7 });
-    fixture.detectChanges();
-    component.onMaritalStatusChanged();
+    it('pushEditingDatatoForm patches the form then fails in dobChangeByCalender(undefined) (production bug)', () => {
+      const el = editData();
+      expect(() => component.pushEditingDatatoForm(el)).toThrowError(TypeError);
+      expect(form.value).toEqual(
+        jasmine.objectContaining({
+          beneficiaryID: 11,
+          beneficiaryRegID: 22,
+          firstName: 'Ravi',
+          lastName: 'Kumar',
+          fullName: 'Ravi Kumar',
+          phoneNo: '9999999999',
+          alternateContactNumber: '8888888888',
+          parentRegID: '44',
+          parentRelation: '1',
+          benPhMapID: '55',
+          benRelationshipType: 'Self',
+          gender: 1,
+          genderName: 'Male',
+          maritalStatus: 2,
+          maritalStatusName: 'Married',
+          spouseName: 'Sita',
+          ageAtMarriage: 25,
+          incomeName: 'APL',
+          income: 2,
+          educationQualification: 2,
+          educationQualificationName: 'Graduate',
+          occupation: 1,
+          occupationOther: 'Farmer',
+        }),
+      );
+      expect(component.genderCategory).toBe('Male');
+    });
 
-    expect(component.enableMarriageDetails).toBe(false);
-  });
-
-  it('should enable marriage details if Beneficiary Marriage status is neither Unmarried or Nor Not Applicable ', () => {
-    const randomNumber = Math.floor(Math.random() * (6 - 2 + 1)) + 2;
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ age: 15, maritalStatus: randomNumber });
-    fixture.detectChanges();
-    component.onMaritalStatusChanged();
-
-    expect(component.enableMarriageDetails).toBe(true);
-  });
-
-  it('should show as invalid aadhaarno is supposed to be numbers and we have given characters', () => {
-    component.ngOnInit();
-    const form = component.personalDetailsForm;
-    form.patchValue({ aadharNo: 'ABCB' });
-    fixture.detectChanges();
-    const aadhar = component.personalDetailsForm.controls['aadharNo'];
-    expect(aadhar.status).toBe('INVALID');
+    it('pushEditingDatatoForm with empty maps and demographics uses null fallbacks', () => {
+      const el = editData({
+        benPhoneMaps: [],
+        maritalStatus: null,
+        spouseName: null,
+        ageAtMarriage: null,
+        literacyStatus: null,
+        i_bendemographics: {},
+      });
+      expect(() => component.pushEditingDatatoForm(el)).toThrow();
+      expect(form.value.parentRegID).toBe('null');
+      expect(form.value.benRelationshipType).toBe('null');
+      expect(form.value.maritalStatus).toBeNull();
+      expect(form.value.maritalStatusName).toBe('null');
+      expect(form.value.educationQualification).toBeNull();
+      expect(form.value.occupationOther).toBeNull();
+      expect(form.value.phoneNo).toBeNull();
+    });
   });
 });

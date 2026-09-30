@@ -19,503 +19,997 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
+
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject, of } from 'rxjs';
+import {
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+  createDialogRefMock,
+  throwingObs,
+} from 'src/testing/test-utils';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
 import { ConfirmationService } from '../../core/services/confirmation.service';
 import { CameraService } from '../../core/services/camera.service';
+import { BeneficiaryDetailsService } from '../../core/services/beneficiary-details.service';
+import { CommonService } from '../../core/services/common-services.service';
+import { HealthIdDisplayModalComponent } from '../../core/components/health-id-display-modal/health-id-display-modal.component';
 import { RegistrarService } from '../shared/services/registrar.service';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/throw';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { SearchDialogComponent } from '../search-dialog/search-dialog.component';
+import { QuickSearchComponent } from '../quick-search/quick-search.component';
 import { SearchComponent } from './search.component';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Md2Module } from 'md2';
-import { MaterialModule } from '../../core/material.module';
-import { BeneficiaryDetailsService } from 'app/app-modules/core/services/beneficiary-details.service';
 
-class RouterStub {
-  navigateByUrl(url: string) {
-    return url;
-  }
-
-  navigate(someRoute) {}
-}
-class MockActivatedRoute {
-  snapshot = {
-    params: [null],
+function identityBen(overrides: any = {}) {
+  return {
+    beneficiaryID: '123456789012',
+    beneficiaryRegID: 55,
+    firstName: 'Asha',
+    lastName: 'Rao',
+    m_gender: { genderName: 'Female' },
+    fatherName: 'Ravi',
+    i_bendemographics: { districtName: 'Pune', districtBranchName: 'Kothrud' },
+    benPhoneMaps: [{ phoneNo: '9999999999' }, { phoneNo: '8888888888' }],
+    dOB: '1990-01-01T00:00:00.000Z',
+    createdDate: '2024-03-05T10:00:00.000Z',
+    ...overrides,
   };
 }
 
-class CameraStub {
-  viewImage(imagedata) {}
-}
-
-class BeneficiaryServiceMock {
-  getBeneficiaryImage(id) {}
-}
-
-class RegistrarServiceMock {
-  patientRevisit() {}
-
-  quickSearch() {}
-
-  registrationMaster = {
-    occupationMaster: [
-      { occupationID: 2, occupationType: 'Agricultural labour' },
-      { occupationID: 3, occupationType: 'Business' },
-      { occupationID: 1, occupationType: 'Cultivation(Agriculture)' },
-      { occupationID: 5, occupationType: 'Govt employee' },
-      { occupationID: 9, occupationType: 'Housewife or Homemaker' },
-      { occupationID: 8, occupationType: 'Not Applicable' },
-      { occupationID: 7, occupationType: 'Other' },
-      { occupationID: 6, occupationType: 'Private employee' },
-      { occupationID: 4, occupationType: 'Student' },
-    ],
-    incomeMaster: [
-      { incomeStatusID: 1, incomeStatus: 'APL' },
-      { incomeStatusID: 2, incomeStatus: 'BPL' },
-      { incomeStatusID: 3, incomeStatus: "Don't Know" },
-    ],
-    maritalStatusMaster: [
-      { maritalStatusID: 3, status: 'Divorced' },
-      { maritalStatusID: 2, status: 'Married' },
-      { maritalStatusID: 7, status: 'Not Applicable' },
-      { maritalStatusID: 4, status: 'Separated' },
-      { maritalStatusID: 1, status: 'Unmarried' },
-      { maritalStatusID: 5, status: 'Widow' },
-      { maritalStatusID: 6, status: 'Widower' },
-    ],
-    religionMaster: [
-      { religionID: 5, religionType: 'Buddhism' },
-      { religionID: 1, religionType: 'Hinduism' },
-      { religionID: 2, religionType: 'Islam' },
-      { religionID: 6, religionType: 'Jainism' },
-      { religionID: 3, religionType: 'Judaism' },
-      { religionID: 7, religionType: 'Other' },
-      { religionID: 4, religionType: 'Sikhism' },
-    ],
-    communityMaster: [
-      { communityID: 4, communityType: 'BC' },
-      { communityID: 7, communityType: "Dont' Know" },
-      { communityID: 5, communityType: 'OBC' },
-      { communityID: 6, communityType: 'OC' },
-      { communityID: 2, communityType: 'SC' },
-      { communityID: 3, communityType: 'ST' },
-    ],
-    qualificationMaster: [
-      { educationID: 6, educationType: 'Diploma / Under Graduate' },
-      { educationID: 7, educationType: 'Graduate' },
-      { educationID: 8, educationType: 'Post Graduate & Above' },
-      { educationID: 2, educationType: 'Primary (1st to 5th Std)' },
-      { educationID: 4, educationType: 'Secondary (9th to 10th)' },
-      {
-        educationID: 5,
-        educationType: 'Senior Secondary (11th to 12th/Intermediate)',
+function externalBen(gender = 'F') {
+  return {
+    id: 'mongo1',
+    amritId: 'A1',
+    healthId: 'asha@sbx',
+    healthIdNumber: '12-3456-7890-1234',
+    externalId: 'EXT1',
+    profile: {
+      patient: {
+        name: 'Asha Rao',
+        firstName: 'Asha',
+        lastName: 'Rao',
+        gender,
+        yearOfBirth: 1990,
+        monthOfBirth: 1,
+        dayOfBirth: 2,
+        address: { state: 'Karnataka', district: 'Mysore', village: 'V1' },
       },
-      { educationID: 3, educationType: 'Upper Primary (6th to 8th Std)' },
-    ],
-    govIdEntityMaster: [
-      { govtIdentityTypeID: 1, identityType: 'Aadhar' },
-      { govtIdentityTypeID: 3, identityType: 'Driving License' },
-      { govtIdentityTypeID: 4, identityType: 'PAN' },
-      { govtIdentityTypeID: 5, identityType: 'Passport' },
-      { govtIdentityTypeID: 6, identityType: 'Ration Card' },
-      { govtIdentityTypeID: 2, identityType: 'Voter ID' },
-    ],
-    genderMaster: [
-      { genderID: 2, genderName: 'Female' },
-      { genderID: 1, genderName: 'Male' },
-      { genderID: 3, genderName: 'Transgender' },
-    ],
-    otherGovIdEntityMaster: [
-      { govtIdentityTypeID: 7, identityType: 'Assam Arogya Nidhi (AAN)' },
-      { govtIdentityTypeID: 8, identityType: 'Atal Amrit Abhiyan' },
-      {
-        govtIdentityTypeID: 9,
-        identityType: 'Janani Shishu Suraksha Karyakram (JSSK)',
-      },
-      { govtIdentityTypeID: 10, identityType: 'Janani Suraksha Yojana (JSY)' },
-      { govtIdentityTypeID: 11, identityType: 'KAYAKALP' },
-      { govtIdentityTypeID: 12, identityType: 'RMNCH+A' },
-      {
-        govtIdentityTypeID: 13,
-        identityType: 'Sanjeevani - Village Health Outreach Programme',
-      },
-      { govtIdentityTypeID: 14, identityType: 'Sneha Sparsha' },
-    ],
+    },
   };
-  registrationMasterDetails = new BehaviorSubject<any>(null);
-  registrationMasterDetails$ = this.registrationMasterDetails.asObservable();
-
-  getRegistrationMaster(spID: any) {
-    this.registrationMasterDetails.next(this.registrationMaster);
-  }
-
-  submitBeneficiary() {
-    return Observable.of(true);
-  }
-  updateBeneficiary() {
-    return Observable.of(false);
-  }
 }
 
-describe('SearchComponent', () => {
+describe('Registrar SearchComponent', () => {
   let component: SearchComponent;
   let fixture: ComponentFixture<SearchComponent>;
-  let router: Router;
-  let route: ActivatedRoute;
-  let camera: CameraService;
-  let registrarService: RegistrarService;
-  let beneficiaryService: BeneficiaryDetailsService;
-  let confirmService: ConfirmationService;
-  let el: HTMLElement;
-  let spy: any;
-  let button: DebugElement;
-  let quickSearchButton: DebugElement;
-  const searchForOm = [
-    {
-      beneficiaryRegID: 7432,
-      benName: 'SOMIYA RABHA ',
-      age: '8 months - 10 days',
-    },
-    {
-      beneficiaryRegID: 7472,
-      benName: 'SOMEONE SOMESURNAME',
-      genderID: 2,
-      genderName: 'Female',
-      districtName: 'BARPETA',
-      villageName: '2 No.Chachara',
-      phoneNo: '5678987654',
-      age: '34 years - 2 months',
-    },
-    {
-      beneficiaryRegID: 7505,
-      benName: 'OMI ',
-      genderID: 2,
-      genderName: 'Female',
-      fatherName: '',
-      districtName: 'BARPETA',
-      villageName: '2 No.Chachara',
-      phoneNo: '9987654396',
-      age: '23 years - 2 months',
-    },
-    {
-      beneficiaryRegID: 7928,
-      benName: 'OM KUMARI',
-      genderID: 2,
-      genderName: 'Female',
-      fatherName: 'SKRAO',
-      districtName: 'CHITTOOR',
-      villageName: 'Ithepalle',
-      phoneNo: '9789678598',
-      age: '41 years - 1 months',
-    },
-    {
-      beneficiaryRegID: 7930,
-      benName: 'OM KUMARI',
-      genderID: 2,
-      genderName: 'Female',
-      districtName: 'CHITTOOR',
-      villageName: 'Chandragiri',
-      phoneNo: '9789678564',
-      age: '41 years - 1 months',
-    },
-    {
-      beneficiaryRegID: 8040,
-      benName: 'RANDOM ',
-      genderID: 2,
-      genderName: 'Female',
-      fatherName: '',
-      districtName: 'BALOD',
-      phoneNo: '3434343456',
-      age: '22 years - 0 months',
-    },
-    {
-      beneficiaryRegID: 8040,
-      benName: 'RANDOM ',
-      genderID: 2,
-      genderName: 'Female',
-      fatherName: '',
-      districtName: 'BALOD',
-      age: '22 years - 0 months',
-    },
-  ];
+  let registrar: any;
+  let common: any;
+  let camera: any;
+  let benDetails: any;
+  let confirm: any;
+  let dialog: any;
+  let session: any;
+  let router: any;
+  let masterSubject: BehaviorSubject<any>;
+  const origExt = environment.abhaExtension;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+  beforeEach(async () => {
+    masterSubject = new BehaviorSubject<any>({
+      genderMaster: [
+        { genderID: 1, genderName: 'Male' },
+        { genderID: 2, genderName: 'Female' },
+        { genderID: 3, genderName: 'Transgender' },
+      ],
+    });
+    registrar = autoSpy(RegistrarService, {
+      registrationMasterDetails$: masterSubject.asObservable(),
+    });
+    common = autoSpy(CommonService);
+    common.getStates.and.returnValue(
+      of([
+        { stateID: 10, stateName: 'Karnataka' },
+        { stateID: 11, stateName: 'Kerala' },
+      ]),
+    );
+    camera = autoSpy(CameraService);
+    benDetails = autoSpy(BeneficiaryDetailsService);
+    router = {
+      navigate: jasmine.createSpy('navigate').and.resolveTo(true),
+      routerState: { snapshot: { url: '/registrar/search' } },
+    };
+    await TestBed.configureTestingModule({
       imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        Md2Module,
-        MaterialModule,
+        HttpClientTestingModule,
         NoopAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
       ],
       declarations: [SearchComponent],
       providers: [
-        { provide: RegistrarService, useClass: RegistrarServiceMock },
-        ConfirmationService,
-        {
-          provide: BeneficiaryDetailsService,
-          useClass: BeneficiaryServiceMock,
-        },
-        { provide: CameraService, useClass: CameraStub },
-        { provide: Router, useClass: RouterStub },
-        { provide: ActivatedRoute, useClass: MockActivatedRoute },
+        ...commonTestProviders({
+          session: {
+            serviceLineDetails: JSON.stringify({
+              vanID: 7,
+              facilityID: 8,
+              parkingPlaceID: 9,
+            }),
+            providerServiceID: 4,
+            servicePointID: 3,
+            servicePointName: 'SP',
+            userName: 'nurse1',
+          },
+        }),
+        { provide: RegistrarService, useValue: registrar },
+        { provide: CommonService, useValue: common },
+        { provide: CameraService, useValue: camera },
+        { provide: BeneficiaryDetailsService, useValue: benDetails },
+        { provide: Router, useValue: router },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
-    registrarService = TestBed.get(RegistrarService);
-    confirmService = TestBed.get(ConfirmationService);
-    camera = TestBed.get(CameraService);
-    router = TestBed.get(Router);
-    route = TestBed.get(ActivatedRoute);
-    beneficiaryService = TestBed.get(BeneficiaryDetailsService);
+    confirm = TestBed.inject(ConfirmationService);
+    dialog = TestBed.inject(MatDialog);
+    session = TestBed.inject(SessionStorageService);
     fixture.detectChanges();
   });
 
-  it('search component should be created', () => {
-    expect(component).toBeTruthy();
+  afterEach(() => {
+    (environment as any).abhaExtension = origExt;
+    fixture.destroy();
   });
 
-  it('should call Quick Search without any search value and give alert to user', () => {
-    const spier = spyOn(confirmService, 'alert').and.returnValue(1);
-    component.quickSearch();
-    expect(spier).toHaveBeenCalledWith(
-      'Please enter Beneficiary ID, Name or Phone No first...',
-    );
+  describe('init', () => {
+    it('sets defaults, language, states and loads registration master', () => {
+      expect(component.searchCategory).toBe('Beneficiary ID');
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+      expect(common.getStates).toHaveBeenCalledWith(1);
+      expect(component.statesList.length).toBe(2);
+      expect(registrar.getRegistrationMaster).toHaveBeenCalledWith(1);
+    });
+
+    it('ignores a null states response', () => {
+      component.statesList = undefined;
+      common.getStates.and.returnValue(of(null));
+      component.stateMaster();
+      expect(component.statesList).toBeUndefined();
+    });
+
+    it('alerts when fetching states fails', () => {
+      common.getStates.and.returnValue(throwingObs());
+      component.stateMaster();
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.errorInfetchingStates,
+        'error',
+      );
+    });
+
+    it('ngDoCheck re-assigns language and ngAfterViewInit binds paginator', () => {
+      component.currentLanguageSet = null;
+      component.ngDoCheck();
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+      const p: any = { pageSize: 0 };
+      component.paginator = p;
+      component.ngAfterViewInit();
+      expect(component.dataSource.paginator).toBe(p);
+    });
+
+    it('matPaginator setter stores and binds the paginator', () => {
+      const p: any = {};
+      component.matPaginator = p;
+      expect(component.paginator).toBe(p);
+      expect(component.dataSource.paginator).toBe(p);
+    });
+
+    it('clearSearchTerm nulls the quick search term', () => {
+      component.quicksearchTerm = 'x';
+      component.clearSearchTerm();
+      expect(component.quicksearchTerm).toBeNull();
+    });
   });
 
-  it('should call Quick Search when search button is clicked', fakeAsync(() => {
-    const spier = spyOn(component, 'quickSearch').and.callThrough();
-    const compiled = fixture.debugElement.nativeElement;
-    compiled.querySelector('button').click();
-    tick();
-    fixture.detectChanges();
-    expect(spier).toHaveBeenCalled();
-  }));
+  describe('validateSearchTerm / searchBeneficiaryDetails', () => {
+    beforeEach(() => {
+      registrar.identityQuickSearch.and.returnValue(
+        of({ data: [identityBen()] }),
+      );
+    });
 
-  it('should call Quick Search with 1 char in search value and give alert to user', () => {
-    const spier = spyOn(confirmService, 'alert').and.returnValue(1);
-    component.quickSearch('b');
-    expect(spier).toHaveBeenCalledWith(
-      'Minimum 2 Character is required to search Beneficiary !!!',
-    );
+    [undefined, null, '   '].forEach((term) => {
+      it(`rejects empty term ${JSON.stringify(term)}`, () => {
+        component.beneficiaryList = [1];
+        component.validateSearchTerm(term, 'Phone No');
+        expect(component.beneficiaryList).toEqual([]);
+        expect(confirm.alert).toHaveBeenCalledWith(
+          LANGUAGE_EN.pleaseEnterValidInput,
+          'info',
+        );
+        expect(registrar.identityQuickSearch).not.toHaveBeenCalled();
+      });
+    });
+
+    it('searches by phone number', () => {
+      component.validateSearchTerm('9999999999', 'Phone No');
+      expect(registrar.identityQuickSearch).toHaveBeenCalledWith({
+        beneficiaryRegID: null,
+        beneficiaryID: null,
+        phoneNo: '9999999999',
+        HealthID: null,
+        HealthIDNumber: null,
+        familyId: null,
+        identity: null,
+      });
+      expect(component.beneficiaryList.length).toBe(1);
+      expect(component.dataSource.data.length).toBe(1);
+      expect(component.filteredBeneficiaryList).toBe(component.beneficiaryList);
+    });
+
+    it('searches by beneficiary id and resets the paginator', () => {
+      const paginator: any = {
+        pageSize: 10,
+        firstPage: jasmine.createSpy('firstPage'),
+      };
+      component.paginator = paginator;
+      component.searchBeneficiaryDetails('123456789012', 'Beneficiary ID');
+      expect(
+        registrar.identityQuickSearch.calls.mostRecent().args[0].beneficiaryID,
+      ).toBe('123456789012');
+      expect(paginator.pageSize).toBe(5);
+      expect(paginator.firstPage).toHaveBeenCalled();
+    });
+
+    it('searches by family id', () => {
+      component.searchBeneficiaryDetails('12345678901234567', 'Family ID');
+      expect(
+        registrar.identityQuickSearch.calls.mostRecent().args[0].familyId,
+      ).toBe('12345678901234567');
+    });
+
+    it('searches by health id number (14 digits)', () => {
+      component.searchBeneficiaryDetails('12345678901234', 'HealthID Number');
+      expect(
+        registrar.identityQuickSearch.calls.mostRecent().args[0].HealthID,
+      ).toBe('12345678901234');
+    });
+
+    it('searches by health id (17 chars)', () => {
+      component.searchBeneficiaryDetails('12-3456-7890-1234', 'Health ID');
+      expect(
+        registrar.identityQuickSearch.calls.mostRecent().args[0].HealthID,
+      ).toBe('12-3456-7890-1234');
+    });
+
+    it('searches by government id (10 and 12)', () => {
+      component.searchBeneficiaryDetails('ABCDE12345', 'GovID');
+      expect(
+        registrar.identityQuickSearch.calls.mostRecent().args[0].identity,
+      ).toBe('ABCDE12345');
+    });
+
+    it('alerts for a term that does not match the category', () => {
+      component.searchBeneficiaryDetails('123456789', 'Phone No');
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.pleaseEnterValidInputFor + 'Phone No',
+        'info',
+      );
+      expect(registrar.identityQuickSearch).not.toHaveBeenCalled();
+    });
+
+    it('alerts for a term outside 8..32 chars', () => {
+      component.searchBeneficiaryDetails('123', 'Phone No');
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.pleaseEnterValidInput,
+        'info',
+      );
+    });
+
+    it('clears lists and alerts when nothing is found', () => {
+      component.beneficiaryList = [];
+      registrar.identityQuickSearch.and.returnValue(of({ data: [] }));
+      component.getSearchResult({}, 'Phone No');
+      expect(component.filteredBeneficiaryList).toEqual([]);
+      expect(component.dataSource.data).toEqual([]);
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.beneNotFound,
+        'info',
+      );
+    });
+
+    it('alerts on search error', () => {
+      registrar.identityQuickSearch.and.returnValue(throwingObs('fail'));
+      component.getSearchResult({}, 'Phone No');
+      expect(confirm.alert).toHaveBeenCalledWith('fail', 'error');
+    });
   });
 
-  it('should call registrar service when 2 chars are given for searching', () => {
-    const spier = spyOn(registrarService, 'quickSearch').and.returnValue(
-      Observable.of(1),
-    );
-    component.quickSearch('ab');
-    expect(spier).toHaveBeenCalledWith({ benID: 'ab' });
+  describe('searchRestruct / getCorrectPhoneNo', () => {
+    it('maps identity data to table rows with fallbacks', () => {
+      const rows = component.searchRestruct(
+        {
+          data: [
+            identityBen(),
+            identityBen({
+              lastName: null,
+              m_gender: {},
+              fatherName: null,
+              i_bendemographics: {},
+              benPhoneMaps: [],
+              dOB: new Date().toISOString(),
+            }),
+          ],
+        },
+        { phoneNo: '8888888888' },
+      );
+      expect(rows[0]).toEqual(
+        jasmine.objectContaining({
+          beneficiaryID: '123456789012',
+          benName: 'Asha Rao',
+          genderName: 'Female',
+          fatherName: 'Ravi',
+          districtName: 'Pune',
+          villageName: 'Kothrud',
+          phoneNo: '8888888888',
+          registeredOn: '05-03-2024',
+        }),
+      );
+      expect(rows[0].age).not.toBe('Not Available');
+      expect(rows[1]).toEqual(
+        jasmine.objectContaining({
+          benName: 'Asha ',
+          genderName: 'Not Available',
+          fatherName: 'Not Available',
+          districtName: 'Not Available',
+          villageName: 'Not Available',
+          phoneNo: 'Not Available',
+          age: 'Not Available',
+        }),
+      );
+    });
+
+    it('returns the first phone when there is no match or no search phone', () => {
+      const maps = [{ phoneNo: '1' }, { phoneNo: '2' }];
+      expect(component.getCorrectPhoneNo(maps, { phoneNo: '3' })).toBe('1');
+      expect(component.getCorrectPhoneNo(maps, null)).toBe('1');
+      expect(component.getCorrectPhoneNo(maps, { phoneNo: '2' })).toBe('2');
+    });
   });
 
-  it('should call alert when nothing is returned by search service', () => {
-    const spier = spyOn(registrarService, 'quickSearch').and.returnValue(
-      Observable.of(null),
-    );
-    const spiAlert = spyOn(confirmService, 'alert').and.returnValue(1);
-    component.quickSearch('ab');
-    expect(spiAlert).toHaveBeenCalledWith('Beneficiary Not found...');
+  describe('searchBeneficiary (quick search by any id)', () => {
+    beforeEach(() => {
+      registrar.identityQuickSearch.and.returnValue(
+        of({ data: [identityBen()] }),
+      );
+    });
+
+    it('rejects empty input', () => {
+      component.searchBeneficiary('  ');
+      expect(registrar.identityQuickSearch).not.toHaveBeenCalled();
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.pleaseEnterValidInput,
+        'info',
+      );
+    });
+
+    it('rejects too short input', () => {
+      component.searchBeneficiary('1234');
+      expect(registrar.identityQuickSearch).not.toHaveBeenCalled();
+    });
+
+    it('searches a 10 digit phone number', () => {
+      component.externalBeneficiaryList = [1];
+      component.searchBeneficiary('9999999999');
+      const req = registrar.identityQuickSearch.calls.mostRecent().args[0];
+      expect(req.phoneNo).toBe('9999999999');
+      expect(req.beneficiaryID).toBeNull();
+      expect(component.externalBeneficiaryList).toEqual([]);
+      expect(component.dataSource.data.length).toBe(1);
+    });
+
+    it('searches a 12 digit beneficiary id (also written into phoneNo)', () => {
+      component.searchBeneficiary('123456789012');
+      const req = registrar.identityQuickSearch.calls.mostRecent().args[0];
+      expect(req.beneficiaryID).toBe('123456789012');
+      // production quirk: phoneNo receives the chained assignment result
+      expect(req.phoneNo).toBe('123456789012');
+    });
+
+    it('falls back to health id pattern for 10/12 chars that are not digits', () => {
+      component.searchBeneficiary('ab12@sbx12');
+      expect(registrar.identityQuickSearch).not.toHaveBeenCalled();
+      component.searchBeneficiary('abcd@sbx');
+      expect(
+        registrar.identityQuickSearch.calls.mostRecent().args[0].HealthID,
+      ).toBe('abcd@sbx');
+    });
+
+    it('accepts 14 digit and hyphenated 17 char health id numbers', () => {
+      component.searchBeneficiary('12345678901234');
+      component.searchBeneficiary('12-3456-7890-1234');
+      expect(registrar.identityQuickSearch).toHaveBeenCalledTimes(2);
+    });
+
+    it('falls back to abha address pattern for invalid 14/17 char terms', () => {
+      component.searchBeneficiary('asha.rao12@sbx');
+      expect(
+        registrar.identityQuickSearch.calls.mostRecent().args[0].HealthID,
+      ).toBe('asha.rao12@sbx');
+      component.searchBeneficiary('xx-xxxx-xxxx-xxxx');
+      expect(registrar.identityQuickSearch).toHaveBeenCalledTimes(1);
+    });
+
+    it('uses the 4 letter pattern for @abdm environments', () => {
+      (environment as any).abhaExtension = '@abdm';
+      component.searchBeneficiary('ashara@abdm');
+      expect(
+        registrar.identityQuickSearch.calls.mostRecent().args[0].HealthID,
+      ).toBe('ashara@abdm');
+      component.searchBeneficiary('ashara@sbx');
+      expect(registrar.identityQuickSearch).toHaveBeenCalledTimes(1);
+    });
+
+    it('clears and alerts on empty response', () => {
+      registrar.identityQuickSearch.and.returnValue(of([]));
+      component.searchBeneficiary('9999999999');
+      expect(component.beneficiaryList).toEqual([]);
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.beneNotFound,
+        'info',
+      );
+    });
+
+    it('alerts on error', () => {
+      registrar.identityQuickSearch.and.returnValue(throwingObs('e'));
+      component.searchBeneficiary('9999999999');
+      expect(confirm.alert).toHaveBeenCalledWith('e', 'error');
+    });
+
+    it('checkValidHealthIDNumber falls through for other lengths', () => {
+      const obj: any = {};
+      expect(component.checkValidHealthIDNumber('abcd@sbx', obj)).toBeTrue();
+      expect(obj.HealthID).toBe('abcd@sbx');
+    });
   });
 
-  it('should load data returned by search service into beneficiarylist', () => {
-    const spier = spyOn(registrarService, 'quickSearch').and.returnValue(
-      Observable.of(searchForOm),
-    );
-    component.quickSearch('OM');
-    fixture.autoDetectChanges();
-    expect(component.beneficiaryList).toBe(searchForOm);
+  describe('getHealthIDDetails', () => {
+    it('opens the ABHA modal when details exist', () => {
+      const abha = [{ healthID: 'x' }];
+      component.getHealthIDDetails({ benObject: { abhaDetails: abha } });
+      expect(dialog.open).toHaveBeenCalledWith(HealthIdDisplayModalComponent, {
+        data: { dataList: abha, search: true },
+      });
+    });
+
+    it('alerts when ABHA details are missing', () => {
+      component.getHealthIDDetails({ benObject: { abhaDetails: [] } });
+      expect(dialog.open).not.toHaveBeenCalled();
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.abhaDetailsNotAvailable,
+        'info',
+      );
+    });
   });
 
-  it('should set default filtered list to be equal to beneficiarylist', () => {
-    const spier = spyOn(registrarService, 'quickSearch').and.returnValue(
-      Observable.of(searchForOm),
-    );
-    component.quickSearch('OM');
-    fixture.autoDetectChanges();
-    expect(component.filteredBeneficiaryList).toBe(component.beneficiaryList);
+  describe('filters', () => {
+    it('filterBeneficiaryList resets without term and filters by value', () => {
+      component.beneficiaryList = [
+        { benName: 'Asha', phoneNo: '1', benObject: { x: 'zzz' } },
+        { benName: 'Ravi', phoneNo: '2', benObject: {} },
+      ];
+      component.filterBeneficiaryList('');
+      expect(component.filteredBeneficiaryList).toBe(component.beneficiaryList);
+      component.filterBeneficiaryList('ASH');
+      expect(component.filteredBeneficiaryList.length).toBe(1);
+      expect(component.dataSource.data[0].sno).toBe(1);
+      component.filterBeneficiaryList('zzz');
+      expect(component.filteredBeneficiaryList.length).toBe(0);
+    });
+
+    it('filterExternalBeneficiaryList resets without term and filters by value', () => {
+      component.externalBeneficiaryList = [
+        { benName: 'Asha', state: 'KA' },
+        { benName: 'Ravi', state: 'KL' },
+      ];
+      component.filterExternalBeneficiaryList(undefined);
+      expect(component.filteredExternalBeneficiaryList).toBe(
+        component.externalBeneficiaryList,
+      );
+      component.filterExternalBeneficiaryList('kl');
+      expect(component.filteredExternalBeneficiaryList).toEqual([
+        jasmine.objectContaining({ benName: 'Ravi', sno: 1 }),
+      ]);
+    });
   });
 
-  it('should set filtered list to be equal to beneficiarylist when filter is called without any parameter', () => {
-    component.filteredBeneficiaryList = [];
-    component.beneficiaryList = searchForOm;
-    component.filterBeneficiaryList();
-    fixture.autoDetectChanges();
-    expect(component.filteredBeneficiaryList).toBe(component.beneficiaryList);
+  describe('patientRevisited / sendToNurseWindow', () => {
+    const ben = () => ({ m_gender: { genderName: 'Male' }, dOB: '1990-01-01' });
+
+    it('confirms and sends to nurse with service line info', () => {
+      registrar.identityPatientRevisit.and.returnValue(of({ data: 'ok' }));
+      const b: any = ben();
+      component.patientRevisited(b);
+      expect(b.vanID).toBe(7);
+      expect(b.facilityID).toBe(8);
+      expect(b.providerServiceMapId).toBe(4);
+      expect(confirm.confirm).toHaveBeenCalledWith(
+        'info',
+        LANGUAGE_EN.confirmSubmitBeneficiary,
+      );
+      expect(registrar.identityPatientRevisit).toHaveBeenCalledWith(b);
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.common.beneficiaryMovedtoNurse,
+        'success',
+      );
+    });
+
+    it('does not send when confirmation declined', () => {
+      confirm.confirm.and.returnValue(of(false));
+      component.patientRevisited(ben());
+      expect(registrar.identityPatientRevisit).not.toHaveBeenCalled();
+    });
+
+    it('warns when beneficiary already added', () => {
+      registrar.identityPatientRevisit.and.returnValue(of({ data: null }));
+      component.sendToNurseWindow(true, {});
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.common.beneAlreadyAdded,
+        'warn',
+      );
+    });
+
+    it('alerts on revisit error and ignores false response', () => {
+      registrar.identityPatientRevisit.and.returnValue(throwingObs('x'));
+      component.sendToNurseWindow(true, {});
+      expect(confirm.alert).toHaveBeenCalledWith('x', 'error');
+      registrar.identityPatientRevisit.calls.reset();
+      component.sendToNurseWindow(false, {});
+      expect(registrar.identityPatientRevisit).not.toHaveBeenCalled();
+    });
+
+    it('alerts for missing gender and age', () => {
+      component.patientRevisited({ m_gender: {}, dOB: null });
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.genderAndAgeDetails,
+        'info',
+      );
+    });
+
+    it('alerts for missing gender only', () => {
+      component.patientRevisited({ m_gender: {}, dOB: '1990' });
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.noGenderDetails,
+        'info',
+      );
+    });
+
+    it('alerts for missing age only', () => {
+      component.patientRevisited({ m_gender: { genderName: 'M' }, dOB: null });
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.noAgeDetailsAvail,
+        'info',
+      );
+    });
   });
 
-  it('should set filtered list empty as per the searched query as no matching pattern is found', () => {
-    component.filteredBeneficiaryList = [];
-    component.beneficiaryList = searchForOm;
-    component.filterBeneficiaryList('qwertyuiop');
-    fixture.autoDetectChanges();
-    expect(component.filteredBeneficiaryList).toEqual([]);
+  describe('editPatientInfo', () => {
+    it('stores beneficiary and navigates on confirm', () => {
+      const b = { beneficiaryID: '42', benObject: { id: 1 } };
+      component.editPatientInfo(b);
+      expect(confirm.confirm).toHaveBeenCalledWith(
+        'info',
+        LANGUAGE_EN.alerts.info.editDetails,
+      );
+      expect(
+        registrar.saveBeneficiaryEditDataASobservable,
+      ).toHaveBeenCalledWith(b.benObject);
+      expect(router.navigate).toHaveBeenCalledWith(['/registrar/search/42']);
+    });
+
+    it('does nothing when declined', () => {
+      confirm.confirm.and.returnValue(of(false));
+      component.editPatientInfo({ beneficiaryID: '42' });
+      expect(router.navigate).not.toHaveBeenCalled();
+    });
   });
 
-  it('should confirm when user tries to submit patient to nurse', () => {
-    const spier = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(false),
-    );
-    component.patientRevisited(123);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalledWith(
-      `Confirm Patient Revisit`,
-      `Please Confirm to Submit Beneficiary to Nurse Work-List ?`,
-    );
+  describe('patientImageView', () => {
+    it('views the image when returned', () => {
+      benDetails.getBeneficiaryImage.and.returnValue(of({ benImage: 'img' }));
+      component.patientImageView(5);
+      expect(benDetails.getBeneficiaryImage).toHaveBeenCalledWith(5);
+      expect(camera.viewImage).toHaveBeenCalledWith('img');
+    });
+
+    it('alerts when no image', () => {
+      benDetails.getBeneficiaryImage.and.returnValue(of({}));
+      component.patientImageView(5);
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.imageNotFound,
+      );
+    });
+
+    it('ignores an empty id', () => {
+      component.patientImageView('');
+      expect(benDetails.getBeneficiaryImage).not.toHaveBeenCalled();
+    });
   });
 
-  it('should call sendToNurseWindow function if user confirms for revisit', () => {
-    const spi = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(true),
-    );
-    const spier = spyOn(component, 'sendToNurseWindow').and.returnValue(1);
-    component.patientRevisited(123);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalled();
+  describe('openSearchDialog (advance search)', () => {
+    function dialogReturns(result: any) {
+      dialog.open.and.returnValue(createDialogRefMock(result));
+    }
+
+    it('runs an advance search and fills the table', () => {
+      dialogReturns({ firstName: 'Asha' });
+      registrar.advanceSearchIdentity.and.returnValue(
+        of({ data: [identityBen(), identityBen()] }),
+      );
+      component.openSearchDialog();
+      expect(dialog.open).toHaveBeenCalledWith(SearchDialogComponent, {
+        width: '60%',
+        disableClose: true,
+      });
+      expect(registrar.advanceSearchIdentity).toHaveBeenCalledWith({
+        firstName: 'Asha',
+      });
+      expect(component.dataSource.data.map((r: any) => r.sno)).toEqual([1, 2]);
+    });
+
+    it('alerts when the advance search is empty', () => {
+      dialogReturns({ firstName: 'x' });
+      registrar.advanceSearchIdentity.and.returnValue(of([]));
+      component.openSearchDialog();
+      expect(component.beneficiaryList).toEqual([]);
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.beneNotFound,
+        'info',
+      );
+    });
+
+    it('alerts on advance search error', () => {
+      dialogReturns({ firstName: 'x' });
+      registrar.advanceSearchIdentity.and.returnValue(throwingObs('bad'));
+      component.openSearchDialog();
+      expect(confirm.alert).toHaveBeenCalledWith('bad', 'error');
+    });
+
+    it('does nothing when dialog is cancelled', () => {
+      dialogReturns(undefined);
+      component.openSearchDialog();
+      expect(registrar.advanceSearchIdentity).not.toHaveBeenCalled();
+    });
   });
 
-  it('should not call sendToNurseWindow function if user doesnt confirm for revisit', () => {
-    const spi = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(false),
-    );
-    const spier = spyOn(component, 'sendToNurseWindow').and.returnValue(1);
-    component.patientRevisited(123);
-    fixture.autoDetectChanges();
-    expect(spier).not.toHaveBeenCalled();
+  describe('external (mongo) search', () => {
+    beforeEach(() => {
+      registrar.externalSearchIdentity.and.returnValue(
+        of([externalBen('F'), externalBen('M'), externalBen('O')]),
+      );
+    });
+
+    it('openQuickSearch searches mongo with the dialog result', () => {
+      dialog.open.and.returnValue(createDialogRefMock({ pageNo: 0 }));
+      component.openQuickSearch();
+      expect(dialog.open).toHaveBeenCalledWith(QuickSearchComponent, {
+        width: '60%',
+        disableClose: true,
+      });
+      expect(registrar.externalSearchIdentity).toHaveBeenCalledWith({
+        pageNo: 0,
+      });
+      const rows = component.externalBeneficiaryList;
+      expect(rows.map((r: any) => r.gender)).toEqual([
+        'Female',
+        'Male',
+        'Others',
+      ]);
+      expect(rows[0]).toEqual(
+        jasmine.objectContaining({
+          amritID: 'A1',
+          dob: '1990-1-2',
+          state: 'Karnataka',
+          district: 'Mysore',
+          sno: 1,
+        }),
+      );
+    });
+
+    it('openQuickSearch ignores a cancelled dialog', () => {
+      dialog.open.and.returnValue(createDialogRefMock(null));
+      component.openQuickSearch();
+      expect(registrar.externalSearchIdentity).not.toHaveBeenCalled();
+    });
+
+    it('searchBeneficiaryInMongo sets pageNo from argument', () => {
+      component.externalSearchTerm = { pageNo: 0 };
+      component.searchBeneficiaryInMongo(3);
+      expect(component.externalSearchTerm.pageNo).toBe(2);
+    });
+
+    it('alerts when patient not found', () => {
+      component.externalSearchTerm = {};
+      registrar.externalSearchIdentity.and.returnValue(
+        of({ response: 'patient not found' }),
+      );
+      component.searchBeneficiaryInMongo(null);
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.beneNotFound,
+        'info',
+      );
+    });
+
+    it('clears lists on empty result', () => {
+      component.externalSearchTerm = {};
+      component.externalBeneficiaryList = [1];
+      registrar.externalSearchIdentity.and.returnValue(of([]));
+      component.searchBeneficiaryInMongo(null);
+      expect(component.externalBeneficiaryList).toEqual([]);
+      expect(component.dataSource.data).toEqual([]);
+    });
+
+    it('clears lists and alerts on error', () => {
+      component.externalSearchTerm = {};
+      component.externalBeneficiaryList = [1];
+      registrar.externalSearchIdentity.and.returnValue(throwingObs('err'));
+      component.searchBeneficiaryInMongo(null);
+      expect(component.externalBeneficiaryList).toEqual([]);
+      expect(confirm.alert).toHaveBeenCalledWith('err', 'error');
+    });
+
+    it('nextPage loads the following page into dataSourceOne', () => {
+      component.externalSearchTerm = { pageNo: 0 };
+      component.nextPage();
+      expect(component.pageNo).toBe(2);
+      expect(component.externalSearchTerm.pageNo).toBe(1);
+      expect(component.dataSourceOne.data.length).toBe(3);
+    });
+
+    it('nextPage steps back when no further records', () => {
+      component.externalSearchTerm = {};
+      registrar.externalSearchIdentity.and.returnValue(of([]));
+      component.nextPage();
+      expect(component.pageNo).toBe(1);
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.noFurtherRecordsToShow,
+        'info',
+      );
+    });
+
+    it('nextPage alerts when patient not found', () => {
+      component.externalSearchTerm = {};
+      registrar.externalSearchIdentity.and.returnValue(
+        of({ response: 'patient not found' }),
+      );
+      component.nextPage();
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.beneNotFound,
+        'info',
+      );
+    });
+
+    it('nextPage steps back on error', () => {
+      component.externalSearchTerm = {};
+      registrar.externalSearchIdentity.and.returnValue(throwingObs('e'));
+      component.nextPage();
+      expect(component.pageNo).toBe(1);
+      expect(confirm.alert).toHaveBeenCalledWith('e', 'error');
+    });
+
+    it('prevPage searches the previous page', () => {
+      component.externalSearchTerm = { pageNo: 3 };
+      component.pageNo = 3;
+      component.prevPage();
+      expect(component.pageNo).toBe(2);
+      expect(component.externalSearchTerm.pageNo).toBe(1);
+    });
+
+    it('clearTableContents resets every list', () => {
+      component.pageNo = 4;
+      component.quicksearchTerm = 'x';
+      component.dataSourceOne.data = [1];
+      component.clearTableContents();
+      expect(component.pageNo).toBe(1);
+      expect(component.quicksearchTerm).toBeNull();
+      expect(component.dataSourceOne.data).toEqual([]);
+    });
   });
 
-  it('should ask for confirmation if used wants to edit the registration', () => {
-    const spier = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(false),
-    );
-    component.editPatientInfo(123);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalledWith(
-      `Confirm Beneficiary Editing`,
-      `Please Confirm do you really want to edit details of this Beneficiary?`,
-    );
+  describe('migrateBeneficiaryToAmrit', () => {
+    beforeEach(() => {
+      registrar.getDistrictList.and.returnValue(
+        of({
+          statusCode: 200,
+          data: [
+            { districtID: 100, districtName: 'Mysore' },
+            { districtID: 101, districtName: 'Other' },
+          ],
+        }),
+      );
+    });
+
+    it('resolves ids, submits to AMRIT and updates mongo', () => {
+      registrar.submitBeneficiary.and.returnValue(
+        of({ statusCode: 200, data: { response: 'Registered BenID 1234' } }),
+      );
+      registrar.updateBenDetailsInMongo.and.returnValue(
+        of({ data: { response: 'ok' } }),
+      );
+      registrar.externalSearchIdentity.and.returnValue(of([]));
+      component.externalSearchTerm = {};
+      const ben = externalBen('F');
+      component.migrateBeneficiaryToAmrit(ben);
+      expect(component.stateID).toBe(10);
+      expect(registrar.getDistrictList).toHaveBeenCalledWith(10);
+      expect(component.districtID).toBe(100);
+      expect(component.genderID).toBe(2);
+      expect(confirm.confirm).toHaveBeenCalledWith(
+        'info',
+        'Please confirm to register in AMRIT',
+      );
+      const req = registrar.submitBeneficiary.calls.mostRecent().args[0];
+      expect(req).toEqual(
+        jasmine.objectContaining({
+          firstName: 'Asha',
+          lastName: 'Rao',
+          genderName: 'Female',
+          genderID: 2,
+          vanID: 7,
+          parkingPlaceID: 9,
+          facilityID: 8,
+          providerServiceMapId: 4,
+          createdBy: 'nurse1',
+        }),
+      );
+      expect(req.i_bendemographics).toEqual({
+        stateName: 'Karnataka',
+        stateID: 10,
+        districtName: 'Mysore',
+        districtID: 100,
+        servicePointID: 3,
+        servicePointName: 'SP',
+      });
+      expect(confirm.alert).toHaveBeenCalledWith(
+        'Registered BenID 1234',
+        'success',
+      );
+      expect(registrar.updateBenDetailsInMongo).toHaveBeenCalledWith({
+        id: 'mongo1',
+        externalId: 'EXT1',
+        amritId: '1234',
+      });
+      expect(registrar.externalSearchIdentity).toHaveBeenCalled();
+    });
+
+    it('maps M and other genders', () => {
+      confirm.confirm.and.returnValue(of(false));
+      component.migrateBeneficiaryToAmrit(externalBen('M'));
+      expect(component.genderID).toBe(1);
+      component.migrateBeneficiaryToAmrit(externalBen('X'));
+      expect(component.genderID).toBe(3);
+      expect(registrar.submitBeneficiary).not.toHaveBeenCalled();
+    });
+
+    it('skips state lookup when state list is empty and ignores bad districts', () => {
+      confirm.confirm.and.returnValue(of(false));
+      component.statesList = [];
+      component.migrateBeneficiaryToAmrit(externalBen('F'));
+      expect(registrar.getDistrictList).not.toHaveBeenCalled();
+      registrar.getDistrictList.and.returnValue(of({ statusCode: 500 }));
+      component.getDistrict(externalBen(), 1);
+      expect(component.districtList).toBeUndefined();
+      registrar.getDistrictList.and.returnValue(
+        of({ statusCode: 200, data: [] }),
+      );
+      component.getDistrict(externalBen(), 1);
+      expect(component.districtID).toBeUndefined();
+    });
+
+    it('alerts error message when submit fails with non-200', () => {
+      registrar.submitBeneficiary.and.returnValue(
+        of({ statusCode: 500, errorMessage: 'nope' }),
+      );
+      component.genderID = 2;
+      component.sendBenToAmrit(externalBen());
+      expect(confirm.alert).toHaveBeenCalledWith('nope', 'error');
+      expect(registrar.updateBenDetailsInMongo).not.toHaveBeenCalled();
+    });
+
+    it('alerts on submit error', () => {
+      registrar.submitBeneficiary.and.returnValue(throwingObs('boom'));
+      component.sendBenToAmrit(externalBen());
+      expect(confirm.alert).toHaveBeenCalledWith('boom', 'error');
+    });
+
+    it('updateAmritIDInMongo ignores null response and logs errors', () => {
+      spyOn(component, 'searchBeneficiaryInMongo');
+      registrar.updateBenDetailsInMongo.and.returnValue(of(null));
+      component.updateAmritIDInMongo(externalBen(), 'ID 77');
+      expect(component.searchBeneficiaryInMongo).not.toHaveBeenCalled();
+      registrar.updateBenDetailsInMongo.and.returnValue(throwingObs());
+      component.updateAmritIDInMongo(externalBen(), 'ID 77');
+      expect(component.searchBeneficiaryInMongo).not.toHaveBeenCalled();
+    });
   });
 
-  it('should navigate to editing page if user confirms editing registration', () => {
-    const spi = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(true),
-    );
-    const spier = spyOn(router, 'navigate').and.returnValue(1);
-    const benRegID = 123;
-    component.editPatientInfo(benRegID);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalledWith(['/registrar/search/' + benRegID]);
+  describe('sendRegisteredBeneficiaryToNurse / transferMigratedBeneficiaryToNurse', () => {
+    it('sends a registered beneficiary to nurse', () => {
+      registrar.identityPatientRevisit.and.returnValue(of({ data: 'ok' }));
+      const b: any = { amritID: 'A1' };
+      component.sendRegisteredBeneficiaryToNurse(b);
+      expect(b.vanID).toBe(7);
+      expect(registrar.identityPatientRevisit).toHaveBeenCalledWith(b);
+    });
+
+    it('does not send when declined', () => {
+      confirm.confirm.and.returnValue(of(false));
+      component.sendRegisteredBeneficiaryToNurse({ amritID: 'A1' });
+      expect(registrar.identityPatientRevisit).not.toHaveBeenCalled();
+    });
+
+    it('asks to register first when no amrit id', () => {
+      component.sendRegisteredBeneficiaryToNurse({ amritID: '' });
+      expect(confirm.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.pleaseRegisterBeneficiaryInAMRIT,
+        'info',
+      );
+    });
+
+    it('transfers a migrated beneficiary', () => {
+      registrar.identityPatientRevisit.and.returnValue(of({ data: 'ok' }));
+      const b: any = {};
+      component.transferMigratedBeneficiaryToNurse(b);
+      expect(b.facilityID).toBe(8);
+      expect(b.providerServiceMapId).toBe(4);
+      expect(registrar.identityPatientRevisit).toHaveBeenCalledWith(b);
+    });
+
+    it('transfer does nothing when declined', () => {
+      confirm.confirm.and.returnValue(of(false));
+      component.transferMigratedBeneficiaryToNurse({});
+      expect(registrar.identityPatientRevisit).not.toHaveBeenCalled();
+    });
   });
 
-  it('should not navigate to editing page if user doesnt confirm editing registration', () => {
-    const spi = spyOn(confirmService, 'confirm').and.returnValue(
-      Observable.of(false),
-    );
-    const spier = spyOn(router, 'navigate').and.returnValue(1);
-    const benRegID = 123;
-    component.editPatientInfo(benRegID);
-    fixture.autoDetectChanges();
-    expect(spier).not.toHaveBeenCalled();
-  });
+  describe('navigateTORegistrar', () => {
+    it('navigates directly when there are no results', () => {
+      component.beneficiaryList = undefined;
+      component.navigateTORegistrar();
+      expect(router.navigate).toHaveBeenCalledWith(['/registrar/registration']);
+      router.navigate.calls.reset();
+      component.beneficiaryList = [];
+      component.navigateTORegistrar();
+      expect(router.navigate).toHaveBeenCalledWith(['/registrar/registration']);
+    });
 
-  it('should call registrarService.patientRevisit if sendToNurseWindows gets user permission', () => {
-    const res = 'sent to nurse window';
-    const spi = spyOn(confirmService, 'alert').and.returnValue(1);
-    const spier = spyOn(registrarService, 'patientRevisit').and.returnValue(
-      Observable.of({ response: res }),
-    );
-    const benRegID = 123;
-    component.sendToNurseWindow(true, benRegID);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalledWith({ beneficiaryRegID: benRegID });
-  });
+    it('confirms before leaving search results', () => {
+      component.beneficiaryList = [{}];
+      component.navigateTORegistrar();
+      expect(confirm.confirm).toHaveBeenCalledWith(
+        'info',
+        LANGUAGE_EN.alerts.info.navigateSearchedData,
+        'Yes',
+        'No',
+      );
+      expect(router.navigate).toHaveBeenCalledWith(['/registrar/registration']);
+    });
 
-  it('should alert after calling registrarService.patientRevisit if sendToNurseWindows gets user permission', () => {
-    const res = 'sent to nurse window';
-    const spi = spyOn(registrarService, 'patientRevisit').and.returnValue(
-      Observable.of({ response: res }),
-    );
-    const spier = spyOn(confirmService, 'alert').and.returnValue(1);
-    const benRegID = 123;
-    component.sendToNurseWindow(true, benRegID);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalledWith(res);
-  });
+    it('stays when declined', () => {
+      confirm.confirm.and.returnValue(of(false));
+      component.beneficiaryList = [{}];
+      component.navigateTORegistrar();
+      expect(router.navigate).not.toHaveBeenCalled();
+    });
 
-  it('should not call registrarService.patientRevisit if sendToNurseWindows doenst get user permission', () => {
-    const res = 'sent to nurse window';
-    const spier = spyOn(registrarService, 'patientRevisit').and.returnValue(
-      Observable.of({ response: res }),
-    );
-    const benRegID = 123;
-    component.sendToNurseWindow(false, benRegID);
-    fixture.autoDetectChanges();
-    expect(spier).not.toHaveBeenCalled();
-  });
-
-  it('should  call beneficiaryDetailsService.getBeneficiaryImage if patientImageView is called', () => {
-    const spier = spyOn(
-      beneficiaryService,
-      'getBeneficiaryImage',
-    ).and.returnValue(Observable.of(1));
-    const benRegID = 123;
-    component.patientImageView(benRegID);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalledWith(benRegID);
-  });
-
-  it('should  not call beneficiaryDetailsService.getBeneficiaryImage if patientImageView is called with benregID', () => {
-    const spier = spyOn(
-      beneficiaryService,
-      'getBeneficiaryImage',
-    ).and.returnValue(Observable.of(1));
-    component.patientImageView('');
-    fixture.autoDetectChanges();
-    expect(spier).not.toHaveBeenCalled();
-  });
-
-  it('should  call viewImage of Camera when getBeneficiaryImage is called on patientImageView ', () => {
-    const imageData = 'wdvsghbfhf3t463yhb';
-    const spi = spyOn(
-      beneficiaryService,
-      'getBeneficiaryImage',
-    ).and.returnValue(Observable.of(imageData));
-    const spier = spyOn(camera, 'viewImage').and.callFake(() => {});
-    const benRegID = 123;
-    component.patientImageView(benRegID);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalled();
-  });
-
-  it('should  call viewImage of Camera with data which getBeneficiaryImage returned on patientImageView call', () => {
-    const imageData = 'wdvsghbfhf3t463yhb';
-    const spi = spyOn(
-      beneficiaryService,
-      'getBeneficiaryImage',
-    ).and.returnValue(Observable.of({ benImage: imageData }));
-    const spier = spyOn(camera, 'viewImage').and.callFake(() => {});
-    const benRegID = 123;
-    component.patientImageView(benRegID);
-    fixture.autoDetectChanges();
-    expect(spier).toHaveBeenCalledWith(imageData);
+    it('does nothing when already on registration', () => {
+      router.routerState.snapshot.url = '/registrar/registration';
+      component.navigateTORegistrar();
+      expect(router.navigate).not.toHaveBeenCalled();
+    });
   });
 });

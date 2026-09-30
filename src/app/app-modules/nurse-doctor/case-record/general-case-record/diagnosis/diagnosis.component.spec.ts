@@ -19,27 +19,53 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
 
 import { DiagnosisComponent } from './diagnosis.component';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('DiagnosisComponent', () => {
   let component: DiagnosisComponent;
   let fixture: ComponentFixture<DiagnosisComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [DiagnosisComponent],
-    }).compileComponents();
-  }));
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideTemplate(DiagnosisComponent, '')
+      .compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(DiagnosisComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create and set language', () => {
     expect(component).toBeTruthy();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+  });
+
+  it('refreshes language on ngDoCheck', () => {
+    component.current_language_set = undefined;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+  });
+
+  it('tracks field interaction under Diagnosis', () => {
+    const tracking = TestBed.inject(AmritTrackingService) as any;
+    component.trackFieldInteraction('Provisional Diagnosis');
+    expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+      'Provisional Diagnosis',
+      'Diagnosis',
+    );
   });
 });

@@ -19,274 +19,427 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { BehaviorSubject, of } from 'rxjs';
+
 import { RegistrationComponent } from './registration.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ConfirmationService } from '../../core/services/confirmation.service';
-import { CameraService } from '../../core/services/camera.service';
 import { RegistrarService } from '../shared/services/registrar.service';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/throw';
-import { Component, Provider } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '../../core/material.module';
-import { RegisterOtherDetailsComponent } from './register-other-details/register-other-details.component';
-import { RegisterPersonalDetailsComponent } from './register-personal-details/register-personal-details.component';
+import { ConfirmationService } from '../../core/services/confirmation.service';
+import { RegistrationUtils } from '../shared/utility/registration-utility';
+import { HealthIdDisplayModalComponent } from '../../core/components/health-id-display-modal/health-id-display-modal.component';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+  throwingObs,
+} from 'src/testing/test-utils';
 
-class RouterStub {
-  navigateByUrl(url: string) {
-    return url;
-  }
-  navigate(url: any) {
-    return true;
-  }
-}
+const MASTER = {
+  govIdEntityMaster: [
+    { govtIdentityTypeID: 1, identityType: 'Aadhar' },
+    { govtIdentityTypeID: 2, identityType: 'Voter ID' },
+    { govtIdentityTypeID: 1, identityType: 'Aadhar' },
+  ],
+  otherGovIdEntityMaster: [
+    { govtIdentityTypeID: 7, identityType: 'State Card' },
+    { govtIdentityTypeID: 7, identityType: 'State Card' },
+  ],
+};
 
-class RegistrarServiceMock {
-  registrationMaster = {
-    occupationMaster: [
-      { occupationID: 2, occupationType: 'Agricultural labour' },
-      { occupationID: 3, occupationType: 'Business' },
-      { occupationID: 1, occupationType: 'Cultivation(Agriculture)' },
-      { occupationID: 5, occupationType: 'Govt employee' },
-      { occupationID: 9, occupationType: 'Housewife or Homemaker' },
-      { occupationID: 8, occupationType: 'Not Applicable' },
-      { occupationID: 7, occupationType: 'Other' },
-      { occupationID: 6, occupationType: 'Private employee' },
-      { occupationID: 4, occupationType: 'Student' },
-    ],
-    incomeMaster: [
-      { incomeStatusID: 1, incomeStatus: 'APL' },
-      { incomeStatusID: 2, incomeStatus: 'BPL' },
-      { incomeStatusID: 3, incomeStatus: "Don't Know" },
-    ],
-    maritalStatusMaster: [
-      { maritalStatusID: 3, status: 'Divorced' },
-      { maritalStatusID: 2, status: 'Married' },
-      { maritalStatusID: 7, status: 'Not Applicable' },
-      { maritalStatusID: 4, status: 'Separated' },
-      { maritalStatusID: 1, status: 'Unmarried' },
-      { maritalStatusID: 5, status: 'Widow' },
-      { maritalStatusID: 6, status: 'Widower' },
-    ],
-    religionMaster: [
-      { religionID: 5, religionType: 'Buddhism' },
-      { religionID: 1, religionType: 'Hinduism' },
-      { religionID: 2, religionType: 'Islam' },
-      { religionID: 6, religionType: 'Jainism' },
-      { religionID: 3, religionType: 'Judaism' },
-      { religionID: 7, religionType: 'Other' },
-      { religionID: 4, religionType: 'Sikhism' },
-    ],
-    communityMaster: [
-      { communityID: 4, communityType: 'BC' },
-      { communityID: 7, communityType: "Dont' Know" },
-      { communityID: 5, communityType: 'OBC' },
-      { communityID: 6, communityType: 'OC' },
-      { communityID: 2, communityType: 'SC' },
-      { communityID: 3, communityType: 'ST' },
-    ],
-    qualificationMaster: [
-      { educationID: 6, educationType: 'Diploma / Under Graduate' },
-      { educationID: 7, educationType: 'Graduate' },
-      { educationID: 8, educationType: 'Post Graduate & Above' },
-      { educationID: 2, educationType: 'Primary (1st to 5th Std)' },
-      { educationID: 4, educationType: 'Secondary (9th to 10th)' },
-      {
-        educationID: 5,
-        educationType: 'Senior Secondary (11th to 12th/Intermediate)',
-      },
-      { educationID: 3, educationType: 'Upper Primary (6th to 8th Std)' },
-    ],
-    govIdEntityMaster: [
-      { govtIdentityTypeID: 1, identityType: 'Aadhar' },
-      { govtIdentityTypeID: 3, identityType: 'Driving License' },
-      { govtIdentityTypeID: 4, identityType: 'PAN' },
-      { govtIdentityTypeID: 5, identityType: 'Passport' },
-      { govtIdentityTypeID: 6, identityType: 'Ration Card' },
-      { govtIdentityTypeID: 2, identityType: 'Voter ID' },
-    ],
-    genderMaster: [
-      { genderID: 2, genderName: 'Female' },
-      { genderID: 1, genderName: 'Male' },
-      { genderID: 3, genderName: 'Transgender' },
-    ],
-    otherGovIdEntityMaster: [
-      { govtIdentityTypeID: 7, identityType: 'Assam Arogya Nidhi (AAN)' },
-      { govtIdentityTypeID: 8, identityType: 'Atal Amrit Abhiyan' },
-      {
-        govtIdentityTypeID: 9,
-        identityType: 'Janani Shishu Suraksha Karyakram (JSSK)',
-      },
-      { govtIdentityTypeID: 10, identityType: 'Janani Suraksha Yojana (JSY)' },
-      { govtIdentityTypeID: 11, identityType: 'KAYAKALP' },
-      { govtIdentityTypeID: 12, identityType: 'RMNCH+A' },
-      {
-        govtIdentityTypeID: 13,
-        identityType: 'Sanjeevani - Village Health Outreach Programme',
-      },
-      { govtIdentityTypeID: 14, identityType: 'Sneha Sparsha' },
-    ],
-  };
-  benDetails = {
-    beneficiaryRegID: 7878,
-    firstName: 'neeraj',
-    lastName: 'baba',
-    gender: 1,
-    dob: 'Jan 7, 1995',
-    maritalStatus: 3,
-    income: 1,
-    occupation: 2,
-    blockID: 4209,
-    blockName: 'North Guwahati (Pt)',
-    stateID: 5,
-    stateName: 'Assam',
-    community: 4,
-    religion: 5,
-    fatherName: 'father ji',
-    districtID: 54,
-    districtName: 'KAMRUP',
-    villageID: 43132,
-    villageName: 'Nalgaon',
-    phoneNo: '9876543567',
-    literacyStatus: 'Illiterate',
-    motherName: 'mother ji',
-    govID: [],
-    otherGovID: [],
-    age: 0,
-  };
+const REVISIT = {
+  beneficiaryID: '100',
+  beneficiaryRegID: 555,
+  firstName: 'Ravi',
+  lastName: 'Kumar',
+  familyName: 'Kumars',
+  familyId: 'F1',
+  i_bendemographics: { districtID: 1, blockID: 2, districtBranchID: 3 },
+};
 
-  registrationMasterDetails = new BehaviorSubject<any>(null);
-  registrationMasterDetails$ = this.registrationMasterDetails.asObservable();
-  beneficiaryDetails = new BehaviorSubject<any>(null);
-  beneficiaryDetails$ = this.beneficiaryDetails.asObservable();
+const SESSION = {
+  serviceLineDetails: JSON.stringify({ facilityID: 9 }),
+  userName: 'reg-user',
+  providerServiceID: 42,
+};
 
-  getRegistrationMaster(spID: any) {
-    this.registrationMasterDetails.next(this.registrationMaster);
-  }
-
-  getPatientDataAsObservable(benRegID: any) {
-    this.beneficiaryDetails.next(this.benDetails);
-  }
-
-  submitBeneficiary() {
-    return of(true);
-  }
-  updateBeneficiary() {
-    return of(false);
-  }
-}
-
-class cameraServiceMock {}
-class confirmationServiceMock {
-  alert() {}
-
-  confirm(String: any) {}
-}
-
-describe('RegisterComponent', () => {
-  let component: RegistrationComponent;
+describe('RegistrationComponent (edit beneficiary)', () => {
   let fixture: ComponentFixture<RegistrationComponent>;
-  let registrarService: RegistrarService;
-  let spy: any;
+  let component: RegistrationComponent;
+  let registrar: any;
+  let confirmation: any;
+  let dialog: any;
+  let router: Router;
+  let removedIDs: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
-      declarations: [
-        RegistrationComponent,
-        RegisterOtherDetailsComponent,
-        RegisterPersonalDetailsComponent,
-      ],
+  beforeEach(async () => {
+    registrar = autoSpy(RegistrarService, {
+      registrationMasterDetails$: new BehaviorSubject<any>(MASTER),
+      beneficiaryEditDetails$: new BehaviorSubject<any>(REVISIT),
+      healthIdMobVerificationCheck$: new BehaviorSubject<any>(null),
+    });
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
+      declarations: [RegistrationComponent],
       providers: [
-        { provide: RegistrarService, useClass: RegistrarServiceMock },
-        { provide: CameraService, useClass: cameraServiceMock },
-        { provide: ConfirmationService, useClass: confirmationServiceMock },
-        { provide: Router, useClass: RouterStub },
+        ...commonTestProviders({ session: SESSION }),
+        { provide: RegistrarService, useValue: registrar },
         {
           provide: ActivatedRoute,
-          useValue: { snapshot: { params: { beneficiaryRegID: '7878' } } },
+          useValue: { snapshot: { params: { beneficiaryID: '100' } } },
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
-    registrarService = TestBed.get(RegistrarService);
-    spyOn(component, 'dateFormatChange').and.returnValue('1');
-
+    removedIDs = { removedGovIDs: [], removedOtherGovIDs: [] };
+    const children: Record<string, any> = {
+      otherDetails: {
+        resetForm: jasmine.createSpy('resetForm'),
+        setcheckBoxEnabledByDefault: jasmine.createSpy('setcheck'),
+        getRemovedIDs: () => removedIDs,
+      },
+      demographicDetails: { setDemographicDefaults: jasmine.createSpy('d') },
+      personalDetails: {
+        setPhoneSelectionEnabledByDefault: jasmine.createSpy('p'),
+      },
+    };
+    Object.keys(children).forEach((k) =>
+      Object.defineProperty(component, k, {
+        get: () => children[k],
+        set: () => undefined,
+        configurable: true,
+      }),
+    );
+    confirmation = TestBed.inject(ConfirmationService);
+    dialog = TestBed.inject(MatDialog);
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.resolveTo(true);
     fixture.detectChanges();
   });
 
-  afterEach(() => {
-    registrarService = null as any;
-    component = null as any;
-    fixture = null as any;
+  const personal = () =>
+    component.beneficiaryRegistrationForm.controls[
+      'personalDetailsForm'
+    ] as FormGroup;
+  const other = () =>
+    component.beneficiaryRegistrationForm.controls[
+      'otherDetailsForm'
+    ] as FormGroup;
+
+  it('loads the component in edit mode with the beneficiary data', () => {
+    expect(component.patientRevisit).toBeTrue();
+    expect(component.revisitData).toEqual(REVISIT);
+    expect(router.navigate).not.toHaveBeenCalled();
+    expect(dialog.open).not.toHaveBeenCalled();
   });
 
-  it('should create edit Beneficiary Component', () => {
-    expect(component).toBeTruthy();
+  it('renders update/cancel buttons and edit header in edit mode', () => {
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('#saveButton')).toBeTruthy();
+    expect(el.querySelector('#cancelButton')).toBeTruthy();
+    expect(el.querySelector('#resetButton')).toBeNull();
+    expect(el.querySelector('#familyTagging')).toBeTruthy();
+    expect(el.querySelector('h3')?.textContent).toContain(
+      LANGUAGE_EN.bendetails.edit,
+    );
   });
 
-  it('should load form for edit Beneficiary', () => {
-    const form = component.beneficiaryRegistrationForm;
-    expect(form).toBeTruthy();
+  it('ngOnDestroy unsubscribes from beneficiary data and clears it', () => {
+    const sub = component.revisitDataSubscription;
+    component.ngOnDestroy();
+    expect(sub.closed).toBeTrue();
+    expect(registrar.clearBeneficiaryEditDetails).toHaveBeenCalled();
   });
 
-  it('should load component in Edit Beneficiary Mode  ', () => {
-    const buttonText = component.postButtonText;
-    expect(component.patientRevisit).toBe(true);
-  });
-
-  it('should set Post button text to Update', () => {
-    const buttonText = component.postButtonText;
-    expect(buttonText).toBe('Update');
-  });
-
-  it('should load Ben Data returned from the Service', () => {
-    const data = component.revisitData;
-    expect(data.beneficiaryRegID).toBe(7878);
-  });
-
-  it('should reset the form', () => {
-    const form = component.beneficiaryRegistrationForm;
-    form.markAsDirty();
-    fixture.detectChanges();
-    component.resetBeneficiaryForm();
-    fixture.detectChanges();
-    expect(form.dirty).toBe(false);
-  });
-
-  it('should call the Update Service Method', () => {
-    const service = fixture.debugElement.injector.get(RegistrarService);
-    spy = spyOn(service, 'updateBeneficiary').and.callFake(function () {
-      return of(true);
+  describe('updateBeneficiarynPassToNurse', () => {
+    beforeEach(() => {
+      personal().patchValue({
+        beneficiaryID: '100',
+        beneficiaryRegID: 555,
+        dob: new Date(1980, 0, 1),
+      });
     });
 
-    component.updateBeneficiaryDetails();
-    expect(service.updateBeneficiary).toHaveBeenCalled();
+    it('updates, maps ABHA and navigates to search', () => {
+      other().patchValue({ healthId: 'a.b', healthIdMode: 'AADHAR' });
+      registrar.updateBeneficiary.and.returnValue(
+        of({ statusCode: 200, data: { response: 'Updated' } }),
+      );
+      component.updateBeneficiarynPassToNurse();
+      const payload = registrar.updateBeneficiary.calls.mostRecent().args[0];
+      expect(payload.passToNurse).toBeTrue();
+      expect(payload.facilityID).toBe(9);
+      expect(payload.benPhoneMaps[0].modifiedBy).toBe('reg-user');
+      expect(confirmation.alert).toHaveBeenCalledWith('Updated', 'success');
+      expect(registrar.mapHealthId).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          beneficiaryID: '100',
+          healthId: 'a.b',
+          authenticationMode: 'AADHAR',
+        }),
+      );
+      expect(router.navigate).toHaveBeenCalledWith(['/registrar/search/']);
+    });
+
+    it('alerts when ABHA mapping fails', () => {
+      other().patchValue({ healthIdNumber: '12' });
+      registrar.updateBeneficiary.and.returnValue(
+        of({ statusCode: 200, data: { response: 'ok' } }),
+      );
+      registrar.mapHealthId.and.returnValue(of({ statusCode: 400 }));
+      component.updateBeneficiarynPassToNurse(false);
+      expect(
+        registrar.updateBeneficiary.calls.mostRecent().args[0].passToNurse,
+      ).toBeFalse();
+      expect(confirmation.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.issueInSavngData,
+        'error',
+      );
+    });
+
+    it('skips mapping without ABHA and alerts on failure', () => {
+      registrar.updateBeneficiary.and.returnValue(
+        of({ statusCode: 200, data: { response: 'ok' } }),
+      );
+      component.updateBeneficiarynPassToNurse();
+      expect(registrar.mapHealthId).not.toHaveBeenCalled();
+
+      registrar.updateBeneficiary.and.returnValue(
+        of({ statusCode: 5000, errorMessage: 'bad' }),
+      );
+      component.updateBeneficiarynPassToNurse();
+      expect(confirmation.alert).toHaveBeenCalledWith('bad', 'error');
+    });
+  });
+
+  describe('updateBeneficiaryDetails', () => {
+    beforeEach(() => {
+      personal().patchValue({
+        beneficiaryID: '100',
+        dob: new Date(1980, 0, 1),
+      });
+      component.beneficiaryRegistrationForm.controls[
+        'demographicDetailsForm'
+      ].patchValue({ stateID: 1 });
+    });
+
+    it('does nothing when the form is invalid', () => {
+      spyOn(component, 'checkValids').and.returnValue(false);
+      component.updateBeneficiaryDetails();
+      expect(registrar.updateBeneficiary).not.toHaveBeenCalled();
+    });
+
+    it('updates without passing to nurse and maps a verified ABHA', () => {
+      other().patchValue({ healthId: 'a.b', healthIdNumber: '1' });
+      component.disableGenerateOTP = true;
+      registrar.updateBeneficiary.and.returnValue(
+        of({ statusCode: 200, data: { response: 'Saved' } }),
+      );
+      component.updateBeneficiaryDetails();
+      expect(
+        registrar.updateBeneficiary.calls.mostRecent().args[0].passToNurse,
+      ).toBeFalse();
+      expect(confirmation.alert).toHaveBeenCalledWith('Saved', 'success');
+      expect(registrar.mapHealthId).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          beneficiaryID: '100',
+          healthIdNumber: '1',
+          providerServiceMapId: 42,
+        }),
+      );
+      expect(router.navigate).toHaveBeenCalledWith(['/registrar/search/']);
+    });
+
+    it('alerts when mapping fails', () => {
+      other().patchValue({ healthIdNumber: '1' });
+      component.disableGenerateOTP = true;
+      registrar.updateBeneficiary.and.returnValue(
+        of({ statusCode: 200, data: { response: 'Saved' } }),
+      );
+      registrar.mapHealthId.and.returnValue(of({ statusCode: 500 }));
+      component.updateBeneficiaryDetails();
+      expect(confirmation.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.issueInSavngData,
+        'error',
+      );
+    });
+
+    it('does not map when no ABHA was generated', () => {
+      registrar.updateBeneficiary.and.returnValue(
+        of({ statusCode: 200, data: { response: 'Saved' } }),
+      );
+      component.updateBeneficiaryDetails();
+      expect(registrar.mapHealthId).not.toHaveBeenCalled();
+    });
+
+    it('alerts the error message on failure', () => {
+      registrar.updateBeneficiary.and.returnValue(
+        of({ statusCode: 5000, errorMessage: 'nope' }),
+      );
+      component.updateBeneficiaryDetails();
+      expect(confirmation.alert).toHaveBeenCalledWith('nope', 'error');
+      expect(router.navigate).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('iEMRFormUpdate / iEMRidsUpdate', () => {
+    it('builds the update payload from the form', () => {
+      personal().patchValue({
+        beneficiaryRegID: 555,
+        beneficiaryID: '100',
+        firstName: 'Ravi',
+        gender: 1,
+        genderName: 'Male',
+        benPhMapID: 'null',
+        parentRelation: 1,
+        phoneNo: '9',
+      });
+      other().patchValue({
+        community: 3,
+        communityName: 'OBC',
+        emailID: 'e@x',
+      });
+      const form: any = component.iEMRFormUpdate();
+      expect(form.beneficiaryRegID).toBe(555);
+      expect(form.firstName).toBe('Ravi');
+      expect(form.m_gender).toEqual({ genderID: 1, genderName: 'Male' });
+      expect(form.i_bendemographics.communityID).toBe(3);
+      expect(form.email).toBe('e@x');
+      expect(form.benPhoneMaps[0].benPhMapID).toBeNull();
+      expect(form.benPhoneMaps[0].benRelationshipType.benRelationshipType).toBe(
+        'Self',
+      );
+      expect(form.beneficiaryIdentities).toBeUndefined();
+      expect(form.createdBy).toBe('reg-user');
+    });
+
+    it('collects existing, new and removed identities (de-duplicated master)', () => {
+      const utils = new RegistrationUtils(new FormBuilder());
+      const govID = other().controls['govID'] as FormArray;
+      const otherGovID = other().controls['otherGovID'] as FormArray;
+      govID.at(0).patchValue({
+        type: 1,
+        idValue: 'A1',
+        deleted: false,
+        benIdentityId: 10,
+      });
+      govID.push(utils.initGovID());
+      govID.at(1).patchValue({
+        type: 2,
+        idValue: 'V1',
+        deleted: false,
+        benIdentityId: null,
+      });
+      otherGovID.at(0).patchValue({
+        type: 7,
+        idValue: 'S1',
+        deleted: false,
+        benIdentityId: 20,
+      });
+      otherGovID.push(utils.initGovID());
+      otherGovID.at(1).patchValue({ type: 7, idValue: 'S2' });
+      removedIDs.removedGovIDs = [
+        { type: 2, idValue: 'OLD', benIdentityId: 30, createdBy: 'u0' },
+      ];
+      removedIDs.removedOtherGovIDs = [
+        { type: 7, idValue: 'OLDS', benIdentityId: 40, createdBy: 'u1' },
+      ];
+
+      const ids: any[] = (component.iEMRFormUpdate() as any)
+        .beneficiaryIdentities;
+      expect(
+        ids.map((i) => [
+          i.govtIdentityNo,
+          i.govtIdentityType.isGovtID,
+          i.deleted,
+        ]),
+      ).toEqual([
+        ['A1', true, false],
+        ['S1', false, false],
+        ['OLD', true, true],
+        ['OLDS', false, true],
+        ['V1', true, false],
+        ['S2', false, false],
+      ]);
+      expect(ids[0].govtIdentityType.identityType).toBe('Aadhar');
+      expect(ids[2].createdBy).toBe('u0');
+      expect(ids[4].createdBy).toBe('reg-user');
+    });
+  });
+
+  describe('NavigateToFamilyTagging', () => {
+    it('navigates with the full beneficiary details', () => {
+      component.NavigateToFamilyTagging();
+      expect(router.navigate).toHaveBeenCalledWith([
+        '/registrar/familyTagging',
+        {
+          beneficiaryRegID: 555,
+          familyName: 'Kumars',
+          familyId: 'F1',
+          beneficiaryName: 'Ravi Kumar',
+          benDistrictId: 1,
+          benBlockId: 2,
+          benVillageId: 3,
+          beneficiaryId: '100',
+        },
+      ]);
+    });
+
+    it('falls back to nulls / last name when details are missing', () => {
+      component.revisitData = {
+        beneficiaryRegID: 1,
+        beneficiaryID: 2,
+        lastName: '',
+        i_bendemographics: {},
+      };
+      component.NavigateToFamilyTagging();
+      const req = (router.navigate as jasmine.Spy).calls.mostRecent()
+        .args[0][1];
+      expect(req).toEqual({
+        beneficiaryRegID: 1,
+        familyName: '',
+        familyId: null,
+        beneficiaryName: null,
+        benDistrictId: null,
+        benBlockId: null,
+        benVillageId: null,
+        beneficiaryId: 2,
+      });
+    });
+  });
+
+  describe('viewHealthIdData', () => {
+    it('opens the ABHA details modal on success', () => {
+      const res = { statusCode: 200, data: [{ healthId: 'x' }] };
+      registrar.getHealthIdDetails.and.returnValue(of(res));
+      component.viewHealthIdData();
+      expect(registrar.getHealthIdDetails).toHaveBeenCalledWith({
+        beneficiaryRegID: 555,
+        beneficiaryID: '100',
+      });
+      expect(dialog.open).toHaveBeenCalledWith(HealthIdDisplayModalComponent, {
+        data: { dataList: res },
+      });
+    });
+
+    it('alerts on non-200 and on error', () => {
+      registrar.getHealthIdDetails.and.returnValue(of({ statusCode: 5000 }));
+      component.viewHealthIdData();
+      registrar.getHealthIdDetails.and.returnValue(throwingObs());
+      component.viewHealthIdData();
+      expect(confirmation.alert).toHaveBeenCalledTimes(2);
+      expect(confirmation.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.issueInGettingBeneficiaryABHADetails,
+        'error',
+      );
+      expect(dialog.open).not.toHaveBeenCalled();
+    });
   });
 });

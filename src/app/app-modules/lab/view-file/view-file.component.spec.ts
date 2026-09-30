@@ -19,27 +19,89 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { of } from 'rxjs';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
+import { ConfirmationService } from '../../core/services/confirmation.service';
 import { ViewFileComponent } from './view-file.component';
 
-describe('ViewFileComponent', () => {
+describe('Lab ViewFileComponent', () => {
   let component: ViewFileComponent;
   let fixture: ComponentFixture<ViewFileComponent>;
+  let data: any;
+  let dialogRef: any;
+  let confirm: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    data = {
+      procedureID: 7,
+      viewFileObj: { 7: [{ name: 'a' }, { name: 'b' }] },
+    };
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [ViewFileComponent],
+      providers: [
+        ...commonTestProviders(),
+        { provide: MAT_DIALOG_DATA, useValue: data },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ViewFileComponent);
     component = fixture.componentInstance;
+    dialogRef = TestBed.inject(MatDialogRef) as any;
+    confirm = TestBed.inject(ConfirmationService) as any;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('disables close and assigns the procedure file list', () => {
+    expect(dialogRef.disableClose).toBeTrue();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    expect(component.fileObj).toBe(data.viewFileObj[7]);
+  });
+
+  it('remove deletes the file after confirm', () => {
+    const f = data.viewFileObj[7][0];
+    component.remove(f);
+    expect(confirm.confirm).toHaveBeenCalledWith(
+      'info',
+      LANGUAGE_EN.alerts.info.wantToRemoveFile,
+    );
+    expect(data.viewFileObj[7]).toEqual([{ name: 'b' }]);
+    expect(dialogRef.close).not.toHaveBeenCalled();
+  });
+
+  it('remove closes dialog when last file removed', () => {
+    data.viewFileObj[7].splice(1, 1);
+    component.remove(data.viewFileObj[7][0]);
+    expect(dialogRef.close).toHaveBeenCalledWith({ 7: [] });
+  });
+
+  it('remove ignores unknown file', () => {
+    component.remove({ name: 'zzz' });
+    expect(data.viewFileObj[7].length).toBe(2);
+  });
+
+  it('remove does nothing when declined', () => {
+    confirm.confirm.and.returnValue(of(false));
+    component.remove(data.viewFileObj[7][0]);
+    expect(data.viewFileObj[7].length).toBe(2);
+  });
+
+  it('closeDialog returns file object', () => {
+    component.closeDialog();
+    expect(dialogRef.close).toHaveBeenCalledWith(data.viewFileObj);
+  });
+
+  it('ngDoCheck re-assigns language', () => {
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
   });
 });

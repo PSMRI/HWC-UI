@@ -19,103 +19,98 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+
 import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { GeneralUtils } from '../../../../shared/utility';
-
-import * as data from '../../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+  createSessionStorageMock,
+} from 'src/testing/test-utils';
+import { MaterialModule } from 'src/app/app-modules/core/material.module';
 import { MasterdataService } from '../../../../shared/services';
-
-import { MasterdataServiceStub } from '../../../../shared/mocks/masterdata-service-stub';
+import { GeneralUtils } from '../../../../shared/utility/general-utility';
 import { MusculoskeletalSystemComponent } from './musculoskeletal-system.component';
 
 describe('MusculoskeletalSystemComponent', () => {
   let component: MusculoskeletalSystemComponent;
   let fixture: ComponentFixture<MusculoskeletalSystemComponent>;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
+  let masterData$: BehaviorSubject<any>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    masterData$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [MusculoskeletalSystemComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
       providers: [
-        { provide: MasterdataService, useClass: MasterdataServiceStub },
+        ...commonTestProviders(),
+        {
+          provide: MasterdataService,
+          useValue: { nurseMasterData$: masterData$.asObservable() },
+        },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(MusculoskeletalSystemComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.musculoSkeletalSystemForm = new GeneralUtils(
-      fb,
-    ).createMusculoSkeletalSystemForm();
+    const utils = new GeneralUtils(
+      new FormBuilder(),
+      createSessionStorageMock({
+        serviceLineDetails: JSON.stringify({
+          facilityID: 1,
+          parkingPlaceID: 2,
+        }),
+      }) as any,
+    );
+    component.musculoSkeletalSystemForm =
+      utils.createMusculoSkeletalSystemForm();
     fixture.detectChanges();
   });
 
-  it('should create MusculoskeletalSystemComponent', () => {
+  it('should create and load the language set', () => {
     expect(component).toBeTruthy();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
   });
 
-  it('Should initialize the component', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('keeps joint types empty while master data is null', () => {
+    expect(component.selectTypeOfJoint).toEqual([]);
   });
 
-  it('Should call getMasterData ', async () => {
-    spyOn(component, 'getMasterData');
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(component.getMasterData).toHaveBeenCalled();
+  it('loads joint types when nurse master data arrives', () => {
+    const jointTypes = [{ jointTypeID: 1, jointType: 'Knee' }];
+    masterData$.next({ jointTypes });
+    expect(component.selectTypeOfJoint).toEqual(jointTypes);
   });
 
-  it('Should call getMasterData and get master Data ', async(
-    inject([MasterdataService], (masterdataService) => {
-      spyOn(component, 'getMasterData').and.callThrough();
-      spyOn(masterdataService, 'getNurseMasterData')
-        .and.returnValue(Observable.of(data.generalOPDNurseMasterdata.data))
-        .and.callThrough();
-      masterdataService.nurseMasterDataSource.next(
-        data.generalOPDNurseMasterdata.data,
-      );
-      component.ngOnInit();
-      fixture.detectChanges();
-      expect(component.getMasterData).toHaveBeenCalled();
-      fixture.detectChanges();
-      expect(component.selectTypeOfJoint).toEqual(
-        data.generalOPDNurseMasterdata.data.jointTypes,
-      );
-    }),
-  ));
+  it('re-assigns the language set on ngDoCheck', () => {
+    component.current_language_set = null;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+  });
+
+  it('unsubscribes from master data on destroy', () => {
+    const sub = component.nurseMasterDataSubscription;
+    fixture.destroy();
+    expect(sub.closed).toBeTrue();
+  });
+
+  it('ngOnDestroy tolerates a missing subscription', () => {
+    component.nurseMasterDataSubscription = undefined;
+    expect(() => component.ngOnDestroy()).not.toThrow();
+    expect(component.nurseMasterDataSubscription).toBeUndefined();
+  });
+
+  it('tracks field interactions under "Musculoskeletal System"', () => {
+    const tracking = TestBed.inject(AmritTrackingService) as any;
+    component.trackFieldInteraction('Spine');
+    expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+      'Spine',
+      'Musculoskeletal System',
+    );
+  });
 });

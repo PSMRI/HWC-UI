@@ -19,27 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
+import { ConfirmationService } from '../../core/services/confirmation.service';
 import { DoctorTmWorklistWrapperComponent } from './doctor-tm-worklist-wrapper.component';
 
 describe('DoctorTmWorklistWrapperComponent', () => {
   let component: DoctorTmWorklistWrapperComponent;
   let fixture: ComponentFixture<DoctorTmWorklistWrapperComponent>;
+  let confirm: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [DoctorTmWorklistWrapperComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(DoctorTmWorklistWrapperComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    confirm = TestBed.inject(ConfirmationService);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('renders and assigns language and teleconsultation flag on init', () => {
+    confirm.eSanjeevaniDoctorFlagArry = 'Swymed';
+    fixture.detectChanges();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+    expect(component.teleConsultationFlag).toBe('Swymed');
+  });
+
+  it('ngDoCheck refreshes the language set', () => {
+    component.current_language_set = undefined;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
   });
 });

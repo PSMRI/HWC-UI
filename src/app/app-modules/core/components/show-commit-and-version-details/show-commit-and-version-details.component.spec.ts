@@ -19,27 +19,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ShowCommitAndVersionDetailsComponent } from './show-commit-and-version-details.component';
+import {
+  COMMON_TEST_IMPORTS,
+  commonTestProviders,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+} from 'src/testing/test-utils';
 
 describe('ShowCommitAndVersionDetailsComponent', () => {
-  let component: ShowCommitAndVersionDetailsComponent;
   let fixture: ComponentFixture<ShowCommitAndVersionDetailsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [ShowCommitAndVersionDetailsComponent],
+      providers: [
+        ...commonTestProviders({
+          dialogData: {
+            commitDetailsAPI: { version: '1' },
+            commitDetailsUI: { version: '2' },
+          },
+        }),
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ShowCommitAndVersionDetailsComponent);
-    component = fixture.componentInstance;
+    spyOn(console, 'log');
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('assigns language and logs input on init', () => {
+    const c = fixture.componentInstance;
+    expect(c.currentLanguageSet).toBe(LANGUAGE_EN);
+    expect(console.log).toHaveBeenCalledWith('input', c.input);
+    expect(c.displayedColumns).toEqual(['action', 'api', 'ui']);
   });
 });

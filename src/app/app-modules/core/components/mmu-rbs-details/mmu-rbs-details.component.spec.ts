@@ -19,27 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MmuRbsDetailsComponent } from './mmu-rbs-details.component';
+import {
+  COMMON_TEST_IMPORTS,
+  commonTestProviders,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+} from 'src/testing/test-utils';
 
 describe('MmuRbsDetailsComponent', () => {
-  let component: MmuRbsDetailsComponent;
   let fixture: ComponentFixture<MmuRbsDetailsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [MmuRbsDetailsComponent],
+      providers: [...commonTestProviders({ dialogData: [{ rbs: 1 }] })],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(MmuRbsDetailsComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('subscribes to language set', () => {
+    expect(fixture.componentInstance.current_language_set).toBe(LANGUAGE_EN);
+  });
+
+  it('closeDialog closes the ref', () => {
+    fixture.componentInstance.closeDialog();
+    expect(TestBed.inject(MatDialogRef).close).toHaveBeenCalled();
   });
 });

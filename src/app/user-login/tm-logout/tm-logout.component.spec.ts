@@ -19,27 +19,56 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import {
+  COMMON_TEST_IMPORTS,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
+import { AuthService } from 'src/app/app-modules/core/services/auth.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 import { TmLogoutComponent } from './tm-logout.component';
 
 describe('TmLogoutComponent', () => {
-  let component: TmLogoutComponent;
   let fixture: ComponentFixture<TmLogoutComponent>;
+  let router: Router;
+  let saved: Record<string, string>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    saved = {};
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const k = sessionStorage.key(i) as string;
+      saved[k] = sessionStorage.getItem(k) as string;
+    }
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [TmLogoutComponent],
+      providers: [
+        ...commonTestProviders({ session: { userID: 1 } }),
+        { provide: AuthService, useValue: autoSpy(AuthService) },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(TmLogoutComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.returnValue(Promise.resolve(true));
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  afterEach(() => {
+    sessionStorage.clear();
+    Object.entries(saved).forEach(([k, v]) => sessionStorage.setItem(k, v));
+  });
+
+  it('clears both storages and navigates to login on init', () => {
+    sessionStorage.setItem('tmp-key', '1');
+    const session: any = TestBed.inject(SessionStorageService);
+    fixture.detectChanges();
+    expect(sessionStorage.getItem('tmp-key')).toBeNull();
+    expect(session.clear).toHaveBeenCalled();
+    expect(session.store.size).toBe(0);
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

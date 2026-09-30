@@ -19,18 +19,72 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { TestBed, inject } from '@angular/core/testing';
 
+import { TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
+import { createSessionStorageMock } from 'src/testing/test-utils';
 import { LabService } from './lab.service';
 
 describe('LabService', () => {
+  let service: LabService;
+  let httpMock: HttpTestingController;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LabService],
+      imports: [HttpClientTestingModule],
+      providers: [
+        LabService,
+        {
+          provide: SessionStorageService,
+          useValue: createSessionStorageMock({
+            serviceLineDetails: JSON.stringify({ facilityID: 8 }),
+            providerServiceID: 3,
+            serviceID: 4,
+          }),
+        },
+      ],
     });
+    service = TestBed.inject(LabService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should be created', inject([LabService], (service: LabService) => {
-    expect(service).toBeTruthy();
-  }));
+  afterEach(() => httpMock.verify());
+
+  it('getLabWorklist GETs by provider/service/facility', () => {
+    let res: any;
+    service.getLabWorklist().subscribe((r) => (res = r));
+    const req = httpMock.expectOne(environment.labWorklist + '3/4/8');
+    expect(req.request.method).toBe('GET');
+    req.flush({ statusCode: 200 });
+    expect(res).toEqual({ statusCode: 200 });
+  });
+
+  it('saveLabWork POSTs the form', () => {
+    service.saveLabWork({ a: 1 }).subscribe();
+    const req = httpMock.expectOne(environment.labSaveWork);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ a: 1 });
+    req.flush({});
+  });
+
+  it('saveFile POSTs the file', () => {
+    service.saveFile({ f: 1 }).subscribe();
+    const req = httpMock.expectOne(environment.saveFile);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ f: 1 });
+    req.flush({});
+  });
+
+  it('viewFileContent POSTs the index', () => {
+    service.viewFileContent({ fileID: 2 }).subscribe();
+    const req = httpMock.expectOne(environment.viewFileData);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ fileID: 2 });
+    req.flush({});
+  });
 });

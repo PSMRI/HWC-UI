@@ -19,154 +19,119 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+  createSessionStorageMock,
+} from 'src/testing/test-utils';
+import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { SystemicExaminationComponent } from './systemic-examination.component';
 
-import { GeneralUtils } from '../../../shared/utility';
-
-import * as data from '../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+const SESSION = {
+  serviceLineDetails: JSON.stringify({ facilityID: 1, parkingPlaceID: 2 }),
+};
 
 describe('SystemicExaminationComponent', () => {
   let component: SystemicExaminationComponent;
   let fixture: ComponentFixture<SystemicExaminationComponent>;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [SystemicExaminationComponent],
+      providers: [...commonTestProviders({ session: SESSION })],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(SystemicExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.systemicExaminationForm = new GeneralUtils(
-      fb,
-    ).createSystemicExaminationForm();
-    fixture.detectChanges();
-  });
-
-  it('should create SystemicExaminationComponent', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('Should initialize the component', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
-  });
-
-  it('should execute on changes of SystemicExaminationComponent', () => {
-    component.ngOnChanges();
-    expect(component).toBeTruthy();
-  });
-
-  it('Should check visit category while initializing', () => {
-    component.visitCategory = 'ANC';
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(component.displayANC).toEqual(true);
-  });
-
-  it('Should check visit category while initializing and enable obtestric examination', () => {
-    component.visitCategory = 'ANC';
-    component.ngOnInit();
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-anc-obstetric-examination'),
+    const utils = new GeneralUtils(
+      new FormBuilder(),
+      createSessionStorageMock(SESSION) as any,
     );
-    expect(component.displayANC).toEqual(true);
-    expect(de.nativeElement).toBeTruthy();
+    form = utils.createSystemicExaminationForm();
+    component.systemicExaminationForm = form;
   });
 
-  it('Should check visit category while initializing and disable obtestric examination', () => {
+  it('should create and render with a General OPD visit', () => {
     component.visitCategory = 'General OPD';
-    component.ngOnInit();
     fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-anc-obstetric-examination'),
+    expect(component).toBeTruthy();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+    expect(component.displayGeneral).toBeTrue();
+    expect(component.displayANC).toBeFalse();
+    expect(component.gastroIntestinalSystemForm).toBe(
+      form.get('gastroIntestinalSystemForm') as FormGroup,
     );
-    expect(component.displayANC).toEqual(false);
-    expect(component.displayGeneral).toEqual(true);
-    expect(de).not.toBeTruthy();
   });
 
-  it('Should check visit category while on changes and enable obtestric examination', () => {
-    component.visitCategory = 'ANC';
-    component.ngOnChanges();
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-anc-obstetric-examination'),
-    );
-    expect(component.displayANC).toEqual(true);
-    expect(de.nativeElement).toBeTruthy();
+  describe('ngOnInit', () => {
+    it('adds the obstetric form for ANC', () => {
+      component.visitCategory = 'ANC';
+      component.ngOnInit();
+      expect(component.displayANC).toBeTrue();
+      expect(component.displayGeneral).toBeFalse();
+      expect(form.contains('obstetricExaminationForANCForm')).toBeTrue();
+      expect(component.obstetricExaminationForANCForm).toBe(
+        form.get('obstetricExaminationForANCForm') as FormGroup,
+      );
+    });
+
+    it('shows general sections for PNC', () => {
+      component.visitCategory = 'PNC';
+      component.ngOnInit();
+      expect(component.displayGeneral).toBeTrue();
+      expect(component.displayANC).toBeFalse();
+      expect(form.contains('obstetricExaminationForANCForm')).toBeFalse();
+    });
+
+    it('shows neither for other categories', () => {
+      component.visitCategory = 'NCD care';
+      component.ngOnInit();
+      expect(component.displayGeneral).toBeFalse();
+      expect(component.displayANC).toBeFalse();
+      expect(component.cardioVascularSystemForm).toBe(
+        form.get('cardioVascularSystemForm') as FormGroup,
+      );
+    });
   });
 
-  it('Should check visit category while on changes and disable obtestric examination', () => {
-    component.visitCategory = 'General OPD';
-    component.ngOnChanges();
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-anc-obstetric-examination'),
-    );
-    expect(component.displayANC).toEqual(false);
-    expect(component.displayGeneral).toEqual(true);
-    expect(de).not.toBeTruthy();
+  describe('ngOnChanges', () => {
+    it('adds the obstetric form when category becomes ANC', () => {
+      component.visitCategory = 'ANC';
+      component.ngOnChanges();
+      expect(component.displayANC).toBeTrue();
+      expect(form.contains('obstetricExaminationForANCForm')).toBeTrue();
+    });
+
+    it('removes the obstetric form and shows general for General OPD', () => {
+      component.visitCategory = 'ANC';
+      component.ngOnChanges();
+      component.visitCategory = 'General OPD';
+      component.ngOnChanges();
+      expect(component.displayANC).toBeFalse();
+      expect(component.displayGeneral).toBeTrue();
+      expect(form.contains('obstetricExaminationForANCForm')).toBeFalse();
+      expect(component.obstetricExaminationForANCForm).toBeNull();
+    });
+
+    it('does not show general for other categories', () => {
+      component.visitCategory = 'NCD screening';
+      component.ngOnChanges();
+      expect(component.displayANC).toBeFalse();
+      expect(component.displayGeneral).toBeFalse();
+    });
   });
 
-  it('Should check visit category while on changes and enable Gastro intestinal examination', () => {
-    component.visitCategory = 'General OPD';
-    component.ngOnChanges();
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-gastro-intestinal-system'),
-    );
-    expect(component.displayANC).toEqual(false);
-    expect(component.displayGeneral).toEqual(true);
-    expect(de.nativeElement).toBeTruthy();
-  });
-
-  it('Should check visit category while on changes and disable Gastro intestinal examination', () => {
-    component.visitCategory = 'ANC';
-    component.ngOnChanges();
-    fixture.detectChanges();
-    const de = fixture.debugElement.query(
-      By.css('nurse-gastro-intestinal-system'),
-    );
-    expect(component.displayANC).toEqual(true);
-    expect(component.displayGeneral).toEqual(false);
-    expect(de).not.toBeTruthy();
+  it('re-assigns the language set on ngDoCheck', () => {
+    component.current_language_set = null;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
   });
 });
