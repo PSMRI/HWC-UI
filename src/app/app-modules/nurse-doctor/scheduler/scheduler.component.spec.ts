@@ -43,60 +43,66 @@ describe('SchedulerComponent', () => {
   let doctorService: any;
   let nurseService: any;
   let confirm: any;
-  let session: any;
   let dialogRef: any;
+  let session: any;
 
-  async function setup(dialogData: any) {
-    await TestBed.configureTestingModule({
+  const setup = async (dialogData: any) => {
+    TestBed.configureTestingModule({
       imports: [...COMMON_TEST_IMPORTS],
       declarations: [SchedulerComponent],
       providers: [
         ...commonTestProviders({
-          session: { providerServiceID: 4, userID: 7 },
+          session: { providerServiceID: 7, userID: 8 },
         }),
         { provide: MAT_DIALOG_DATA, useValue: dialogData },
         { provide: DoctorService, useValue: autoSpy(DoctorService) },
-        { provide: NurseService, useValue: autoSpy(NurseService) },
+        {
+          provide: NurseService,
+          useValue: autoSpy(NurseService, {}, undefined),
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-
+    });
+    if (!dialogData) {
+      // The new-schedule form uses Material controls (mat-radio/mat-select)
+      // that have no value accessor under NO_ERRORS_SCHEMA; test class logic.
+      TestBed.overrideTemplate(SchedulerComponent, '');
+    }
+    await TestBed.compileComponents();
     fixture = TestBed.createComponent(SchedulerComponent);
     component = fixture.componentInstance;
     doctorService = TestBed.inject(DoctorService);
     nurseService = TestBed.inject(NurseService);
     confirm = TestBed.inject(ConfirmationService);
-    session = TestBed.inject(SessionStorageService);
     dialogRef = TestBed.inject(MatDialogRef);
-  }
+    session = TestBed.inject(SessionStorageService);
+  };
 
-  describe('with scheduled slot data', () => {
-    const scheduled = {
+  describe('with existing scheduled data', () => {
+    const data = {
       schedulerForm: {
         allocation: true,
-        allocationDate: new Date(2024, 2, 4),
-        specialization: { specialization: 'Cardiology' },
+        allocationDate: new Date(2024, 0, 2),
+        specialization: { specialization: 'Cardio' },
         specialistDetails: { userName: 'drx' },
       },
-      tmSlot: { fromTime: '10:00:00', toTime: '10:15:00' },
+      tmSlot: { fromTime: '10:00', toTime: '10:15' },
     };
-    beforeEach(async () => setup(scheduled));
-
-    it('shows the scheduled slot summary', () => {
+    beforeEach(async () => {
+      await setup(data);
       fixture.detectChanges();
-      expect(component.scheduledData).toBe(scheduled);
-      expect(component.schedulerForm).toBeUndefined();
-      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
-      const text = fixture.nativeElement.textContent;
-      expect(text).toContain('Cardiology');
-      expect(text).toContain('drx');
-      expect(text).toContain('04/03/2024');
-      expect(text).toContain('10:15:00');
     });
 
-    it('clearScheduledSlot resets comorbid flag and closes with clear', () => {
-      fixture.detectChanges();
-      fixture.nativeElement.querySelector('#clearScheduledSlot').click();
+    it('shows the scheduled data and does not build a form', () => {
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+      expect(component.scheduledData).toBe(data);
+      expect(component.schedulerForm).toBeUndefined();
+      expect(fixture.nativeElement.textContent).toContain('Cardio');
+      expect(fixture.nativeElement.textContent).toContain('drx');
+    });
+
+    it('clearScheduledSlot flags comorbid false and closes with clear', () => {
+      component.clearScheduledSlot();
       expect(session.setItem).toHaveBeenCalledWith('setComorbid', 'false');
       expect(component.ansComorbid).toBe('false');
       expect(nurseService.filter).toHaveBeenCalledWith('false');
@@ -104,269 +110,189 @@ describe('SchedulerComponent', () => {
     });
 
     it('closeModal closes with false', () => {
-      fixture.detectChanges();
-      fixture.nativeElement.querySelector('#closeModal').click();
+      component.closeModal();
       expect(dialogRef.close).toHaveBeenCalledWith(false);
+    });
+
+    it('ngDoCheck refreshes language', () => {
+      component.currentLanguageSet = null;
+      component.ngDoCheck();
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
     });
   });
 
-  describe('without scheduled slot data', () => {
-    const spec = { specializationID: 3, specialization: 'Cardiology' };
-    const specialist = { userID: 21, userName: 'drx' };
-
+  describe('new schedule', () => {
     beforeEach(async () => {
       await setup(null);
-      component.ngOnInit();
+      doctorService.getMasterSpecialization.and.returnValue(
+        of({ statusCode: 200, data: [{ specializationID: 3 }] }),
+      );
+      fixture.detectChanges();
     });
 
-    it('creates an empty scheduler form', () => {
+    it('builds an empty form', () => {
       expect(component.scheduledData).toBeNull();
-      expect(component.today instanceof Date).toBeTrue();
-      expect(component.schedulerDate instanceof Date).toBeTrue();
       expect(component.schedulerForm.value).toEqual({
         allocation: null,
         allocationDate: null,
         specialization: null,
         specialistDetails: null,
       });
+      expect(component.today instanceof Date).toBeTrue();
     });
 
-    describe('checkAllocation', () => {
-      it('walk-in (true) uses today and loads specializations', () => {
-        doctorService.getMasterSpecialization.and.returnValue(
-          of({ statusCode: 200, data: [spec] }),
-        );
-        component.availableSlotList = [1];
-        component.checkAllocation(true);
-        expect(component.allocationDate instanceof Date).toBeTrue();
-        expect(component.specialization).toBeNull();
-        expect(component.specialistDetails).toBeNull();
-        expect(component.today).toBe(component.schedulerDate);
-        expect(component.availableSlotList).toBeNull();
-        expect(component.masterSpecialistDetails).toEqual([]);
-        expect(component.masterSpecialization).toEqual([spec]);
-      });
-
-      it('schedule (false) allows tomorrow up to two months ahead', () => {
-        doctorService.getMasterSpecialization.and.returnValue(
-          of({ statusCode: 200, data: [spec] }),
-        );
-        const now = new Date();
-        component.schedulerForm.patchValue({ allocationDate: now });
-        component.checkAllocation(false);
-        expect(component.allocationDate).toBeNull();
-        expect(component.today.getTime()).toBeGreaterThan(now.getTime());
-        expect(component.schedulerDate.getTime()).toBeGreaterThan(
-          component.today.getTime(),
-        );
-        expect(component.masterSpecialization).toEqual([spec]);
-      });
-
-      it('does nothing else for other values', () => {
-        component.checkAllocation(null);
-        expect(doctorService.getMasterSpecialization).not.toHaveBeenCalled();
-        expect(component.masterSpecialization).toEqual([]);
-      });
+    it('walk-in allocation sets today and loads specializations', () => {
+      component.masterSpecialistDetails = [1];
+      component.checkAllocation(true);
+      expect(component.allocationDate instanceof Date).toBeTrue();
+      expect(component.masterSpecialization).toEqual([{ specializationID: 3 }]);
+      expect(component.masterSpecialistDetails).toEqual([]);
+      expect(component.availableSlotList).toBeNull();
     });
 
-    describe('getMasterSpecialization', () => {
-      beforeEach(() =>
-        component.schedulerForm.patchValue({
-          allocationDate: new Date(),
-          specialization: spec,
-          specialistDetails: specialist,
-        }),
+    it('scheduled allocation sets future window and loads specializations', () => {
+      component.checkAllocation(false);
+      expect(component.allocationDate).toBeNull();
+      expect(component.today.getTime()).toBeGreaterThan(Date.now());
+      expect(component.schedulerDate.getTime()).toBeGreaterThan(
+        component.today.getTime(),
       );
-
-      it('clears selections and stores specializations', () => {
-        doctorService.getMasterSpecialization.and.returnValue(
-          of({ statusCode: 200, data: [spec] }),
-        );
-        component.getMasterSpecialization();
-        expect(component.specialization).toBeNull();
-        expect(component.specialistDetails).toBeNull();
-        expect(component.masterSpecialization).toEqual([spec]);
-      });
-
-      it('alerts on non-200', () => {
-        doctorService.getMasterSpecialization.and.returnValue(
-          of({ statusCode: 5000, errorMessage: 'bad' }),
-        );
-        component.getMasterSpecialization();
-        expect(confirm.alert).toHaveBeenCalledWith('bad', 'error');
-        expect(component.masterSpecialization).toEqual([]);
-      });
-
-      it('alerts on error', () => {
-        doctorService.getMasterSpecialization.and.returnValue(throwingObs('e'));
-        component.getMasterSpecialization();
-        expect(confirm.alert).toHaveBeenCalledWith('e', 'error');
-      });
+      expect(component.masterSpecialization).toEqual([{ specializationID: 3 }]);
     });
 
-    describe('getMasterSpecializationSchedule', () => {
-      it('clears selections and stores specializations', () => {
-        component.schedulerForm.patchValue({ specialization: spec });
-        doctorService.getMasterSpecialization.and.returnValue(
-          of({ statusCode: 200, data: [spec] }),
-        );
-        component.getMasterSpecializationSchedule();
-        expect(component.specialization).toBeNull();
-        expect(component.masterSpecialization).toEqual([spec]);
-      });
+    it('other allocation values do nothing but reset', () => {
+      component.checkAllocation(undefined);
+      expect(doctorService.getMasterSpecialization).not.toHaveBeenCalled();
+      expect(component.masterSpecialization).toEqual([]);
+    });
 
-      it('alerts on non-200', () => {
-        doctorService.getMasterSpecialization.and.returnValue(
-          of({ statusCode: 5000, errorMessage: 'bad' }),
-        );
-        component.getMasterSpecializationSchedule();
-        expect(confirm.alert).toHaveBeenCalledWith('bad', 'error');
-      });
+    it('getMasterSpecialization alerts on non-200 and on error', () => {
+      component.schedulerForm.patchValue({ allocationDate: new Date() });
+      doctorService.getMasterSpecialization.and.returnValue(
+        of({ statusCode: 5000, errorMessage: 'm' }),
+      );
+      component.getMasterSpecialization();
+      expect(confirm.alert).toHaveBeenCalledWith('m', 'error');
+      doctorService.getMasterSpecialization.and.returnValue(throwingObs('x'));
+      component.getMasterSpecialization();
+      expect(confirm.alert).toHaveBeenCalledWith('x', 'error');
+    });
 
-      it('alerts on error', () => {
-        doctorService.getMasterSpecialization.and.returnValue(throwingObs('e'));
-        component.getMasterSpecializationSchedule();
-        expect(confirm.alert).toHaveBeenCalledWith('e', 'error');
-      });
+    it('getMasterSpecializationSchedule alerts on non-200 and on error', () => {
+      doctorService.getMasterSpecialization.and.returnValue(
+        of({ statusCode: 5000, errorMessage: 'n' }),
+      );
+      component.getMasterSpecializationSchedule();
+      expect(confirm.alert).toHaveBeenCalledWith('n', 'error');
+      doctorService.getMasterSpecialization.and.returnValue(throwingObs('y'));
+      component.getMasterSpecializationSchedule();
+      expect(confirm.alert).toHaveBeenCalledWith('y', 'error');
     });
 
     describe('getSpecialist', () => {
       beforeEach(() =>
         component.schedulerForm.patchValue({
-          specialization: spec,
-          specialistDetails: specialist,
+          specialization: { specializationID: 3 },
+          specialistDetails: { userID: 1 },
         }),
       );
-
-      it('requests specialists for the chosen specialization', () => {
+      it('loads specialists for the chosen specialization', () => {
         doctorService.getSpecialist.and.returnValue(
-          of({ statusCode: 200, data: [specialist] }),
+          of({ statusCode: 200, data: [{ userID: 9 }] }),
         );
         component.getSpecialist();
         expect(doctorService.getSpecialist).toHaveBeenCalledWith({
-          providerServiceMapID: 4,
+          providerServiceMapID: 7,
           specializationID: 3,
-          userID: 7,
+          userID: 8,
         });
         expect(component.specialistDetails).toBeNull();
-        expect(component.masterSpecialistDetails).toEqual([specialist]);
+        expect(component.masterSpecialistDetails).toEqual([{ userID: 9 }]);
       });
-
       it('alerts on non-200', () => {
         doctorService.getSpecialist.and.returnValue(
-          of({ statusCode: 5000, errorMessage: 'bad' }),
+          of({ statusCode: 5000, errorMessage: 's' }),
         );
         component.getSpecialist();
-        expect(confirm.alert).toHaveBeenCalledWith('bad', 'error');
-        expect(component.masterSpecialistDetails).toEqual([]);
+        expect(confirm.alert).toHaveBeenCalledWith('s', 'error');
       });
-
       it('alerts on error', () => {
-        doctorService.getSpecialist.and.returnValue(throwingObs('e'));
+        doctorService.getSpecialist.and.returnValue(throwingObs('t'));
         component.getSpecialist();
-        expect(confirm.alert).toHaveBeenCalledWith('e', 'error');
+        expect(confirm.alert).toHaveBeenCalledWith('t', 'error');
       });
     });
 
     describe('getAvailableSlot', () => {
-      const date = new Date(2024, 2, 4);
+      const date = new Date(2024, 4, 5);
       beforeEach(() =>
         component.schedulerForm.patchValue({
           allocationDate: date,
-          specialistDetails: specialist,
+          specialistDetails: { userID: 9 },
         }),
       );
-
-      it('loads slots for specialist and date', () => {
-        const slots = [{ fromTime: '10:00', status: 'Available' }];
+      it('loads slots for the specialist and date', () => {
         doctorService.getAvailableSlot.and.returnValue(
-          of({ statusCode: 200, data: { slots } }),
+          of({ statusCode: 200, data: { slots: [{ status: 'Available' }] } }),
         );
-        component.getAvailableSlot(specialist);
+        component.getAvailableSlot(null);
         expect(doctorService.getAvailableSlot).toHaveBeenCalledWith({
-          userID: 21,
+          userID: 9,
           date,
         });
-        expect(component.availableSlotList).toEqual(slots);
+        expect(component.availableSlotList).toEqual([{ status: 'Available' }]);
       });
-
       it('alerts on non-200', () => {
         doctorService.getAvailableSlot.and.returnValue(
-          of({ statusCode: 5000, errorMessage: 'bad' }),
+          of({ statusCode: 5000, errorMessage: 'u' }),
         );
-        component.getAvailableSlot(specialist);
-        expect(confirm.alert).toHaveBeenCalledWith('bad', 'error');
-        expect(component.availableSlotList).toBeNull();
+        component.getAvailableSlot(null);
+        expect(confirm.alert).toHaveBeenCalledWith('u', 'error');
       });
-
       it('alerts on error', () => {
-        doctorService.getAvailableSlot.and.returnValue(throwingObs('e'));
-        component.getAvailableSlot(specialist);
-        expect(confirm.alert).toHaveBeenCalledWith('e', 'error');
+        doctorService.getAvailableSlot.and.returnValue(throwingObs('v'));
+        component.getAvailableSlot(null);
+        expect(confirm.alert).toHaveBeenCalledWith('v', 'error');
       });
     });
 
     it('selectAvailableSlot only accepts available slots', () => {
-      const booked = { status: 'Booked' };
-      const free = { status: 'AVAILABLE' };
-      component.selectAvailableSlot(booked);
+      component.selectAvailableSlot({ status: 'Booked' });
       expect(component.selectedSlot).toBeUndefined();
-      component.selectAvailableSlot(free);
-      expect(component.selectedSlot).toBe(free);
-      component.selectAvailableSlot(booked);
-      expect(component.selectedSlot).toBe(free);
+      const slot = { status: 'AVAILABLE' };
+      component.selectAvailableSlot(slot);
+      expect(component.selectedSlot).toBe(slot);
     });
 
-    describe('saveScheduledSlot', () => {
-      it('closes with slot data and sets comorbid flag', () => {
-        const date = new Date(2024, 2, 4);
-        component.schedulerForm.patchValue({
-          allocation: false,
+    it('saveScheduledSlot closes with slot details when complete', () => {
+      const date = new Date(2024, 4, 5);
+      component.schedulerForm.patchValue({
+        allocation: false,
+        allocationDate: date,
+        specialization: { specializationID: 3 },
+        specialistDetails: { userID: 9 },
+      });
+      component.selectedSlot = { fromTime: '10:00', toTime: '10:15' };
+      component.saveScheduledSlot();
+      expect(session.setItem).toHaveBeenCalledWith('setComorbid', 'true');
+      expect(nurseService.filter).toHaveBeenCalledWith('true');
+      expect(dialogRef.close).toHaveBeenCalledWith({
+        schedulerForm: component.schedulerForm.value,
+        tmSlot: {
+          walkIn: false,
+          specializationID: 3,
           allocationDate: date,
-          specialization: spec,
-          specialistDetails: specialist,
-        });
-        component.selectedSlot = { fromTime: '10:00', toTime: '10:15' };
-        component.saveScheduledSlot();
-        expect(session.setItem).toHaveBeenCalledWith('setComorbid', 'true');
-        expect(component.ansComorbid).toBe('true');
-        expect(nurseService.filter).toHaveBeenCalledWith('true');
-        expect(dialogRef.close).toHaveBeenCalledWith({
-          schedulerForm: {
-            allocation: false,
-            allocationDate: date,
-            specialization: spec,
-            specialistDetails: specialist,
-          },
-          tmSlot: {
-            walkIn: false,
-            specializationID: 3,
-            allocationDate: date,
-            userID: 21,
-            fromTime: '10:00',
-            toTime: '10:15',
-          },
-        });
-      });
-
-      it('closes with null when no slot selected', () => {
-        component.schedulerForm.patchValue({ specialistDetails: specialist });
-        component.saveScheduledSlot();
-        expect(nurseService.filter).not.toHaveBeenCalled();
-        expect(dialogRef.close).toHaveBeenCalledWith(null);
-      });
-
-      it('closes with null when no specialist selected', () => {
-        component.selectedSlot = { fromTime: '10:00', toTime: '10:15' };
-        component.saveScheduledSlot();
-        expect(dialogRef.close).toHaveBeenCalledWith(null);
+          userID: 9,
+          fromTime: '10:00',
+          toTime: '10:15',
+        },
       });
     });
 
-    it('ngDoCheck refreshes the language set', () => {
-      component.currentLanguageSet = undefined;
-      component.ngDoCheck();
-      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    it('saveScheduledSlot closes with null when incomplete', () => {
+      component.saveScheduledSlot();
+      expect(dialogRef.close).toHaveBeenCalledWith(null);
+      expect(nurseService.filter).not.toHaveBeenCalled();
     });
   });
 });

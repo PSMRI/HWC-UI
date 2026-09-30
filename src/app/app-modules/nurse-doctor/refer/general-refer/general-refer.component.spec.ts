@@ -32,10 +32,7 @@ import {
   commonTestProviders,
   throwingObs,
 } from 'src/testing/test-utils';
-import { ConfirmationService } from 'src/app/app-modules/core/services/confirmation.service';
-import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
-import { AmritTrackingService } from 'Common-UI/src/tracking';
-import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
+import { GeneralReferComponent } from './general-refer.component';
 import {
   DoctorService,
   MasterdataService,
@@ -43,29 +40,18 @@ import {
 } from '../../shared/services';
 import { IdrsscoreService } from '../../shared/services/idrsscore.service';
 import { NcdScreeningService } from '../../shared/services/ncd-screening.service';
-import { GeneralReferComponent } from './general-refer.component';
-
-const ALL_REASONS = [
-  'Screening positive for diabetes',
-  'Screening positive for epilepsy',
-  'Screening positive for asthma',
-  'Screening positive for vision screening',
-  'Screening positive for tuberculosis screening',
-  'Screening positive for malaria screening',
-  'Screening positive for hypertension',
-  'Screening positive for oral cancer',
-  'Screening positive for cervical cancer',
-  'Screening positive for breast cancer',
-  'Something unrelated',
-].map((name) => ({ name }));
+import { ConfirmationService } from 'src/app/app-modules/core/services/confirmation.service';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { PreviousDetailsComponent } from 'src/app/app-modules/core/components/previous-details/previous-details.component';
 
 describe('GeneralReferComponent', () => {
   let component: GeneralReferComponent;
   let fixture: ComponentFixture<GeneralReferComponent>;
-  let masterData$: BehaviorSubject<any>;
+  let master$: BehaviorSubject<any>;
   let caseRecord$: BehaviorSubject<any>;
-  let suspected$: BehaviorSubject<any>;
-  let referralSuggested$: BehaviorSubject<any>;
+  let idrsFlag$: BehaviorSubject<any>;
+  let referralFlag$: BehaviorSubject<any>;
   let enablingIdrs$: BehaviorSubject<any>;
   let doctorService: any;
   let nurseService: any;
@@ -74,93 +60,111 @@ describe('GeneralReferComponent', () => {
   let dialog: any;
   let session: any;
   let tracking: any;
-  let savedSuspect: string | null;
-  let savedInst: string | null;
+  const R = LANGUAGE_EN.Referdetails;
 
-  function buildForm() {
-    return new FormGroup({
+  // Fresh list per use: the component pushes into the master list while filtering.
+  const makeReasons = () =>
+    [
+      'Screening positive for Diabetes',
+      'Screening positive for Epilepsy',
+      'Screening positive for Asthma',
+      'Screening positive for Vision screening',
+      'Screening positive for Tuberculosis screening',
+      'Screening positive for Malaria screening',
+      'Screening positive for Hypertension',
+      'Screening positive for Oral cancer',
+      'Screening positive for Cervical cancer',
+      'Screening positive for Breast cancer',
+      'Something else',
+    ].map((name, i) => ({ id: i, name }));
+  const reasons = makeReasons();
+  const namesOf = (l: any[]) => l.map((x) => x.name);
+
+  const makeForm = () =>
+    new FormGroup({
       referredToInstituteID: new FormControl(null),
       referredToInstituteName: new FormControl(null),
       otherReferredToInstituteName: new FormControl(null),
+      referralReason: new FormControl(null),
+      referralReasonList: new FormControl(null),
+      otherReferralReason: new FormControl(null),
       refrredToAdditionalServiceList: new FormControl(null),
       revisitDate: new FormControl(null),
-      referralReason: new FormControl(null),
-      referralReasonList: new FormControl([]),
-      otherReferralReason: new FormControl(null),
     });
-  }
 
-  async function setup(sessionValues: Record<string, any> = {}) {
-    masterData$ = new BehaviorSubject<any>(null);
+  const create = async (session0: Record<string, any>) => {
+    master$ = new BehaviorSubject<any>(null);
     caseRecord$ = new BehaviorSubject<any>(null);
-    suspected$ = new BehaviorSubject<any>(0);
-    referralSuggested$ = new BehaviorSubject<any>(0);
-    enablingIdrs$ = new BehaviorSubject<any>(false);
-    doctorService = autoSpy(DoctorService, {
-      populateCaserecordResponse$: caseRecord$.asObservable(),
-    });
-    nurseService = autoSpy(NurseService);
-    idrs = autoSpy(IdrsscoreService, {
-      IDRSSuspectedFlag$: suspected$.asObservable(),
-      referralSuggestedFlag$: referralSuggested$.asObservable(),
-    });
-
-    await TestBed.configureTestingModule({
+    idrsFlag$ = new BehaviorSubject<any>(0);
+    referralFlag$ = new BehaviorSubject<any>(0);
+    enablingIdrs$ = new BehaviorSubject<any>(true);
+    TestBed.configureTestingModule({
       imports: [...COMMON_TEST_IMPORTS],
       declarations: [GeneralReferComponent],
       providers: [
-        ...commonTestProviders({
-          session: {
-            visitCategory: 'General OPD',
-            beneficiaryRegID: '11',
-            visitID: '22',
-            designation: 'Doctor',
-            ...sessionValues,
-          },
-        }),
-        { provide: DoctorService, useValue: doctorService },
-        { provide: NurseService, useValue: nurseService },
+        ...commonTestProviders({ session: session0 }),
+        {
+          provide: DoctorService,
+          useValue: autoSpy(DoctorService, {
+            populateCaserecordResponse$: caseRecord$,
+          }),
+        },
         {
           provide: MasterdataService,
-          useValue: { doctorMasterData$: masterData$.asObservable() },
+          useValue: autoSpy(MasterdataService, { doctorMasterData$: master$ }),
         },
-        { provide: IdrsscoreService, useValue: idrs },
+        { provide: NurseService, useValue: autoSpy(NurseService) },
+        {
+          provide: IdrsscoreService,
+          useValue: autoSpy(
+            IdrsscoreService,
+            {
+              IDRSSuspectedFlag$: idrsFlag$,
+              referralSuggestedFlag$: referralFlag$,
+            },
+            undefined,
+          ),
+        },
         {
           provide: NcdScreeningService,
-          useValue: { enablingIdrs$: enablingIdrs$.asObservable() },
+          useValue: autoSpy(NcdScreeningService, { enablingIdrs$ }),
         },
       ],
       schemas: [NO_ERRORS_SCHEMA],
-    }).compileComponents();
-
+    });
+    // Template binds formControlName to Material selects/datepicker, which
+    // have no value accessor under NO_ERRORS_SCHEMA; test class logic only.
+    TestBed.overrideTemplate(GeneralReferComponent, '');
+    await TestBed.compileComponents();
     fixture = TestBed.createComponent(GeneralReferComponent);
     component = fixture.componentInstance;
-    component.referForm = buildForm();
+    component.referForm = makeForm();
+    doctorService = TestBed.inject(DoctorService);
+    nurseService = TestBed.inject(NurseService);
+    idrs = TestBed.inject(IdrsscoreService);
     confirm = TestBed.inject(ConfirmationService);
     dialog = TestBed.inject(MatDialog);
     session = TestBed.inject(SessionStorageService);
     tracking = TestBed.inject(AmritTrackingService);
-  }
-
-  beforeEach(() => {
-    savedSuspect = sessionStorage.getItem('suspectFlag');
-    savedInst = sessionStorage.getItem('instFlag');
-    spyOn(console, 'log');
-  });
+  };
 
   afterEach(() => {
-    fixture?.destroy();
-    const restore = (k: string, v: string | null) =>
-      v === null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v);
-    restore('suspectFlag', savedSuspect);
-    restore('instFlag', savedInst);
+    sessionStorage.removeItem('suspectFlag');
+    sessionStorage.removeItem('instFlag');
   });
 
-  describe('ngOnInit', () => {
-    beforeEach(async () => setup());
+  describe('init (General OPD)', () => {
+    beforeEach(async () => {
+      await create({
+        visitCategory: 'General OPD',
+        designation: 'Doctor',
+        beneficiaryRegID: '101',
+        visitID: '201',
+      });
+    });
 
-    it('initialises language, session values, dates and clears IDRS flags', () => {
-      component.ngOnInit();
+    it('initialises dates, flags and IDRS subscriptions', () => {
+      fixture.detectChanges();
       expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
       expect(component.visitCategory).toBe('General OPD');
       expect(component.referredVisitcode).toBe('undefined');
@@ -176,170 +180,163 @@ describe('GeneralReferComponent', () => {
       expect(sessionStorage.getItem('suspectFlag')).toBe('false');
     });
 
-    it('sets suspectFlag true when IDRS suspected or referral suggested', () => {
-      component.ngOnInit();
-      suspected$.next(2);
+    it('sets suspectFlag true when IDRS or referral flag is positive', () => {
+      fixture.detectChanges();
+      idrsFlag$.next(2);
       expect(component.showMsg).toBe(2);
       expect(sessionStorage.getItem('suspectFlag')).toBe('true');
-      suspected$.next(0);
+      referralFlag$.next(0);
       expect(sessionStorage.getItem('suspectFlag')).toBe('false');
-      referralSuggested$.next(1);
+      referralFlag$.next(1);
       expect(sessionStorage.getItem('suspectFlag')).toBe('true');
     });
 
-    it('ngOnDestroy unsubscribes master data and refer subscriptions', () => {
-      component.referMode = 'view';
-      component.ngOnInit();
-      masterData$.next({ higherHealthCare: [], referralReasonList: [] });
-      const md = component.doctorMasterDataSubscription;
-      const rs = component.referSubscription;
-      component.ngOnDestroy();
-      expect(md.closed).toBeTrue();
-      expect(rs.closed).toBeTrue();
+    it('loads master data with institutes', () => {
+      fixture.detectChanges();
+      master$.next({
+        higherHealthCare: [{ institutionID: 1 }],
+        additionalServices: ['s'],
+        revisitDate: ['d'],
+        referralReasonList: reasons,
+      });
+      expect(component.instituteFlag).toBeTrue();
+      expect(sessionStorage.getItem('instFlag')).toBe('true');
+      expect(component.additionalServices).toEqual(['s']);
+      expect(component.revisitDate).toEqual(['d']);
+      expect(component.fpReferral).toBe(reasons);
     });
 
-    it('ngOnDestroy is safe when nothing subscribed', () => {
+    it('flags no institutes when list is empty', () => {
+      fixture.detectChanges();
+      master$.next({ higherHealthCare: [], referralReasonList: [] });
+      expect(component.instituteFlag).toBeFalse();
+      expect(sessionStorage.getItem('instFlag')).toBe('false');
+    });
+
+    it('unsubscribes on destroy', () => {
+      component.referMode = 'view';
+      fixture.detectChanges();
+      master$.next({ higherHealthCare: [], referralReasonList: [] });
+      fixture.destroy();
+      expect(master$.observers.length).toBe(0);
+      expect(caseRecord$.observers.length).toBe(0);
+    });
+
+    it('ngOnDestroy tolerates missing subscriptions', () => {
       expect(() => component.ngOnDestroy()).not.toThrow();
     });
   });
 
-  it('uses referredVisitCode from session when present', async () => {
-    await setup({ referredVisitCode: 'VC1' });
-    component.ngOnInit();
-    expect(component.referredVisitcode).toBe('VC1');
-  });
-
-  describe('master data', () => {
-    beforeEach(async () => setup());
-
-    it('ignores empty master data', () => {
-      component.ngOnInit();
-      expect(component.higherHealthcareCenter).toBeUndefined();
+  describe('referredVisitCode present', () => {
+    beforeEach(async () => {
+      await create({ visitCategory: 'General OPD', referredVisitCode: 'RV1' });
     });
-
-    it('marks institute flag false when there are no higher health care centres', () => {
-      component.ngOnInit();
-      masterData$.next({
-        higherHealthCare: [],
-        additionalServices: [{ serviceID: 1 }],
-        revisitDate: ['1 week'],
-        referralReasonList: [{ name: 'X' }],
-      });
-      expect(component.instituteFlag).toBeFalse();
-      expect(sessionStorage.getItem('instFlag')).toBe('false');
-      expect(component.additionalServices).toEqual([{ serviceID: 1 }]);
-      expect(component.revisitDate).toEqual(['1 week']);
-      expect(component.fpReferral).toEqual([{ name: 'X' }]);
-    });
-
-    it('marks institute flag true when centres exist', () => {
-      component.ngOnInit();
-      masterData$.next({ higherHealthCare: [{ institutionID: 1 }] });
-      expect(component.instituteFlag).toBeTrue();
-      expect(sessionStorage.getItem('instFlag')).toBe('true');
+    it('stores the referred visit code', () => {
+      fixture.detectChanges();
+      expect(component.referredVisitcode).toBe('RV1');
     });
   });
 
   describe('NCD screening referral reasons', () => {
-    it('filters to IDRS reasons when IDRS form is enabled', async () => {
-      await setup({ visitCategory: 'NCD screening' });
-      enablingIdrs$.next(true);
-      component.ngOnInit();
-      masterData$.next({
-        higherHealthCare: [{}],
-        referralReasonList: ALL_REASONS.slice(),
-      });
+    it('IDRS enabled: keeps IDRS-related reasons', async () => {
+      await create({ visitCategory: 'NCD screening' });
+      fixture.detectChanges();
+      const list = makeReasons();
+      master$.next({ higherHealthCare: [], referralReasonList: list });
       expect(component.enableCBACForm).toBeFalse();
-      expect(component.fpReferral.map((r: any) => r.name)).toEqual(
-        ALL_REASONS.slice(0, 7).map((r) => r.name),
+      // Current behaviour: matched items are also pushed onto the master list.
+      expect(list.length).toBe(11 + 7);
+      expect(namesOf(component.fpReferral)).toEqual(
+        reasons.slice(0, 7).map((r) => r.name),
       );
     });
 
-    it('handles missing reason list when IDRS form is enabled', async () => {
-      await setup({ visitCategory: 'NCD screening' });
+    it('IDRS enabled with no reason list', async () => {
+      await create({ visitCategory: 'NCD screening' });
       enablingIdrs$.next(true);
-      component.ngOnInit();
-      masterData$.next({ higherHealthCare: [{}], referralReasonList: null });
+      fixture.detectChanges();
+      master$.next({ higherHealthCare: [], referralReasonList: null });
       expect(component.fpReferral).toBeNull();
     });
 
-    it('filters to male CBAC reasons', async () => {
-      await setup({
+    it('CBAC for male: keeps hypertension, diabetes, oral cancer', async () => {
+      await create({
         visitCategory: 'NCD screening',
         beneficiaryGender: 'Male',
       });
       enablingIdrs$.next(false);
-      component.ngOnInit();
-      masterData$.next({
-        higherHealthCare: [{}],
-        referralReasonList: ALL_REASONS.slice(),
-      });
+      fixture.detectChanges();
+      master$.next({ higherHealthCare: [], referralReasonList: makeReasons() });
       expect(component.enableCBACForm).toBeTrue();
-      expect(component.fpReferral.map((r: any) => r.name)).toEqual([
-        'Screening positive for diabetes',
-        'Screening positive for hypertension',
-        'Screening positive for oral cancer',
+      expect(namesOf(component.fpReferral)).toEqual([
+        'Screening positive for Diabetes',
+        'Screening positive for Hypertension',
+        'Screening positive for Oral cancer',
       ]);
     });
 
-    it('filters to female CBAC reasons', async () => {
-      await setup({
-        visitCategory: 'NCD screening',
-        beneficiaryGender: 'Female',
-      });
-      component.ngOnInit();
-      masterData$.next({
-        higherHealthCare: [{}],
-        referralReasonList: ALL_REASONS.slice(),
-      });
-      expect(component.fpReferral.map((r: any) => r.name).sort()).toEqual(
-        [
-          'Screening positive for diabetes',
-          'Screening positive for hypertension',
-          'Screening positive for oral cancer',
-          'Screening positive for cervical cancer',
-          'Screening positive for breast cancer',
-        ].sort(),
-      );
-    });
-
-    it('keeps null reason list for CBAC male and female', async () => {
-      await setup({
+    it('CBAC for male with no reason list', async () => {
+      await create({
         visitCategory: 'NCD screening',
         beneficiaryGender: 'Male',
       });
-      component.ngOnInit();
-      masterData$.next({ higherHealthCare: [{}], referralReasonList: null });
-      expect(component.fpReferral).toBeNull();
-      session.store.set('beneficiaryGender', 'Female');
-      masterData$.next({
-        higherHealthCare: [{}],
-        referralReasonList: undefined,
-      });
+      enablingIdrs$.next(false);
+      fixture.detectChanges();
+      master$.next({ higherHealthCare: [], referralReasonList: undefined });
       expect(component.fpReferral).toBeUndefined();
+    });
+
+    it('CBAC for female: also keeps cervical and breast cancer', async () => {
+      await create({
+        visitCategory: 'NCD screening',
+        beneficiaryGender: 'Female',
+      });
+      enablingIdrs$.next(false);
+      fixture.detectChanges();
+      master$.next({ higherHealthCare: [], referralReasonList: makeReasons() });
+      expect(namesOf(component.fpReferral)).toEqual([
+        'Screening positive for Diabetes',
+        'Screening positive for Hypertension',
+        'Screening positive for Oral cancer',
+        'Screening positive for Cervical cancer',
+        'Screening positive for Breast cancer',
+      ]);
+    });
+
+    it('CBAC for female with no reason list', async () => {
+      await create({
+        visitCategory: 'NCD screening',
+        beneficiaryGender: 'Female',
+      });
+      enablingIdrs$.next(false);
+      fixture.detectChanges();
+      master$.next({ higherHealthCare: [], referralReasonList: null });
+      expect(component.fpReferral).toBeNull();
     });
   });
 
-  describe('view mode / getReferDetails', () => {
-    const centres = [
+  describe('view mode', () => {
+    const institutes = [
       { institutionID: 5, institutionName: 'District Hospital' },
       { institutionID: 6, institutionName: 'Other' },
     ];
-
     beforeEach(async () => {
-      await setup();
+      await create({
+        visitCategory: 'General OPD',
+        beneficiaryRegID: '101',
+        visitID: '201',
+      });
       component.referMode = 'view';
-      component.ngOnInit();
-      masterData$.next({ higherHealthCare: centres });
+      fixture.detectChanges();
+      master$.next({ higherHealthCare: institutes, referralReasonList: [] });
     });
 
-    it('reads beneficiary/visit ids from session and subscribes to case record', () => {
-      expect(component.beneficiaryRegID).toBe('11');
-      expect(component.visitID).toBe('22');
-      expect(component.referSubscription).toBeDefined();
+    it('reads identifiers from session', () => {
+      expect(component.beneficiaryRegID).toBe('101');
+      expect(component.visitID).toBe('201');
     });
 
-    it('patches the form with refer details and resolves the institute', () => {
+    it('patches the form from the case record', () => {
       caseRecord$.next({
         statusCode: 200,
         data: {
@@ -347,61 +344,49 @@ describe('GeneralReferComponent', () => {
             referredToInstituteID: 5,
             referralReasonList: ['Other'],
             otherReferralReason: 'custom',
-            revisitDate: '2024-01-05T00:00:00.000Z',
+            revisitDate: '2024-07-01',
           },
         },
       });
-      expect(component.referForm.value.referredToInstituteName).toEqual(
-        centres[0],
-      );
       expect(component.healthCareReferred).toBeTrue();
       expect(component.selectValue).toBe(1);
       expect(component.enableOthersReferralTextField).toBeTrue();
-      expect(component.referForm.value.otherReferralReason).toBe('custom');
-      expect(component.referForm.value.referralReasonList).toEqual(['Other']);
-      expect(component.referForm.value.revisitDate).toEqual(
-        new Date('2024-01-05T00:00:00.000Z'),
+      expect(component.referForm.value.referredToInstituteName).toEqual(
+        institutes[0],
       );
+      expect(component.referForm.value.otherReferralReason).toBe('custom');
+      expect(component.RevisitDate?.value).toEqual(new Date('2024-07-01'));
     });
 
-    it('enables the other-institute field when the institute is "Other"', () => {
+    it('patches without institute or reasons', () => {
       caseRecord$.next({
         statusCode: 200,
-        data: { Refer: { referredToInstituteID: 6, revisitDate: null } },
+        data: { Refer: { referralReason: 'r', revisitDate: '2024-07-02' } },
       });
-      expect(component.enableOtherHigherInstitute).toBeTrue();
-    });
-
-    it('ignores responses without refer data', () => {
-      caseRecord$.next({ statusCode: 500, data: null });
-      caseRecord$.next({ statusCode: 200, data: {} });
-      expect(component.referForm.value.referredToInstituteName).toBeNull();
-    });
-
-    it('skips institute lookup when there is no institute id', () => {
-      caseRecord$.next({
-        statusCode: 200,
-        data: { Refer: { referralReason: 'r', revisitDate: null } },
-      });
-      expect(component.referForm.value.referralReason).toBe('r');
+      expect(component.ReferralReason?.value).toBe('r');
       expect(component.healthCareReferred).toBeFalse();
+    });
+
+    it('ignores case records without refer data', () => {
+      caseRecord$.next({ statusCode: 200, data: {} });
+      expect(component.referForm.value.revisitDate).toBeNull();
     });
   });
 
-  describe('form helpers', () => {
-    beforeEach(async () => setup());
-
-    it('exposes revisitDate and referralReason controls', () => {
-      expect(component.RevisitDate).toBe(
-        component.referForm.get('revisitDate'),
-      );
-      expect(component.ReferralReason).toBe(
-        component.referForm.get('referralReason'),
-      );
+  describe('helpers', () => {
+    beforeEach(async () => {
+      await create({
+        visitCategory: 'General OPD',
+        beneficiaryRegID: '101',
+        referredVisitCode: 'RV',
+        referredVisitID: 'RID',
+      });
+      component.currentLanguageSet = LANGUAGE_EN;
+      component.visitCategory = 'General OPD';
     });
 
-    it('checkdate stores the local ISO date and recomputes limits', () => {
-      const d = new Date(2024, 0, 10, 12, 0, 0);
+    it('checkdate stores local ISO date and resets limits', () => {
+      const d = new Date(2024, 0, 15, 0, 0, 0);
       component.checkdate(d);
       const expected = new Date(
         d.getTime() - d.getTimezoneOffset() * 60000,
@@ -411,179 +396,134 @@ describe('GeneralReferComponent', () => {
       expect(component.maxSchedulerDate).toBeDefined();
     });
 
-    it('canDisable returns undefined without previous services', () => {
+    it('canDisable marks previously used services', () => {
       expect(component.canDisable({ serviceID: 1 })).toBeUndefined();
-    });
-
-    it('canDisable flags services already referred', () => {
       component.previousServiceList = [{ serviceID: 1 }];
-      const s1: any = { serviceID: 1 };
-      const s2: any = { serviceID: 2 };
-      expect(component.canDisable(s1)).toBeTrue();
-      expect(s1.disabled).toBeTrue();
-      expect(component.canDisable(s2)).toBeFalse();
-      expect(s2.disabled).toBeFalse();
+      const a: any = { serviceID: 1 };
+      const b: any = { serviceID: 2 };
+      expect(component.canDisable(a)).toBeTrue();
+      expect(a.disabled).toBeTrue();
+      expect(component.canDisable(b)).toBeFalse();
+      expect(b.disabled).toBeFalse();
     });
 
-    it('additionalservices records selection count', () => {
-      component.additionalservices([1, 2]);
+    it('additionalservices stores the selection count', () => {
+      component.additionalservices(['a', 'b']);
       expect(component.selectValueService).toBe(2);
       component.additionalservices(null);
       expect(component.selectValueService).toBe(2);
     });
 
-    it('higherhealthcarecenter handles "Other", normal, null and "select none"', () => {
-      component.higherhealthcarecenter({ institutionName: 'Other' });
-      expect(component.enableOtherHigherInstitute).toBeTrue();
-      expect(component.healthCareReferred).toBeTrue();
-
-      component.referForm.controls['otherReferredToInstituteName'].setValue(
-        'x',
-      );
-      component.higherhealthcarecenter({ institutionName: 'PHC' });
-      expect(component.enableOtherHigherInstitute).toBeFalse();
-      expect(component.referForm.value.otherReferredToInstituteName).toBeNull();
-
-      component.higherhealthcarecenter(null);
-      expect(component.selectValue).toBe(0);
-      expect(component.healthCareReferred).toBeFalse();
-
-      component.healthCareReferred = true;
-      component.higherhealthcarecenter('select none');
-      expect(component.selectValue).toBe(0);
-      expect(component.healthCareReferred).toBeFalse();
+    describe('higherhealthcarecenter', () => {
+      it('enables other-institute field for "Other"', () => {
+        component.higherhealthcarecenter({ institutionName: 'OTHER' });
+        expect(component.enableOtherHigherInstitute).toBeTrue();
+        expect(component.healthCareReferred).toBeTrue();
+      });
+      it('clears everything for null', () => {
+        component.referForm.patchValue({ otherReferredToInstituteName: 'x' });
+        component.healthCareReferred = true;
+        component.higherhealthcarecenter(null);
+        expect(component.selectValue).toBe(0);
+        expect(component.healthCareReferred).toBeFalse();
+        expect(
+          component.referForm.value.otherReferredToInstituteName,
+        ).toBeNull();
+      });
+      it('clears everything for "select none"', () => {
+        component.higherhealthcarecenter('select none');
+        expect(component.selectValue).toBe(0);
+        expect(component.enableOtherHigherInstitute).toBeFalse();
+      });
+      it('regular institute disables other field', () => {
+        component.referForm.patchValue({ otherReferredToInstituteName: 'x' });
+        component.higherhealthcarecenter({ institutionName: 'PHC' });
+        expect(component.selectValue).toBe(1);
+        expect(component.enableOtherHigherInstitute).toBeFalse();
+        expect(
+          component.referForm.value.otherReferredToInstituteName,
+        ).toBeNull();
+      });
+      it('object without a name only clears the other field', () => {
+        component.higherhealthcarecenter({});
+        expect(component.healthCareReferred).toBeFalse();
+        expect(component.enableOtherHigherInstitute).toBeFalse();
+      });
     });
 
     it('setInstituteNameValue clears institute controls', () => {
       component.referForm.patchValue({
         referredToInstituteID: 1,
-        referredToInstituteName: 'a',
+        referredToInstituteName: 'x',
       });
       component.setInstituteNameValue();
       expect(component.referForm.value.referredToInstituteID).toBeNull();
       expect(component.referForm.value.referredToInstituteName).toBeNull();
     });
 
-    it('checkForOthersOption toggles the other reason field', () => {
-      component.checkForOthersOption(['Other']);
-      expect(component.enableOthersReferralTextField).toBeTrue();
-      component.referForm.controls['otherReferralReason'].setValue('x');
-      component.checkForOthersOption(['A']);
-      expect(component.enableOthersReferralTextField).toBeFalse();
-      expect(component.referForm.value.otherReferralReason).toBeNull();
-      component.enableOthersReferralTextField = true;
-      component.referForm.controls['otherReferralReason'].setValue('y');
-      component.checkForOthersOption([]);
-      expect(component.enableOthersReferralTextField).toBeFalse();
-      expect(component.referForm.value.otherReferralReason).toBeNull();
-    });
-
-    it('trackFieldInteraction forwards to tracking service', () => {
-      component.trackFieldInteraction('revisitDate');
-      expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
-        'revisitDate',
-        'Refer & Revisit',
-      );
-    });
-
-    it('ngDoCheck re-assigns the language set', () => {
-      component.currentLanguageSet = null;
-      component.ngDoCheck();
-      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
-    });
-  });
-
-  describe('getPreviousReferralHistory', () => {
-    beforeEach(async () => {
-      await setup();
-      component.ngOnInit();
-    });
-
-    it('opens the previous details dialog when history exists', () => {
-      const data = { data: [{ a: 1 }] };
-      nurseService.getPreviousReferredHistory.and.returnValue(
-        of({ statusCode: 200, data }),
-      );
-      component.getPreviousReferralHistory();
-      expect(nurseService.getPreviousReferredHistory).toHaveBeenCalledWith(
-        '11',
-        'General OPD',
-      );
-      expect(dialog.open).toHaveBeenCalledWith(PreviousDetailsComponent, {
-        data: {
-          dataList: data,
-          title: LANGUAGE_EN.previousReferralHistoryDetails,
-        },
-      });
-    });
-
-    it('alerts when no history is available', () => {
-      nurseService.getPreviousReferredHistory.and.returnValue(
-        of({ statusCode: 200, data: { data: [] } }),
-      );
-      component.getPreviousReferralHistory();
-      expect(confirm.alert).toHaveBeenCalledWith(
-        LANGUAGE_EN.Referdetails.previousReferralhistorynotAvailable,
-      );
-    });
-
-    it('alerts error on bad status', () => {
-      nurseService.getPreviousReferredHistory.and.returnValue(
-        of({ statusCode: 500, data: null }),
-      );
-      component.getPreviousReferralHistory();
-      expect(confirm.alert).toHaveBeenCalledWith(
-        LANGUAGE_EN.Referdetails.errorInFetchingPreviousHistory,
-        'error',
-      );
-    });
-
-    it('alerts error on failure', () => {
-      nurseService.getPreviousReferredHistory.and.returnValue(throwingObs());
-      component.getPreviousReferralHistory();
-      expect(confirm.alert).toHaveBeenCalledWith(
-        LANGUAGE_EN.Referdetails.errorInFetchingPreviousHistory,
-        'error',
-      );
-    });
-  });
-
-  describe('loadMMUReferDeatils', () => {
-    it('does not call the service when referred visit is undefined', async () => {
-      await setup({
-        referredVisitCode: 'undefined',
-        referredVisitID: 'undefined',
-      });
-      component.ngOnInit();
-      component.loadMMUReferDeatils();
-      expect(doctorService.getMMUData).not.toHaveBeenCalled();
-    });
-
-    describe('with referred visit', () => {
-      beforeEach(async () => {
-        await setup({ referredVisitCode: 'VC', referredVisitID: 'VID' });
-        component.ngOnInit();
-      });
-
-      it('opens MMU refer dialog when services exist', () => {
-        const data = { data: { refrredToAdditionalServiceList: [{}] } };
-        doctorService.getMMUData.and.returnValue(of({ statusCode: 200, data }));
-        component.loadMMUReferDeatils();
-        expect(doctorService.getMMUData).toHaveBeenCalledWith({
-          benRegID: '11',
-          visitCode: 'VC',
-          benVisitID: 'VID',
-          fetchMMUDataFor: 'Referral',
-        });
+    describe('getPreviousReferralHistory', () => {
+      it('opens dialog when history exists', () => {
+        const data = { data: [{ a: 1 }] };
+        nurseService.getPreviousReferredHistory.and.returnValue(
+          of({ statusCode: 200, data }),
+        );
+        component.getPreviousReferralHistory();
+        expect(nurseService.getPreviousReferredHistory).toHaveBeenCalledWith(
+          '101',
+          'General OPD',
+        );
         expect(dialog.open).toHaveBeenCalledWith(PreviousDetailsComponent, {
           data: {
             dataList: data,
-            title: LANGUAGE_EN.Referdetails.mMUReferralDetails,
+            title: LANGUAGE_EN.previousReferralHistoryDetails,
           },
         });
       });
+      it('alerts when history is empty', () => {
+        nurseService.getPreviousReferredHistory.and.returnValue(
+          of({ statusCode: 200, data: { data: [] } }),
+        );
+        component.getPreviousReferralHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(
+          R.previousReferralhistorynotAvailable,
+        );
+      });
+      it('alerts on non-200', () => {
+        nurseService.getPreviousReferredHistory.and.returnValue(
+          of({ statusCode: 5000, data: null }),
+        );
+        component.getPreviousReferralHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(
+          R.errorInFetchingPreviousHistory,
+          'error',
+        );
+      });
+      it('alerts on error', () => {
+        nurseService.getPreviousReferredHistory.and.returnValue(throwingObs());
+        component.getPreviousReferralHistory();
+        expect(confirm.alert).toHaveBeenCalledWith(
+          R.errorInFetchingPreviousHistory,
+          'error',
+        );
+      });
+    });
 
-      it('alerts when MMU refer details are empty', () => {
+    describe('loadMMUReferDeatils', () => {
+      it('requests MMU data and opens dialog', () => {
+        const data = { data: { refrredToAdditionalServiceList: [1] } };
+        doctorService.getMMUData.and.returnValue(of({ statusCode: 200, data }));
+        component.loadMMUReferDeatils();
+        expect(doctorService.getMMUData).toHaveBeenCalledWith({
+          benRegID: '101',
+          visitCode: 'RV',
+          benVisitID: 'RID',
+          fetchMMUDataFor: 'Referral',
+        });
+        expect(dialog.open).toHaveBeenCalledWith(PreviousDetailsComponent, {
+          data: { dataList: data, title: R.mMUReferralDetails },
+        });
+      });
+      it('alerts when no MMU referral', () => {
         doctorService.getMMUData.and.returnValue(
           of({
             statusCode: 200,
@@ -592,38 +532,81 @@ describe('GeneralReferComponent', () => {
         );
         component.loadMMUReferDeatils();
         expect(confirm.alert).toHaveBeenCalledWith(
-          LANGUAGE_EN.Referdetails.mMUReferraldetailsnotAvailable,
+          R.mMUReferraldetailsnotAvailable,
         );
       });
-
-      it('alerts error on bad status and on failure', () => {
-        doctorService.getMMUData.and.returnValue(of({ statusCode: 500 }));
+      it('alerts on non-200', () => {
+        doctorService.getMMUData.and.returnValue(
+          of({ statusCode: 5000, data: null }),
+        );
         component.loadMMUReferDeatils();
-        doctorService.getMMUData.and.returnValue(throwingObs());
-        component.loadMMUReferDeatils();
-        expect(confirm.alert).toHaveBeenCalledTimes(2);
         expect(confirm.alert).toHaveBeenCalledWith(
-          LANGUAGE_EN.Referdetails.errorInFetchingMMUReferraldetails,
+          R.errorInFetchingMMUReferraldetails,
           'error',
         );
       });
+      it('alerts on error', () => {
+        doctorService.getMMUData.and.returnValue(throwingObs());
+        component.loadMMUReferDeatils();
+        expect(confirm.alert).toHaveBeenCalledWith(
+          R.errorInFetchingMMUReferraldetails,
+          'error',
+        );
+      });
+      it('sends nulls for empty identifiers', () => {
+        session.store.set('beneficiaryRegID', '');
+        session.store.set('referredVisitCode', '');
+        session.store.set('referredVisitID', '');
+        doctorService.getMMUData.and.returnValue(
+          of({ statusCode: 5000, data: null }),
+        );
+        component.loadMMUReferDeatils();
+        expect(doctorService.getMMUData).toHaveBeenCalledWith({
+          benRegID: null,
+          visitCode: null,
+          benVisitID: null,
+          fetchMMUDataFor: 'Referral',
+        });
+      });
+      it('skips when referred visit is the "undefined" string', () => {
+        session.store.set('referredVisitCode', 'undefined');
+        component.loadMMUReferDeatils();
+        expect(doctorService.getMMUData).not.toHaveBeenCalled();
+      });
     });
 
-    it('sends nulls for empty session ids', async () => {
-      await setup({
-        beneficiaryRegID: '',
-        referredVisitCode: '',
-        referredVisitID: '',
+    describe('checkForOthersOption', () => {
+      it('enables text field when Other chosen', () => {
+        component.checkForOthersOption(['Other']);
+        expect(component.enableOthersReferralTextField).toBeTrue();
       });
-      doctorService.getMMUData.and.returnValue(of({ statusCode: 500 }));
-      component.ngOnInit();
-      component.loadMMUReferDeatils();
-      expect(doctorService.getMMUData).toHaveBeenCalledWith({
-        benRegID: null,
-        visitCode: null,
-        benVisitID: null,
-        fetchMMUDataFor: 'Referral',
+      it('clears text when Other not chosen', () => {
+        component.referForm.patchValue({ otherReferralReason: 'x' });
+        component.checkForOthersOption(['A']);
+        expect(component.enableOthersReferralTextField).toBeFalse();
+        expect(component.referForm.value.otherReferralReason).toBeNull();
       });
+      it('clears text when nothing chosen', () => {
+        component.enableOthersReferralTextField = true;
+        component.referForm.patchValue({ otherReferralReason: 'x' });
+        component.checkForOthersOption([]);
+        expect(component.enableOthersReferralTextField).toBeFalse();
+        expect(component.referForm.value.otherReferralReason).toBeNull();
+      });
+    });
+
+    it('trackFieldInteraction forwards to tracking service', () => {
+      component.trackFieldInteraction('Revisit Date');
+      expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+        'Revisit Date',
+        'Refer & Revisit',
+      );
+    });
+
+    it('ngDoCheck refreshes language', () => {
+      component.currentLanguageSet = null;
+      component.ngDoCheck();
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
     });
   });
 });

@@ -26,7 +26,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, Subject, of } from 'rxjs';
 import {
   LANGUAGE_EN,
   NO_ERRORS_SCHEMA,
@@ -60,6 +60,19 @@ function identityBen(overrides: any = {}) {
     dOB: '1990-01-01T00:00:00.000Z',
     createdDate: '2024-03-05T10:00:00.000Z',
     ...overrides,
+  };
+}
+
+/** MatTableDataSource subscribes to paginator.page / initialized. */
+function fakePaginator(extra: any = {}) {
+  return {
+    page: new Subject<any>(),
+    initialized: of(undefined),
+    pageIndex: 0,
+    pageSize: 5,
+    length: 0,
+    firstPage: () => undefined,
+    ...extra,
   };
 }
 
@@ -195,14 +208,14 @@ describe('Registrar SearchComponent', () => {
       component.currentLanguageSet = null;
       component.ngDoCheck();
       expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
-      const p: any = { pageSize: 0 };
+      const p: any = fakePaginator({ pageSize: 0 });
       component.paginator = p;
       component.ngAfterViewInit();
       expect(component.dataSource.paginator).toBe(p);
     });
 
     it('matPaginator setter stores and binds the paginator', () => {
-      const p: any = {};
+      const p: any = fakePaginator();
       component.matPaginator = p;
       expect(component.paginator).toBe(p);
       expect(component.dataSource.paginator).toBe(p);
@@ -252,10 +265,10 @@ describe('Registrar SearchComponent', () => {
     });
 
     it('searches by beneficiary id and resets the paginator', () => {
-      const paginator: any = {
+      const paginator: any = fakePaginator({
         pageSize: 10,
         firstPage: jasmine.createSpy('firstPage'),
-      };
+      });
       component.paginator = paginator;
       component.searchBeneficiaryDetails('123456789012', 'Beneficiary ID');
       expect(

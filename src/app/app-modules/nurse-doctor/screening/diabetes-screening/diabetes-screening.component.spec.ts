@@ -21,6 +21,7 @@
  */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -67,7 +68,7 @@ describe('DiabetesScreeningComponent', () => {
     params = { attendant: 'nurse' };
     master$ = new BehaviorSubject<any>(null);
     await TestBed.configureTestingModule({
-      imports: [...COMMON_TEST_IMPORTS, MatSelectModule],
+      imports: [...COMMON_TEST_IMPORTS, MatSelectModule, MatInputModule],
       declarations: [DiabetesScreeningComponent],
       providers: [
         ...commonTestProviders(),

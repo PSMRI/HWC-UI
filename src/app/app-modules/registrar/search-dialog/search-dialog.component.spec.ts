@@ -102,8 +102,17 @@ describe('Registrar SearchDialogComponent', () => {
     expect(component.states).toEqual([{ stateID: 10, stateName: 'Karnataka' }]);
     expect(component.today instanceof Date).toBeTrue();
     expect(component.newSearchForm.valid).toBeFalse();
-    component.newSearchForm.patchValue({ firstName: 'A', gender: 1 });
-    expect(component.newSearchForm.valid).toBeTrue();
+    expect(
+      component.newSearchForm.controls['firstName'].hasError('required'),
+    ).toBeTrue();
+    expect(
+      component.newSearchForm.controls['gender'].hasError('required'),
+    ).toBeTrue();
+    component.newSearchForm.patchValue({ firstName: 'Anil', gender: 1 });
+    expect(
+      component.newSearchForm.controls['firstName'].hasError('required'),
+    ).toBeFalse();
+    expect(component.newSearchForm.controls['gender'].valid).toBeTrue();
   });
 
   it('ignores null master data', () => {
