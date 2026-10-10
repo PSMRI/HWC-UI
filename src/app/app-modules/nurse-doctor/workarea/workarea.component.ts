@@ -4396,7 +4396,12 @@ export class WorkareaComponent
           },
           (err) => {
             this.resetSpinnerandEnableTheSubmitButton();
-            this.confirmationService.alert(err, 'error');
+            this.confirmationService.alert(
+              err?.error?.errorMessage ??
+                this.current_language_set?.common?.unableSave ??
+                'Unable to save data',
+              'error',
+            );
           },
         );
     }
