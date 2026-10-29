@@ -19,27 +19,113 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
 
 import { CovidDiagnosisComponent } from './covid-diagnosis.component';
+import { DoctorService } from '../../../../shared/services';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('CovidDiagnosisComponent', () => {
   let component: CovidDiagnosisComponent;
   let fixture: ComponentFixture<CovidDiagnosisComponent>;
+  let caseRecord$: BehaviorSubject<any>;
+  let session: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    caseRecord$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [CovidDiagnosisComponent],
-    }).compileComponents();
-  }));
+      providers: [
+        ...commonTestProviders(),
+        {
+          provide: DoctorService,
+          useValue: autoSpy(DoctorService, {
+            populateCaserecordResponse$: caseRecord$.asObservable(),
+          }),
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideTemplate(CovidDiagnosisComponent, '')
+      .compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(CovidDiagnosisComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    session = TestBed.inject(SessionStorageService) as any;
+    component.generalDiagnosisForm = new FormGroup({
+      doctorDiagnosis: new FormControl(null),
+      specialistDiagnosis: new FormControl(null),
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('enables doctor diagnosis for a non-specialist', () => {
+    session.setItem('designation', 'Doctor');
+    fixture.detectChanges();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+    expect(component.specialist).toBeFalse();
+    expect(component.doctorDaignosis?.enabled).toBeTrue();
+    expect(component.specialistDaignosis?.disabled).toBeTrue();
+  });
+
+  it('enables specialist diagnosis for TC Specialist', () => {
+    session.setItem('designation', 'TC Specialist');
+    fixture.detectChanges();
+    expect(component.specialist).toBeTrue();
+    expect(component.doctorDaignosis?.disabled).toBeTrue();
+    expect(component.specialistDaignosis?.enabled).toBeTrue();
+  });
+
+  it('refreshes language on ngDoCheck', () => {
+    fixture.detectChanges();
+    component.current_language_set = null;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+  });
+
+  it('patches diagnosis in view mode', () => {
+    fixture.detectChanges();
+    component.caseRecordMode = 'view';
+    component.ngOnChanges();
+    caseRecord$.next({
+      statusCode: 200,
+      data: {
+        diagnosis: { doctorDiagnonsis: 'Covid', specialistDiagnosis: 'S' },
+      },
+    });
+    expect(component.generalDiagnosisForm.get('doctorDiagnosis')?.value).toBe(
+      'Covid',
+    );
+    expect(
+      component.generalDiagnosisForm.get('specialistDiagnosis')?.value,
+    ).toBe('S');
+  });
+
+  it('ignores responses without diagnosis', () => {
+    component.caseRecordMode = 'view';
+    component.ngOnChanges();
+    caseRecord$.next({ statusCode: 200, data: {} });
+    expect(component.generalDiagnosisForm.value.doctorDiagnosis).toBeNull();
+  });
+
+  it('does not subscribe outside view mode and unsubscribes on destroy', () => {
+    component.caseRecordMode = 'edit';
+    component.ngOnChanges();
+    expect(component.diagnosisSubscription).toBeUndefined();
+    component.ngOnDestroy();
+    component.caseRecordMode = 'view';
+    component.ngOnChanges();
+    const sub = component.diagnosisSubscription;
+    component.ngOnDestroy();
+    expect(sub.closed).toBeTrue();
   });
 });

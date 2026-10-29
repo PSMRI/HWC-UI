@@ -19,86 +19,257 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import {
-  async,
-  inject,
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  FormArray,
-} from '@angular/forms';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../core/material.module';
-
-import { VisitDetailUtils } from '../../shared/utility';
-
-import { ConfirmationService } from '../../../core/services/confirmation.service';
-import { DoctorService, MasterdataService } from '../../shared/services';
-
-import { MasterdataServiceStub } from '../../shared/mocks/masterdata-service-stub';
-import { DoctorServiceStub } from '../../shared/mocks/doctor-service-stub';
-
-import * as data from '../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Rx';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+import { BehaviorSubject, of } from 'rxjs';
 
 import { InvestigationsComponent } from './investigations.component';
+import {
+  DoctorService,
+  MasterdataService,
+  NurseService,
+} from '../../shared/services';
+import { AmritTrackingService } from 'Common-UI/src/tracking';
+import { MaterialModule } from 'src/app/app-modules/core/material.module';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('InvestigationsComponent', () => {
   let component: InvestigationsComponent;
   let fixture: ComponentFixture<InvestigationsComponent>;
-  let debugElement: DebugElement;
-  let fb: FormBuilder;
+  let doctor: any;
+  let nurse: any;
+  let tracking: any;
+  let masterData$: BehaviorSubject<any>;
+  let rbs$: BehaviorSubject<any>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+  const RBS = {
+    procedureID: 1,
+    procedureName: 'RBS Test',
+    procedureType: 'Laboratory',
+  };
+  const HB = {
+    procedureID: 2,
+    procedureName: 'Hemoglobin Test',
+    procedureType: 'Laboratory',
+  };
+  const CBC = {
+    procedureID: 3,
+    procedureName: 'CBC',
+    procedureType: 'Laboratory',
+  };
+  const XRAY = {
+    procedureID: 4,
+    procedureName: 'X-Ray',
+    procedureType: 'Radiology',
+  };
+  const MASTER = { procedures: [RBS, HB, CBC, XRAY] };
+
+  async function setup(seed: Record<string, any> = {}, mode?: string) {
+    masterData$ = new BehaviorSubject<any>(null);
+    rbs$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [InvestigationsComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        ConfirmationService,
-        { provide: MasterdataService, useClass: MasterdataServiceStub },
-        { provide: DoctorService, useClass: DoctorServiceStub },
+        ...commonTestProviders({ session: seed }),
+        { provide: DoctorService, useValue: autoSpy(DoctorService) },
+        {
+          provide: NurseService,
+          useValue: autoSpy(NurseService, {
+            rbsTestResultCurrent$: rbs$,
+            rbsTestResultFromDoctorFetch: null,
+          }),
+        },
+        {
+          provide: MasterdataService,
+          useValue: autoSpy(MasterdataService, {
+            nurseMasterData$: masterData$,
+          }),
+        },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(InvestigationsComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
+    component.mode = mode as any;
+    component.patientInvestigationsForm = new FormBuilder().group({
+      laboratoryList: [[]],
+    });
+    doctor = TestBed.inject(DoctorService) as any;
+    nurse = TestBed.inject(NurseService) as any;
+    tracking = TestBed.inject(AmritTrackingService) as any;
+  }
 
-    fb = debugElement.injector.get(FormBuilder);
-    component.patientInvestigationsForm = new VisitDetailUtils(
-      fb,
-    ).createPatientInvestigationsForm();
+  describe('default mode', () => {
+    beforeEach(async () => {
+      await setup({ visitID: 'V1', beneficiaryRegID: 'B1' });
+      fixture.detectChanges();
+    });
 
-    fixture.detectChanges();
-  });
+    it('should init: clear RBS, set language', () => {
+      expect(nurse.clearRbsInVitals).toHaveBeenCalled();
+      expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+      expect(component.rbsTestResultCurrent).toBeNull();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should filter laboratory procedures from master data without fetching', () => {
+      masterData$.next(MASTER);
+      fixture.detectChanges();
+      expect(component.selectLabTest).toEqual([RBS, HB, CBC]);
+      expect(doctor.getVisitComplaintDetails).not.toHaveBeenCalled();
+    });
 
-  it('should call getNurseMasterData on Initialisation', inject(
-    [MasterdataService],
-    (masterdataService) => {
-      masterdataService.nurseMasterDataSource.next(
-        data.generalOPDNurseMasterdata.data,
+    it('should record RBS result from nurse service', () => {
+      rbs$.next(120);
+      expect(component.RBSTestScore).toBe(120);
+      expect(component.RBStestDone).toBeTrue();
+      expect(component.rbsTestResultCurrent).toBe(120);
+    });
+
+    it('canDisable returns true for RBS test when result present', () => {
+      expect(component.canDisable(RBS)).toBeUndefined();
+      rbs$.next(100);
+      expect(component.canDisable(RBS)).toBeTrue();
+      expect(component.canDisable(CBC)).toBeUndefined();
+      rbs$.next(null);
+      nurse.rbsTestResultFromDoctorFetch = 90;
+      expect(component.canDisable(RBS)).toBeTrue();
+    });
+
+    it('checkTestName with RBS adds hemoglobin test', () => {
+      masterData$.next(MASTER);
+      component.checkTestName({ value: [RBS] });
+      expect(component.RBStestDone).toBeTrue();
+      expect(nurse.setRbsSelectedInInvestigation).toHaveBeenCalledWith(true);
+      expect(component.laboratoryList.value).toEqual([RBS, HB]);
+    });
+
+    it('checkTestName with RBS and HB already selected does not duplicate', () => {
+      masterData$.next(MASTER);
+      component.checkTestName({ value: [RBS, HB] });
+      expect(component.laboratoryList.value).toEqual([RBS, HB]);
+    });
+
+    it('checkTestName without RBS resets flag', () => {
+      masterData$.next(MASTER);
+      component.RBStestDone = true;
+      component.checkTestName({ value: [CBC] });
+      expect(component.RBStestDone).toBeFalse();
+      expect(nurse.setRbsSelectedInInvestigation).toHaveBeenCalledWith(false);
+      expect(nurse.setRbsSelectedInInvestigation).not.toHaveBeenCalledWith(
+        true,
       );
-      spyOn(component, 'getNurseMasterData');
-      component.ngOnInit();
-      expect(component.getNurseMasterData).toHaveBeenCalled();
-      expect(component.selectLabTest).toEqual(
-        data.generalOPDNurseMasterdata.data.labTests.filter((item) => {
-          return item.isRadiologyImaging !== true;
+      expect(component.laboratoryList.value).toEqual([CBC]);
+    });
+
+    it('checkTestName with RBS but no HB in master', () => {
+      component.selectLabTest = [RBS];
+      component.checkTestName({ value: [RBS] });
+      expect(component.laboratoryList.value).toEqual([RBS]);
+    });
+
+    it('checkLabTest does nothing without details or laboratoryList', () => {
+      component.patientInvestigationDetails = null;
+      component.checkLabTest();
+      component.patientInvestigationDetails = {};
+      component.checkLabTest();
+      expect(component.laboratoryList.value).toEqual([]);
+      expect(component.checkInvestigation([])).toBeUndefined();
+    });
+
+    it('trackFieldInteraction should call tracking service', () => {
+      component.trackFieldInteraction('Lab');
+      expect(tracking.trackFieldInteraction).toHaveBeenCalledWith(
+        'Lab',
+        'Investigations',
+      );
+    });
+
+    it('getInvestigation ignores non-200', () => {
+      doctor.getVisitComplaintDetails.and.returnValue(
+        of({ statusCode: 5000, data: null }),
+      );
+      component.getInvestigation('B', 'V');
+      expect(component.patientInvestigationDetails).toBeUndefined();
+    });
+
+    it('ngOnDestroy should unsubscribe everything', () => {
+      component.getInvestigation('B', 'V');
+      const s1 = spyOn(component.nurseMasterDataSubscription, 'unsubscribe');
+      const s2 = spyOn(component.getInvestigationDetails, 'unsubscribe');
+      const s3 = spyOn(component.rbsTestResultSubscription, 'unsubscribe');
+      component.ngOnDestroy();
+      expect(s1).toHaveBeenCalled();
+      expect(s2).toHaveBeenCalled();
+      expect(s3).toHaveBeenCalled();
+    });
+
+    it('ngOnDestroy without subscriptions should not throw', () => {
+      component.nurseMasterDataSubscription = null;
+      component.rbsTestResultSubscription = null as any;
+      expect(() => component.ngOnDestroy()).not.toThrow();
+      expect(component.getInvestigationDetails).toBeUndefined();
+    });
+  });
+
+  describe('view mode', () => {
+    beforeEach(async () => {
+      await setup({ visitID: 'V1', beneficiaryRegID: 'B1' }, 'view');
+      fixture.detectChanges();
+    });
+
+    it('should fetch investigation and patch matching lab tests', () => {
+      doctor.getVisitComplaintDetails.and.returnValue(
+        of({
+          statusCode: 200,
+          data: {
+            Investigation: {
+              laboratoryList: [
+                { procedureID: 1, procedureName: 'RBS Test' },
+                { procedureID: 99, procedureName: 'Unknown' },
+              ],
+            },
+          },
         }),
       );
-    },
-  ));
+      masterData$.next(MASTER);
+      expect(doctor.getVisitComplaintDetails).toHaveBeenCalledWith('B1', 'V1');
+      expect(component.laboratoryList.value).toEqual([RBS]);
+      expect(nurse.setRbsSelectedInInvestigation).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe('specialist', () => {
+    beforeEach(async () => {
+      await setup({
+        visitID: 'V2',
+        beneficiaryRegID: 'B2',
+        specialistFlag: '100',
+      });
+      fixture.detectChanges();
+    });
+
+    it('should fetch investigation for specialist', () => {
+      doctor.getVisitComplaintDetails.and.returnValue(
+        of({
+          statusCode: 200,
+          data: {
+            Investigation: {
+              laboratoryList: [{ procedureID: 3, procedureName: 'CBC' }],
+            },
+          },
+        }),
+      );
+      masterData$.next(MASTER);
+      expect(doctor.getVisitComplaintDetails).toHaveBeenCalledWith('B2', 'V2');
+      expect(component.laboratoryList.value).toEqual([CBC]);
+      expect(nurse.setRbsSelectedInInvestigation).not.toHaveBeenCalled();
+    });
+  });
 });

@@ -19,27 +19,59 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  flushMicrotasks,
+} from '@angular/core/testing';
+import { Router } from '@angular/router';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
+import { ConfirmationService } from '../../core/services/confirmation.service';
 import { RedirFallbackComponent } from './redir-fallback.component';
 
 describe('RedirFallbackComponent', () => {
   let component: RedirFallbackComponent;
   let fixture: ComponentFixture<RedirFallbackComponent>;
+  let router: Router;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [RedirFallbackComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(RedirFallbackComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.resolveTo(true);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('alerts inventory issue and redirects to worklist after view init', fakeAsync(() => {
+    fixture.detectChanges();
+    flushMicrotasks();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+    expect(
+      (TestBed.inject(ConfirmationService) as any).alert,
+    ).toHaveBeenCalledWith(
+      LANGUAGE_EN.alerts.info.IssuesinConnectingtoInventory,
+      'error',
+    );
+    expect(router.navigate).toHaveBeenCalledWith([
+      '/pharmacist/pharmacist-worklist',
+    ]);
+  }));
+
+  it('ngDoCheck re-assigns language', () => {
+    component.current_language_set = undefined;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
   });
 });

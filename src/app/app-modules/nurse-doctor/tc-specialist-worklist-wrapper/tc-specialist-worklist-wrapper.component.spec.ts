@@ -19,27 +19,51 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 import { TcSpecialistWorklistWrapperComponent } from './tc-specialist-worklist-wrapper.component';
 
 describe('TcSpecialistWorklistWrapperComponent', () => {
   let component: TcSpecialistWorklistWrapperComponent;
   let fixture: ComponentFixture<TcSpecialistWorklistWrapperComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [TcSpecialistWorklistWrapperComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TcSpecialistWorklistWrapperComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('renders and assigns the language set on init', () => {
+    fixture.detectChanges();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('ngDoCheck refreshes the language set', () => {
+    component.currentLanguageSet = undefined;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('tab 0 selects the current worklist', () => {
+    component.tabChanged({ index: 0 } as MatTabChangeEvent);
+    expect(component.getChangedTab).toBe('current');
+  });
+
+  it('any other tab selects the future worklist', () => {
+    component.tabChanged({ index: 1 } as MatTabChangeEvent);
+    expect(component.getChangedTab).toBe('future');
   });
 });

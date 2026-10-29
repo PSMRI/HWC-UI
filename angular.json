@@ -92,7 +92,7 @@
                 }
               ]
             },
-            "test":{
+            "test": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -140,7 +140,17 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "karmaConfig": "karma.conf.js",
+            "codeCoverageExclude": [
+              "Common-UI/**",
+              "src/testing/**",
+              "src/environments/**",
+              "src/test.ts",
+              "src/polyfills.ts",
+              "src/main.ts",
+              "**/mocks/**"
+            ]
           }
         },
         "lint": {

@@ -19,27 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Referred104DetailsPopupComponent } from './referred-104-details-popup.component';
 
 describe('Referred104DetailsPopupComponent', () => {
   let component: Referred104DetailsPopupComponent;
   let fixture: ComponentFixture<Referred104DetailsPopupComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [Referred104DetailsPopupComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(Referred104DetailsPopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create and render its template', () => {
+    expect(component instanceof Referred104DetailsPopupComponent).toBeTrue();
+    expect(fixture.nativeElement).toBeTruthy();
   });
 });

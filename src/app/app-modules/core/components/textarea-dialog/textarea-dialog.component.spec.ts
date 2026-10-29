@@ -19,27 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 import { TextareaDialogComponent } from './textarea-dialog.component';
+import {
+  COMMON_TEST_IMPORTS,
+  commonTestProviders,
+  NO_ERRORS_SCHEMA,
+} from 'src/testing/test-utils';
 
 describe('TextareaDialogComponent', () => {
-  let component: TextareaDialogComponent;
   let fixture: ComponentFixture<TextareaDialogComponent>;
+  let ref: any;
+  const backdrop = new Subject<any>();
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [TextareaDialogComponent],
+      providers: [
+        ...commonTestProviders({
+          dialogData: { observations: 'obs', length: 50 },
+        }),
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
+    ref = TestBed.inject(MatDialogRef);
+    ref.backdropClick.and.returnValue(backdrop.asObservable());
     fixture = TestBed.createComponent(TextareaDialogComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('receives dialog data', () => {
+    expect(fixture.componentInstance.data.observations).toBe('obs');
+  });
+
+  it('closes with current observations on backdrop click', () => {
+    fixture.componentInstance.data.observations = 'changed';
+    backdrop.next({});
+    expect(ref.close).toHaveBeenCalledWith('changed');
   });
 });

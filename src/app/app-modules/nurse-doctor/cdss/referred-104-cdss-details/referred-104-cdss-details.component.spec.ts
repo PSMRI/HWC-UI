@@ -19,27 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Referred104CdssDetailsComponent } from './referred-104-cdss-details.component';
 
 describe('Referred104CdssDetailsComponent', () => {
   let component: Referred104CdssDetailsComponent;
   let fixture: ComponentFixture<Referred104CdssDetailsComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [Referred104CdssDetailsComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(Referred104CdssDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should create and render its template', () => {
+    expect(component instanceof Referred104CdssDetailsComponent).toBeTrue();
+    expect(fixture.nativeElement).toBeTruthy();
   });
 });

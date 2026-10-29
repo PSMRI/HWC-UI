@@ -20,21 +20,97 @@
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
 
-import { TestBed, inject } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+import { SessionStorageService } from 'Common-UI/src/registrar/services/session-storage.service';
+import { environment } from 'src/environments/environment';
+import { createSessionStorageMock } from 'src/testing/test-utils';
 import { DataSyncService } from './data-sync.service';
 
 describe('DataSyncService', () => {
+  let service: DataSyncService;
+  let httpMock: HttpTestingController;
+  let session: any;
+
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [DataSyncService],
+    session = createSessionStorageMock({
+      userName: 'nurse1',
+      serviceLineDetails: JSON.stringify({ vanID: 42 }),
     });
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [
+        DataSyncService,
+        { provide: SessionStorageService, useValue: session },
+      ],
+    });
+    service = TestBed.inject(DataSyncService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  it('should be created', inject(
-    [DataSyncService],
-    (service: DataSyncService) => {
-      expect(service).toBeTruthy();
-    },
-  ));
+  afterEach(() => httpMock.verify());
+
+  it('getDataSYNCGroup issues a GET', () => {
+    let result: any;
+    service.getDataSYNCGroup().subscribe((r) => (result = r));
+    const req = httpMock.expectOne(environment.getDataSYNCGroupUrl);
+    expect(req.request.method).toBe('GET');
+    req.flush({ statusCode: 200, data: [1] });
+    expect(result).toEqual({ statusCode: 200, data: [1] });
+  });
+
+  it('dataSyncLogin posts credentials', () => {
+    service.dataSyncLogin('u', 'p', true).subscribe();
+    const req = httpMock.expectOne(environment.syncLoginUrl);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({
+      userName: 'u',
+      password: 'p',
+      doLogout: true,
+    });
+    req.flush({});
+  });
+
+  it('syncUploadData posts groupID, user and vanID from session', () => {
+    service.syncUploadData(3).subscribe();
+    const req = httpMock.expectOne(environment.syncDataUploadUrl);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ groupID: 3, user: 'nurse1', vanID: 42 });
+    req.flush({});
+  });
+
+  it('syncUploadData tolerates missing serviceLineDetails', () => {
+    session.store.delete('serviceLineDetails');
+    service.syncUploadData(1).subscribe();
+    const req = httpMock.expectOne(environment.syncDataUploadUrl);
+    expect(req.request.body.vanID).toBeUndefined();
+    req.flush({});
+  });
+
+  it('syncDownloadData posts the request object', () => {
+    service.syncDownloadData({ vanID: 1 }).subscribe();
+    const req = httpMock.expectOne(environment.syncDataDownloadUrl);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ vanID: 1 });
+    req.flush({});
+  });
+
+  it('syncDownloadDataProgress issues a GET', () => {
+    service.syncDownloadDataProgress().subscribe();
+    const req = httpMock.expectOne(environment.syncDownloadProgressUrl);
+    expect(req.request.method).toBe('GET');
+    req.flush({});
+  });
+
+  it('getVanDetailsForMasterDownload issues a GET', () => {
+    service.getVanDetailsForMasterDownload().subscribe();
+    const req = httpMock.expectOne(
+      environment.getVanDetailsForMasterDownloadUrl,
+    );
+    expect(req.request.method).toBe('GET');
+    req.flush({});
+  });
 });

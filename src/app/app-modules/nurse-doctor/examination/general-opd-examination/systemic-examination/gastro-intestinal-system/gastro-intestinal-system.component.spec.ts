@@ -19,115 +19,79 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
+
 import {
-  async,
-  ComponentFixture,
-  tick,
-  inject,
-  fakeAsync,
-  TestBed,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  FormGroup,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '../../../../../core/material.module';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { GeneralUtils } from '../../../../shared/utility';
-
-import * as data from '../../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Observable';
-
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+  createSessionStorageMock,
+} from 'src/testing/test-utils';
+import { MaterialModule } from 'src/app/app-modules/core/material.module';
+import { GeneralUtils } from '../../../../shared/utility/general-utility';
 import { GastroIntestinalSystemComponent } from './gastro-intestinal-system.component';
 
 describe('GastroIntestinalSystemComponent', () => {
   let component: GastroIntestinalSystemComponent;
   let fixture: ComponentFixture<GastroIntestinalSystemComponent>;
-  let fb;
-  let debugElement: DebugElement;
-  let el: HTMLElement;
-  let spy: any;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [GastroIntestinalSystemComponent],
+      providers: [...commonTestProviders()],
       schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(GastroIntestinalSystemComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fb = debugElement.injector.get(FormBuilder);
-    component.gastroIntestinalSystemForm = new GeneralUtils(
-      fb,
-    ).createGastroIntestinalSystemForm();
+    const utils = new GeneralUtils(
+      new FormBuilder(),
+      createSessionStorageMock({
+        serviceLineDetails: JSON.stringify({
+          facilityID: 1,
+          parkingPlaceID: 2,
+        }),
+      }) as any,
+    );
+    component.gastroIntestinalSystemForm =
+      utils.createGastroIntestinalSystemForm();
     fixture.detectChanges();
   });
 
-  it('should create GastroIntestinalSystemComponent', () => {
+  it('should create and load the language set', () => {
     expect(component).toBeTruthy();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
   });
 
-  it('Should initialize the component', () => {
-    component.ngOnInit();
-    expect(component).toBeTruthy();
+  it('re-assigns the language set on ngDoCheck', () => {
+    component.current_language_set = null;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
   });
 
-  it('should enable Location of tenderness when Tenderness is present ', () => {
+  it('getters reflect tenderness form values', () => {
     component.gastroIntestinalSystemForm.patchValue({
-      palpation_Tenderness: 'Present',
+      palpation_Tenderness: 'Localized',
+      palpation_LocationOfTenderness: 'RUQ',
     });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(
-      By.css('#palpation_LocationOfTenderness'),
-    );
-    expect(debugElement).toBeTruthy();
+    expect(component.palpation_Tenderness).toBe('Localized');
+    expect(component.palpation_LocationOfTenderness).toBe('RUQ');
   });
 
-  it('should disable Location of tenderness when Tenderness is Absent ', () => {
+  it('checkWithTenderness clears the location of tenderness', () => {
     component.gastroIntestinalSystemForm.patchValue({
-      palpation_Tenderness: 'Absent',
+      palpation_LocationOfTenderness: 'RUQ',
     });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(
-      By.css('#palpation_LocationOfTenderness'),
-    );
-    expect(debugElement).not.toBeTruthy();
+    component.checkWithTenderness();
+    expect(component.palpation_LocationOfTenderness).toBeNull();
   });
 
-  it('should check Tenderness and make dependentfield null', async(() => {
-    spyOn(component, 'checkWithTenderness').and.callThrough();
-    component.gastroIntestinalSystemForm.patchValue({
-      palpation_Tenderness: 'Present',
-    });
-    component.gastroIntestinalSystemForm.patchValue({
-      palpation_LocationOfTenderness: 'jhfgfhjhjhg',
-    });
-    debugElement = fixture.debugElement.query(By.css('#palpation_Tenderness'));
-    debugElement.nativeElement.value = 'Present';
-    const el = debugElement.nativeElement as HTMLElement;
-    el.dispatchEvent(new Event('input'));
-    el.dispatchEvent(new Event('change'));
-    fixture.detectChanges();
-    expect(component.palpation_Tenderness).toEqual(
-      debugElement.nativeElement.value,
-    );
-    fixture.detectChanges();
-    expect(component.checkWithTenderness).toHaveBeenCalled();
-    expect(component.palpation_LocationOfTenderness).toEqual(null);
-  }));
+  it('exposes abdomen texture, liver and spleen options', () => {
+    expect(component.selectAbdomenTexture.length).toBe(4);
+    expect(component.selectLiver.length).toBe(3);
+    expect(component.selectSpleen[2].name).toBe('Enlarged');
+  });
 });

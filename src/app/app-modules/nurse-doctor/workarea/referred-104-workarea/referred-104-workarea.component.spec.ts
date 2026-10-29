@@ -19,27 +19,60 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Referred104WorkareaComponent } from './referred-104-workarea.component';
+import {
+  COMMON_TEST_IMPORTS,
+  commonTestProviders,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+} from 'src/testing/test-utils';
 
 describe('Referred104WorkareaComponent', () => {
   let component: Referred104WorkareaComponent;
   let fixture: ComponentFixture<Referred104WorkareaComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [Referred104WorkareaComponent],
+      providers: [...commonTestProviders()],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(Referred104WorkareaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create and assign the language set on init', () => {
     expect(component).toBeTruthy();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('ngDoCheck re-assigns the language set', () => {
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  describe('sideNavModeChange', () => {
+    const makeNav = () => ({ mode: '', toggle: jasmine.createSpy('toggle') });
+
+    it('uses "over" mode on narrow screens', () => {
+      spyOnProperty(window.screen, 'width', 'get').and.returnValue(500);
+      const nav = makeNav();
+      component.sideNavModeChange(nav);
+      expect(nav.mode).toBe('over');
+      expect(nav.toggle).toHaveBeenCalled();
+    });
+
+    it('uses "side" mode on wide screens', () => {
+      spyOnProperty(window.screen, 'width', 'get').and.returnValue(1200);
+      const nav = makeNav();
+      component.sideNavModeChange(nav);
+      expect(nav.mode).toBe('side');
+      expect(nav.toggle).toHaveBeenCalled();
+    });
   });
 });

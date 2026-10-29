@@ -19,94 +19,88 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
 import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  FormArray,
-} from '@angular/forms';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { MaterialModule } from '../../../../core/material.module';
-
-import { CameraService } from '../../../../core/services/camera.service';
-import { CameraServiceStub } from '../../../../core/mocks/camera-service-stub';
-
-import { CancerUtils } from '../../../shared/utility';
-
-import * as data from '../../../shared/mocks/mock-data';
-import { Observable } from 'rxjs/Rx';
-
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  commonTestProviders,
+  createSessionStorageMock,
+} from 'src/testing/test-utils';
+import { MaterialModule } from 'src/app/app-modules/core/material.module';
+import { GeneralUtils } from '../../../shared/utility/general-utility';
 import { GeneralOralExaminationComponent } from './general-oral-examination.component';
 
 describe('GeneralOralExaminationComponent', () => {
   let component: GeneralOralExaminationComponent;
   let fixture: ComponentFixture<GeneralOralExaminationComponent>;
-  let debugElement: any;
-  let fb: any;
+  let form: FormGroup;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, ReactiveFormsModule, MaterialModule],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS, MaterialModule],
       declarations: [GeneralOralExaminationComponent],
+      providers: [...commonTestProviders()],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [{ provide: CameraService, useClass: CameraServiceStub }],
     }).compileComponents();
-  }));
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(GeneralOralExaminationComponent);
     component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-
-    fb = debugElement.injector.get(FormBuilder);
-    component.oralExaminationForm = new CancerUtils(
-      fb,
+    form = new GeneralUtils(
+      new FormBuilder(),
+      createSessionStorageMock({
+        serviceLineDetails: JSON.stringify({
+          facilityID: 1,
+          parkingPlaceID: 2,
+        }),
+      }) as any,
     ).createOralExaminationForm();
+    component.oralExaminationForm = form;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create and load the language set', () => {
     expect(component).toBeTruthy();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+    expect(component.showOther).toBeFalse();
   });
 
-  it('should not show type of premalignant lesion', () => {
-    debugElement = fixture.debugElement.query(
-      By.css('#preMalignantLesionTypeList'),
-    );
-    expect(debugElement).toBeFalsy();
+  it('shows the "other" field when "Any other lesion" is selected', () => {
+    form.patchValue({ preMalignantLesionTypeList: ['Any other lesion'] });
+    expect(component.showOther).toBeTrue();
   });
 
-  it('should not show other lesion', () => {
-    debugElement = fixture.debugElement.query(By.css('#otherLesionType'));
-    expect(debugElement).toBeFalsy();
+  it('hides "other" and clears its value for other selections', () => {
+    form.patchValue({ preMalignantLesionTypeList: ['Any other lesion'] });
+    form.patchValue({ otherLesionType: 'Custom' });
+    form.patchValue({ preMalignantLesionTypeList: ['Leukoplakia'] });
+    expect(component.showOther).toBeFalse();
+    expect(form.value.otherLesionType).toBeNull();
   });
 
-  it('should show other lesion when preMalignantLesionTypeList contians Any other lesion', () => {
-    component.oralExaminationForm.patchValue({ premalignantLesions: true });
-    component.oralExaminationForm.patchValue({
-      preMalignantLesionTypeList: ['Any other lesion'],
-    });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(By.css('#otherLesionType'));
-    expect(debugElement).toBeTruthy();
+  it('clears the other lesion type when the list is reset to null', () => {
+    form.patchValue({ otherLesionType: 'Custom' });
+    component.checkWithPremalignantLesion();
+    expect(form.value.preMalignantLesionTypeList).toBeNull();
+    expect(form.value.otherLesionType).toBeNull();
   });
 
-  it('should show type of premalignant lesion when premalignant lesions is true', () => {
-    component.oralExaminationForm.patchValue({ premalignantLesions: true });
-    fixture.detectChanges();
-    debugElement = fixture.debugElement.query(
-      By.css('#preMalignantLesionTypeList'),
-    );
-    expect(debugElement).toBeTruthy();
+  it('getters expose the underlying controls', () => {
+    expect(component.premalignantLesions).toBe(form.get('premalignantLesions'));
+    expect(component.preMalignantLesionType).toBeNull();
+    expect(component.observation).toBe(form.get('observation'));
   });
 
-  it('should call annotateImage when image is clicked', () => {
-    spyOn(component, 'annotateImage');
-    debugElement = fixture.debugElement.query(By.css('#annotateOralImg'));
-    debugElement.triggerEventHandler('click', null);
-    expect(component.annotateImage).toHaveBeenCalled();
+  it('re-assigns the language set on ngDoCheck', () => {
+    component.current_language_set = null;
+    component.ngDoCheck();
+    expect(component.current_language_set).toEqual(LANGUAGE_EN);
+  });
+
+  it('tolerates a form without the lesion list control', () => {
+    component.oralExaminationForm = new FormGroup({});
+    expect(() => component.ngOnInit()).not.toThrow();
   });
 });

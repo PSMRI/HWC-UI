@@ -19,27 +19,94 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 import { TreatmentsOnSideEffectsComponent } from './treatments-on-side-effects.component';
+import { DoctorService } from '../../../shared/services';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
 describe('TreatmentsOnSideEffectsComponent', () => {
   let component: TreatmentsOnSideEffectsComponent;
   let fixture: ComponentFixture<TreatmentsOnSideEffectsComponent>;
+  let caseRecord$: BehaviorSubject<any>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    caseRecord$ = new BehaviorSubject<any>(null);
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [TreatmentsOnSideEffectsComponent],
-    }).compileComponents();
-  }));
+      providers: [
+        ...commonTestProviders(),
+        {
+          provide: DoctorService,
+          useValue: autoSpy(DoctorService, {
+            populateCaserecordResponse$: caseRecord$.asObservable(),
+          }),
+        },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    })
+      .overrideTemplate(TreatmentsOnSideEffectsComponent, '')
+      .compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(TreatmentsOnSideEffectsComponent);
     component = fixture.componentInstance;
+    component.treatmentsOnSideEffectsForm = new FormGroup({
+      treatmentsOnSideEffects: new FormControl(null),
+    });
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create and set language', () => {
     expect(component).toBeTruthy();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+    component.currentLanguageSet = null;
+    component.ngDoCheck();
+    expect(component.currentLanguageSet).toEqual(LANGUAGE_EN);
+  });
+
+  it('patches treatments in view mode', () => {
+    component.caseRecordMode = 'view';
+    component.ngOnChanges();
+    caseRecord$.next({
+      statusCode: 200,
+      data: { treatmentsOnSideEffects: 'Paracetamol' },
+    });
+    expect(
+      component.treatmentsOnSideEffectsForm.value.treatmentsOnSideEffects,
+    ).toBe('Paracetamol');
+  });
+
+  it('ignores responses without treatments', () => {
+    component.caseRecordMode = 'view';
+    component.ngOnChanges();
+    caseRecord$.next({ statusCode: 200, data: {} });
+    caseRecord$.next({ statusCode: 5000, data: {} });
+    expect(
+      component.treatmentsOnSideEffectsForm.value.treatmentsOnSideEffects,
+    ).toBeNull();
+  });
+
+  it('does not subscribe when not in view mode', () => {
+    component.caseRecordMode = 'edit';
+    component.ngOnChanges();
+    expect(component.sideEffectsTretmentSubscription).toBeUndefined();
+    expect(() => component.ngOnDestroy()).not.toThrow();
+  });
+
+  it('unsubscribes on destroy', () => {
+    component.caseRecordMode = 'view';
+    component.ngOnChanges();
+    const sub = component.sideEffectsTretmentSubscription;
+    component.ngOnDestroy();
+    expect(sub.closed).toBeTrue();
   });
 });

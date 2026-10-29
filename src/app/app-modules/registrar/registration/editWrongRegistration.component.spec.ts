@@ -19,197 +19,118 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RegistrationComponent } from './registration.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ConfirmationService } from '../../core/services/confirmation.service';
-import { CameraService } from '../../core/services/camera.service';
-import { RegistrarService } from '../shared/services/registrar.service';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/empty';
-import 'rxjs/add/observable/throw';
+import {
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MaterialModule } from '../../core/material.module';
+import { MatDialog } from '@angular/material/dialog';
 
-class RouterStub {
-  navigate(url: any) {}
-}
+import { RegistrationComponent } from './registration.component';
+import { RegistrarService } from '../shared/services/registrar.service';
+import { ConfirmationService } from '../../core/services/confirmation.service';
+import {
+  COMMON_TEST_IMPORTS,
+  LANGUAGE_EN,
+  NO_ERRORS_SCHEMA,
+  autoSpy,
+  commonTestProviders,
+} from 'src/testing/test-utils';
 
-class RegistrarServiceMock {
-  registrationMaster = {
-    occupationMaster: [
-      { occupationID: 2, occupationType: 'Agricultural labour' },
-      { occupationID: 3, occupationType: 'Business' },
-      { occupationID: 1, occupationType: 'Cultivation(Agriculture)' },
-      { occupationID: 5, occupationType: 'Govt employee' },
-      { occupationID: 9, occupationType: 'Housewife or Homemaker' },
-      { occupationID: 8, occupationType: 'Not Applicable' },
-      { occupationID: 7, occupationType: 'Other' },
-      { occupationID: 6, occupationType: 'Private employee' },
-      { occupationID: 4, occupationType: 'Student' },
-    ],
-    incomeMaster: [
-      { incomeStatusID: 1, incomeStatus: 'APL' },
-      { incomeStatusID: 2, incomeStatus: 'BPL' },
-      { incomeStatusID: 3, incomeStatus: "Don't Know" },
-    ],
-    maritalStatusMaster: [
-      { maritalStatusID: 3, status: 'Divorced' },
-      { maritalStatusID: 2, status: 'Married' },
-      { maritalStatusID: 7, status: 'Not Applicable' },
-      { maritalStatusID: 4, status: 'Separated' },
-      { maritalStatusID: 1, status: 'Unmarried' },
-      { maritalStatusID: 5, status: 'Widow' },
-      { maritalStatusID: 6, status: 'Widower' },
-    ],
-    religionMaster: [
-      { religionID: 5, religionType: 'Buddhism' },
-      { religionID: 1, religionType: 'Hinduism' },
-      { religionID: 2, religionType: 'Islam' },
-      { religionID: 6, religionType: 'Jainism' },
-      { religionID: 3, religionType: 'Judaism' },
-      { religionID: 7, religionType: 'Other' },
-      { religionID: 4, religionType: 'Sikhism' },
-    ],
-    communityMaster: [
-      { communityID: 4, communityType: 'BC' },
-      { communityID: 7, communityType: "Dont' Know" },
-      { communityID: 5, communityType: 'OBC' },
-      { communityID: 6, communityType: 'OC' },
-      { communityID: 2, communityType: 'SC' },
-      { communityID: 3, communityType: 'ST' },
-    ],
-    qualificationMaster: [
-      { educationID: 6, educationType: 'Diploma / Under Graduate' },
-      { educationID: 7, educationType: 'Graduate' },
-      { educationID: 8, educationType: 'Post Graduate & Above' },
-      { educationID: 2, educationType: 'Primary (1st to 5th Std)' },
-      { educationID: 4, educationType: 'Secondary (9th to 10th)' },
-      {
-        educationID: 5,
-        educationType: 'Senior Secondary (11th to 12th/Intermediate)',
-      },
-      { educationID: 3, educationType: 'Upper Primary (6th to 8th Std)' },
-    ],
-    govIdEntityMaster: [
-      { govtIdentityTypeID: 1, identityType: 'Aadhar' },
-      { govtIdentityTypeID: 3, identityType: 'Driving License' },
-      { govtIdentityTypeID: 4, identityType: 'PAN' },
-      { govtIdentityTypeID: 5, identityType: 'Passport' },
-      { govtIdentityTypeID: 6, identityType: 'Ration Card' },
-      { govtIdentityTypeID: 2, identityType: 'Voter ID' },
-    ],
-    genderMaster: [
-      { genderID: 2, genderName: 'Female' },
-      { genderID: 1, genderName: 'Male' },
-      { genderID: 3, genderName: 'Transgender' },
-    ],
-    otherGovIdEntityMaster: [
-      { govtIdentityTypeID: 7, identityType: 'Assam Arogya Nidhi (AAN)' },
-      { govtIdentityTypeID: 8, identityType: 'Atal Amrit Abhiyan' },
-      {
-        govtIdentityTypeID: 9,
-        identityType: 'Janani Shishu Suraksha Karyakram (JSSK)',
-      },
-      { govtIdentityTypeID: 10, identityType: 'Janani Suraksha Yojana (JSY)' },
-      { govtIdentityTypeID: 11, identityType: 'KAYAKALP' },
-      { govtIdentityTypeID: 12, identityType: 'RMNCH+A' },
-      {
-        govtIdentityTypeID: 13,
-        identityType: 'Sanjeevani - Village Health Outreach Programme',
-      },
-      { govtIdentityTypeID: 14, identityType: 'Sneha Sparsha' },
-    ],
-  };
-
-  registrationMasterDetails = new BehaviorSubject<any>(null);
-  registrationMasterDetails$ = this.registrationMasterDetails.asObservable();
-
-  beneficiaryDetails = new BehaviorSubject<any>(null);
-  beneficiaryDetails$ = this.beneficiaryDetails.asObservable();
-
-  getRegistrationMaster(spID: any) {
-    this.registrationMasterDetails.next(this.registrationMaster);
-  }
-
-  getPatientDataAsObservable(benRegID: any) {
-    //this.beneficiaryDetails.next(this.benDetails);
-  }
-}
-
-class cameraServiceMock {}
-class confirmationServiceMock {
-  alert() {}
-}
-
-describe('RegisterComponent', () => {
-  let component: RegistrationComponent;
+/**
+ * Edit mode where the beneficiary data in the service is missing or belongs
+ * to a different beneficiary than the one in the route: the component must
+ * redirect back to search.
+ */
+describe('RegistrationComponent (edit with wrong/missing beneficiary)', () => {
   let fixture: ComponentFixture<RegistrationComponent>;
-  let registrarService;
+  let component: RegistrationComponent;
+  let registrar: any;
+  let confirmation: any;
+  let router: Router;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [
-        ReactiveFormsModule,
-        FormsModule,
-        MaterialModule,
-        NoopAnimationsModule,
-      ],
+  async function setup(editData: any) {
+    registrar = autoSpy(RegistrarService, {
+      registrationMasterDetails$: new BehaviorSubject<any>(null),
+      beneficiaryEditDetails$: new BehaviorSubject<any>(editData),
+      healthIdMobVerificationCheck$: new BehaviorSubject<any>(null),
+    });
+    await TestBed.configureTestingModule({
+      imports: [...COMMON_TEST_IMPORTS],
       declarations: [RegistrationComponent],
       providers: [
-        { provide: RegistrarService, useClass: RegistrarServiceMock },
-        { provide: CameraService, useClass: cameraServiceMock },
-        { provide: ConfirmationService, useClass: confirmationServiceMock },
-        {
-          provide: Router,
-          useClass: class {
-            navigate = jasmine.createSpy('navigate');
-          },
-        },
+        ...commonTestProviders(),
+        { provide: RegistrarService, useValue: registrar },
         {
           provide: ActivatedRoute,
-          useValue: { snapshot: { params: { beneficiaryRegID: '7878' } } },
+          useValue: { snapshot: { params: { beneficiaryID: '100' } } },
         },
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
-    registrarService = TestBed.get(RegistrarService);
-    fixture.detectChanges();
+    const children: Record<string, any> = {
+      otherDetails: {
+        resetForm: () => undefined,
+        setcheckBoxEnabledByDefault: () => undefined,
+      },
+      demographicDetails: { setDemographicDefaults: () => undefined },
+      personalDetails: { setPhoneSelectionEnabledByDefault: () => undefined },
+    };
+    Object.keys(children).forEach((k) =>
+      Object.defineProperty(component, k, {
+        get: () => children[k],
+        set: () => undefined,
+        configurable: true,
+      }),
+    );
+    confirmation = TestBed.inject(ConfirmationService);
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate').and.resolveTo(true);
+  }
+
+  describe('with no beneficiary data', () => {
+    beforeEach(async () => setup(null));
+
+    it('redirects to search and alerts', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      expect(component.patientRevisit).toBeTrue();
+      expect(component.revisitData).toBeUndefined();
+      expect(router.navigate).toHaveBeenCalledWith(['/registrar/search/']);
+      expect(confirmation.alert).toHaveBeenCalledWith(
+        LANGUAGE_EN.alerts.info.issueInFetchDetails,
+        'info',
+      );
+    }));
+
+    it('accepts later matching data and never opens the consent dialog', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      registrar.beneficiaryEditDetails$.next({
+        beneficiaryID: '100',
+        firstName: 'X',
+      });
+      expect(component.revisitData).toEqual({
+        beneficiaryID: '100',
+        firstName: 'X',
+      });
+      expect((TestBed.inject(MatDialog) as any).open).not.toHaveBeenCalled();
+    }));
   });
 
-  it('should create edit Beneficiary Component', () => {
-    expect(component).toBeTruthy();
-  });
+  describe('with data for another beneficiary', () => {
+    beforeEach(async () => setup({ beneficiaryID: '999' }));
 
-  it('should load form for edit Beneficiary', () => {
-    const form = component.beneficiaryRegistrationForm;
-    expect(form).toBeTruthy();
-  });
-
-  it('should load component in Edit Beneficiary Mode  ', () => {
-    const buttonText = component.postButtonText;
-    expect(component.patientRevisit).toBe(true);
-  });
-
-  it('should set Post button text to Update', () => {
-    const buttonText = component.postButtonText;
-    expect(buttonText).toBe('Update');
-  });
-
-  it('should redirect to Search Component as there is no Beneficiary data available', () => {
-    const router = fixture.debugElement.injector.get(Router);
-
-    expect(router.navigate).toHaveBeenCalledWith(['/registrar/search/']);
+    it('redirects to search', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      expect(component.revisitData).toBeUndefined();
+      expect(router.navigate).toHaveBeenCalledWith(['/registrar/search/']);
+    }));
   });
 });

@@ -19,7 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see https://www.gnu.org/licenses/.
  */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { DashboardComponent } from './dashboard.component';
 
@@ -27,19 +29,29 @@ describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [DashboardComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should be created', () => {
+  it('should be created and log on init', () => {
+    const logSpy = spyOn(console, 'log');
+    fixture.detectChanges();
     expect(component).toBeTruthy();
+    expect(logSpy).toHaveBeenCalledWith('success');
+  });
+
+  it('renders header, router outlet and footer', () => {
+    spyOn(console, 'log');
+    fixture.detectChanges();
+    const el: HTMLElement = fixture.nativeElement;
+    expect(el.querySelector('app-header')).not.toBeNull();
+    expect(el.querySelector('router-outlet')).not.toBeNull();
+    expect(el.querySelector('app-footer')).not.toBeNull();
   });
 });
