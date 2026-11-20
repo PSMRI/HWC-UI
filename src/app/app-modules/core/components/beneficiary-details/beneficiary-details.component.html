@@ -10,6 +10,10 @@
       [src]="beneficiary?.benImage"
       alt="Patient Image"
     />
+    <app-consent-button
+      [beneficiaryRegID]="consentRegId"
+      [patientPhone]="beneficiary?.preferredPhoneNum || beneficiary?.benPhoneMaps?.[0]?.phoneNo"
+    ></app-consent-button>
     <div class="horizontal-scroll-except-first-column">
       <table class="table profileData" aria-describedby="benDetails">
         <tr style="font-size: 14px; color: #000000">
@@ -139,6 +143,10 @@
       [src]="beneficiary?.benImage"
       alt="Patient Image"
     />
+    <app-consent-button
+      [beneficiaryRegID]="consentRegId"
+      [patientPhone]="beneficiary?.preferredPhoneNum || beneficiary?.benPhoneMaps?.[0]?.phoneNo"
+    ></app-consent-button>
     <div class="horizontal-scroll-except-first-column">
       <table class="table profileData" aria-describedby="benDetails">
         <tr style="font-size: 14px; color: #000000">

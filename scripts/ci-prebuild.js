@@ -64,6 +64,8 @@ const defaultEnvValues = {
   TRACKING_ENABLED: 'true',
   ENABLE_CHO_REPORT_BUTTON: true,
   DHIS_URL:'',
+  CONSENT_ENABLED: 'false',
+  CONSENT_API_BASE: '',
 };
 
 // Generate output data
