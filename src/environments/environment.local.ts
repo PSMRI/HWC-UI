@@ -545,6 +545,7 @@ export const environment = {
   getPreviousAnthropometryUrl: `${TM_API}anthropometryVitals/getBenHeightDetailsFrmNurse`,
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+  getConsentConfigUrl: `${COMMON_API}customization/consent/fetchConsentConfig`,
 
   /*Biometric with Health ID*/
   getdeviceRDServiceUrl: `${COMMON_API}biometric/getBiometricData/`,

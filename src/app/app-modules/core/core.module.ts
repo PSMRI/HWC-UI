@@ -35,6 +35,7 @@ import { AllergenSearchComponent } from './components/allergen-search/allergen-s
 import { SpecialistLoginComponent } from './components/specialist-login/specialist-login.component';
 import { AppHeaderComponent } from './components/app-header/app-header.component';
 import { BeneficiaryDetailsComponent } from './components/beneficiary-details/beneficiary-details.component';
+import { ConsentButtonComponent } from 'Common-UI/src/consent/public-api';
 import { CalibrationComponent } from './components/calibration/calibration.component';
 import { CameraDialogComponent } from './components/camera-dialog/camera-dialog.component';
 import { DiagnosisSearchComponent } from './components/diagnosis-search/diagnosis-search.component';
@@ -99,6 +100,7 @@ import { SharedModule } from './components/shared/shared.module';
     WebcamModule,
     MatTableModule,
     SharedModule,
+    ConsentButtonComponent,
   ],
   declarations: [
     CommonDialogComponent,
