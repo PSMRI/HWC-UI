@@ -2285,6 +2285,8 @@
             "validUntil": "Valid until",
             "withdraw": "Withdraw",
             "withdrawAll": "Withdraw all",
+            "withdrawAllTitle": "Withdraw all consent",
+            "withdrawAllContactOfficer": "To withdraw all consent, the patient must contact the grievance officer below.",
             "withdrawImplications": "Reminders, sharing and doctor access for these purposes stop at once.",
             "notWithdrawable": "This purpose is required by law and cannot be withdrawn.",
             "history": "History",

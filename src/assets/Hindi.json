@@ -2279,6 +2279,8 @@
       "validUntil": "Valid until",
       "withdraw": "Withdraw",
       "withdrawAll": "Withdraw all",
+      "withdrawAllTitle": "सभी सहमति वापस लें",
+      "withdrawAllContactOfficer": "सभी सहमति वापस लेने के लिए मरीज़ को नीचे दिए गए शिकायत अधिकारी से संपर्क करना होगा।",
       "withdrawImplications": "Reminders, sharing and doctor access for these purposes stop at once.",
       "notWithdrawable": "This purpose is required by law and cannot be withdrawn.",
       "history": "History",
