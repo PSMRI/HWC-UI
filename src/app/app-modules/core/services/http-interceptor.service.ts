@@ -77,7 +77,12 @@ export class HttpInterceptorService implements HttpInterceptor {
         .set('Content-Type', 'application/json');
       modifiedReq = req.clone({ headers });
     } else {
-      if (key !== undefined && key !== null) {
+      if (req.body instanceof FormData) {
+        // Uploads (e.g. consent voice evidence): the browser sets multipart/form-data with its boundary.
+        modifiedReq = req.clone({
+          headers: req.headers.set('Authorization', key || ''),
+        });
+      } else if (key !== undefined && key !== null) {
         modifiedReq = req.clone({
           headers: req.headers
             .set('Authorization', key)
