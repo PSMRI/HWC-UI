@@ -14,3 +14,8 @@ img {
     vertical-align: middle;
     color: #52575C !important;
 }
+/* Consent button sits on its own line below the patient image. */
+app-consent-button {
+    display: block;
+    margin: 8px 0 4px;
+}

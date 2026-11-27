@@ -1,7 +1,18 @@
 <div *ngIf="confirmAlert">
-  <h3 [ngClass]="['title', title]">
-    {{ (title === "warn" ? "warning" : title) | titlecase }}
-  </h3>
+  <div [ngClass]="['title', 'dialog-header', title]">
+    <h3 class="dialog-title">
+      {{ (title === "warn" ? "warning" : title) | titlecase }}
+    </h3>
+    <button
+      type="button"
+      class="dialog-close"
+      aria-label="Close"
+      title="Close"
+      (click)="matDialogRef.close(false)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
   <div class="message">{{ message }}</div>
   <div class="action">
     <button
@@ -13,7 +24,7 @@
     <button
       class="full-width-login button-ok"
       (click)="matDialogRef.close(true)"
-      [ngClass]="{ 'background-primary': title !== 'warn' }"
+      [ngClass]="title === 'warn' ? 'background-warn' : 'background-primary'"
       cdkFocusInitial
     >
       {{ btnOkText }}
@@ -59,9 +70,20 @@
 </div>
 
 <div *ngIf="confirmcalibration">
-  <h3 [ngClass]="['title', title]">
-    {{ (title === "warn" ? "warning" : title) | titlecase }}
-  </h3>
+  <div [ngClass]="['title', 'dialog-header', title]">
+    <h3 class="dialog-title">
+      {{ (title === "warn" ? "warning" : title) | titlecase }}
+    </h3>
+    <button
+      type="button"
+      class="dialog-close"
+      aria-label="Close"
+      title="Close"
+      (click)="matDialogRef.close(false)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
   <div class="message">{{ message }}</div>
   <div class="action">
     <button
@@ -73,7 +95,7 @@
     <button
       class="full-width-login button-ok"
       (click)="matDialogRef.close(true)"
-      [ngClass]="{ 'background-primary': title !== 'warn' }"
+      [ngClass]="title === 'warn' ? 'background-warn' : 'background-primary'"
       cdkFocusInitial
     >
       {{ btnOkText }}

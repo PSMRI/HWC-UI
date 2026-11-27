@@ -11,6 +11,9 @@
   },
   "include": [
     "src/**/*.spec.ts",
+    "Common-UI/src/consent/**/*.spec.ts",
+    "Common-UI/src/registrar/**/*.consent-hook.spec.ts",
+    "Common-UI/src/registrar/registration/registration-success/*.spec.ts",
     "src/testing/**/*.ts",
     "src/**/*.d.ts"
   ]

@@ -63,6 +63,10 @@ export const environment = {
     trackingPlatform: '<%= TRACKING_PLATFORM %>',
     enabled: '<%= TRACKING_ENABLED %>' === 'true'
   },
+  consentManagement: {
+    enabled: String('<%= CONSENT_ENABLED %>') === 'true',
+    apiBase: '<%= CONSENT_API_BASE %>',
+  },
 
 
   RBSTest: `RBS Test`,
@@ -530,6 +534,7 @@ export const environment = {
 
   /* Customization APIs*/
   getAllRegistrationData: `${COMMON_API}customization/fetchAllData`,
+  getConsentConfigUrl: `${COMMON_API}customization/consent/fetchConsentConfig`,
 
   /*Biometric with Health ID*/
   getdeviceRDServiceUrl: `${COMMON_API}biometric/getBiometricData/`,

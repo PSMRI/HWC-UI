@@ -123,6 +123,18 @@ describe('HttpInterceptorService', () => {
       expect(handled!.headers.get('Content-Type')).toBe('application/json');
     });
 
+    it('leaves Content-Type unset for FormData uploads so multipart is sent', () => {
+      sessionStorage.setItem('key', 'KEY1');
+      const upload = new HttpRequest<any>(
+        'POST',
+        'consent-api/consent/v1/evidence',
+        new FormData(),
+      );
+      svc.intercept(upload, okHandler() as any).subscribe();
+      expect(handled!.headers.get('Authorization')).toBe('KEY1');
+      expect(handled!.headers.has('Content-Type')).toBeFalse();
+    });
+
     it('strips Authorization for platform-feedback', () => {
       sessionStorage.setItem('key', 'KEY1');
       svc

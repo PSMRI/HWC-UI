@@ -45,6 +45,8 @@ import { SessionStorageService } from 'Common-UI/src/registrar/services/session-
 })
 export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   beneficiary: any;
+  /** For the Consent button (AMM-2522). */
+  consentRegId: any = null;
   today: any;
   beneficiaryDetailsSubscription: any;
   familyIdStatusStatusSubscription!: Subscription;
@@ -111,6 +113,7 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
   getBenDetails() {
     const benFlowID: any = this.sessionstorage.getItem('benFlowID');
     this.route.params.subscribe((param) => {
+      this.consentRegId = param['beneficiaryRegID'];
       this.beneficiaryDetailsService.getBeneficiaryDetails(
         param['beneficiaryRegID'],
         benFlowID,
@@ -161,6 +164,7 @@ export class BeneficiaryDetailsComponent implements OnInit, DoCheck, OnDestroy {
       }
     });
     const benFlowID: any = this.sessionstorage.getItem('beneficiaryRegID');
+    this.consentRegId = benFlowID;
     this.beneficiaryDetailsService
       .getBeneficiaryImage(benFlowID)
       .subscribe((data: any) => {

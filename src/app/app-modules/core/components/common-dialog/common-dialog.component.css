@@ -95,3 +95,53 @@
     max-width: 110px;
     border: 1px solid white !important;
   }
+
+/* Dialog header with a close button (confirm dialogs) */
+.dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-right: 12px;
+}
+
+.dialog-title {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+}
+
+.dialog-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+}
+
+.dialog-close:hover,
+.dialog-close:focus-visible {
+    background-color: rgba(255, 255, 255, 0.18);
+    outline: none;
+}
+
+.dialog-close .mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.background-warn {
+    background-color: #C21F1F !important;
+    border-color: #C21F1F !important;
+    color: white !important;
+}
