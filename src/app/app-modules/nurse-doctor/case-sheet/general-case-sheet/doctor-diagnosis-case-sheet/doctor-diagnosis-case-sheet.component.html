@@ -1,16 +1,20 @@
+<!-- eslint-disable prettier/prettier -->
 <div class="container">
+  <!-- Header Section -->
   <div class="row m-t-10">
     <div class="col-xs-12 text-right">
-      <p>
-        <strong> {{ current_language_set?.common?.date }}: </strong> {{ date }}
+      // eslint-disable-next-line prettier/prettier
+      <p style="margin-bottom: 16px">
+        <strong>{{ current_language_set?.common?.date }}:</strong> {{ date }}
       </p>
     </div>
-    <div class="col-xs-12 text-center">
+    <div class="col-xs-12 text-center" style="margin-bottom: 24px">
       <img id="logo" src="assets/images/Swasthya.png" alt="Piramal" />
     </div>
   </div>
 
-  <div class="row m-t-20">
+  <!-- Visit Category Info -->
+  <div class="row m-t-20" style="margin-bottom: 24px">
     <div class="col-xs-6 text-left">
       <p>
         <strong>
@@ -23,7 +27,7 @@
     </div>
     <div class="col-xs-6 text-right" *ngIf="casesheetData?.serviceID === 2">
       <p>
-        <strong> {{ current_language_set?.casesheet?.servicePoint }}: </strong>
+        <strong>{{ current_language_set?.casesheet?.servicePoint }}:</strong>
         {{ beneficiaryDetails?.servicePointName }}
       </p>
     </div>
@@ -228,7 +232,13 @@
             <th id="height">{{ current_language_set?.casesheet?.height }}:</th>
             <td>{{ currentVitals && currentVitals.height_cm }}</td>
             <th id="temp">{{ current_language_set?.casesheet?.temp }}:</th>
-            <td>{{ currentVitals && currentVitals.temperature }}</td>
+            <td
+              [class.vital-abnormal]="
+                isAbnormalTemp(currentVitals?.temperature)
+              "
+            >
+              {{ currentVitals && currentVitals.temperature }}
+            </td>
           </tr>
           <tr>
             <th id="weight">{{ current_language_set?.casesheet?.weight }}:</th>
@@ -236,29 +246,62 @@
             <th id="pulseRate">
               {{ current_language_set?.casesheet?.pulseRate }}:
             </th>
-            <td>{{ currentVitals && currentVitals.pulseRate }}</td>
+            <td
+              [class.vital-abnormal]="isAbnormalPulse(currentVitals?.pulseRate)"
+            >
+              {{ currentVitals && currentVitals.pulseRate }}
+            </td>
           </tr>
 
           <tr>
             <th id="spo2">{{ current_language_set?.sPOTwoWithUnit }}:</th>
-            <td>{{ currentVitals && currentVitals.sPO2 }}</td>
+            <td
+              [class.vital-critical]="isCriticalSPO2(currentVitals?.sPO2)"
+              [class.vital-abnormal]="isAbnormalSPO2(currentVitals?.sPO2)"
+            >
+              {{ currentVitals && currentVitals.sPO2 }}
+            </td>
             <th id="bpSystolic">
               {{ current_language_set?.casesheet?.bpSystolic }}:
             </th>
-            <td>{{ currentVitals && currentVitals.systolicBP_1stReading }}</td>
+            <td
+              [class.vital-abnormal]="
+                isAbnormalBP(
+                  currentVitals?.systolicBP_1stReading,
+                  currentVitals?.diastolicBP_1stReading
+                )
+              "
+            >
+              {{ currentVitals && currentVitals.systolicBP_1stReading }}
+            </td>
           </tr>
           <tr>
             <th id="bpDiastolic">
               {{ current_language_set?.casesheet?.bpDiastolic }}:
             </th>
-            <td>{{ currentVitals && currentVitals.diastolicBP_1stReading }}</td>
+            <td
+              [class.vital-abnormal]="
+                isAbnormalBP(
+                  currentVitals?.systolicBP_1stReading,
+                  currentVitals?.diastolicBP_1stReading
+                )
+              "
+            >
+              {{ currentVitals && currentVitals.diastolicBP_1stReading }}
+            </td>
             <th id="respiratoryRate">
               {{
                 current_language_set?.vitalsDetails?.vitalsDataANC_OPD_NCD_PNC
                   ?.respiratoryRate
               }}:
             </th>
-            <td>{{ currentVitals && currentVitals.respiratoryRate }}</td>
+            <td
+              [class.vital-abnormal]="
+                isAbnormalRespiratoryRate(currentVitals?.respiratoryRate)
+              "
+            >
+              {{ currentVitals && currentVitals.respiratoryRate }}
+            </td>
           </tr>
 
           <tr *ngIf="beneficiaryDetails && beneficiaryDetails.ben_age_val > 20">
@@ -599,7 +642,7 @@
       class="row m-t-10"
       *ngIf="printPagePreviewSelect?.caseSheetChiefComplaints"
     >
-      <div class="col-xs-12">
+      <div class="col-xs-12" style="margin-bottom: 12px">
         <h4>{{ current_language_set?.casesheet?.chiefComplaint }}:</h4>
       </div>
       <!-- General visit type -->
@@ -810,7 +853,11 @@
       class="row m-t-10"
       *ngIf="printPagePreviewSelect?.caseSheetClinicalObservations"
     >
-      <div class="col-xs-12" *ngIf="enableClinicalObv">
+      <div
+        class="col-xs-12"
+        *ngIf="enableClinicalObv"
+        style="margin-bottom: 12px"
+      >
         <h4>{{ current_language_set?.casesheet?.clinicalObs }}:</h4>
         <div class="textarea" textAreaValidator>
           {{
@@ -831,7 +878,11 @@
       "
       class="row m-t-10"
     >
-      <div class="col-xs-12" *ngIf="enableSignificantFindigs">
+      <div
+        class="col-xs-12"
+        *ngIf="enableSignificantFindigs"
+        style="margin-bottom: 12px"
+      >
         <h4>{{ current_language_set?.casesheet?.significantFind }}:</h4>
         <div class="textarea">
           {{
@@ -849,7 +900,7 @@
       class="row m-t-10"
       *ngIf="printPagePreviewSelect?.caseSheetInvestigations"
     >
-      <div class="col-xs-12">
+      <div class="col-xs-12" style="margin-bottom: 12px">
         <h4>
           {{
             current_language_set?.nurseData?.investigationsDetails
@@ -938,7 +989,7 @@
       class="row m-t-10"
       *ngIf="printPagePreviewSelect?.caseSheetExtInvestigation"
     >
-      <div class="col-xs-12">
+      <div class="col-xs-12" style="margin-bottom: 12px">
         <h4>{{ current_language_set?.casesheet?.externalInvest }}:</h4>
         <div class="textarea">
           {{
@@ -953,7 +1004,7 @@
 
     <!-- Diagnosis -->
     <div class="row m-t-10" *ngIf="printPagePreviewSelect?.caseSheetDiagnosis">
-      <div class="col-xs-12">
+      <div class="col-xs-12" style="margin-bottom: 12px">
         <h4>{{ current_language_set?.casesheet?.diagnosis }}:</h4>
       </div>
 
@@ -1580,7 +1631,7 @@
       class="row m-t-10"
       *ngIf="printPagePreviewSelect?.caseSheetPrescription"
     >
-      <div class="col-xs-12">
+      <div class="col-xs-12" style="margin-bottom: 12px">
         <h4>{{ current_language_set?.casesheet?.prescribe }}:</h4>
       </div>
 
